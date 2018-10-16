@@ -1,49 +1,35 @@
-
 import React, { Component } from 'react';
-import { Router, browserHistory, Route, Link } from 'react-router';
+import { HashRouter as Router, Route, NavLink } from 'react-router-dom';
+import SignUpForm from './pages/SignUpForm';
+import SignInForm from './pages/SignInForm';
+
 import './App.css';
-
-const Page = ({ title }) => (
-    <div className="App">
-      <div className="App-header">
-        <img src="WOLF.png" className="App-logo" alt="logo" />
-        <h2>{title}</h2>
-      </div>
-      <div id="onderkant">
-      <p id="Welcome" className="App-intro">
-        Welcome to Game of Wolves
-      </p>
-      <p>
-        <Link class='link' to="/">Home</Link>
-      </p>
-      <p>
-        <Link class='link' to="/about">About</Link>
-      </p>
-      <p>
-        <Link class='link' to="/settings">Settings</Link>
-      </p></div>
-    </div>
-);
-
-const Home = (props) => (
-  <Page title="Game of Wolves"/>
-);
-
-const About = (props) => (
-  <Page title="About"/>
-);
-
-const Settings = (props) => (
-  <Page title="Settings"/>
-);
 
 class App extends Component {
   render() {
     return (
-      <Router history={browserHistory}>
-        <Route path="/" component={Home}/>
-        <Route path="/about" component={About}/>
-        <Route path="/settings" component={Settings}/>
+      <Router basename="/react-auth-ui/">
+        <div className="App">
+          <div className="Title">
+            <h1>Game Of Wolves</h1>
+          </div>
+          <div className="App__Form">
+            <div className="PageSwitcher">
+                <NavLink to="/sign-in" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign In</NavLink>
+                <NavLink exact to="/" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign Up</NavLink>
+              </div>
+
+              <div className="FormTitle">
+                  <NavLink to="/sign-in" activeClassName="FormTitle__Link--Active" className="FormTitle__Link">Sign In</NavLink> or <NavLink exact to="/" activeClassName="FormTitle__Link--Active" className="FormTitle__Link">Sign Up</NavLink>
+              </div>
+
+              <Route exact path="/" component={SignUpForm}>
+              </Route>
+              <Route path="/sign-in" component={SignInForm}>
+              </Route>
+          </div>
+
+        </div>
       </Router>
     );
   }
