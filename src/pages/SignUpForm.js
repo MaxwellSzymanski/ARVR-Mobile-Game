@@ -38,6 +38,8 @@ class SignUpForm extends React.Component {
         <div className="FormCenter">
             <form onSubmit={this.handleSubmit} className="FormFields">
               <div className="FormField">
+                <label className="FormField__Label" htmlFor="picture">Take a Selfie</label>
+                  <button class="butn"></button>
                 <label className="FormField__Label" htmlFor="name">Full Name</label>
                 <input type="text" id="name" className="FormField__Input" placeholder="Enter your full name" name="name" value={this.state.name} onChange={this.handleChange} />
               </div>
