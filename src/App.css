@@ -8,10 +8,13 @@
   width: 100%;
   background-color: #cc1f10;
   padding: 10px;
+  padding-bottom: 50px;
+  padding-top: 50px;
 }
 
 h1 {
   color: #421f1c;
+  font-size: 90px;
 
 }
 
@@ -150,9 +153,15 @@ h1 {
 
 .butn {
     background-image: url("camera2.png");
-    height:195px;
-    width: 195px;
+    background-size: contain;
+    height:110px;
+    width: 110px;
     margin-top: 50px;
     margin-bottom: 50px;
     border-radius: 100%;
+    border: none;
+}
+
+.Map {
+  background-image: url("map.PNG");
 }
