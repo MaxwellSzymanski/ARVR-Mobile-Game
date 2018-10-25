@@ -1,7 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+
 class SignUpForm extends React.Component {
+
+
     constructor() {
         super();
 
@@ -14,6 +17,10 @@ class SignUpForm extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    fileSelectorHandler = event => {
+      console.log(event);
     }
 
     handleChange(e) {
@@ -37,9 +44,12 @@ class SignUpForm extends React.Component {
         return (
         <div className="FormCenter">
             <form onSubmit={this.handleSubmit} className="FormFields">
-              <div className="FormField">
                 <label className="FormField__Label" htmlFor="picture">Take a Selfie</label>
-                  <button class="butn"></button>
+                  <input type="file" accept="image/*" capture="user"/>
+                  <Link to='.camera.html'>
+                  <button  class="butn" ></button>
+                  </Link>
+              <div className="FormField">
                 <label className="FormField__Label" htmlFor="name">Full Name</label>
                 <input type="text" id="name" className="FormField__Input" placeholder="Enter your full name" name="name" value={this.state.name} onChange={this.handleChange} />
               </div>

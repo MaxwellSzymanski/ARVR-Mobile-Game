@@ -2,12 +2,6 @@ import React, { Component } from 'react';
 import { HashRouter as Router, Route, NavLink } from 'react-router-dom';
 import SignUpForm from './pages/SignUpForm';
 import SignInForm from './pages/SignInForm';
-import {
-  ReactiveBase,
-  CategorySearch,
-  RatingsFilter,
-  ResultCard
-} from '@appbaseio/reactivesearch';
 
 import './App.css';
 
