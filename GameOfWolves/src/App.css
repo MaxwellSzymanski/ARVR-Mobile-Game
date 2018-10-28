@@ -151,16 +151,36 @@ h1 {
   margin-left: 5px;
 }
 
-.butn {
+.custom-file-upload {
     background-image: url("camera2.png");
     background-size: contain;
-    height:110px;
-    width: 110px;
-    margin-top: 50px;
+    height:50%;
+    width: 50%;
+    margin-top: 10%;
     margin-bottom: 50px;
     border-radius: 100%;
     border: none;
+    padding: 100px 100px 100px 100px;
+    display: inline-block;
 }
+
+#text {
+  display: block;
+  text-align: center;
+}
+.hide {
+  display: none;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+#side {
+  display: inline-block;
+}
+
+
 
 .Map {
   background-image: url("map.PNG");
