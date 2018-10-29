@@ -48,25 +48,13 @@ class SignUpForm extends React.Component {
         <div className="FormCenter">
             <form onSubmit={this.handleSubmit} className="FormFields">
             <label id="text">Take a picture</label>
-<<<<<<< HEAD
-
-            <Link to="/takePicture">
-              <button className="button"></button>
-            </Link>
 
 
-            <div id="side">
-            <label for="file-upload" class="custom-file-upload">
-            </label>
-              <input id="file-upload" type="file" accept="image/*" capture="camera"  value={this.state.picture} onChange={this.handleChange}/>
-              </div>
-=======
           <div id="centerButton">
           <Link to="/takePicture">
             <button className="button"></button></Link></div>
 
 
->>>>>>> 2bfc6dce1f316acba87ec05cb85bbbef9970d489
               <div className="FormField">
                 <label className="FormField__Label" htmlFor="name">Full Name</label>
                 <input type="text" id="name" className="FormField__Input" placeholder="Enter your full name" name="name" value={this.state.name} onChange={this.handleChange} />
