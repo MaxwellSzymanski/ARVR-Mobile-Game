@@ -1,8 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 
-
-class Maps extends React.Component {
+class Map extends React.Component {
 
     render() {
         return (
@@ -15,4 +15,4 @@ class Maps extends React.Component {
     }
 }
 
-export default Maps;
+export default Map;

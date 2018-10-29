@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { HashRouter as Router, Route, Switch } from 'react-router-dom';
+import { HashRouter as Router, Route, NavLink, Switch } from 'react-router-dom';
+import SignUpForm from './pages/SignUpForm';
+import SignInForm from './pages/SignInForm';
 import FirstPage from './FirstPage';
-import Maps from './pages/Maps';
+import Map from './pages/Map';
 import CameraComp from './pages/CameraComp';
 
 import './App.css';
@@ -15,7 +17,7 @@ class App extends Component {
         <div className="App">
         <Switch>
           <Route exact path="/" component={FirstPage}></Route>
-          <Route path="/map" component={Maps}></Route>
+          <Route path="/map" component={Map}></Route>
           <Route path="/takePicture" component={CameraComp}></Route>
       </Switch>
 

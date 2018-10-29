@@ -1,5 +1,9 @@
 import React from 'react';
+<<<<<<< HEAD
 import { HashRouter as Router, Route, Switch, NavLink } from 'react-router-dom';
+=======
+import { HashRouter as Router, Route, NavLink } from 'react-router-dom';
+>>>>>>> parent of 2e98ed5... maps
 import SignUpForm from './pages/SignUpForm';
 import SignInForm from './pages/SignInForm';
 
