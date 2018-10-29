@@ -47,9 +47,9 @@ class SignUpForm extends React.Component {
         <div className="FormCenter">
             <form onSubmit={this.handleSubmit} className="FormFields">
             <label id="text">Take a picture</label>
-
+          <div id="centerButton">
           <Link to="/takePicture">
-            <button className="button"></button></Link>
+            <button className="button"></button></Link></div>
 
 
               <div className="FormField">

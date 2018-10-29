@@ -159,20 +159,14 @@ h1 {
     border: none;
     margin-top: 20px;
     margin-bottom: 40px;
+    display: inline-block;
+}
+
+#centerButton {
+  text-align: center;
+
 }
 
 #text {
   display: block;
-  text-align: center;
-}
-.hide {
-  display: none;
-}
-
-input[type="file"] {
-    display: none;
-}
-
-#side {
-  display: inline-block;
 }
