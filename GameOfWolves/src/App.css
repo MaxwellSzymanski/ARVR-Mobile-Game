@@ -163,24 +163,11 @@ h1 {
     display: inline-block;
 }
 
+#centerButton {
+  text-align: center;
+
+}
+
 #text {
   display: block;
-  text-align: center;
-}
-.hide {
-  display: none;
-}
-
-input[type="file"] {
-    display: none;
-}
-
-#side {
-  display: inline-block;
-}
-
-
-
-.Map {
-  background-image: url("map.PNG");
 }

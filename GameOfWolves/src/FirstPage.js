@@ -5,6 +5,10 @@ import SignInForm from './pages/SignInForm';
 
 import './App.css';
 
+import SignUpForm from './pages/SignUpForm';
+import SignInForm from './pages/SignInForm';
+
+>>>>>>> 2bfc6dce1f316acba87ec05cb85bbbef9970d489
 class FirstPage extends React.Component {
   render() {
     return(
