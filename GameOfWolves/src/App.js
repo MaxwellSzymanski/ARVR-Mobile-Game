@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import { HashRouter as Router, Route, NavLink } from 'react-router-dom';
+import { HashRouter as Router, Route, NavLink, Switch } from 'react-router-dom';
 import SignUpForm from './pages/SignUpForm';
 import SignInForm from './pages/SignInForm';
+import FirstPage from './FirstPage';
+import Map from './pages/Map';
+import CameraComp from './pages/CameraComp';
 
 import './App.css';
 
@@ -12,22 +15,11 @@ class App extends Component {
     return (
       <Router basename="/react-auth-ui/">
         <div className="App">
-          <div className="Title">
-            <h1>Game Of Wolves</h1>
-          </div>
-          <div className="App__Form">
-            <div className="PageSwitcher">
-                <NavLink to="/sign-in" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign In</NavLink>
-                <NavLink exact to="/" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign Up</NavLink>
-              </div>
-
-
-              <Route exact path="/" component={SignUpForm}>
-              </Route>
-              <Route path="/sign-in" component={SignInForm}>
-              </Route>
-              <Route path="/map" component={Map}></Route>
-          </div>
+        <Switch>
+          <Route exact path="/" component={FirstPage}></Route>
+          <Route path="/map" component={Map}></Route>
+          <Route path="/takePicture" component={CameraComp}></Route>
+      </Switch>
 
         </div>
       </Router>

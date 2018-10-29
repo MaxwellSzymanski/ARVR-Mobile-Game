@@ -179,9 +179,3 @@ input[type="file"] {
 #side {
   display: inline-block;
 }
-
-
-
-.Map {
-  background-image: url("map.PNG");
-}
