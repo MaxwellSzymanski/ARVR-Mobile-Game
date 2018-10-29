@@ -46,6 +46,12 @@ class SignUpForm extends React.Component {
         <div className="FormCenter">
             <form onSubmit={this.handleSubmit} className="FormFields">
             <label id="text">Take a picture</label>
+
+            <Link to="/takePicture">
+              <button className="button"></button>
+            </Link>
+
+
             <div id="side">
             <label for="file-upload" class="custom-file-upload">
             </label>

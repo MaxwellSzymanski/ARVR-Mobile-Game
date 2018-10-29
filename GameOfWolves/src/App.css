@@ -151,16 +151,15 @@ h1 {
   margin-left: 5px;
 }
 
-.custom-file-upload {
+.button {
     background-image: url("camera2.png");
     background-size: contain;
-    height:50%;
-    width: 50%;
-    margin-top: 10%;
+    height:190px;
+    width: 190px;
+    margin-top: 20px;
     margin-bottom: 50px;
     border-radius: 100%;
     border: none;
-    padding: 100px 100px 100px 100px;
     display: inline-block;
 }
 
