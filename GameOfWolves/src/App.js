@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { HashRouter as Router, Route, Switch, NavLink } from 'react-router-dom';
 import FirstPage from './FirstPage';
 import CameraComp from './pages/CameraComp';
-import Map from './pages/CameraComp';
+import Map from './pages/Map.js';
 
 import './App.css';
 
