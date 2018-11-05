@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+const insertUser = require('../db/insertUser');
+
 class SignUpForm extends React.Component {
     constructor() {
         super();
@@ -28,6 +30,8 @@ class SignUpForm extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
+
+        insertUser(this.state);
 
         console.log('The form was submitted with the following data:');
         console.log(this.state);
