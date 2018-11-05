@@ -157,8 +157,7 @@ h1 {
 }
 
 .button {
-    background-image: url("camera2.png");
-    background-size: contain;
+    
     height:190px;
     width: 190px;
     margin-top: 20px;

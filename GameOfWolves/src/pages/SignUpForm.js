@@ -43,6 +43,16 @@ class SignUpForm extends React.Component {
         console.log(this.state);
     }
 
+    var ImageSearch() {
+      var value = localStorage.getItem('SelfieTaken');
+      if (value !== null) {
+        return value;
+      }
+      else {
+        return
+      }
+    }
+
     render() {
         return (
         <div className="FormCenter">

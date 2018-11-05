@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+import CameraButton from './CameraButton.js';
 
 
 class SignUpForm extends React.Component {
@@ -41,7 +41,17 @@ class SignUpForm extends React.Component {
         console.log(this.state);
     }
 
+
+
     render() {
+
+      let button;
+      if (localStorage.getItem("test") === null) {
+        button = <img className="button" src={ require('../camera2.png') } />;
+      } else {
+        button = <img  className="button" src={'../WOLF.png'}/>
+      }
+
         return (
         <div className="FormCenter">
             <form onSubmit={this.handleSubmit} className="FormFields">
@@ -51,7 +61,8 @@ class SignUpForm extends React.Component {
 
           <div id="centerButton">
           <Link to="/takePicture">
-            <button className="button"></button></Link></div>
+            {button}</Link></div>
+
 
 
               <div className="FormField">
