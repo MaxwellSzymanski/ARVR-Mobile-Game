@@ -1,12 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-<<<<<<< HEAD
-const insertUser = require('../db/insertUser');
-=======
+
 const insertUser = require('..\db\insertUser.js')
 
->>>>>>> 499c6ff826b29c538a12a1505c8ca62fa56d4d77
 
 class SignUpForm extends React.Component {
     constructor() {
