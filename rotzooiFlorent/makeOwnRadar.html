@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            background: black;
+        }
+        h1 {
+           color: rgba(100,255,0,0.5);
+
+        }
+        .obj{
+            background:#cf5;
+            position:absolute;
+            border-radius: 50%;
+            width:4px; height:4px; margin:-2px;
+            box-shadow:0 0 10px 5px rgba(100,255,0,0.5);
+            opacity:0.2;
+        }
+    </style>
+</head>
+<body>
+
+<button onclick="increaseNumberPixelPerMeter()">Enlarge Radar!</button>
+<button onclick="decreaseNumberPixelPerMeter()">Reduce Radar!</button>
+<button onclick="autozoom()">AutoZoom!</button>
+
+<h1 class="obj" data-atDeg="10">Radar!</h1>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<div id="parentRadar">
+    <div id="radar" numberPixelPerMeter="1" updateFrequency="3000" autozoom="on"></div>
+</div>
+<script>
+
+    function increaseNumberPixelPerMeter(){
+        document.getElementById("radar").setAttribute("autozoom","off");
+        var numberPixelPerMeter = parseFloat(document.getElementById("radar").getAttribute("numberPixelPerMeter"))
+        numberPixelPerMeter += 0.5;
+        document.getElementById("radar").setAttribute("numberPixelPerMeter",numberPixelPerMeter.toString());
+
+    }
+    function decreaseNumberPixelPerMeter(){
+        document.getElementById("radar").setAttribute("autozoom","off");
+        var numberPixelPerMeter = parseFloat(document.getElementById("radar").getAttribute("numberPixelPerMeter"))
+        numberPixelPerMeter -= 0.5;
+        document.getElementById("radar").setAttribute("numberPixelPerMeter",numberPixelPerMeter.toString());
+    }
+    function autozoom(){
+        document.getElementById("radar").setAttribute("autozoom","on");
+    }
+
+    function degreesToRadians(degrees){
+        return degrees * Math.PI / 180;
+    }
+
+    function distanceBetween(lat1, lon1, lat2, lon2) {
+        var earthRadiusKm = 6371;
+
+        var dLat = this.degreesToRadians(lat2-lat1);
+        var dLon = this.degreesToRadians(lon2-lon1);
+
+        lat1 = this.degreesToRadians(lat1);
+        lat2 = this.degreesToRadians(lat2);
+
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return earthRadiusKm * c * 1000; // * 1000 (answer in meters)
+    }
+
+    // https://stackoverflow.com/questions/18353107/radar-scanner-effect-using-jquery
+    $(function d () {
+
+        var urlD = 'http://localhost:8080';
+
+        var data = {};
+
+        data.Request = "Radar";
+        data.playerId = "1";
+        data.Longitude ="4.451721";
+        data.Latitude ="50.950346";
+
+        obj = JSON.stringify(data);
+        // Send get request use jquery ajax.
+
+        $.post(urlD,obj, function (data) {
+            createRadar(data);
+        });
+
+        function createRadar(data){
+
+            var playerLongitude = 4.351721;
+            var playerLatitude =  50.850346;
+
+            var i = 0;
+
+            var smallestDistancePlayer = 1000000;
+
+            var object1 = JSON.parse(data);
+
+
+            if(document.getElementById("radar").getAttribute("autozoom") === "on") {
+                for( x in object1){
+                    var distancePlayer = distanceBetween(playerLongitude,playerLatitude,object1[i].longitude,object1[i].latitude);
+                    if( distancePlayer > 10 && distancePlayer < smallestDistancePlayer){
+                        smallestDistancePlayer = distancePlayer;
+                    }
+                    i++;
+                }
+                var newRatioPixelMeter = (screen.width/4)/smallestDistancePlayer;
+                document.getElementById("radar").setAttribute("numberPixelPerMeter",parseFloat(newRatioPixelMeter));
+            }
+
+            var object = JSON.parse(data);
+
+            i = 0;
+            for( x in object){
+                let pos = JSON.parse(longLatToXandY(playerLongitude,playerLatitude,object[i].longitude,object[i].latitude));
+                addElement(pos.x, pos.y, object[i].idPlayer);
+                i++;
+            }
+        }
+
+        function addElement (xValue,yValue,idPlayer) {
+            // delete old div elements
+            if (document.getElementById(idPlayer)) {
+                var element = document.getElementById(idPlayer);
+                element.parentNode.removeChild(element);
+            }
+
+            let html = '<button onclick="showPlayer(this.id)" id=' +idPlayer+ ' class="obj" data-x="'+xValue+'" data-y="'+yValue+'" ></button>'
+            $('body').append(html);
+
+            var $obj = $('.obj');
+
+            $obj.each(function(){
+                var pos = $(this).data();
+                $(this).css({left:pos.x, top:pos.y}).attr('data-atDeg', "10");
+            });
+        }
+
+
+        function longLatToXandY(playerLogitude,playerLatitude,longitude, latitude){
+
+            var numberPixelPerMeter = document.getElementById("radar").getAttribute("numberPixelPerMeter");
+
+            var m_per_deg_lat = 111132.954 - 559.822 * Math.cos( 2.0 * parseFloat(latitude) ) + 1.175 * Math.cos( 4.0 * parseFloat(latitude));
+            var m_per_deg_lon = (3.14159265359/180 ) * 6367449 * Math.cos ( parseFloat(latitude) );
+
+            var deltaLongitude = parseFloat(playerLogitude) - parseFloat(longitude);
+            var deltaLatitude = parseFloat(playerLatitude) - parseFloat(latitude);
+
+            var xPosition = deltaLongitude * m_per_deg_lon;
+            var yPosition = deltaLatitude * m_per_deg_lat;
+
+            var data = {};
+
+            data.x = xPosition/numberPixelPerMeter + (screen.width/2);
+            data.y = yPosition/numberPixelPerMeter + (screen.height/2);
+
+            obj = JSON.stringify(data);
+
+            return obj;
+
+        }
+        var updateFrequency = parseFloat(document.getElementById("radar").getAttribute("updateFrequency"));
+        setTimeout(d, updateFrequency); // LOOP
+
+    });
+    $(function() {
+        var deg = 0;
+        (function rotate() {
+            $('[data-atDeg='+deg+']').stop().fadeTo(0,1).fadeTo(1700,0.2);
+
+            deg = ++deg % 120;
+            setTimeout(rotate, 2); // LOOP
+        })();
+
+    });
+
+    function showPlayer(id){
+        alert("idPlayer: "+id);
+    }
+</script>
+</body>
+</html>
