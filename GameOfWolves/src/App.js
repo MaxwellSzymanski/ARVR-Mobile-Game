@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+// eslint-disable-next-line
 import { HashRouter as Router, Route, Switch, NavLink } from 'react-router-dom';
 import FirstPage from './FirstPage';
 import CameraComp from './pages/CameraComp';
