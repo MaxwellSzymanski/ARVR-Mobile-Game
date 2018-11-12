@@ -116,3 +116,5 @@ const Photo = (props) => (
 
 
 }
+
+export default Capture;

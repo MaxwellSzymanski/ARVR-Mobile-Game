@@ -45,10 +45,11 @@ class SignUpForm extends React.Component {
     render() {
 
       let button;
-      if (localStorage.getItem("test") === null) {
+      if (localStorage.getItem("PhotoOfMe") === null) {
         button = <img className="button" alt="" src={ require('../camera2.png') } />;
       } else {
-        button = <img  className="button" alt="" src={'../WOLF.png'}/>
+        var img = localStorage.getItem("PhotoOfMe")
+        button = <img  className="button" alt="" src={img} />
       }
 
         return (
