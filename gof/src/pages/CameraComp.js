@@ -15,6 +15,7 @@ class CameraComp extends React.Component {
           onTakePhoto = { (dataUri) => { this.onTakePhoto(dataUri); } }
         />
       </div>
+
     );
   }
 }
