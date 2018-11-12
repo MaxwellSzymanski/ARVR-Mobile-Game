@@ -17,18 +17,23 @@ http.createServer(function (req, res) {
         body = Buffer.concat(body).toString();
 
         obj = JSON.parse(body);
-        var request = obj.Request;
+        var request = obj.request;
         switch(request) {
             case "Radar":
                 console.log("Request: radar ================================================");
                 getPlayerPositionRadar(obj,res);
                 break;
-            case "fixedSignal":
+            case "sendSignal":
                 console.log("Request: fixedSignal ==========================================");
-                sendFixedSignal(obj);
+                sendSignal(obj);
+                break;
+            case "fight":
+                console.log("Request: fight ================================================");
+                fight(obj);
                 break;
             default:
                 console.log("Bad request ===================================================");
+                break;
         }
     });
 
@@ -37,9 +42,9 @@ http.createServer(function (req, res) {
 function getPlayerPositionRadar(jsonData,res) {
 
     var playerId = jsonData.playerId;
-    var playerLongitude = jsonData.Longitude;
-    var playerLatitude = jsonData.Latitude;
-    var fixedSignal = jsonData.fixedSignal;
+    var playerLongitude = jsonData.longitude;
+    var playerLatitude = jsonData.latitude;
+    var sendSignal = jsonData.sendSignal;
 
 
     MongoClient.connect(url, function (err, db) {
@@ -48,8 +53,8 @@ function getPlayerPositionRadar(jsonData,res) {
 
         console.log("Insert position of player with id: "+playerId);
 
-        var query = { idPlayer: playerId };
-        var newvalues = { $set: {Longitude : playerLongitude, Latitude : playerLatitude } };
+        var query = { idPlayer:playerId };
+        var newvalues = { $set: {longitude : playerLongitude, latitude : playerLatitude } };
         dbo.collection("testPlayers").updateOne(query, newvalues, function(err, res) {
             if (err) throw err;
             console.log("Update DB for player positions with id: "+playerId+ ", result query: "+res);
@@ -81,30 +86,53 @@ function getPlayerPositionRadar(jsonData,res) {
             }
         });
 
-        // update database after fixed signal
-        if (fixedSignal === 'true') {
+        // update database after signal
+        var myquery = { idPlayer: playerId };
+        var newvalues = { $set: {sendSignal: "falseSignal", dataSignal: null} };
+        dbo.collection("testPlayers").updateOne(myquery, newvalues, function(err, res) {
+            if (err) throw err;
+            console.log("sendSignal to false for player with id: "+playerId+", result query: "+ res);
+            db.close();
+        });
 
-            var myquery = { idPlayer: playerId };
-            var newvalues = { $set: {fixedSignal: "false"} };
-            dbo.collection("testPlayers").updateOne(myquery, newvalues, function(err, res) {
-                if (err) throw err;
-                console.log("fixedSignal to false for player with id: "+playerId+", result query: "+ res);
-                db.close();
-            });
-        }
     });
 }
-function sendFixedSignal(obj){
+function sendSignal(obj){
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         var dbo = db.db("testPlayers");
 
         var myquery = { idPlayer: obj.playerId };
-        var newvalues = { $set: {fixedSignal : "true"} };
+        var newvalues = { $set: {sendSignal : obj.sendSignal, dataSignal: obj.dataSignal} };
         dbo.collection("testPlayers").updateOne(myquery, newvalues, function(err, res) {
             if (err) throw err;
-            console.log("fixedSignal send to player with id: "+obj.playerId+", result query: "+ res);
+            console.log("Signal send to player with id: "+obj.playerId+", result query: "+ res);
             db.close();
         });
     });
 }
+function fight(obj){
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        var dbo = db.db("testPlayers");
+
+        var myquery = { idPlayer: obj.playerId };
+        var newvalues = { $set: {enemyPlayerId : obj.enemyPlayerId} };
+        dbo.collection("testPlayers").updateOne(myquery, newvalues, function(err, res) {
+            if (err) throw err;
+        });
+
+        console.log("==============>"+obj.idPlayer+"================>"+obj.enemyPlayerId);
+
+        var myquery = { idPlayer: obj.enemyPlayerId };
+        var newvalues = { $set: {enemyPlayerId : obj.idPlayer} };
+        dbo.collection("testPlayers").updateOne(myquery, newvalues, function(err, res) {
+            if (err) throw err;
+        });
+
+        console.log("Enemies are created");
+        db.close();
+
+    });
+}
+
