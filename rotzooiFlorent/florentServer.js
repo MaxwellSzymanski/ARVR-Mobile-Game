@@ -4,24 +4,46 @@ var http = require('http');
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
 
+const insertUser = require('./insertUser.js');
+const verifyUser = require('./verifyUser.js');
+
 //create a server object:
 http.createServer(function (req, res) {
 
-    const { headers, method, url } = req;
+    const {headers, method, url} = req;
+
     let body = [];
     req.on('error', (err) => {
         console.error(err);
     }).on('data', (chunk) => {
         body.push(chunk);
-    }).on('end', () => {
+    }).on('end', async () => {
         body = Buffer.concat(body).toString();
 
         obj = JSON.parse(body);
         var request = obj.request;
-        switch(request) {
+        switch (request) {
+            case "signup":
+                console.log("Request: signup ===============================================");
+                insertUser(obj);
+                break;
+            case "signin":
+                console.log("Request: signin ===============================================");
+                console.log(await  verifyUser(obj));
+                if(await verifyUser(obj)) {
+                    res.setHeader('Access-Control-Allow-Origin', '*');
+                    res.setHeader("Content-Type", "application/json");
+                    res.write(JSON.stringify({"result": true }))
+                } else {
+                    res.setHeader('Access-Control-Allow-Origin', '*');
+                    res.setHeader("Content-Type", "application/json");
+                    res.write(JSON.stringify({"result": false }))
+                }
+                res.end();
+                break;
             case "Radar":
                 console.log("Request: radar ================================================");
-                getPlayerPositionRadar(obj,res);
+                getPlayerPositionRadar(obj, res);
                 break;
             case "sendSignal":
                 console.log("Request: fixedSignal ==========================================");
@@ -36,7 +58,6 @@ http.createServer(function (req, res) {
                 break;
         }
     });
-
 }).listen(8080); //the server object listens on port 8080
 
 function getPlayerPositionRadar(jsonData,res) {

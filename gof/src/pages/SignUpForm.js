@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
+// const $ = require('jQuery');
 
 class SignUpForm extends React.Component {
     constructor() {
@@ -31,10 +33,17 @@ class SignUpForm extends React.Component {
         });
     }
 
-    handleSubmit(e) {
+    async handleSubmit(e) {
         e.preventDefault();
 
-        /*-- insertUser(this.state); --*/
+        const dataToSend = this.state;
+        dataToSend.request = "signup";
+
+        // send HTTP request to get JSON object with players
+        var urlD = 'http://localhost:8080';
+        let obj = JSON.stringify(dataToSend);
+
+        axios.post(urlD, obj);
 
         console.log('The form was submitted with the following data:');
         console.log(this.state);

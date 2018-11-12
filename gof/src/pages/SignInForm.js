@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import axios from "axios";
 
 class SignInForm extends React.Component {
     constructor() {
@@ -24,11 +25,27 @@ class SignInForm extends React.Component {
         });
     }
 
-    handleSubmit(e) {
+    async handleSubmit(e) {
         e.preventDefault();
+
+        const dataToSend = this.state;
+        dataToSend.request = "signin";
+
+        // send HTTP request to get JSON object with players
+        var urlD = 'http://localhost:8080';
+        let obj = JSON.stringify(dataToSend);
 
         console.log('The form was submitted with the following data:');
         console.log(this.state);
+
+        await axios.post(urlD, obj).then(
+            function(json) {
+                console.log('got here');
+                console.log(json.data.result);
+            }
+        );
+
+
     }
 
     render() {
