@@ -1,5 +1,5 @@
-var http = require('http');
-
+var https = require('https');
+const fs = require('fs');
 
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
@@ -7,8 +7,15 @@ var url = "mongodb://localhost:27017/";
 const insertUser = require('./insertUser.js');
 const verifyUser = require('./verifyUser.js');
 
+const https_options = {
+    key: fs.readFileSync('./ssl/team12.key'),
+    passphrase: 'GOWteam12',
+    cert: fs.readFileSync('./ssl/team12.pem')
+};
+
+
 //create a server object:
-http.createServer(function (req, res) {
+https.createServer(https_options, async function (req, res) {
 
     const {headers, method, url} = req;
 
@@ -25,7 +32,12 @@ http.createServer(function (req, res) {
         switch (request) {
             case "signup":
                 console.log("Request: signup ===============================================");
-                insertUser(obj);
+                try {
+                    console.log(await insertUser(obj));
+                } catch (e) {
+                    console.log('error catched');
+                }
+
                 break;
             case "signin":
                 console.log("Request: signin ===============================================");
