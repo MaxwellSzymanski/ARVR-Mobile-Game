@@ -8,14 +8,13 @@
     <title>OpenLayers example</title>
 </head>
 <body>
-
-
-<div id="map" class="map" ></div>
-<script src="https://openlayers.org/en/v4.6.5/build/ol.js"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<button onclick="createmap()">Map!</button>
 <button onclick="increaseUpdateFrequencyMap()">Raise update Frequency</button>
 <button onclick="decreaseUpdateFrequencyMap()">Decrease update Frequency</button>
+<button onclick="autozoom()">Autozoom</button>
+<div id="mapInfo" autozoom="14" zoom="14"></div>
+<div id="map" class="map" autozoom="14" zoom="14"></div>
+<script src="https://openlayers.org/en/v4.6.5/build/ol.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
 
 
@@ -26,9 +25,14 @@
     function decreaseUpdateFrequencyMap(){
 
     }
+    d();
 
+    function d () {
 
-    function createmap() {
+        alert("createMap");
+
+        document.getElementById("map").innerHTML = "";
+
         let longitude = 4.361721;
         let latitude = 50.850346;
 
@@ -50,10 +54,10 @@
 
         var data = {};
 
-        data.Request = "Radar";
-        data.playerId = "id1";
-        data.Longitude = "";
-        data.Latitude = "";
+        data.request = "Radar";
+        data.playerId = "1";
+        data.longitude = longitude;
+        data.latitude = latitude;
 
         obj = JSON.stringify(data);
         // Send get request use jquery ajax.
@@ -61,6 +65,7 @@
         $.post(urlD, obj, function (data) {
             create(data);
         });
+
 
         function create(players) {
 
@@ -74,15 +79,35 @@
                 })],
                 view: new ol.View({
                     center: ol.proj.fromLonLat([longitude, latitude]),
-                    zoom: 14,
                     rotation: rotationMap
                 })
 
             });
+            map.getView().setZoom(parseInt(document.getElementById("mapInfo").getAttribute("zoom")));
+
+            map.on('click', function(evt) {
+                var feature = map.forEachFeatureAtPixel(evt.pixel,
+                    function(feature, layer) {
+                        return feature;
+                    });
+                if( feature) {
+                    var att = feature.getProperties();
+                    var json = JSON.parse(att.name);
+                    alert("Id player: "+json.idPlayer);
+                }
+            });
+
 
             // add every player to map
             getPlayerLayers(players, map);
 
+
+            setTimeout(function(){
+                // store zoom of previous map
+                var zoom = map.getView().getZoom();
+                alert("get value of zoom: "+document.getElementById("mapInfo").getAttribute("zoom"));
+                document.getElementById("mapInfo").setAttribute("zoom",zoom.toString());
+            }, 8000);
 
             function getPlayerLayers(players, map) {
 
@@ -97,9 +122,12 @@
 
                     let longitude = obj[i].longitude;
                     let latitude = obj[i].latitude;
+                    let name = JSON.stringify(obj[i]);
+
 
                     var icon1 = new ol.Feature({
                         geometry: new ol.geom.Point(ol.proj.fromLonLat([longitude, latitude]),),
+                        name: name
                     });
 
 
@@ -127,8 +155,16 @@
                 }
             }
         }
-        setTimeout(createmap, 10000); //
+
+    setTimeout(d, 8000); //
     };
+
+    function autozoom(){
+        var zoom = document.getElementById("mapInfo").getAttribute("autozoom");
+        document.getElementById("mapInfo").setAttribute("zoom",zoom.toString());
+        alert("AUTOZOOM ACITVATED");
+        d();
+    }
 
 </script>
 </body>

@@ -82,13 +82,12 @@ function getPlayerPositionRadar(jsonData,res) {
                 res.write(JSON.stringify(result)); //write a response to the client
                 res.end(); //end the response
                 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
             }
         });
 
         // update database after signal
         var myquery = { idPlayer: playerId };
-        var newvalues = { $set: {sendSignal: "falseSignal", dataSignal: null} };
+        var newvalues = { $set: {sendSignal: null, dataSignal: null} };
         dbo.collection("testPlayers").updateOne(myquery, newvalues, function(err, res) {
             if (err) throw err;
             console.log("sendSignal to false for player with id: "+playerId+", result query: "+ res);
@@ -101,7 +100,6 @@ function sendSignal(obj){
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         var dbo = db.db("testPlayers");
-
         var myquery = { idPlayer: obj.playerId };
         var newvalues = { $set: {sendSignal : obj.sendSignal, dataSignal: obj.dataSignal} };
         dbo.collection("testPlayers").updateOne(myquery, newvalues, function(err, res) {
@@ -114,25 +112,37 @@ function sendSignal(obj){
 function fight(obj){
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
+
         var dbo = db.db("testPlayers");
 
         var myquery = { idPlayer: obj.playerId };
         var newvalues = { $set: {enemyPlayerId : obj.enemyPlayerId} };
         dbo.collection("testPlayers").updateOne(myquery, newvalues, function(err, res) {
             if (err) throw err;
+            console.log(res+ "result fight")
         });
-
-        console.log("==============>"+obj.idPlayer+"================>"+obj.enemyPlayerId);
-
-        var myquery = { idPlayer: obj.enemyPlayerId };
-        var newvalues = { $set: {enemyPlayerId : obj.idPlayer} };
-        dbo.collection("testPlayers").updateOne(myquery, newvalues, function(err, res) {
-            if (err) throw err;
-        });
-
-        console.log("Enemies are created");
         db.close();
 
     });
+
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        var dbo = db.db("testPlayers");
+
+        var myquery = { idPlayer: obj.enemyPlayerId };
+        var newvalues = { $set: {enemyPlayerId : obj.playerId} };
+        dbo.collection("testPlayers").updateOne(myquery, newvalues, function(err, res) {
+            if (err) throw err;
+            console.log(res+ "result fight")
+        });
+
+        db.close();
+
+    });
+
+    console.log("Enemies are created");
+
+
+
 }
 
