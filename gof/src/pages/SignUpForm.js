@@ -39,14 +39,19 @@ class SignUpForm extends React.Component {
         const dataToSend = this.state;
         dataToSend.request = "signup";
 
-        // send HTTP request to get JSON object with players
-        var urlD = 'http://localhost:8080';
+        // send HTTP request with sign up data.
+        var urlD = 'https://localhost:8080';
         let obj = JSON.stringify(dataToSend);
-
-        axios.post(urlD, obj);
 
         console.log('The form was submitted with the following data:');
         console.log(this.state);
+
+        await axios.post(urlD, obj).then(
+            function (json) {
+                if (json.data.success) console.log("success!");
+                else console.log(json.data.message);
+            });
+
     }
 
 

@@ -4,12 +4,19 @@ const fs = require('fs');
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
 
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/userdb',  { useNewUrlParser: true });
+
+const User = require('./db/userModel.js');
+
 const insertUser = require('./insertUser.js');
 const verifyUser = require('./verifyUser.js');
 
+const HTTPSsecret = require('./ssl/https_config.js');
+
 const https_options = {
     key: fs.readFileSync('./ssl/team12.key'),
-    passphrase: 'GOWteam12',
+    passphrase: HTTPSsecret,
     cert: fs.readFileSync('./ssl/team12.pem')
 };
 
@@ -32,12 +39,23 @@ https.createServer(https_options, async function (req, res) {
         switch (request) {
             case "signup":
                 console.log("Request: signup ===============================================");
-                try {
-                    console.log(await insertUser(obj));
-                } catch (e) {
-                    console.log('error catched');
-                }
-
+                const newUser = new User(obj);
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.setHeader("Content-Type", "application/json");
+                newUser.save( function(error) {
+                    if (error) {
+                        console.log(error);
+                        res.write(JSON.stringify({
+                            success: false,
+                            message: error.message,
+                        }));
+                    } else {
+                        res.write(JSON.stringify({
+                            success: true,
+                        }));
+                    }
+                    res.end();
+                });
                 break;
             case "signin":
                 console.log("Request: signin ===============================================");
