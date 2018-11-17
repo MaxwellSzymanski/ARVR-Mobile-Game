@@ -50,9 +50,9 @@ class SignUpForm extends React.Component {
         await axios.post(urlD, obj).then(
             function (json) {
                 if (json.data.success) console.log("success!\ntoken:   " + json.data.token);
-                else console.log(json.data.message);
-            });
-
+                else alert(json.data.message);
+            }
+        );
     }
 
 

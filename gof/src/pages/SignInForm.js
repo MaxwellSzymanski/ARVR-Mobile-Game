@@ -58,9 +58,9 @@ class SignInForm extends React.Component {
         // { email: true, password: true/false }        if e-mail registered and password correct/incorrect
         await axios.post(urlD, obj).then(
             function(json) {
-                if (!json.data.email) console.log("invalid e-mail");
-                else if(!json.data.password) console.log("invalid password");
-                else console.log("success!");
+                if (!json.data.email) alert("invalid e-mail");
+                else if(!json.data.password) alert("invalid password");
+                else alert("success!");
             }
         );
     }
