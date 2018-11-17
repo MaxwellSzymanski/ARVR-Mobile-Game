@@ -8,9 +8,14 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/userdb',  { useNewUrlParser: true });
 
 const User = require('./db/userModel.js');
+const ActivePlayer = require('./db/gameModel');
 
-const insertUser = require('./insertUser.js');
-const verifyUser = require('./verifyUser.js');
+const getFirstActivePlayer = async function () {
+    return await User.findById(
+        (await ActivePlayer.findOne(
+            {}, 'playerid', { sort: { 'created_at' : 1 } })
+        ).playerid);
+};
 
 const HTTPSsecret = require('./ssl/https_config.js');
 
@@ -52,6 +57,7 @@ https.createServer(https_options, async function (req, res) {
                     } else {
                         res.write(JSON.stringify({
                             success: true,
+                            token: newUser.createToken(),
                         }));
                     }
                     res.end();
@@ -59,17 +65,24 @@ https.createServer(https_options, async function (req, res) {
                 break;
             case "signin":
                 console.log("Request: signin ===============================================");
-                console.log(await  verifyUser(obj));
-                if(await verifyUser(obj)) {
-                    res.setHeader('Access-Control-Allow-Origin', '*');
-                    res.setHeader("Content-Type", "application/json");
-                    res.write(JSON.stringify({"result": true }))
-                } else {
-                    res.setHeader('Access-Control-Allow-Origin', '*');
-                    res.setHeader("Content-Type", "application/json");
-                    res.write(JSON.stringify({"result": false }))
-                }
-                res.end();
+                console.log(obj.position);
+                User.findOne({ email : obj.email }, async function (error, result) {
+                    if (error) throw error;
+                    if (result === null) {
+                        res.setHeader('Access-Control-Allow-Origin', '*');
+                        res.setHeader("Content-Type", "application/json");
+                        res.write(JSON.stringify({"email": false}));
+                        res.end();
+                    } else {
+                        const value = await result.checkPassword(obj.password);
+                        res.setHeader('Access-Control-Allow-Origin', '*');
+                        res.setHeader("Content-Type", "application/json");
+                        res.write(JSON.stringify({"email": true, "password": value}));
+                        res.end();
+                        const newActivePlayer = new ActivePlayer({playerid: result._id, location: obj.position});
+                        newActivePlayer.save();
+                    }
+                });
                 break;
             case "Radar":
                 console.log("Request: radar ================================================");

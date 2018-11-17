@@ -40,7 +40,8 @@ class SignUpForm extends React.Component {
         dataToSend.request = "signup";
 
         // send HTTP request with sign up data.
-        var urlD = 'https://localhost:8080';
+        // receive success value (and error if the e-mail/username is already taken.
+        const urlD = 'https://localhost:8080';
         let obj = JSON.stringify(dataToSend);
 
         console.log('The form was submitted with the following data:');
@@ -48,7 +49,7 @@ class SignUpForm extends React.Component {
 
         await axios.post(urlD, obj).then(
             function (json) {
-                if (json.data.success) console.log("success!");
+                if (json.data.success) console.log("success!\ntoken:   " + json.data.token);
                 else console.log(json.data.message);
             });
 

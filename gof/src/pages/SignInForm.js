@@ -28,24 +28,41 @@ class SignInForm extends React.Component {
     async handleSubmit(e) {
         e.preventDefault();
 
+        const position = { longitude: 0.0, latitude: 0.0 };
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(storePosition);
+        } else {
+            alert("No geolocation available");
+        }
+
+        function storePosition(pos) {
+            position.longitude = pos.coords.longitude;
+            position.latitude = pos.coords.latitude;
+        };
+
+        this.state.position = position;
         const dataToSend = this.state;
         dataToSend.request = "signin";
 
-        // send HTTP request to get JSON object with players
-        var urlD = 'http://localhost:8080';
+        // send HTTP request with login data and receive value
+        // about correctness of data.
+        const urlD = 'https://localhost:8080';
         let obj = JSON.stringify(dataToSend);
 
         console.log('The form was submitted with the following data:');
         console.log(this.state);
 
+        // received object:
+        // { email: false }                             if e-mail not registered
+        // { email: true, password: true/false }        if e-mail registered and password correct/incorrect
         await axios.post(urlD, obj).then(
             function(json) {
-                console.log('got here');
-                console.log(json.data.result);
+                if (!json.data.email) console.log("invalid e-mail");
+                else if(!json.data.password) console.log("invalid password");
+                else console.log("success!");
             }
         );
-
-
     }
 
     render() {

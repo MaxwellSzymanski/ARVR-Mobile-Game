@@ -13,7 +13,7 @@ const Schema = new mongoose.Schema({
         lowercase: true,
         unique: true,
         required: true,
-        // index: true         // index to optimise queries that search on username
+        index: true         // index to optimise queries that search on username
     },
     email: {
         type: String,
@@ -21,7 +21,7 @@ const Schema = new mongoose.Schema({
         unique: true,
         required: true,
         match: /\S+@\S+\.\S+/,
-        // index: true         // index to optimise queries that search on email
+        index: true         // index to optimise queries that search on email
     },
     password: {
         type: String,
@@ -39,11 +39,8 @@ Schema.pre('save', async function(){
     this.password = hash;
 });
 
-Schema.methods.checkPassword = function(password) {
-    bcrypt.compare(password, this.passwordHash, function (err, res) {
-        if (err) throw err;
-        return res;
-    });
+Schema.methods.checkPassword = async function(password) {
+    return await bcrypt.compare(password, this.password);
 };
 
 Schema.methods.createToken = function() {
