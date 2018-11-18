@@ -3,6 +3,7 @@ const fs = require('fs');
 
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
+var frequency = 4000;
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/userdb',  { useNewUrlParser: true });
@@ -96,12 +97,37 @@ https.createServer(https_options, async function (req, res) {
                 console.log("Request: fight ================================================");
                 fight(obj);
                 break;
+            case "updateFrequency":
+                console.log("Request: update frequency ================================================");
+                updateFrequency(obj,res);
+                break;
+            case "frequency":
+                console.log("Request: frequency ================================================");
+                frequency(obj,res);
+                break;
             default:
                 console.log("Bad request ===================================================");
                 break;
         }
     });
-}).listen(8080); //the server object listens on port 8080
+}).listen(80); //the server object listens on port 8080
+
+function frequency(jsonData,res){
+    jsonData.frequency = frequency;
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader("Content-Type", "ERROR");
+    res.write(JSON.stringify(jsonData));
+    res.end();
+}
+
+function updateFrequency(jsonData,res){
+    frequency = jsonData.frequency;
+    jsonData.update = "true";
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader("Content-Type", "ERROR");
+    res.write(JSON.stringify(jsonData));
+    res.end();
+}
 
 function getPlayerPositionRadar(jsonData,res) {
 
