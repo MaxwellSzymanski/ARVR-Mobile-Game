@@ -48,7 +48,7 @@ http.createServer(function (req, res) {
 
 }).listen(8080); //the server object listens on port 8080
 
-function frequency(obj,res){
+function frequency(jsonData,res){
     jsonData.frequency = frequency;
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader("Content-Type", "ERROR");
