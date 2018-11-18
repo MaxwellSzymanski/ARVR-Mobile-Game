@@ -39,6 +39,8 @@
 <button onclick="sendSpecialSignal()">send Special Signal</button>
 <button onclick="sendHandShake()">send HandShake</button>
 <button onclick="autozoom()">AutoZoom!</button>
+<button onclick="increaseUpdateFrequency()" id="increaseFrequencyButton">Increase update frequency!</button>
+<button onclick="decreaseUpdateFrequency()" id="decreaseFrequencyButton">Decrease update frequency!</button>
 <h1 id="typeSignal"></h1>
 
 
@@ -47,6 +49,8 @@
     <div id="radar" ></div>
 </div>
 <script>
+
+    var urlD = 'http://localhost:8080'; // adres server
 
 
     var dataCookie = {};
@@ -60,6 +64,43 @@
     dataCookie.latitude ="50.850346";
 
     document.cookie = JSON.stringify(dataCookie);
+
+    function increaseUpdateFrequency(){
+        sendUpdateFrequency(true);
+    }
+
+    function decreaseUpdateFrequency(){
+        sendUpdateFrequency(false);
+    }
+
+    function sendUpdateFrequency(increase){
+        var cookieJson = JSON.parse(document.cookie);
+        var frequency = Number(cookieJson.updateFrequency);
+        if(increase && frequency > 1000) {
+            frequency -= 1000;
+        } else {
+            frequency += 1000;
+        }
+        cookieJson.updateFrequency = frequency.toString();
+        document.cookie = JSON.stringify(cookieJson);
+
+        var data = {};
+
+        data.request = "updateFrequency";
+        data.frequency = frequency;
+
+        obj = JSON.stringify(data);
+
+        $.post(urlD,obj, function (dataHTTP) {
+            var returnObject = JSON.parse(dataHTTP);
+            if(returnObject.hasOwnProperty("frequency") && returnObject.hasOwnProperty("update") && returnObject.update === "true"){
+                var cookieJson = JSON.parse(document.cookie);
+                cookieJson.frequency = returnObject.frequency;
+                alert("Frequency is adjusted => frequency now: "+cookieJson.frequency);
+            }
+
+        });
+    }
 
     function sendSpecialSignal(){
         var cookieJson = JSON.parse(document.cookie);
@@ -115,7 +156,6 @@
     // https://stackoverflow.com/questions/18353107/radar-scanner-effect-using-jquery
     $(function d () {
 
-        var urlD = 'http://localhost:8080';
 
         var data = {};
 
@@ -187,6 +227,14 @@
 
             i = 0;
             for( x in object2){
+
+                // check if player is firstPlayer
+                if( object2[i].hasOwnProperty("firstPlayer") && object2[i].firstPlayer === thisPlayer) {
+                    document.getElementById("increaseFrequencyButton").style.visibility="visible";
+                    document.getElementById("decreaseFrequencyButton").style.visibility="visible";
+                } else {
+                    document.getElementById("increaseFrequencyButton").style.visibility="hidden";
+                    document.getElementById("decreaseFrequencyButton").style.visibility="hidden";                }
 
                 // check for enemy!
                 if( object2[i].idPlayer === thisPlayer && object2[i].hasOwnProperty("enemyPlayerId") &&object2[i].enemyPlayerId !== null ) {

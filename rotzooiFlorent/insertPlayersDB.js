@@ -35,7 +35,7 @@ MongoClient.connect(url, function(err, db) {
 
     dbo.collection("testPlayers").insertOne(firstPlayer, function(err, res) {
         if (err) throw err;
-        console.log("Player 2 inserted");
+        console.log("First player inserted");
     });
 
     db.close();

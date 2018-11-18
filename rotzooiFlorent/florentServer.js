@@ -3,6 +3,7 @@ var http = require('http');
 
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
+var frequency = 4000;
 
 //create a server object:
 http.createServer(function (req, res) {
@@ -31,6 +32,14 @@ http.createServer(function (req, res) {
                 console.log("Request: fight ================================================");
                 fight(obj);
                 break;
+            case "updateFrequency":
+                console.log("Request: update frequency ================================================");
+                updateFrequency(obj,res);
+                break;
+            case "frequency":
+                console.log("Request: frequency ================================================");
+                frequency(obj,res);
+                break;
             default:
                 console.log("Bad request ===================================================");
                 break;
@@ -38,6 +47,24 @@ http.createServer(function (req, res) {
     });
 
 }).listen(8080); //the server object listens on port 8080
+
+function frequency(obj,res){
+    jsonData.frequency = frequency;
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader("Content-Type", "ERROR");
+    res.write(JSON.stringify(jsonData));
+    res.end();
+}
+
+function updateFrequency(jsonData,res){
+    frequency = jsonData.frequency;
+    jsonData.update = "true";
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader("Content-Type", "ERROR");
+    res.write(JSON.stringify(jsonData));
+    res.end();
+}
+
 
 function getPlayerPositionRadar(jsonData,res) {
 
