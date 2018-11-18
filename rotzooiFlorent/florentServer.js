@@ -38,7 +38,7 @@ http.createServer(function (req, res) {
                 break;
             case "frequency":
                 console.log("Request: frequency ================================================");
-                frequency(obj,res);
+                getFrequency(obj,res);
                 break;
             default:
                 console.log("Bad request ===================================================");
@@ -48,8 +48,9 @@ http.createServer(function (req, res) {
 
 }).listen(8080); //the server object listens on port 8080
 
-function frequency(jsonData,res){
+function getFrequency(jsonData,res){
     jsonData.frequency = frequency;
+    jsonData.update = "true";
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader("Content-Type", "ERROR");
     res.write(JSON.stringify(jsonData));
