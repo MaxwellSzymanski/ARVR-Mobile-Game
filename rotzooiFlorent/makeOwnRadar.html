@@ -65,6 +65,27 @@
 
     document.cookie = JSON.stringify(dataCookie);
 
+
+    function specialSignalReceived(){
+        document.body.style.backgroundColor = "red";
+        setTimeout(function(){
+            document.body.style.backgroundColor = "black";
+        }, 3000);
+    }
+
+
+    function getFrequency(){
+        $.post(urlD,'{ "request": "frequency" }', function (dataHTTP) {
+            var returnObject = JSON.parse(dataHTTP);
+            if(returnObject.hasOwnProperty("frequency") && returnObject.hasOwnProperty("update") && returnObject.update === "true"){
+                var cookieJson = JSON.parse(document.cookie);
+                cookieJson.frequency = returnObject.frequency;
+                document.cookie = JSON.stringify(cookieJson);
+            }
+
+        });
+    }
+
     function increaseUpdateFrequency(){
         sendUpdateFrequency(true);
     }
@@ -157,9 +178,12 @@
     $(function d () {
 
 
+
+        // get latest update frequency
+        getFrequency();
+
+
         var data = {};
-
-
 
         var cookie = JSON.parse(document.cookie);
 
@@ -167,6 +191,20 @@
         data.playerId = cookie.idPlayer;
         data.longitude = cookie.longitude;
         data.latitude =  cookie.latitude;
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            alert("No geolocation available");
+        }
+        function showPosition(position) {
+            var cookieJson = JSON.parse(document.cookie);
+            cookieJson.longitude = position.coords.longitude;
+            cookieJson.latitude = position.coords.latitude;
+            document.cookie = JSON.stringify(cookieJson);
+        }
+
+
         data.sendSignal = cookie.sendSignal;
 
 
@@ -211,9 +249,11 @@
             var object = JSON.parse(dataHTTP);
 
             i = 0;
-            for( x in object){
-                let pos = JSON.parse(longLatToXandY(playerLongitude,playerLatitude,object[i].longitude,object[i].latitude));
-                addElement(pos.x, pos.y, object[i].idPlayer);
+            for( x in object) {
+                let pos = JSON.parse(longLatToXandY(playerLongitude, playerLatitude, object[i].longitude, object[i].latitude));
+                if( !object[i].hasOwnProperty("firstPlayer") ){
+                    addElement(pos.x, pos.y, object[i].idPlayer);
+                }
                 i++;
             }
 
@@ -244,6 +284,7 @@
                 if (object2[i].sendSignal === "specialSignal" && object2[i].idPlayer === thisPlayer){
                     //alert("acknowledgement received!");
                     alert("specialSignal received!");
+                    specialSignalReceived();
                     break;
                 }
 
