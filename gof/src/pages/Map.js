@@ -1,13 +1,17 @@
 import React from 'react';
 // eslint-disable-next-line
 import { Link } from 'react-router-dom';
+import Radar from './Radar.js';
 
 
 class Map extends React.Component {
 
+
+
     render() {
       return(
-        <div><h1>This is the map</h1></div>
+      <div
+> <Radar></Radar></div>
       );
     }
 }
