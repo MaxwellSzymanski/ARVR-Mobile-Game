@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.2.0/css/ol.css" type="text/css">
+    <style>
+
+    </style>
+    <title>OpenLayers example</title>
+</head>
+<body>
+<button onclick="increaseUpdateFrequencyMap()">Raise update Frequency</button>
+<button onclick="decreaseUpdateFrequencyMap()">Decrease update Frequency</button>
+<button onclick="autozoom()">Autozoom</button>
+<div id="mapInfo" autozoom="14" zoom="14"></div>
+<div id="map" class="map" autozoom="14" zoom="14"></div>
+<script src="https://openlayers.org/en/v4.6.5/build/ol.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+
+
+    function increaseUpdateFrequencyMap (){
+
+    }
+
+    function decreaseUpdateFrequencyMap(){
+
+    }
+    d();
+
+    function d () {
+
+        alert("createMap");
+
+        document.getElementById("map").innerHTML = "";
+
+        let longitude = 4.361721;
+        let latitude = 50.850346;
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            alert("No geolocation available");
+        }
+
+        function showPosition(position) {
+            longitude = position.coords.longitude;
+            latitude = position.coords.latitude;
+        }
+
+
+        // send HTTP request to get JSON object with players
+
+        var urlD = 'http://localhost:8080';
+
+        var data = {};
+
+        data.request = "Radar";
+        data.playerId = "1";
+        data.longitude = longitude;
+        data.latitude = latitude;
+
+        obj = JSON.stringify(data);
+        // Send get request use jquery ajax.
+
+        $.post(urlD, obj, function (data) {
+            create(data);
+        });
+
+
+        function create(players) {
+
+            // Create Map
+            let rotationMap = 0;
+
+            const map = new ol.Map({
+                target: 'map',
+                layers: [new ol.layer.Tile({
+                    source: new ol.source.OSM(),
+                })],
+                view: new ol.View({
+                    center: ol.proj.fromLonLat([longitude, latitude]),
+                    rotation: rotationMap
+                })
+
+            });
+            map.getView().setZoom(parseInt(document.getElementById("mapInfo").getAttribute("zoom")));
+
+            map.on('click', function(evt) {
+                var feature = map.forEachFeatureAtPixel(evt.pixel,
+                    function(feature, layer) {
+                        return feature;
+                    });
+                if( feature) {
+                    var att = feature.getProperties();
+                    var json = JSON.parse(att.name);
+                    alert("Id player: "+json.idPlayer);
+                }
+            });
+
+
+            // add every player to map
+            getPlayerLayers(players, map);
+
+
+            setTimeout(function(){
+                // store zoom of previous map
+                var zoom = map.getView().getZoom();
+                alert("get value of zoom: "+document.getElementById("mapInfo").getAttribute("zoom"));
+                document.getElementById("mapInfo").setAttribute("zoom",zoom.toString());
+            }, 8000);
+
+            function getPlayerLayers(players, map) {
+
+
+                obj = (JSON.parse(players));
+
+                let i = 0;
+                for (x in obj) {
+
+                    // create icon
+                    // Source: https://stackoverflow.com/questions/48902253/how-to-add-icon-marker-to-osm-map-using-openlayers-4-6-4
+
+                    let longitude = obj[i].longitude;
+                    let latitude = obj[i].latitude;
+                    let name = JSON.stringify(obj[i]);
+
+
+                    var icon1 = new ol.Feature({
+                        geometry: new ol.geom.Point(ol.proj.fromLonLat([longitude, latitude]),),
+                        name: name
+                    });
+
+
+                    let iconLayerSource = new ol.source.Vector({
+                        features: [icon1]
+                    });
+
+                    let iconLayer = new ol.layer.Vector({
+                        source: iconLayerSource,
+                        style: new ol.style.Style({
+                            image: new ol.style.Icon({
+                                anchor: [0.5, 0.5],
+                                anchorXUnits: 'fraction',
+                                anchorYUnits: 'fraction',
+                                scale: 0.1,
+                                src: 'https://img.freepik.com/free-icon/frontal-standing-man-silhouette_318-29133.jpg?size=338c&ext=jpg'
+                            })
+                        })
+                    });
+                    i++;
+
+                    // adding every player icon to map!
+                    map.addLayer(iconLayer);
+
+                }
+            }
+        }
+
+    setTimeout(d, 8000); //
+    };
+
+    function autozoom(){
+        var zoom = document.getElementById("mapInfo").getAttribute("autozoom");
+        document.getElementById("mapInfo").setAttribute("zoom",zoom.toString());
+        alert("AUTOZOOM ACITVATED");
+        d();
+    }
+
+</script>
+</body>
+</html>
