@@ -18,6 +18,7 @@
 <script type="text/javascript">
 
 
+
     function increaseUpdateFrequencyMap (){
 
     }
@@ -25,9 +26,17 @@
     function decreaseUpdateFrequencyMap(){
 
     }
+
+
+    var longitude = 4.361721;
+    var latitude = 50.850346;
+
+
     d();
 
+
     function d () {
+
 
         alert("createMap");
 
@@ -40,25 +49,24 @@
 
         var data = {};
 
-        data.playerId = "1";
+        data.playerId = "5bf1d5a3b373a15628ea2b81";
         data.request = "Radar";
 
-
-        let longitude = 4.361721;
-        let latitude = 50.850346;
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition);
         } else {
-            alert("No geolocation available");
             data.longitude = longitude;
             data.latitude = latitude;
         }
 
         function showPosition(position) {
-            data.longitude = position.coords.longitude;
-            data.latitude = position.coords.latitude;
+            longitude = position.coords.longitude;
+            latitude = position.coords.latitude;
         }
+
+        data.longitude = longitude;
+        data.latitude = latitude;
 
         obj = JSON.stringify(data);
         // Send get request use jquery ajax.

@@ -50,12 +50,12 @@
 </div>
 <script>
 
-    var urlD = 'http://localhost:8080'; // adres server
+    var urlD = 'https://35.241.198.186:80'; // adres server
 
 
     var dataCookie = {};
 
-    dataCookie.idPlayer="1";
+    dataCookie.idPlayer="5bf1d5a3b373a15628ea2b81";
     dataCookie.numberPixelPerMeter="1";
     dataCookie.updateFrequency="4000";
     dataCookie.autozoom="on";
@@ -75,6 +75,7 @@
 
 
     function getFrequency(){
+
         $.post(urlD,'{ "request": "frequency" }', function (dataHTTP) {
             var returnObject = JSON.parse(dataHTTP);
             if(returnObject.hasOwnProperty("frequency") && returnObject.hasOwnProperty("update") && returnObject.update === "true"){
@@ -247,7 +248,7 @@
             }
 
             var object = JSON.parse(dataHTTP);
-
+            
             i = 0;
             for( x in object) {
                 let pos = JSON.parse(longLatToXandY(playerLongitude, playerLatitude, object[i].longitude, object[i].latitude));
