@@ -57,18 +57,17 @@ io.sockets.on('connection', function (socket) {
 
 //MongoDB code
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/";
+var url = "mongodb://team12:mongoDBteam12@35.241.198.186:27017/?authMechanism=SCRAM-SHA-1&authSource=userdb";
 
 var names;
 
 function addPlayerEntry(name, fv) {
   MongoClient.connect(url, function(err, db) {
     if (err) throw err;
-    var dbo = db.db("gow");
+    var dbo = db.db("facerecognition");
     var myobj = { username: name , featureVector: fv };
     dbo.collection("players").insertOne(myobj, function(err, res) {
       if (err) throw err;
-      console.log("document inserted");
       db.close();
     });
   });
@@ -78,7 +77,7 @@ async function getFeatureVectorsFromDB(callBack) {
 
   MongoClient.connect(url, async function(err, db) {
     if (err) throw err;
-    var dbo = db.db("gow");
+    var dbo = db.db("facerecognition");
     dbo.collection("players").find({}, { projection: { _id: 0, username: 1, featureVector: 1 } }).toArray(function(err, result) {
       if (err) throw err;
       //console.log(result);
