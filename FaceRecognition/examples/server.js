@@ -64,9 +64,9 @@ var names;
 function addPlayerEntry(name, fv) {
   MongoClient.connect(url, function(err, db) {
     if (err) throw err;
-    var dbo = db.db("facerecognition");
+    var dbo = db.db("userdb");
     var myobj = { username: name , featureVector: fv };
-    dbo.collection("players").insertOne(myobj, function(err, res) {
+    dbo.collection("facerecognition").insertOne(myobj, function(err, res) {
       if (err) throw err;
       db.close();
     });
@@ -77,8 +77,8 @@ async function getFeatureVectorsFromDB(callBack) {
 
   MongoClient.connect(url, async function(err, db) {
     if (err) throw err;
-    var dbo = db.db("facerecognition");
-    dbo.collection("players").find({}, { projection: { _id: 0, username: 1, featureVector: 1 } }).toArray(function(err, result) {
+    var dbo = db.db("userdb");
+    dbo.collection("facerecognition").find({}, { projection: { _id: 0, username: 1, featureVector: 1 } }).toArray(function(err, result) {
       if (err) throw err;
       //console.log(result);
       db.close();
