@@ -1,0 +1,116 @@
+<html>
+<head>
+  <script src="face-api.js"></script>
+  <script src="commons.js"></script>
+  <script type="text/javascript" src="GoW/faceRecognition.js"></script>
+  <script type="text/javascript" src="GoW/tests.js"></script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="GoW/style.css">
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/GoW/mongoDB.js"></script>
+
+
+</head>
+<body>
+
+<div class="split left">
+  <div class="centered">
+    <img class ="image" id="inputImg1" src="" alt="inputImg1" style="max-width: 400px; max-height: 400px;" />
+    <p></p>
+    <input type="file"  accept="image/*" name="image" id="file1"  onchange="loadFile1(event)">
+    <button for="imgUrlInput" onclick="updateResults()" style="cursor: pointer;">DETECT</button>
+    <button for="imgUrlInput" onclick="getMatchFromDB()" style="cursor: pointer;">DETECT FROM DB</button>
+    <p></p>
+    First name: <input type="text" name="FirstName" value="" id="firstName"><br>
+    Last name: <input type="text" name="LastName" value="" id="lastName"><br>
+    <button for="imgUrlInput" onclick="submitPhoto()" style="cursor: pointer;">SUBMIT PHOTO</button>
+    <p></p>
+    Confidence: <input type="number" id= "confidence" name="confidence" min="0" max="1">
+    <button onclick="setConfidence()">SET</button>
+  </div>
+</div>
+
+<div class="split right">
+  <div class="centered">
+    <img class ="image" id="inputImg2" src="" alt="inputImg2" style="max-width: 400px; max-height: 400px;" />
+    <p></p>
+    <input type="file"  accept="image/*" name="image" id="file2"  onchange="loadFile2(event)">
+    <b class="distance" id="distanceLabel" style="color: black"> Distance: 0 </b>
+    <p></p>
+    <button onclick="runTests()"> RUN TEST </button>
+  </div>
+</div>
+<div id="myDiv"></div>
+
+</body>
+
+
+
+
+<script>
+
+  async function getBestMatch(result) {
+    descriptor1 = await getDescriptorImg1()
+    var distances = []
+
+
+
+    for (i = 0; i < result.length; i++) {
+      descriptor2 = []
+      for (j = 0; j < 128; j++) {
+        descriptor2.push((result[i].featureVector)[j])
+      }
+
+      if (descriptor1 != null && descriptor2 != null) {
+
+        distance = faceapi.round(faceapi.euclideanDistance(descriptor1, descriptor2))
+        distances.push(distance)
+        console.log(result[i].username + " distance: " + distance)
+      }
+    }
+      var mindex = await indexOfMin(distances);
+      console.log("MATCH: " + result[mindex].username)
+    }
+
+  function indexOfMin(arr) {
+    if (arr.length === 0) {
+        return -1;
+    }
+
+    var min = arr[0];
+    var minIndex = 0;
+
+    for (var i = 1; i < arr.length; i++) {
+        if (arr[i] < min) {
+            minIndex = i;
+            min = arr[i];
+        }
+    }
+    return minIndex;
+  }
+
+  var socket = io.connect('http://localhost:3000');
+
+  async function getMatchFromDB() {
+    socket.emit('getPlayerMatch');
+  }
+
+  async function submitPhoto() {
+    fv = await getDescriptorImg1()
+    name = document.getElementById('firstName').value + " " + document.getElementById('lastName').value
+    socket.emit('getPlayerEntry', name, fv);
+  }
+
+  socket.on('sendFV', function(result) {
+    console.log(result)
+    getBestMatch(result)
+  })
+
+
+  $(document).ready(function() {
+    run()
+  })
+
+</script>
+</html>

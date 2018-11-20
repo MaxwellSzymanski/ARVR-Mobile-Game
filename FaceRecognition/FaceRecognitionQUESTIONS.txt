@@ -1,0 +1,3 @@
+Picture resolution?
+Bizantijnse tolerantie?
+False-Positive / False-Negative

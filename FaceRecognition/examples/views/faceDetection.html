@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="face-api.js"></script>
+  <script src="commons.js"></script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+</head>
+
+<style>
+  div {
+    .grid-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr;
+      grid-template-areas: "c1 c2 c3" "c1 c2 c3" "c1 c2 c3";
+    }
+
+    .c1 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1.3fr 0.7fr;
+      grid-template-areas: "photoGrid1 photoGrid1" "buttonGrid buttonGrid";
+      grid-area: c1;
+    }
+
+    .photoGrid1 { grid-area: photoGrid1; }
+
+    .buttonGrid { grid-area: buttonGrid; }
+
+    .c2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 0.7fr 0.9fr 1.4fr;
+      grid-template-areas: ". . ." "centerGrid centerGrid centerGrid" ". . .";
+      grid-area: c2;
+    }
+
+    .centerGrid { grid-area: centerGrid; }
+
+    .c3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1.3fr 0.7fr;
+      grid-template-areas: "photoGrid2 photoGrid2 photoGrid2" "buttonGrid2 buttonGrid2 buttonGrid2";
+      grid-area: c3;
+    }
+
+    .photoGrid2 { grid-area: photoGrid2; }
+
+    .buttonGrid2 { grid-area: buttonGrid2; }
+</style>
+
+<body>
+  <div class="grid-container">
+    <div class="c1" style:"     background-color: #f94545;">
+      <div class="photoGrid1"></div>
+      <div class="buttonGrid"></div>
+    </div>
+    <div class="c2">
+      <div class="centerGrid"></div>
+    </div>
+    <div class="c3">
+      <div class="photoGrid2"></div>
+      <div class="buttonGrid2"></div>
+    </div>
+  </div>
+</body>
+</html>
