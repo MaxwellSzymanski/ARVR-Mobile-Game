@@ -68,6 +68,9 @@
         distances.push(distance)
         console.log(result[i].username + " distance: " + distance)
       }
+      else {
+        distances.push(1)
+      }
     }
       var mindex = await indexOfMin(distances);
       console.log("MATCH: " + result[mindex].username)
@@ -98,8 +101,13 @@
 
   async function submitPhoto() {
     fv = await getDescriptorImg1()
-    name = document.getElementById('firstName').value + " " + document.getElementById('lastName').value
-    socket.emit('getPlayerEntry', name, fv);
+    if (fv != null) {
+      name = document.getElementById('firstName').value + " " + document.getElementById('lastName').value
+      socket.emit('getPlayerEntry', name, fv);
+    }
+    else {
+      console.log("ERROR: No face detected!")
+    }
   }
 
   socket.on('sendFV', function(result) {
