@@ -24,20 +24,6 @@ app.get('/peno', (req, res) => res.sendFile(path.join(viewsDir, 'GoW/PenO.html')
 
 server.listen(3000, () => console.log('Listening on port 3000!'))
 
-app.post('/fetch_external_image', async (req, res) => {
-  const { imageUrl } = req.body
-  if (!imageUrl) {
-    return res.status(400).send('imageUrl param required')
-  }
-  try {
-    const externalResponse = await request(imageUrl)
-    res.set('content-type', externalResponse.headers['content-type'])
-    return res.status(202).send(Buffer.from(externalResponse.body))
-  } catch (err) {
-    return res.status(404).send(err.toString())
-  }
-})
-
 //connection between client and server.js
 io.sockets.on('connection', function (socket) {
     console.log('A client is connected!');
@@ -49,7 +35,6 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('getPlayerMatch', function() {
         getFeatureVectorsFromDB(function(result) {
-          console.log(result)
           socket.emit('sendFV', result);
         })
     });
