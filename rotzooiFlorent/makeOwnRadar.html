@@ -22,38 +22,137 @@
             box-shadow:0 0 10px 5px rgba(100,255,0,0.5);
             opacity:0.2;
         }
+        .objEnemy{
+            background:#cf5;
+            position:absolute;
+            border-radius: 50%;
+            width:4px; height:4px; margin:-2px;
+            box-shadow:0 0 10px 5px rgba(255, 0, 0, 1);
+            opacity:0.2;
+        }
     </style>
 </head>
 <body>
 
 <button onclick="increaseNumberPixelPerMeter()">Enlarge Radar!</button>
 <button onclick="decreaseNumberPixelPerMeter()">Reduce Radar!</button>
+<button onclick="sendSpecialSignal()">send Special Signal</button>
+<button onclick="sendHandShake()">send HandShake</button>
 <button onclick="autozoom()">AutoZoom!</button>
-
-<h1 class="obj" data-atDeg="10">Radar!</h1>
+<button onclick="increaseUpdateFrequency()" id="increaseFrequencyButton">Increase update frequency!</button>
+<button onclick="decreaseUpdateFrequency()" id="decreaseFrequencyButton">Decrease update frequency!</button>
+<h1 id="typeSignal"></h1>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <div id="parentRadar">
-    <div id="radar" numberPixelPerMeter="1" updateFrequency="3000" autozoom="on"></div>
+    <div id="radar" ></div>
 </div>
 <script>
 
-    function increaseNumberPixelPerMeter(){
-        document.getElementById("radar").setAttribute("autozoom","off");
-        var numberPixelPerMeter = parseFloat(document.getElementById("radar").getAttribute("numberPixelPerMeter"))
-        numberPixelPerMeter += 0.5;
-        document.getElementById("radar").setAttribute("numberPixelPerMeter",numberPixelPerMeter.toString());
+    var urlD = 'https://35.241.198.186:80'; // adres server
 
+
+    var dataCookie = {};
+
+    dataCookie.idPlayer="5bf1d5a3b373a15628ea2b81";
+    dataCookie.numberPixelPerMeter="1";
+    dataCookie.updateFrequency="4000";
+    dataCookie.autozoom="on";
+    dataCookie.typeSignal= null;
+    dataCookie.longitude ="4.361721";
+    dataCookie.latitude ="50.850346";
+
+    document.cookie = JSON.stringify(dataCookie);
+
+
+    function specialSignalReceived(){
+        document.body.style.backgroundColor = "red";
+        setTimeout(function(){
+            document.body.style.backgroundColor = "black";
+        }, 3000);
+    }
+
+
+    function getFrequency(){
+        $.post(urlD,'{ "request": "frequency" }', function (dataHTTP) {
+            var returnObject = JSON.parse(dataHTTP);
+            if(returnObject.hasOwnProperty("frequency") && returnObject.hasOwnProperty("update") && returnObject.update === "true"){
+                var cookieJson = JSON.parse(document.cookie);
+                cookieJson.frequency = returnObject.frequency;
+                document.cookie = JSON.stringify(cookieJson);
+            }
+
+        });
+    }
+
+    function increaseUpdateFrequency(){
+        sendUpdateFrequency(true);
+    }
+
+    function decreaseUpdateFrequency(){
+        sendUpdateFrequency(false);
+    }
+
+    function sendUpdateFrequency(increase){
+        var cookieJson = JSON.parse(document.cookie);
+        var frequency = Number(cookieJson.updateFrequency);
+        if(increase && frequency > 1000) {
+            frequency -= 1000;
+        } else {
+            frequency += 1000;
+        }
+        cookieJson.updateFrequency = frequency.toString();
+        document.cookie = JSON.stringify(cookieJson);
+
+        var data = {};
+
+        data.request = "updateFrequency";
+        data.frequency = frequency;
+
+        obj = JSON.stringify(data);
+
+        $.post(urlD,obj, function (dataHTTP) {
+            var returnObject = JSON.parse(dataHTTP);
+            if(returnObject.hasOwnProperty("frequency") && returnObject.hasOwnProperty("update") && returnObject.update === "true"){
+                var cookieJson = JSON.parse(document.cookie);
+                cookieJson.frequency = returnObject.frequency;
+                alert("Frequency is adjusted => frequency now: "+cookieJson.frequency);
+            }
+
+        });
+    }
+
+    function sendSpecialSignal(){
+        var cookieJson = JSON.parse(document.cookie);
+        cookieJson.typeSignal = "specialSignal";
+        document.cookie = JSON.stringify(cookieJson);
+        document.getElementById("typeSignal").innerHTML = "Type signal: specialSignal"
+    }
+
+    function sendHandShake(){
+        var cookieJson = JSON.parse(document.cookie);
+        cookieJson.typeSignal = "handShake";
+        document.cookie = JSON.stringify(cookieJson);
+        document.getElementById("typeSignal").innerHTML = "Type signal: handShakeSignal"
+    }
+
+    function increaseNumberPixelPerMeter(){
+        var cookieJson = JSON.parse(document.cookie);
+        cookieJson.autozoom = "off";
+        cookieJson.numberPixelPerMeter += 0.5;
+        document.cookie = JSON.stringify(cookieJson);
     }
     function decreaseNumberPixelPerMeter(){
-        document.getElementById("radar").setAttribute("autozoom","off");
-        var numberPixelPerMeter = parseFloat(document.getElementById("radar").getAttribute("numberPixelPerMeter"))
-        numberPixelPerMeter -= 0.5;
-        document.getElementById("radar").setAttribute("numberPixelPerMeter",numberPixelPerMeter.toString());
+        var cookieJson = JSON.parse(document.cookie);
+        cookieJson.autozoom = "off";
+        cookieJson.numberPixelPerMeter -= 0.5;
+        document.cookie = JSON.stringify(cookieJson);
     }
     function autozoom(){
-        document.getElementById("radar").setAttribute("autozoom","on");
+        var cookieJson = JSON.parse(document.cookie);
+        cookieJson.autozoom = "on";
+        document.cookie = JSON.stringify(cookieJson);
     }
 
     function degreesToRadians(degrees){
@@ -78,14 +177,36 @@
     // https://stackoverflow.com/questions/18353107/radar-scanner-effect-using-jquery
     $(function d () {
 
-        var urlD = 'http://localhost:8080';
+
+
+        // get latest update frequency
+        getFrequency();
+
 
         var data = {};
 
-        data.Request = "Radar";
-        data.playerId = "1";
-        data.Longitude ="4.451721";
-        data.Latitude ="50.950346";
+        var cookie = JSON.parse(document.cookie);
+
+        data.request = "Radar";
+        data.playerId = cookie.idPlayer;
+        data.longitude = cookie.longitude;
+        data.latitude =  cookie.latitude;
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            alert("No geolocation available");
+        }
+        function showPosition(position) {
+            var cookieJson = JSON.parse(document.cookie);
+            cookieJson.longitude = position.coords.longitude;
+            cookieJson.latitude = position.coords.latitude;
+            document.cookie = JSON.stringify(cookieJson);
+        }
+
+
+        data.sendSignal = cookie.sendSignal;
+
 
         obj = JSON.stringify(data);
         // Send get request use jquery ajax.
@@ -94,37 +215,96 @@
             createRadar(data);
         });
 
-        function createRadar(data){
+        function createRadar(dataHTTP){
 
-            var playerLongitude = 4.351721;
-            var playerLatitude =  50.850346;
+            var cookie = (document.cookie);
+            var playerLongitude = parseFloat(JSON.parse(cookie).longitude);
+            var playerLatitude =  parseFloat(JSON.parse(cookie).latitude);
 
             var i = 0;
 
             var smallestDistancePlayer = 1000000;
 
-            var object1 = JSON.parse(data);
+            var object1 = JSON.parse(dataHTTP);
+
+            var cookie = document.cookie;
 
 
-            if(document.getElementById("radar").getAttribute("autozoom") === "on") {
+            if(JSON.parse(cookie).autozoom === "on") {
                 for( x in object1){
                     var distancePlayer = distanceBetween(playerLongitude,playerLatitude,object1[i].longitude,object1[i].latitude);
+
                     if( distancePlayer > 10 && distancePlayer < smallestDistancePlayer){
                         smallestDistancePlayer = distancePlayer;
                     }
                     i++;
                 }
-                var newRatioPixelMeter = (screen.width/4)/smallestDistancePlayer;
-                document.getElementById("radar").setAttribute("numberPixelPerMeter",parseFloat(newRatioPixelMeter));
+                var newRatioPixelMeter = smallestDistancePlayer/(screen.height/4);
+
+                dataCookie = JSON.parse(document.cookie);
+                dataCookie.numberPixelPerMeter = parseFloat(newRatioPixelMeter);
+                document.cookie = JSON.stringify(dataCookie);
             }
 
-            var object = JSON.parse(data);
+            var object = JSON.parse(dataHTTP);
 
             i = 0;
-            for( x in object){
-                let pos = JSON.parse(longLatToXandY(playerLongitude,playerLatitude,object[i].longitude,object[i].latitude));
-                addElement(pos.x, pos.y, object[i].idPlayer);
+            for( x in object) {
+                let pos = JSON.parse(longLatToXandY(playerLongitude, playerLatitude, object[i].longitude, object[i].latitude));
+                if( !object[i].hasOwnProperty("firstPlayer") ){
+                    addElement(pos.x, pos.y, object[i].idPlayer);
+                }
                 i++;
+            }
+
+            // check if acknowledgement/specialSignal is send to player
+
+            var object2 = JSON.parse(dataHTTP);
+
+            var cookie = JSON.parse(document.cookie);
+            var thisPlayer = cookie.idPlayer;
+            //var thisPlayer = document.getElementById("radar").setAttribute("idPlayer",thisPlayer);
+
+            i = 0;
+            for( x in object2){
+
+                // check if player is firstPlayer
+                if( object2[i].hasOwnProperty("firstPlayer") && object2[i].firstPlayer === thisPlayer) {
+                    document.getElementById("increaseFrequencyButton").style.visibility="visible";
+                    document.getElementById("decreaseFrequencyButton").style.visibility="visible";
+                } else {
+                    document.getElementById("increaseFrequencyButton").style.visibility="hidden";
+                    document.getElementById("decreaseFrequencyButton").style.visibility="hidden";                }
+
+                // check for enemy!
+                if( object2[i].idPlayer === thisPlayer && object2[i].hasOwnProperty("enemyPlayerId") &&object2[i].enemyPlayerId !== null ) {
+                    document.getElementById(object2[i].enemyPlayerId).className = "objEnemy";
+                }
+
+                if (object2[i].sendSignal === "specialSignal" && object2[i].idPlayer === thisPlayer){
+                    //alert("acknowledgement received!");
+                    alert("specialSignal received!");
+                    specialSignalReceived();
+                    break;
+                }
+
+                if (object2[i].sendSignal === "handShakeSignal" && object2[i].idPlayer === thisPlayer){
+                    //alert("acknowledgement received!");
+                    alert("handShakeSignal received!");
+
+                    var dataSignal = JSON.parse(object2[i].dataSignal);
+
+                    if(dataSignal.acknowledged === "falseACK"){
+                        acknowledgeHandshake(dataSignal.idPlayer);
+                        break;
+                    }
+                    else if(dataSignal.acknowledged === "trueACK"){
+                        alert("handshake is acknowledged!!! You are nog in a fight!!!");
+                        fight(dataSignal.idPlayer);
+                        break;
+                    }}
+                i++;
+
             }
         }
 
@@ -135,7 +315,7 @@
                 element.parentNode.removeChild(element);
             }
 
-            let html = '<button onclick="showPlayer(this.id)" id=' +idPlayer+ ' class="obj" data-x="'+xValue+'" data-y="'+yValue+'" ></button>'
+            let html = '<button onclick="sendFixedSignal(this.id)" id=' +idPlayer+ ' class="obj" data-x="'+xValue+'" data-y="'+yValue+'" ></button>'
             $('body').append(html);
 
             var $obj = $('.obj');
@@ -146,10 +326,10 @@
             });
         }
 
-
         function longLatToXandY(playerLogitude,playerLatitude,longitude, latitude){
 
-            var numberPixelPerMeter = document.getElementById("radar").getAttribute("numberPixelPerMeter");
+            var cookie = (document.cookie);
+            var numberPixelPerMeter = parseFloat(JSON.parse(cookie).numberPixelPerMeter);
 
             var m_per_deg_lat = 111132.954 - 559.822 * Math.cos( 2.0 * parseFloat(latitude) ) + 1.175 * Math.cos( 4.0 * parseFloat(latitude));
             var m_per_deg_lon = (3.14159265359/180 ) * 6367449 * Math.cos ( parseFloat(latitude) );
@@ -162,15 +342,18 @@
 
             var data = {};
 
-            data.x = xPosition/numberPixelPerMeter + (screen.width/2);
-            data.y = yPosition/numberPixelPerMeter + (screen.height/2);
+            data.x = String(xPosition/numberPixelPerMeter + (screen.width/2));
+            data.y = String(yPosition/numberPixelPerMeter + (screen.height/2));
 
             obj = JSON.stringify(data);
-
             return obj;
-
         }
-        var updateFrequency = parseFloat(document.getElementById("radar").getAttribute("updateFrequency"));
+
+
+        var cookie = document.cookie;
+
+        var updateFrequency = parseFloat(JSON.parse(cookie).updateFrequency);
+
         setTimeout(d, updateFrequency); // LOOP
 
     });
@@ -185,8 +368,81 @@
 
     });
 
-    function showPlayer(id){
-        alert("idPlayer: "+id);
+    function sendFixedSignal(id){
+        var cookie = JSON.parse(document.cookie);
+        var thisPlayer = cookie.idPlayer;
+
+        if (thisPlayer === id){
+            alert("cannot send signal to yourself :)")
+        } else {
+            var urlD = 'http://localhost:8080';
+
+            var data = {};
+
+            data.request = "sendSignal";
+            data.playerId = id;
+            var typeSignal = cookie.typeSignal;
+            var dataSignal = {};
+            if (typeSignal === "specialSignal") {
+                data.sendSignal = "specialSignal";
+                alert("send speciaSignal to player with id: " + id);
+            } else {
+                data.sendSignal = "handShakeSignal";
+                dataSignal.acknowledged = "falseACK";
+                alert("send acknowledgeHandshake falseACK signal to player with id: "+id);
+
+            }
+            dataSignal.idPlayer = thisPlayer;
+            data.dataSignal = JSON.stringify(dataSignal);
+
+            obj = JSON.stringify(data);
+
+            $.post(urlD, obj); // send ajax object to server
+        }
+    }
+
+    function acknowledgeHandshake (id){
+        var urlD = 'http://localhost:8080';
+
+        var data = {};
+
+        data.request = "sendSignal";
+        data.playerId = id;
+        data.sendSignal = "handShakeSignal";
+
+        var cookie = JSON.parse(document.cookie);
+
+        var dataSignal ={};
+        dataSignal.idPlayer = cookie.idPlayer;
+        dataSignal.acknowledged = "trueACK";
+        data.dataSignal = JSON.stringify( dataSignal);
+
+        alert("send acknowledgeHandshake trueACK signal to player with id: "+id);
+
+        obj = JSON.stringify(data);
+
+        $.post(urlD,obj); // send ajax object to server
+
+    }
+    function fight(idEnemyPlayer) {
+        var urlD = 'http://localhost:8080';
+
+        var data = {};
+
+        data.request = "fight";
+
+        var cookie = JSON.parse(document.cookie);
+
+        data.playerId = cookie.idPlayer;
+
+        data.enemyPlayerId = String(idEnemyPlayer);
+
+        alert(data.playerId+" player id fight enemey with id:" + idEnemyPlayer);
+
+        obj = JSON.stringify(data);
+
+        $.post(urlD,obj); // send ajax object to server
+
     }
 </script>
 </body>

@@ -2,11 +2,12 @@ var https = require('https');
 const fs = require('fs');
 
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/";
+// var url = "mongodb://localhost:27017/userdb";
+var url = 'mongodb://team12:mongoDBteam12@35.241.198.186:27017/?authMechanism=SCRAM-SHA-1&authSource=userdb';
 var frequency = 4000;
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/userdb',  { useNewUrlParser: true });
+mongoose.connect('mongodb://team12:mongoDBteam12@35.241.198.186:27017/userdb?authMechanism=SCRAM-SHA-1&authSource=userdb',  { useNewUrlParser: true });
 
 const User = require('./db/userModel.js');
 const ActivePlayer = require('./db/gameModel');
@@ -26,6 +27,7 @@ const https_options = {
     cert: fs.readFileSync('./ssl/team12.pem')
 };
 
+const port = 80;
 
 //create a server object:
 https.createServer(https_options, async function (req, res) {
@@ -40,8 +42,9 @@ https.createServer(https_options, async function (req, res) {
     }).on('end', async () => {
         body = Buffer.concat(body).toString();
 
-        obj = JSON.parse(body);
-        var request = obj.request;
+        let obj = JSON.parse(body);
+        const request = obj.request;
+        console.log("\n");
         switch (request) {
             case "signup":
                 console.log("Request: signup ===============================================");
@@ -63,6 +66,7 @@ https.createServer(https_options, async function (req, res) {
                     }
                     res.end();
                 });
+                console.log(newUser._id);
                 break;
             case "signin":
                 console.log("Request: signin ===============================================");
@@ -87,7 +91,9 @@ https.createServer(https_options, async function (req, res) {
                 break;
             case "Radar":
                 console.log("Request: radar ================================================");
-                getPlayerPositionRadar(obj, res);
+                if(obj.playerId !== null &&
+                        (await ActivePlayer.findOne({playerid: obj.playerId})) !== null)
+                    getPlayerPositionRadar(obj, res);
                 break;
             case "sendSignal":
                 console.log("Request: fixedSignal ==========================================");
@@ -103,17 +109,20 @@ https.createServer(https_options, async function (req, res) {
                 break;
             case "frequency":
                 console.log("Request: frequency ================================================");
-                frequency(obj,res);
+                getFrequency(obj,res);
                 break;
             default:
                 console.log("Bad request ===================================================");
                 break;
         }
+        console.log("\n");
     });
-}).listen(80); //the server object listens on port 8080
+}).listen(port);
+console.log("\n\n    Server listening on localhost:" + port + "\n\n");
 
-function frequency(jsonData,res){
+function getFrequency(jsonData,res){
     jsonData.frequency = frequency;
+    jsonData.update = "true";
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader("Content-Type", "ERROR");
     res.write(JSON.stringify(jsonData));
@@ -129,31 +138,49 @@ function updateFrequency(jsonData,res){
     res.end();
 }
 
-function getPlayerPositionRadar(jsonData,res) {
-
+async function getPlayerPositionRadar(jsonData,res) {
     var playerId = jsonData.playerId;
     var playerLongitude = jsonData.longitude;
     var playerLatitude = jsonData.latitude;
     var sendSignal = jsonData.sendSignal;
 
+    ActivePlayer.findOne({ playerid: playerId}, function (error, result) {
+        if (result!== null) {
+            result.location.latitude = playerLatitude;
+            result.location.longitude = playerLongitude;
+            result.save();
+        }
+    });
+
+    // let result = await ActivePlayer.findOne({ playerid: playerId});
+    // result.latitude = result.location.latitude;
+    // result.longitude = result.location.longitude;
+    //
+    // res.setHeader('Access-Control-Allow-Origin', '*');
+    // console.log("Result: "+JSON.stringify(result));
+    // res.write(JSON.stringify(result)); //write a response to the client
+    // res.end(); //end the response
+
 
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
-        var dbo = db.db("testPlayers");
+        var dbo = db.db("userdb");
 
         console.log("Insert position of player with id: "+playerId);
 
-        var query = { idPlayer:playerId };
-        var newvalues = { $set: {longitude : playerLongitude, latitude : playerLatitude } };
-        dbo.collection("testPlayers").updateOne(query, newvalues, function(err, res) {
+        var query = { playerid:playerId };
+        var newvalues = { $set: {longitude : 1, latitude : playerLatitude } };
+        dbo.collection("activeplayers").updateOne(query, newvalues, function(err, res) {
             if (err) throw err;
-            console.log("Update DB for player positions with id: "+playerId+ ", result query: "+res);
+            console.log("\nUpdate DB for player positions with id: "+playerId+ ", result query: "+res +"\n");
         });
 
-        console.log("Get Players nearby(RADAR)!")
+        console.log("Get Players nearby(RADAR)!");
 
         var query = {};
-        dbo.collection("testPlayers").find(query).toArray(function (err, result) {
+        const select = { 'playerid': 1, 'location.latitude': 1, 'location.longitude': 1, _id: 0 };
+        // ActivePlayer.find({}, function (err, result) {
+        dbo.collection("activeplayers").find(query, select).toArray(async function (err, result) {
 
             if (err){
                 res.write("No player positions available");
@@ -166,63 +193,69 @@ function getPlayerPositionRadar(jsonData,res) {
                 // Filter players on distance
                 //var resultFilter = filterPlayers(result, playerLongitude, playerLatitude, range);
 
-                // Return Result -=-=-=-=-=-=-=-=-
+                result.forEach( function(elem) {
+                    elem.playerId = elem.playerid;
+                    delete elem.playerid;
+                    elem.longitude = elem.location.longitude;
+                    delete elem.location.longitude;
+                    elem.latitude = elem.location.latitude;
+                    delete elem.location.latitude;
+                });
+
                 res.setHeader('Access-Control-Allow-Origin', '*');
-                console.log("Result: "+JSON.stringify(result))
+                console.log("Result: "+JSON.stringify(result));
                 res.write(JSON.stringify(result)); //write a response to the client
                 res.end(); //end the response
                 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
             }
         });
 
         // update database after signal
-        var myquery = { idPlayer: playerId };
+        var query = { playerid: playerId };
         var newvalues = { $set: {sendSignal: "falseSignal", dataSignal: null} };
-        dbo.collection("testPlayers").updateOne(myquery, newvalues, function(err, res) {
+        dbo.collection("activeplayers").updateOne(query, newvalues, function(err, res) {
             if (err) throw err;
             console.log("sendSignal to false for player with id: "+playerId+", result query: "+ res);
             db.close();
         });
-
     });
 }
+
 function sendSignal(obj){
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
-        var dbo = db.db("testPlayers");
+        var dbo = db.db("activeplayers");
 
-        var myquery = { idPlayer: obj.playerId };
+        var myquery = { playerid: obj.playerId };
         var newvalues = { $set: {sendSignal : obj.sendSignal, dataSignal: obj.dataSignal} };
-        dbo.collection("testPlayers").updateOne(myquery, newvalues, function(err, res) {
+        dbo.collection("activeplayers").updateOne(myquery, newvalues, function(err, res) {
             if (err) throw err;
             console.log("Signal send to player with id: "+obj.playerId+", result query: "+ res);
             db.close();
         });
     });
 }
+
 function fight(obj){
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
-        var dbo = db.db("testPlayers");
+        var dbo = db.db("activeplayers");
 
-        var myquery = { idPlayer: obj.playerId };
+        var myquery = { playerid: obj.playerId };
         var newvalues = { $set: {enemyPlayerId : obj.enemyPlayerId} };
-        dbo.collection("testPlayers").updateOne(myquery, newvalues, function(err, res) {
+        dbo.collection("activeplayers").updateOne(myquery, newvalues, function(err, res) {
             if (err) throw err;
         });
 
         console.log("==============>"+obj.idPlayer+"================>"+obj.enemyPlayerId);
 
-        var myquery = { idPlayer: obj.enemyPlayerId };
+        var myquery = { playerid: obj.enemyPlayerId };
         var newvalues = { $set: {enemyPlayerId : obj.idPlayer} };
-        dbo.collection("testPlayers").updateOne(myquery, newvalues, function(err, res) {
+        dbo.collection("activeplayers").updateOne(myquery, newvalues, function(err, res) {
             if (err) throw err;
         });
 
         console.log("Enemies are created");
         db.close();
-
     });
 }
-
