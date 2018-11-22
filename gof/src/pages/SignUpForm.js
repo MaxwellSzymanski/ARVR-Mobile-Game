@@ -1,6 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
+const fs = require('fs');
+// const $ = require('jQuery');
 
 class SignUpForm extends React.Component {
     constructor() {
@@ -31,13 +34,30 @@ class SignUpForm extends React.Component {
         });
     }
 
-    handleSubmit(e) {
+    async handleSubmit(e) {
         e.preventDefault();
 
-        /*-- insertUser(this.state); --*/
+        const dataToSend = this.state;
+        dataToSend.request = "signup";
+
+        // TODO: path naar foto invullen
+        // const image = fs.readFileSync(PATH);
+        // dataToSend.image = new Buffer(image).toString('base32');
+
+        // send HTTP request with sign up data.
+        // receive success value (and error if the e-mail/username is already taken.
+        const urlD = 'https://localhost:8080';
+        let obj = JSON.stringify(dataToSend);
 
         console.log('The form was submitted with the following data:');
         console.log(this.state);
+
+        await axios.post(urlD, obj).then(
+            function (json) {
+                if (json.data.success) console.log("success!\ntoken:   " + json.data.token);
+                else alert(json.data.message);
+            }
+        );
     }
 
 

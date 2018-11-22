@@ -43,7 +43,6 @@
 <button onclick="decreaseUpdateFrequency()" id="decreaseFrequencyButton">Decrease update frequency!</button>
 <h1 id="typeSignal"></h1>
 
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <div id="parentRadar">
     <div id="radar" ></div>
@@ -51,7 +50,6 @@
 <script>
 
     var urlD = 'https://35.241.198.186:80'; // adres server
-
 
     var dataCookie = {};
 
@@ -65,7 +63,6 @@
 
     document.cookie = JSON.stringify(dataCookie);
 
-
     function specialSignalReceived(){
         document.body.style.backgroundColor = "red";
         setTimeout(function(){
@@ -73,9 +70,7 @@
         }, 3000);
     }
 
-
     function getFrequency(){
-
         $.post(urlD,'{ "request": "frequency" }', function (dataHTTP) {
             var returnObject = JSON.parse(dataHTTP);
             if(returnObject.hasOwnProperty("frequency") && returnObject.hasOwnProperty("update") && returnObject.update === "true"){
@@ -178,11 +173,8 @@
     // https://stackoverflow.com/questions/18353107/radar-scanner-effect-using-jquery
     $(function d () {
 
-
-
         // get latest update frequency
         getFrequency();
-
 
         var data = {};
 
@@ -205,9 +197,7 @@
             document.cookie = JSON.stringify(cookieJson);
         }
 
-
         data.sendSignal = cookie.sendSignal;
-
 
         obj = JSON.stringify(data);
         // Send get request use jquery ajax.
@@ -230,7 +220,6 @@
 
             var cookie = document.cookie;
 
-
             if(JSON.parse(cookie).autozoom === "on") {
                 for( x in object1){
                     var distancePlayer = distanceBetween(playerLongitude,playerLatitude,object1[i].longitude,object1[i].latitude);
@@ -248,7 +237,15 @@
             }
 
             var object = JSON.parse(dataHTTP);
-            
+
+            // check if acknowledgement/specialSignal is send to player
+
+            var object2 = JSON.parse(dataHTTP);
+
+            var cookie = JSON.parse(document.cookie);
+            var thisPlayer = cookie.idPlayer;
+            //var thisPlayer = document.getElementById("radar").setAttribute("idPlayer",thisPlayer);
+
             i = 0;
             for( x in object) {
                 let pos = JSON.parse(longLatToXandY(playerLongitude, playerLatitude, object[i].longitude, object[i].latitude));
@@ -256,6 +253,7 @@
                     addElement(pos.x, pos.y, object[i].idPlayer);
                 }
                 i++;
+
             }
 
             // check if acknowledgement/specialSignal is send to player
@@ -349,7 +347,6 @@
             obj = JSON.stringify(data);
             return obj;
         }
-
 
         var cookie = document.cookie;
 
