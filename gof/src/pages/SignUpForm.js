@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+const fs = require('fs');
 // const $ = require('jQuery');
 
 class SignUpForm extends React.Component {
@@ -38,6 +39,10 @@ class SignUpForm extends React.Component {
 
         const dataToSend = this.state;
         dataToSend.request = "signup";
+
+        // TODO: path naar foto invullen
+        // const image = fs.readFileSync(PATH);
+        // dataToSend.image = new Buffer(image).toString('base32');
 
         // send HTTP request with sign up data.
         // receive success value (and error if the e-mail/username is already taken.

@@ -43,7 +43,6 @@
 <button onclick="decreaseUpdateFrequency()" id="decreaseFrequencyButton">Decrease update frequency!</button>
 <h1 id="typeSignal"></h1>
 
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <div id="parentRadar">
     <div id="radar" ></div>
@@ -51,7 +50,6 @@
 <script>
 
     var urlD = 'https://35.241.198.186:80'; // adres server
-
 
     var dataCookie = {};
 
@@ -65,14 +63,12 @@
 
     document.cookie = JSON.stringify(dataCookie);
 
-
     function specialSignalReceived(){
         document.body.style.backgroundColor = "red";
         setTimeout(function(){
             document.body.style.backgroundColor = "black";
         }, 3000);
     }
-
 
     function getFrequency(){
         $.post(urlD,'{ "request": "frequency" }', function (dataHTTP) {
@@ -177,11 +173,8 @@
     // https://stackoverflow.com/questions/18353107/radar-scanner-effect-using-jquery
     $(function d () {
 
-
-
         // get latest update frequency
         getFrequency();
-
 
         var data = {};
 
@@ -204,9 +197,7 @@
             document.cookie = JSON.stringify(cookieJson);
         }
 
-
         data.sendSignal = cookie.sendSignal;
-
 
         obj = JSON.stringify(data);
         // Send get request use jquery ajax.
@@ -228,7 +219,6 @@
             var object1 = JSON.parse(dataHTTP);
 
             var cookie = document.cookie;
-
 
             if(JSON.parse(cookie).autozoom === "on") {
                 for( x in object1){
@@ -357,7 +347,6 @@
             obj = JSON.stringify(data);
             return obj;
         }
-
 
         var cookie = document.cookie;
 

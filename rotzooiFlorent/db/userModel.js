@@ -28,8 +28,14 @@ const Schema = new mongoose.Schema({
         required: true
     },
     image: {
-        type: String        // path to file
+        data: Buffer,
+        contentType: String,
+        // required: true
     },
+    featureVector: {
+        type: Object,
+        // required: true
+    }
 }, {timestamps: true});
 
 Schema.plugin(uniqueValidator, {message: 'already taken'});

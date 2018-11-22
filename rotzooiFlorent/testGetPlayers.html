@@ -32,7 +32,6 @@
 
     d();
 
-
     function d () {
         document.getElementById("map").innerHTML = "";
 
@@ -66,7 +65,6 @@
         $.post(urlD, obj, function (data) {
             create(data);
         });
-
 
         function create(players) {
             // Create Map
@@ -109,7 +107,6 @@
                     alert("Id player: "+json.idPlayer);
                 }
             });
-
 
             // add every player to map
             getPlayerLayers(players, map);
@@ -178,7 +175,6 @@
         // alert("AUTOZOOM ACITVATED");
         d();
     }
-
 </script>
 </body>
 </html>

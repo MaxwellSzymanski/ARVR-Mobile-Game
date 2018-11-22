@@ -152,16 +152,6 @@ async function getPlayerPositionRadar(jsonData,res) {
         }
     });
 
-    // let result = await ActivePlayer.findOne({ playerid: playerId});
-    // result.latitude = result.location.latitude;
-    // result.longitude = result.location.longitude;
-    //
-    // res.setHeader('Access-Control-Allow-Origin', '*');
-    // console.log("Result: "+JSON.stringify(result));
-    // res.write(JSON.stringify(result)); //write a response to the client
-    // res.end(); //end the response
-
-
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         var dbo = db.db("userdb");
