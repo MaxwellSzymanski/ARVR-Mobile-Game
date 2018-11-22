@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "justadudewhohacks",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.4",
+    "mongodb": "^3.1.10",
+    "request": "^2.87.0",
+    "socket.io": "^2.1.1"
+  }
+}

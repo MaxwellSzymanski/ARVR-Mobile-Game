@@ -67,6 +67,7 @@
             create(data);
         });
 
+
         function create(players) {
             // Create Map
             let rotationMap = 0;
@@ -95,6 +96,20 @@
                     alert("Id player: "+json.idPlayer);
                 }
             });
+            map.getView().setZoom(parseInt(document.getElementById("mapInfo").getAttribute("zoom")));
+
+            map.on('click', function(evt) {
+                var feature = map.forEachFeatureAtPixel(evt.pixel,
+                    function(feature, layer) {
+                        return feature;
+                    });
+                if( feature) {
+                    var att = feature.getProperties();
+                    var json = JSON.parse(att.name);
+                    alert("Id player: "+json.idPlayer);
+                }
+            });
+
 
             // add every player to map
             getPlayerLayers(players, map);
@@ -103,6 +118,13 @@
                 // store zoom of previous map
                 var zoom = map.getView().getZoom();
                 // alert("get value of zoom: "+document.getElementById("mapInfo").getAttribute("zoom"));
+                document.getElementById("mapInfo").setAttribute("zoom",zoom.toString());
+            }, 8000);
+
+            setTimeout(function(){
+                // store zoom of previous map
+                var zoom = map.getView().getZoom();
+                alert("get value of zoom: "+document.getElementById("mapInfo").getAttribute("zoom"));
                 document.getElementById("mapInfo").setAttribute("zoom",zoom.toString());
             }, 8000);
 
@@ -117,6 +139,7 @@
                     let longitude = obj[i].longitude;
                     let latitude = obj[i].latitude;
                     let name = JSON.stringify(obj[i]);
+
 
                     var icon1 = new ol.Feature({
                         geometry: new ol.geom.Point(ol.proj.fromLonLat([longitude, latitude]),),

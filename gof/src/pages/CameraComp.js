@@ -5,7 +5,7 @@ import 'react-html5-camera-photo/build/css/index.css';
 class CameraComp extends React.Component {
   onTakePhoto (dataUri) {
     // Do stuff with the dataUri photo...
-    console.log('takePhoto');
+    localStorage.setItem("PhotoOfMe", dataUri);
   }
 
   render () {
@@ -15,6 +15,7 @@ class CameraComp extends React.Component {
           onTakePhoto = { (dataUri) => { this.onTakePhoto(dataUri); } }
         />
       </div>
+
     );
   }
 }

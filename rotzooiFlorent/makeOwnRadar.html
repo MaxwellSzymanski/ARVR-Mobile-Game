@@ -248,6 +248,14 @@
 
             var object = JSON.parse(dataHTTP);
 
+            // check if acknowledgement/specialSignal is send to player
+
+            var object2 = JSON.parse(dataHTTP);
+
+            var cookie = JSON.parse(document.cookie);
+            var thisPlayer = cookie.idPlayer;
+            //var thisPlayer = document.getElementById("radar").setAttribute("idPlayer",thisPlayer);
+
             i = 0;
             for( x in object) {
                 let pos = JSON.parse(longLatToXandY(playerLongitude, playerLatitude, object[i].longitude, object[i].latitude));
@@ -255,6 +263,7 @@
                     addElement(pos.x, pos.y, object[i].idPlayer);
                 }
                 i++;
+
             }
 
             // check if acknowledgement/specialSignal is send to player

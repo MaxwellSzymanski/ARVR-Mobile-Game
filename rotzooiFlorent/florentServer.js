@@ -245,17 +245,24 @@ function fight(obj){
         var newvalues = { $set: {enemyPlayerId : obj.enemyPlayerId} };
         dbo.collection("activeplayers").updateOne(myquery, newvalues, function(err, res) {
             if (err) throw err;
+            console.log(res+ "result fight")
         });
+        db.close();
 
-        console.log("==============>"+obj.idPlayer+"================>"+obj.enemyPlayerId);
+    });
 
         var myquery = { playerid: obj.enemyPlayerId };
         var newvalues = { $set: {enemyPlayerId : obj.idPlayer} };
         dbo.collection("activeplayers").updateOne(myquery, newvalues, function(err, res) {
             if (err) throw err;
+            console.log(res+ "result fight")
         });
 
-        console.log("Enemies are created");
         db.close();
     });
+
+    console.log("Enemies are created");
+
+
+
 }
