@@ -1,7 +1,7 @@
 import React from 'react';
 // eslint-disable-next-line
 import { Link } from 'react-router-dom';
-import { $, obj } from "jquery";
+import {$, obj} from 'jquery';
 
 class Radar extends React.Component {
 
