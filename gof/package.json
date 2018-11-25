@@ -6,7 +6,7 @@
     "axios": "^0.18.0",
     "jQuery": "file:node_modules/jquery",
     "jquery": "file:node_modules/jquery",
-    "react": "^16.6.0",
+    "react": "^16.6.3",
     "react-dom": "^16.6.0",
     "react-html5-camera-photo": "^1.2.9",
     "react-router-dom": "^4.3.1",

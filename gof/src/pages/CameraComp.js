@@ -13,27 +13,37 @@ class CameraComp extends React.Component {
     }
 
   renderRedirect = () => {
-    if (this.state.redirect) {return <Redirect to="/" />}
+    if (this.state.redirect) {return <Redirect to="/imageConfirm" />}
   }
   onTakePhoto (dataUri) {
-    // Do stuff with the dataUri photo...
-    localStorage.setItem("PhotoOfMe", dataUri);
-    this.setRedirect();
+    // TODO: Check face
+
+      if (false) {
+        alert("No face detected, try again.")
+      }
+      else{
+          localStorage.setItem("PhotoOfMe", dataUri);
+          this.setRedirect();
+      }
   }
 
   redirect() {
     return <Redirect to="/view"/>;
   }
 
+
   render () {
     return (
-      <div className="App">
+      <div className="Title">
         {this.renderRedirect()}
         <Camera
           onTakePhoto = { (dataUri) => { this.onTakePhoto(dataUri); } }
+          isImageMirror = {true}
         />
 
       </div>
+
+
 
     );
   }

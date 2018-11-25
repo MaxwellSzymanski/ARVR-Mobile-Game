@@ -60,6 +60,16 @@ class SignUpForm extends React.Component {
         );
     }
 
+    openTerms() {
+        var modal = document.getElementById('myModal');
+        modal.style.display = "block";
+    }
+
+    closeTerms() {
+        var modal = document.getElementById('myModal');
+        modal.style.display = "none";
+    }
+
 
 
     render() {
@@ -73,6 +83,7 @@ class SignUpForm extends React.Component {
       }
 
         return (
+
         <div className="FormCenter">
             <form onSubmit={this.handleSubmit} className="FormFields">
             <div id="text">
@@ -82,9 +93,6 @@ class SignUpForm extends React.Component {
           <div id="centerButton">
           <Link to="/takePicture">
             {button}</Link></div>
-
-
-
               <div className="FormField">
                 <label className="FormField__Label" htmlFor="name">Full Name</label>
                 <input type="text" id="name" className="FormField__Input" placeholder="Enter your full name" name="name" value={this.state.name} onChange={this.handleChange} />
@@ -100,13 +108,40 @@ class SignUpForm extends React.Component {
 
               <div className="FormField">
                 <label className="FormField__CheckboxLabel">
-                    <input className="FormField__Checkbox" type="checkbox" name="hasAgreed" value={this.state.hasAgreed} onChange={this.handleChange} /> I agree all statements in <a href='./pages/terms.html' className="FormField__TermsLink">terms of service</a>
+                    <input className="FormField__Checkbox" type="checkbox" name="hasAgreed" value={this.state.hasAgreed} onChange={this.handleChange} /> I agree all statements in <a className="FormField__TermsLink" onClick={this.openTerms}>terms of service</a>
                 </label>
               </div>
               <div className="FormField">
                   <button className="FormField__Button mr-20">Sign Up</button> <Link to="/sign-in" className="FormField__Link">I'm already member</Link>
               </div>
             </form>
+
+            <div id="myModal" className="modal">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <span className="close" onClick = {this.closeTerms}>&times;</span>
+                        <h2>Terms and Agreements</h2>
+                    </div>
+                    <div className="modal-body">
+                        <h3>Your Content</h3>
+                        <p>In these Website Standard Terms and Conditions, “Your Content” shall mean any audio, video text,
+                            images or other material you choose to display on this Website. By displaying Your Content,
+                            you grant Company Name a non-exclusive, worldwide irrevocable, sub licensable license to use,
+                            reproduce, adapt, publish, translate and distribute it in any and all media.
+
+                            Your Content must be your own and must not be invading any third-party's rights.
+                            Company Name reserves the right to remove any of Your Content from this Website at any time without notice.</p>
+
+
+                         <h3>No warranties</h3>
+
+                        <p>This Website is provided “as is,” with all faults, and Company Name express no representations
+                            or warranties, of any kind related to this Website or the materials contained on this Website.
+                            Also, nothing contained on this Website shall be interpreted as advising you.</p>
+
+                    </div>
+                </div>
+            </div>
           </div>
         );
     }

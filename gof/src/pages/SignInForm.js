@@ -84,6 +84,8 @@ class SignInForm extends React.Component {
                   <button className="FormField__Button mr-20">Sign In</button> <Link to="/" className="FormField__Link">Create an account</Link>
               </div>
             </form>
+
+
           </div>
         );
     }

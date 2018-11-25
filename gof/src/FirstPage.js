@@ -4,9 +4,15 @@ import { HashRouter as Router, Route, NavLink } from 'react-router-dom';
 import SignUpForm from './pages/SignUpForm';
 import SignInForm from './pages/SignInForm';
 class FirstPage extends React.Component {
+
+    setPage() {
+        document.body.style = 'background: #cc1f10'
+    }
+
   render() {
     return(
       <div>
+          {this.setPage()}
       <div className="Title">
         <h1>Game Of Wolves</h1>
       </div>

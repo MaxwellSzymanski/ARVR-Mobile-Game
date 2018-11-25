@@ -7,6 +7,7 @@ import Map from './pages/Map.js';
 import View from './pages/View.js';
 
 import './App.css';
+import ImageConfirm from "./pages/ImageConfirm";
 
 
 
@@ -21,8 +22,9 @@ class App extends Component {
             <Route exact path="/takePicture" component={CameraComp}></Route>
             <Route exact path="/map" component={Map}></Route>
             <Route exact path="/view" component={View}></Route>
+            <Route exact path="/imageConfirm" component={ImageConfirm}></Route>
           </Switch>
-          }
+
         </div>
       </Router>
     );
