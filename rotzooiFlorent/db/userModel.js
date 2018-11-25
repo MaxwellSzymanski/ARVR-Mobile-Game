@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 const jwt = require('jsonwebtoken');
-const secret = require('./config');
+const secret = require('./config.js');
 
 const Schema = new mongoose.Schema({
     name: {
@@ -59,6 +59,10 @@ Schema.methods.createToken = function() {
         name: this.name,
         exp: parseInt(exp.getTime() / 1000),
     }, secret);
+};
+
+Schema.methods.checkToken = function(token) {
+    return this.name === token.name;
 };
 
 Schema.methods.getUserData = function() {

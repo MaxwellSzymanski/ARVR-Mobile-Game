@@ -1,6 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import axios from "axios";
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
+
+const url = 'https://localhost:8080';
 
 class SignInForm extends React.Component {
     constructor() {
@@ -45,22 +49,27 @@ class SignInForm extends React.Component {
         const dataToSend = this.state;
         dataToSend.request = "signin";
 
-        // send HTTP request with login data and receive value
-        // about correctness of data.
-        const urlD = 'https://localhost:8080';
-        let obj = JSON.stringify(dataToSend);
-
         console.log('The form was submitted with the following data:');
         console.log(this.state);
 
-        // received object:
-        // { email: false }                             if e-mail not registered
-        // { email: true, password: true/false }        if e-mail registered and password correct/incorrect
-        await axios.post(urlD, obj).then(
+        let obj = JSON.stringify(dataToSend);
+        // send HTTP request with login data and receive value about correctness of data.
+        //      received object:
+        // { email: false }                                 if e-mail not registered
+        // { email: true, password: false }                 if e-mail registered and password incorrect
+        // { email: true, password: true, token: jwt }      if e-mail registered and password correct, the jwt token
+        //                                                      is further on stored in a cookie in the browser
+        await axios.post(url, obj).then(
             function(json) {
-                if (!json.data.email) alert("invalid e-mail");
-                else if(!json.data.password) alert("invalid password");
-                else alert("success!");
+                if (!json.data.email)
+                    alert("invalid e-mail");
+                else if(!json.data.password)
+                    alert("invalid password");
+                else {
+                    alert("success!");
+                    cookies.set('loginCookie', json.data.token, {path: '/'});
+                    console.log(cookies.get('loginCookie'));
+                }
             }
         );
     }
