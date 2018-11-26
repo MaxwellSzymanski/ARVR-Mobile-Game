@@ -4,12 +4,39 @@ import {ol} from 'openlayers';
 
 class GetPlayer extends React.Component {
 
+  constructor (props) {
+    super(props)
+    this.map={};
+  }
+
   state = {
     longitude: 4.361721,
     latitude: 50.850346
   }
 
-  increaseUpdateFrequencyMap (){
+
+  componentDidMount() {
+
+        this.map = new ol.Map({
+            layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.OSM()
+                })
+            ],
+            target: 'map',
+            view: new ol.View({
+                center: [0, 0],
+                zoom: 2
+            })
+        });
+
+        // this.map.updateSize();
+        // this.map.render();
+        // this.map.redraw();
+    }
+
+
+  /** increaseUpdateFrequencyMap (){
 
   }
 
@@ -18,7 +45,8 @@ class GetPlayer extends React.Component {
   }
 
   async d () {
-      document.getElementById("map").innerHTML = "";
+      var niks = "";
+      document.getElementById("map").innerHTML = niks;
 
       // send HTTP request to get JSON object with players
       var urlD = 'https://35.241.198.186:80';
@@ -159,12 +187,12 @@ class GetPlayer extends React.Component {
           document.getElementById("mapInfo").setAttribute("zoom",zoom.toString());
           // alert("AUTOZOOM ACITVATED");
           this.d();
-      }
+      } */
 
 render() {
   return(
     <div>
-    {this.d()}
+
     <button onClick={this.increaseUpdateFrequencyMap}>Raise update Frequency</button>
     <button onClick={this.decreaseUpdateFrequencyMap}>Decrease update Frequency</button>
     <button onClick={this.autozoom}>Autozoom</button>
