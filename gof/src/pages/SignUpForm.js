@@ -42,7 +42,8 @@ class SignUpForm extends React.Component {
 
         // TODO: path naar foto invullen
         // const image = fs.readFileSync(PATH);
-        // dataToSend.image = new Buffer(image).toString('base32');
+        var image = localStorage.getItem("PhotoOfMe")
+        dataToSend.image = new Buffer(image).toString('base64');
 
         // send HTTP request with sign up data.
         // receive success value (and error if the e-mail/username is already taken.
