@@ -5,6 +5,7 @@ import FirstPage from './FirstPage';
 import CameraComp from './pages/CameraComp';
 import Map from './pages/Map.js';
 import Radars from './pages/Radars.js';
+import GetPlayer from './pages/GetPlayer.js'
 
 import './App.css';
 import axios from "axios";
@@ -46,6 +47,7 @@ class App extends Component {
           <Switch>
             <Route exact path="/" component={FirstPage}></Route>
             <Route exact path='/radar' component={Radars}></Route>
+            <Route exact path='/maps' component={GetPlayer}></Route>
             <Route exact path="/sign-in" render={ () => (
                 !loggedIn() ? <Redirect to="/map"/> : <FirstPage />
                 // false ? <Redirect to="/map"/> : <FirstPage />
