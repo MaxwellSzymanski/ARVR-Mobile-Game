@@ -1,5 +1,7 @@
 var https = require('https');
 const fs = require('fs');
+const jwt = require('jsonwebtoken');
+const secret = require('./db/config.js');
 
 var MongoClient = require('mongodb').MongoClient;
 // var url = "mongodb://localhost:27017/userdb";
@@ -7,16 +9,16 @@ var url = 'mongodb://team12:mongoDBteam12@35.241.198.186:27017/?authMechanism=SC
 var frequency = 4000;
 
 const mongoose = require('mongoose');
+// mongoose.connect("mongodb://localhost:27017/userdb", { useNewUrlParser: true });
 mongoose.connect('mongodb://team12:mongoDBteam12@35.241.198.186:27017/userdb?authMechanism=SCRAM-SHA-1&authSource=userdb',  { useNewUrlParser: true });
 
 const User = require('./db/userModel.js');
 const ActivePlayer = require('./db/gameModel');
 
 const getFirstActivePlayer = async function () {
-    return await User.findById(
-        (await ActivePlayer.findOne(
+    return (await ActivePlayer.findOne(
             {}, 'playerid', { sort: { 'created_at' : 1 } })
-        ).playerid);
+    ).playerid;
 };
 
 const HTTPSsecret = require('./ssl/https_config.js');
@@ -27,7 +29,7 @@ const https_options = {
     cert: fs.readFileSync('./ssl/team12.pem')
 };
 
-const port = 80;
+const port = 8080;
 
 //create a server object:
 https.createServer(https_options, async function (req, res) {
@@ -44,7 +46,8 @@ https.createServer(https_options, async function (req, res) {
 
         let obj = JSON.parse(body);
         const request = obj.request;
-        console.log("\n");
+
+        console.log("\n            " + Date.now());
         switch (request) {
             case "signup":
                 console.log("Request: signup ===============================================");
@@ -66,7 +69,7 @@ https.createServer(https_options, async function (req, res) {
                     }
                     res.end();
                 });
-                console.log(newUser._id);
+                console.log("    Created new user with id:    " + newUser._id);
                 break;
             case "signin":
                 console.log("Request: signin ===============================================");
@@ -82,25 +85,62 @@ https.createServer(https_options, async function (req, res) {
                         const value = await result.checkPassword(obj.password);
                         res.setHeader('Access-Control-Allow-Origin', '*');
                         res.setHeader("Content-Type", "application/json");
-                        res.write(JSON.stringify({"email": true, "password": value}));
+                        if (!value)
+                            res.write(JSON.stringify({"email": true, "password": value}));
+                        else
+                            res.write(JSON.stringify({"email": true, "password": value, token: result.createToken() }));
                         res.end();
                         const newActivePlayer = new ActivePlayer({playerid: result._id, location: obj.position});
                         newActivePlayer.save();
                     }
                 });
                 break;
+            case "signout":
+                console.log("Request: signout ==============================================");
+
+            case "jwt":
+                console.log("Request: jwt ==================================================");
+                jwt.verify(obj.token, secret, async function(err, token) {
+                    if (err) {
+                        console.log("invalid token");
+                        res.setHeader('Access-Control-Allow-Origin', '*');
+                        res.setHeader("Content-Type", "application/json");
+                        res.write(JSON.stringify({result: false}));
+                        res.end();
+                    } else {
+                        console.log(token);
+                        User.findById(token.id).then(
+                            async function (user) {
+                                console.log(user);
+                                let value = false;
+                                if (user !== null)
+                                    value = await user.checkToken(token);
+                                console.log(value);
+                                res.setHeader('Access-Control-Allow-Origin', '*');
+                                res.setHeader("Content-Type", "application/json");
+                                res.write(JSON.stringify({result: value}));
+                                res.end();
+                            });
+                    }
+                });
             case "Radar":
                 console.log("Request: radar ================================================");
                 if(obj.playerId !== null &&
-                        (await ActivePlayer.findOne({playerid: obj.playerId})) !== null)
+                    (await ActivePlayer.findOne({playerid: obj.playerId})) !== null)
                     getPlayerPositionRadar(obj, res);
                 break;
             case "sendSignal":
                 console.log("Request: fixedSignal ==========================================");
+
+                console.log("\n\n\n" + JSON.stringify(obj) + "\n\n\n");
+
                 sendSignal(obj);
                 break;
             case "fight":
                 console.log("Request: fight ================================================");
+
+                console.log("\n\n\n" + JSON.stringify(obj) + "\n\n\n");
+
                 fight(obj);
                 break;
             case "updateFrequency":
@@ -139,6 +179,8 @@ function updateFrequency(jsonData,res){
 }
 
 async function getPlayerPositionRadar(jsonData,res) {
+    const firstPlayer = await getFirstActivePlayer();
+
     var playerId = jsonData.playerId;
     var playerLongitude = jsonData.longitude;
     var playerLatitude = jsonData.latitude;
@@ -152,107 +194,71 @@ async function getPlayerPositionRadar(jsonData,res) {
         }
     });
 
-    MongoClient.connect(url, function (err, db) {
-        if (err) throw err;
-        var dbo = db.db("userdb");
+    ActivePlayer.find({}, '-createdAt -_id -updatedAt -__v', {lean: true}, async function(error, result) {
+        if (error) {
+            res.write("No player positions available");
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader("Content-Type", "ERROR");
+            throw error;
+        } else {
+            result.firstPlayer = firstPlayer;
+            result.forEach(function (elem) {
+                elem.playerId = elem.playerid;
+                delete elem.playerid;
+                elem.longitude = elem.location.longitude;
+                elem.latitude = elem.location.latitude;
+                delete elem.location.longitude;
+                delete elem.location.latitude;
+                delete elem.location;
+            });
 
-        console.log("Insert position of player with id: "+playerId);
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            console.log("Result: " + result);
+            res.write(JSON.stringify(result)); //write a response to the client
+            res.end(); //end the response
 
-        var query = { playerid:playerId };
-        var newvalues = { $set: {longitude : 1, latitude : playerLatitude } };
-        dbo.collection("activeplayers").updateOne(query, newvalues, function(err, res) {
-            if (err) throw err;
-            console.log("\nUpdate DB for player positions with id: "+playerId+ ", result query: "+res +"\n");
-        });
+            console.log(result.firstPlayer);
 
-        console.log("Get Players nearby(RADAR)!");
-
-        var query = {};
-        const select = { 'playerid': 1, 'location.latitude': 1, 'location.longitude': 1, _id: 0 };
-        // ActivePlayer.find({}, function (err, result) {
-        dbo.collection("activeplayers").find(query, select).toArray(async function (err, result) {
-
-            if (err){
-                res.write("No player positions available");
-                res.setHeader('Access-Control-Allow-Origin', '*');
-                res.setHeader("Content-Type", "ERROR");
-                throw err;
-            } else {
-                db.close();
-
-                // Filter players on distance
-                //var resultFilter = filterPlayers(result, playerLongitude, playerLatitude, range);
-
-                result.forEach( function(elem) {
-                    elem.playerId = elem.playerid;
-                    delete elem.playerid;
-                    elem.longitude = elem.location.longitude;
-                    delete elem.location.longitude;
-                    elem.latitude = elem.location.latitude;
-                    delete elem.location.latitude;
-                });
-
-                res.setHeader('Access-Control-Allow-Origin', '*');
-                console.log("Result: "+JSON.stringify(result));
-                res.write(JSON.stringify(result)); //write a response to the client
-                res.end(); //end the response
-                // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-            }
-        });
-
-        // update database after signal
-        var query = { playerid: playerId };
-        var newvalues = { $set: {sendSignal: "falseSignal", dataSignal: null} };
-        dbo.collection("activeplayers").updateOne(query, newvalues, function(err, res) {
-            if (err) throw err;
-            console.log("sendSignal to false for player with id: "+playerId+", result query: "+ res);
-            db.close();
-        });
+            ActivePlayer.findOne({playerid: playerId}, function (error, result) {
+                if (error) throw error;
+                if (result !== null) {
+                    result.sendSignal = "falseSignal";
+                    result.dataSignal = null;
+                    result.save();
+                }
+                console.log("sendSignal to false for player with id: " + playerId + ", result query: " + res);
+            });
+        }
     });
 }
 
-function sendSignal(obj){
-    MongoClient.connect(url, function (err, db) {
-        if (err) throw err;
-        var dbo = db.db("activeplayers");
-
-        var myquery = { playerid: obj.playerId };
-        var newvalues = { $set: {sendSignal : obj.sendSignal, dataSignal: obj.dataSignal} };
-        dbo.collection("activeplayers").updateOne(myquery, newvalues, function(err, res) {
-            if (err) throw err;
-            console.log("Signal send to player with id: "+obj.playerId+", result query: "+ res);
-            db.close();
-        });
+function sendSignal(obj) {
+    ActivePlayer.findOne({playerid: obj.playerId}, function (error, result) {
+        if (error) throw error;
+        if (result !== null) {
+            result.sendSignal = obj.sendSignal;
+            result.dataSignal = obj.dataSignal;
+            result.save();
+        }
     });
 }
 
 function fight(obj){
-    MongoClient.connect(url, function (err, db) {
-        if (err) throw err;
-        var dbo = db.db("activeplayers");
-
-        var myquery = { playerid: obj.playerId };
-        var newvalues = { $set: {enemyPlayerId : obj.enemyPlayerId} };
-        dbo.collection("activeplayers").updateOne(myquery, newvalues, function(err, res) {
-            if (err) throw err;
-            console.log(res+ "result fight")
-        });
-        db.close();
-
+    ActivePlayer.findOne({ playerid: obj.playerId }, function(error, result) {
+        if (error) throw error;
+        if (result !== null) {
+            result.enemyPlayerId = obj.enemyPlayerId;
+            result.save();
+        }
     });
 
-        var myquery = { playerid: obj.enemyPlayerId };
-        var newvalues = { $set: {enemyPlayerId : obj.idPlayer} };
-        dbo.collection("activeplayers").updateOne(myquery, newvalues, function(err, res) {
-            if (err) throw err;
-            console.log(res+ "result fight")
-        });
-
-        db.close();
+    ActivePlayer.findOne({ playerid: obj.enemyPlayerId }, function(error, result) {
+        if (error) throw error;
+        if (result !== null) {
+            result.enemyPlayerId = obj.playerId;
+            result.save();
+        }
     });
 
     console.log("Enemies are created");
-
-
-
 }

@@ -11,7 +11,7 @@
             background: black;
         }
         h1 {
-           color: rgba(100,255,0,0.5);
+            color: rgba(100,255,0,0.5);
 
         }
         .obj{
@@ -41,7 +41,11 @@
 <button onclick="autozoom()">AutoZoom!</button>
 <button onclick="increaseUpdateFrequency()" id="increaseFrequencyButton">Increase update frequency!</button>
 <button onclick="decreaseUpdateFrequency()" id="decreaseFrequencyButton">Decrease update frequency!</button>
+<input type="text" id="playerId" type="submit" value="">
+
+
 <h1 id="typeSignal"></h1>
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <div id="parentRadar">
@@ -51,9 +55,10 @@
 
     var urlD = 'https://35.241.198.186:80'; // adres server
 
+
     var dataCookie = {};
 
-    dataCookie.idPlayer="5bf1d5a3b373a15628ea2b81";
+    dataCookie.playerId="5bf1d5a3b373a15628ea2b81";
     dataCookie.numberPixelPerMeter="1";
     dataCookie.updateFrequency="4000";
     dataCookie.autozoom="on";
@@ -63,6 +68,7 @@
 
     document.cookie = JSON.stringify(dataCookie);
 
+
     function specialSignalReceived(){
         document.body.style.backgroundColor = "red";
         setTimeout(function(){
@@ -70,7 +76,9 @@
         }, 3000);
     }
 
+
     function getFrequency(){
+
         $.post(urlD,'{ "request": "frequency" }', function (dataHTTP) {
             var returnObject = JSON.parse(dataHTTP);
             if(returnObject.hasOwnProperty("frequency") && returnObject.hasOwnProperty("update") && returnObject.update === "true"){
@@ -173,15 +181,26 @@
     // https://stackoverflow.com/questions/18353107/radar-scanner-effect-using-jquery
     $(function d () {
 
+
+
         // get latest update frequency
         getFrequency();
+
 
         var data = {};
 
         var cookie = JSON.parse(document.cookie);
 
+
+        // update input Field playerId
+        cookie.playerId = document.getElementById("playerId").value;
+        document.cookie = JSON.stringify(cookie);
+
+
         data.request = "Radar";
-        data.playerId = cookie.idPlayer;
+        //data.playerId = cookie.playerId;
+        data.playerId = document.getElementById("playerId").value;
+
         data.longitude = cookie.longitude;
         data.latitude =  cookie.latitude;
 
@@ -197,7 +216,9 @@
             document.cookie = JSON.stringify(cookieJson);
         }
 
+
         data.sendSignal = cookie.sendSignal;
+
 
         obj = JSON.stringify(data);
         // Send get request use jquery ajax.
@@ -209,8 +230,10 @@
         function createRadar(dataHTTP){
 
             var cookie = (document.cookie);
+
             var playerLongitude = parseFloat(JSON.parse(cookie).longitude);
             var playerLatitude =  parseFloat(JSON.parse(cookie).latitude);
+
 
             var i = 0;
 
@@ -220,8 +243,10 @@
 
             var cookie = document.cookie;
 
+
             if(JSON.parse(cookie).autozoom === "on") {
                 for( x in object1){
+
                     var distancePlayer = distanceBetween(playerLongitude,playerLatitude,object1[i].longitude,object1[i].latitude);
 
                     if( distancePlayer > 10 && distancePlayer < smallestDistancePlayer){
@@ -238,22 +263,13 @@
 
             var object = JSON.parse(dataHTTP);
 
-            // check if acknowledgement/specialSignal is send to player
-
-            var object2 = JSON.parse(dataHTTP);
-
-            var cookie = JSON.parse(document.cookie);
-            var thisPlayer = cookie.idPlayer;
-            //var thisPlayer = document.getElementById("radar").setAttribute("idPlayer",thisPlayer);
-
             i = 0;
             for( x in object) {
                 let pos = JSON.parse(longLatToXandY(playerLongitude, playerLatitude, object[i].longitude, object[i].latitude));
                 if( !object[i].hasOwnProperty("firstPlayer") ){
-                    addElement(pos.x, pos.y, object[i].idPlayer);
+                    addElement(pos.x, pos.y, object[i].playerId);
                 }
                 i++;
-
             }
 
             // check if acknowledgement/specialSignal is send to player
@@ -261,8 +277,8 @@
             var object2 = JSON.parse(dataHTTP);
 
             var cookie = JSON.parse(document.cookie);
-            var thisPlayer = cookie.idPlayer;
-            //var thisPlayer = document.getElementById("radar").setAttribute("idPlayer",thisPlayer);
+            var thisPlayer = cookie.playerId;
+            //var thisPlayer = document.getElementById("radar").setAttribute("playerId",thisPlayer);
 
             i = 0;
             for( x in object2){
@@ -276,30 +292,30 @@
                     document.getElementById("decreaseFrequencyButton").style.visibility="hidden";                }
 
                 // check for enemy!
-                if( object2[i].idPlayer === thisPlayer && object2[i].hasOwnProperty("enemyPlayerId") &&object2[i].enemyPlayerId !== null ) {
+                if( object2[i].playerId === thisPlayer && object2[i].hasOwnProperty("enemyPlayerId") &&object2[i].enemyPlayerId !== null ) {
                     document.getElementById(object2[i].enemyPlayerId).className = "objEnemy";
                 }
 
-                if (object2[i].sendSignal === "specialSignal" && object2[i].idPlayer === thisPlayer){
+                if (object2[i].sendSignal === "specialSignal" && object2[i].playerId === thisPlayer){
                     //alert("acknowledgement received!");
                     alert("specialSignal received!");
                     specialSignalReceived();
                     break;
                 }
 
-                if (object2[i].sendSignal === "handShakeSignal" && object2[i].idPlayer === thisPlayer){
+                if (object2[i].sendSignal === "handShakeSignal" && object2[i].playerId === thisPlayer){
                     //alert("acknowledgement received!");
                     alert("handShakeSignal received!");
 
                     var dataSignal = JSON.parse(object2[i].dataSignal);
 
                     if(dataSignal.acknowledged === "falseACK"){
-                        acknowledgeHandshake(dataSignal.idPlayer);
+                        acknowledgeHandshake(dataSignal.playerId);
                         break;
                     }
                     else if(dataSignal.acknowledged === "trueACK"){
                         alert("handshake is acknowledged!!! You are nog in a fight!!!");
-                        fight(dataSignal.idPlayer);
+                        fight(dataSignal.playerId);
                         break;
                     }}
                 i++;
@@ -307,14 +323,14 @@
             }
         }
 
-        function addElement (xValue,yValue,idPlayer) {
+        function addElement (xValue,yValue,playerId) {
             // delete old div elements
-            if (document.getElementById(idPlayer)) {
-                var element = document.getElementById(idPlayer);
+            if (document.getElementById(playerId)) {
+                var element = document.getElementById(playerId);
                 element.parentNode.removeChild(element);
             }
 
-            let html = '<button onclick="sendFixedSignal(this.id)" id=' +idPlayer+ ' class="obj" data-x="'+xValue+'" data-y="'+yValue+'" ></button>'
+            let html = '<button onclick="sendFixedSignal(this.id)" id=' +playerId+ ' class="obj" data-x="'+xValue+'" data-y="'+yValue+'" ></button>'
             $('body').append(html);
 
             var $obj = $('.obj');
@@ -330,14 +346,17 @@
             var cookie = (document.cookie);
             var numberPixelPerMeter = parseFloat(JSON.parse(cookie).numberPixelPerMeter);
 
+
             var m_per_deg_lat = 111132.954 - 559.822 * Math.cos( 2.0 * parseFloat(latitude) ) + 1.175 * Math.cos( 4.0 * parseFloat(latitude));
             var m_per_deg_lon = (3.14159265359/180 ) * 6367449 * Math.cos ( parseFloat(latitude) );
 
             var deltaLongitude = parseFloat(playerLogitude) - parseFloat(longitude);
             var deltaLatitude = parseFloat(playerLatitude) - parseFloat(latitude);
 
+
             var xPosition = deltaLongitude * m_per_deg_lon;
             var yPosition = deltaLatitude * m_per_deg_lat;
+
 
             var data = {};
 
@@ -347,6 +366,7 @@
             obj = JSON.stringify(data);
             return obj;
         }
+
 
         var cookie = document.cookie;
 
@@ -368,12 +388,11 @@
 
     function sendFixedSignal(id){
         var cookie = JSON.parse(document.cookie);
-        var thisPlayer = cookie.idPlayer;
+        var thisPlayer = cookie.playerId;
 
         if (thisPlayer === id){
             alert("cannot send signal to yourself :)")
         } else {
-            var urlD = 'http://localhost:8080';
 
             var data = {};
 
@@ -390,7 +409,7 @@
                 alert("send acknowledgeHandshake falseACK signal to player with id: "+id);
 
             }
-            dataSignal.idPlayer = thisPlayer;
+            dataSignal.playerId = thisPlayer;
             data.dataSignal = JSON.stringify(dataSignal);
 
             obj = JSON.stringify(data);
@@ -400,7 +419,6 @@
     }
 
     function acknowledgeHandshake (id){
-        var urlD = 'http://localhost:8080';
 
         var data = {};
 
@@ -411,7 +429,7 @@
         var cookie = JSON.parse(document.cookie);
 
         var dataSignal ={};
-        dataSignal.idPlayer = cookie.idPlayer;
+        dataSignal.playerId = cookie.playerId;
         dataSignal.acknowledged = "trueACK";
         data.dataSignal = JSON.stringify( dataSignal);
 
@@ -423,7 +441,6 @@
 
     }
     function fight(idEnemyPlayer) {
-        var urlD = 'http://localhost:8080';
 
         var data = {};
 
@@ -431,7 +448,7 @@
 
         var cookie = JSON.parse(document.cookie);
 
-        data.playerId = cookie.idPlayer;
+        data.playerId = cookie.playerId;
 
         data.enemyPlayerId = String(idEnemyPlayer);
 
@@ -444,4 +461,5 @@
     }
 </script>
 </body>
+</html><!DOCTYPE html>
 </html>

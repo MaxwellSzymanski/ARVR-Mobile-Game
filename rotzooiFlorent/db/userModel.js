@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 const jwt = require('jsonwebtoken');
-const secret = require('./config');
+const secret = require('./config.js');
 
 const Schema = new mongoose.Schema({
     name: {
@@ -28,9 +28,8 @@ const Schema = new mongoose.Schema({
         required: true
     },
     image: {
-        data: Buffer,
-        contentType: String,
-        // required: true
+        type: String,
+        required: true
     },
     featureVector: {
         type: Object,
@@ -59,6 +58,10 @@ Schema.methods.createToken = function() {
         name: this.name,
         exp: parseInt(exp.getTime() / 1000),
     }, secret);
+};
+
+Schema.methods.checkToken = function(token) {
+    return this.name === token.name;
 };
 
 Schema.methods.getUserData = function() {

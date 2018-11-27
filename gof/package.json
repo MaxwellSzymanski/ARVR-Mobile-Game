@@ -10,7 +10,8 @@
     "react-dom": "^16.6.0",
     "react-html5-camera-photo": "^1.2.9",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "2.1.1"
+    "react-scripts": "2.1.1",
+    "universal-cookie": "^3.0.6"
   },
   "scripts": {
     "start": "set HTTPS=true && set PORT=8012 && PORT=8012 react-scripts start || react-scripts start",
