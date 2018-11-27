@@ -17,6 +17,18 @@ const Schema = new mongoose.Schema({
             required: true,
         },
     },
+    sendSignal: {
+        type: String,
+        required: false,
+    },
+    dataSignal: {
+        type: Object,
+        required: false,
+    },
+    enemyPlayerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    },
 }, {timestamps: true});
 
 Schema.methods.getLocationJSON = function() {
