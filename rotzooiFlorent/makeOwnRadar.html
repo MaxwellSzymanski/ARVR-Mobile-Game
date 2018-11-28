@@ -250,7 +250,7 @@
                     var distancePlayer = distanceBetween(playerLongitude,playerLatitude,object1[i].longitude,object1[i].latitude);
 
                     if( distancePlayer > 10 && distancePlayer < smallestDistancePlayer){
-                        smallestDistancePlayer = distancePlayer;
+                        smallestDistancePlayer = Math.max(distancePlayer, 0.000000001);
                     }
                     i++;
                 }

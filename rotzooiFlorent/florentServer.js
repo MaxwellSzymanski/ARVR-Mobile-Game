@@ -90,23 +90,56 @@ https.createServer(https_options, async function (req, res) {
                         else
                             res.write(JSON.stringify({"email": true, "password": value, token: result.createToken() }));
                         res.end();
-                        const newActivePlayer = new ActivePlayer({playerid: result._id, location: obj.position});
-                        newActivePlayer.save();
+                        ActivePlayer.findOneAndRemove({playerid:result._id}, { sort: { 'created_at' : 1 }}, function() {
+                            const newActivePlayer = new ActivePlayer({playerid: result._id, location: obj.position});
+                            newActivePlayer.save();
+                        });
                     }
                 });
                 break;
             case "signout":
                 console.log("Request: signout ==============================================");
-
+                jwt.verify(obj.token, secret, async function(err, token) {
+                    if (err) {
+                        console.log("invalid token");
+                        res.setHeader('Access-Control-Allow-Origin', '*');
+                        res.setHeader("Content-Type", "ERROR");
+                        res.end();
+                        throw err;
+                    } else {
+                        console.log(token);
+                        User.findById(token.id).then(
+                            async function (user) {
+                                console.log(user);
+                                if (user !== null)
+                                    if (!(await user.checkToken(token))) {
+                                        console.log("invalid token");
+                                        res.setHeader('Access-Control-Allow-Origin', '*');
+                                        res.setHeader("Content-Type", "ERROR");
+                                        res.end();
+                                    } else {
+                                        ActivePlayer.findOne({playerid: user._id}, (erro, result) => {
+                                            delete result;
+                                        });
+                                        ActivePlayer.deleteMany({playerid: user._id});
+                                        res.setHeader('Access-Control-Allow-Origin', '*');
+                                        res.setHeader("Content-Type", "application/json");
+                                        res.write(JSON.stringify({result: true}));
+                                        res.end();
+                                    }
+                            });
+                    }
+                });
+                break;
             case "jwt":
                 console.log("Request: jwt ==================================================");
                 jwt.verify(obj.token, secret, async function(err, token) {
                     if (err) {
                         console.log("invalid token");
                         res.setHeader('Access-Control-Allow-Origin', '*');
-                        res.setHeader("Content-Type", "application/json");
-                        res.write(JSON.stringify({result: false}));
+                        res.setHeader("Content-Type", "ERROR");
                         res.end();
+                        throw err;
                     } else {
                         console.log(token);
                         User.findById(token.id).then(
@@ -123,6 +156,7 @@ https.createServer(https_options, async function (req, res) {
                             });
                     }
                 });
+                break;
             case "Radar":
                 console.log("Request: radar ================================================");
                 if(obj.playerId !== null &&
