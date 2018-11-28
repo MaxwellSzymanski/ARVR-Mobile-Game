@@ -110,7 +110,6 @@ https.createServer(https_options, async function (req, res) {
                         console.log(token);
                         User.findById(token.id).then(
                             async function (user) {
-                                console.log(user);
                                 if (user !== null)
                                     if (!(await user.checkToken(token))) {
                                         console.log("invalid token");
@@ -118,14 +117,20 @@ https.createServer(https_options, async function (req, res) {
                                         res.setHeader("Content-Type", "ERROR");
                                         res.end();
                                     } else {
-                                        ActivePlayer.findOne({playerid: user._id}, (erro, result) => {
-                                            delete result;
+                                        ActivePlayer.findOne({playerid: user._id}, (err, result) => {
+                                            if (result !== null) {
+                                                result.delete();
+                                                res.setHeader('Access-Control-Allow-Origin', '*');
+                                                res.setHeader("Content-Type", "application/json");
+                                                res.write(JSON.stringify({result: true}));
+                                                res.end();
+                                            } else {
+                                                console.log("user not logged in");
+                                                res.setHeader('Access-Control-Allow-Origin', '*');
+                                                res.setHeader("Content-Type", "ERROR");
+                                                res.end();
+                                            }
                                         });
-                                        ActivePlayer.deleteMany({playerid: user._id});
-                                        res.setHeader('Access-Control-Allow-Origin', '*');
-                                        res.setHeader("Content-Type", "application/json");
-                                        res.write(JSON.stringify({result: true}));
-                                        res.end();
                                     }
                             });
                     }
