@@ -29,7 +29,16 @@ const Schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },
-}, {timestamps: true});
+    created_at: {
+        type: Date,
+        default: Date.now()
+    },
+    updated_at: {
+        type: Date,
+        expires: 30,
+        default: Date.now()
+    },
+});
 
 Schema.methods.getLocationJSON = function() {
     return JSON.stringify({

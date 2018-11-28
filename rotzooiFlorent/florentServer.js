@@ -29,7 +29,7 @@ const https_options = {
     cert: fs.readFileSync('./ssl/team12.pem')
 };
 
-const port = 8080;
+const port = 80;
 
 //create a server object:
 https.createServer(https_options, async function (req, res) {
@@ -73,7 +73,6 @@ https.createServer(https_options, async function (req, res) {
                 break;
             case "signin":
                 console.log("Request: signin ===============================================");
-                console.log(obj.position);
                 User.findOne({ email : obj.email }, async function (error, result) {
                     if (error) throw error;
                     if (result === null) {
@@ -167,19 +166,21 @@ https.createServer(https_options, async function (req, res) {
                 if(obj.playerId !== null &&
                     (await ActivePlayer.findOne({playerid: obj.playerId})) !== null)
                     getPlayerPositionRadar(obj, res);
+                else {
+                    console.log("invalid playerid");
+                    res.setHeader('Access-Control-Allow-Origin', '*');
+                    res.setHeader("Content-Type", "ERROR");
+                    res.end();
+                }
                 break;
             case "sendSignal":
                 console.log("Request: fixedSignal ==========================================");
-
                 console.log("\n\n\n" + JSON.stringify(obj) + "\n\n\n");
-
                 sendSignal(obj);
                 break;
             case "fight":
                 console.log("Request: fight ================================================");
-
                 console.log("\n\n\n" + JSON.stringify(obj) + "\n\n\n");
-
                 fight(obj);
                 break;
             case "updateFrequency":
@@ -218,8 +219,8 @@ function updateFrequency(jsonData,res){
 }
 
 async function getPlayerPositionRadar(jsonData,res) {
-    const firstPlayer = await getFirstActivePlayer();
-
+    let fp = await getFirstActivePlayer();
+    fp = { firstPlayer : fp };
     var playerId = jsonData.playerId;
     var playerLongitude = jsonData.longitude;
     var playerLatitude = jsonData.latitude;
@@ -229,19 +230,20 @@ async function getPlayerPositionRadar(jsonData,res) {
         if (result!== null) {
             result.location.latitude = playerLatitude;
             result.location.longitude = playerLongitude;
+            result.updated_at = Date.now();
             result.save();
         }
     });
 
-    ActivePlayer.find({}, '-createdAt -_id -updatedAt -__v', {lean: true}, async function(error, result) {
+    ActivePlayer.find({}, '-created_at -_id -updated_at -__v', {lean: true}, async function(error, result) {
         if (error) {
             res.write("No player positions available");
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.setHeader("Content-Type", "ERROR");
             throw error;
         } else {
-            result.firstPlayer = firstPlayer;
             result.forEach(function (elem) {
+                console.log(elem);
                 elem.playerId = elem.playerid;
                 delete elem.playerid;
                 elem.longitude = elem.location.longitude;
@@ -251,12 +253,11 @@ async function getPlayerPositionRadar(jsonData,res) {
                 delete elem.location;
             });
 
+            result.push(fp);
+
             res.setHeader('Access-Control-Allow-Origin', '*');
-            console.log("Result: " + result);
             res.write(JSON.stringify(result)); //write a response to the client
             res.end(); //end the response
-
-            console.log(result.firstPlayer);
 
             ActivePlayer.findOne({playerid: playerId}, function (error, result) {
                 if (error) throw error;
