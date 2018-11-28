@@ -220,7 +220,7 @@ function updateFrequency(jsonData,res){
 
 async function getPlayerPositionRadar(jsonData,res) {
     let fp = await getFirstActivePlayer();
-    fp = { firstPlayer : fp };
+    fp = { firstPlayer : fp, frequency : frequency };
     var playerId = jsonData.playerId;
     var playerLongitude = jsonData.longitude;
     var playerLatitude = jsonData.latitude;

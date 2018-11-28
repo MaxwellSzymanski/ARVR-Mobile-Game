@@ -250,7 +250,7 @@
                     var distancePlayer = distanceBetween(playerLongitude,playerLatitude,object1[i].longitude,object1[i].latitude);
 
                     if( distancePlayer > 10 && distancePlayer < smallestDistancePlayer){
-                        smallestDistancePlayer = Math.max(distancePlayer, 0.000000001);
+                        smallestDistancePlayer = Math.max(distancePlayer, 10);
                     }
                     i++;
                 }
@@ -290,6 +290,10 @@
                 } else {
                     document.getElementById("increaseFrequencyButton").style.visibility="hidden";
                     document.getElementById("decreaseFrequencyButton").style.visibility="hidden";                }
+                if (object2[i].hasOwnProperty("frequency")) {
+                    updateFrequency = object2[i].frequency;
+                }
+
 
                 // check for enemy!
                 if( object2[i].playerId === thisPlayer && object2[i].hasOwnProperty("enemyPlayerId") &&object2[i].enemyPlayerId !== null ) {

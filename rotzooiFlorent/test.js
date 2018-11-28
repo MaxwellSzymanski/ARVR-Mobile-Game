@@ -18,3 +18,4 @@ https.createServer(https_options, function (req, res) {
     });
 }).listen(443);
 console.log("Server listening on https://35.241.198.186:443");
+console.log("Server is responding with " + path);
