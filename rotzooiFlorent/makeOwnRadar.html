@@ -290,11 +290,7 @@
                 } else {
                     document.getElementById("increaseFrequencyButton").style.visibility="hidden";
                     document.getElementById("decreaseFrequencyButton").style.visibility="hidden";                }
-                if (object2[i].hasOwnProperty("frequency")) {
-                    updateFrequency = object2[i].frequency;
-                }
-
-
+        
                 // check for enemy!
                 if( object2[i].playerId === thisPlayer && object2[i].hasOwnProperty("enemyPlayerId") &&object2[i].enemyPlayerId !== null ) {
                     document.getElementById(object2[i].enemyPlayerId).className = "objEnemy";

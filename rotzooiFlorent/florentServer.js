@@ -213,14 +213,14 @@ function updateFrequency(jsonData,res){
     frequency = jsonData.frequency;
     jsonData.update = "true";
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader("Content-Type", "ERROR");
+    // res.setHeader("Content-Type", "ERROR");
     res.write(JSON.stringify(jsonData));
     res.end();
 }
 
 async function getPlayerPositionRadar(jsonData,res) {
     let fp = await getFirstActivePlayer();
-    fp = { firstPlayer : fp, frequency : frequency };
+    fp = { firstPlayer : fp };
     var playerId = jsonData.playerId;
     var playerLongitude = jsonData.longitude;
     var playerLatitude = jsonData.latitude;
