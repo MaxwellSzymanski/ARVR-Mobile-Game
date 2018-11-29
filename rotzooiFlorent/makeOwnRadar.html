@@ -230,6 +230,7 @@
         function createRadar(dataHTTP){
 
             var cookie = (document.cookie);
+            alert(cookie);
 
             var playerLongitude = parseFloat(JSON.parse(cookie).longitude);
             var playerLatitude =  parseFloat(JSON.parse(cookie).latitude);

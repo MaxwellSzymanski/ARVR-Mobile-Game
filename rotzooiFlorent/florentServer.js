@@ -34,8 +34,6 @@ const port = 80;
 //create a server object:
 https.createServer(https_options, async function (req, res) {
 
-    const {headers, method, url} = req;
-
     let body = [];
     req.on('error', (err) => {
         console.error(err);
@@ -45,154 +43,42 @@ https.createServer(https_options, async function (req, res) {
         body = Buffer.concat(body).toString();
 
         let obj = JSON.parse(body);
-        const request = obj.request;
+        const request = (obj.request).toLowerCase();
 
-        console.log("\n            " + Date.now());
+        console.log("\n\n\nRequest:    " + request + "    ===============    current time:    " + new Date().toLocaleTimeString());
         switch (request) {
             case "signup":
-                console.log("Request: signup ===============================================");
-                const newUser = new User(obj);
-                res.setHeader('Access-Control-Allow-Origin', '*');
-                res.setHeader("Content-Type", "application/json");
-                newUser.save( function(error) {
-                    if (error) {
-                        console.log(error);
-                        res.write(JSON.stringify({
-                            success: false,
-                            message: error.message,
-                        }));
-                    } else {
-                        res.write(JSON.stringify({
-                            success: true,
-                            token: newUser.createToken(),
-                        }));
-                    }
-                    res.end();
-                });
-                console.log("    Created new user with id:    " + newUser._id);
+                signup(obj, res);
                 break;
             case "signin":
-                console.log("Request: signin ===============================================");
-                User.findOne({ email : obj.email }, async function (error, result) {
-                    if (error) throw error;
-                    if (result === null) {
-                        res.setHeader('Access-Control-Allow-Origin', '*');
-                        res.setHeader("Content-Type", "application/json");
-                        res.write(JSON.stringify({"email": false}));
-                        res.end();
-                    } else {
-                        const value = await result.checkPassword(obj.password);
-                        res.setHeader('Access-Control-Allow-Origin', '*');
-                        res.setHeader("Content-Type", "application/json");
-                        if (!value)
-                            res.write(JSON.stringify({"email": true, "password": value}));
-                        else
-                            res.write(JSON.stringify({"email": true, "password": value, token: result.createToken() }));
-                        res.end();
-                        ActivePlayer.findOneAndRemove({playerid:result._id}, { sort: { 'created_at' : 1 }}, function() {
-                            const newActivePlayer = new ActivePlayer({playerid: result._id, location: obj.position});
-                            newActivePlayer.save();
-                        });
-                    }
-                });
+                signin(obj, res);
                 break;
             case "signout":
-                console.log("Request: signout ==============================================");
-                jwt.verify(obj.token, secret, async function(err, token) {
-                    if (err) {
-                        console.log("invalid token");
-                        res.setHeader('Access-Control-Allow-Origin', '*');
-                        res.setHeader("Content-Type", "ERROR");
-                        res.end();
-                        throw err;
-                    } else {
-                        console.log(token);
-                        User.findById(token.id).then(
-                            async function (user) {
-                                if (user !== null)
-                                    if (!(await user.checkToken(token))) {
-                                        console.log("invalid token");
-                                        res.setHeader('Access-Control-Allow-Origin', '*');
-                                        res.setHeader("Content-Type", "ERROR");
-                                        res.end();
-                                    } else {
-                                        ActivePlayer.findOne({playerid: user._id}, (err, result) => {
-                                            if (result !== null) {
-                                                result.delete();
-                                                res.setHeader('Access-Control-Allow-Origin', '*');
-                                                res.setHeader("Content-Type", "application/json");
-                                                res.write(JSON.stringify({result: true}));
-                                                res.end();
-                                            } else {
-                                                console.log("user not logged in");
-                                                res.setHeader('Access-Control-Allow-Origin', '*');
-                                                res.setHeader("Content-Type", "ERROR");
-                                                res.end();
-                                            }
-                                        });
-                                    }
-                            });
-                    }
-                });
+                signout(obj, res);
                 break;
             case "jwt":
-                console.log("Request: jwt ==================================================");
-                jwt.verify(obj.token, secret, async function(err, token) {
-                    if (err) {
-                        console.log("invalid token");
-                        res.setHeader('Access-Control-Allow-Origin', '*');
-                        res.setHeader("Content-Type", "ERROR");
-                        res.end();
-                        throw err;
-                    } else {
-                        console.log(token);
-                        User.findById(token.id).then(
-                            async function (user) {
-                                console.log(user);
-                                let value = false;
-                                if (user !== null)
-                                    value = await user.checkToken(token);
-                                console.log(value);
-                                res.setHeader('Access-Control-Allow-Origin', '*');
-                                res.setHeader("Content-Type", "application/json");
-                                res.write(JSON.stringify({result: value}));
-                                res.end();
-                            });
-                    }
-                });
+                verifyJWT(obj, res);
                 break;
-            case "Radar":
-                console.log("Request: radar ================================================");
-                if(obj.playerId !== null &&
-                    (await ActivePlayer.findOne({playerid: obj.playerId})) !== null)
-                    getPlayerPositionRadar(obj, res);
-                else {
-                    console.log("invalid playerid");
-                    res.setHeader('Access-Control-Allow-Origin', '*');
-                    res.setHeader("Content-Type", "ERROR");
-                    res.end();
-                }
+            case "radar":
+                radar(obj, res);
                 break;
-            case "sendSignal":
-                console.log("Request: fixedSignal ==========================================");
-                console.log("\n\n\n" + JSON.stringify(obj) + "\n\n\n");
+            case "sendsignal":
                 sendSignal(obj);
+                res.end();
                 break;
             case "fight":
-                console.log("Request: fight ================================================");
-                console.log("\n\n\n" + JSON.stringify(obj) + "\n\n\n");
                 fight(obj);
+                res.end();
                 break;
-            case "updateFrequency":
-                console.log("Request: update frequency ================================================");
+            case "updatefrequency":
                 updateFrequency(obj,res);
                 break;
             case "frequency":
-                console.log("Request: frequency ================================================");
                 getFrequency(obj,res);
                 break;
             default:
-                console.log("Bad request ===================================================");
+                console.log("!!!  unknown request  !!!");
+                res.end();
                 break;
         }
         console.log("\n");
@@ -200,11 +86,123 @@ https.createServer(https_options, async function (req, res) {
 }).listen(port);
 console.log("\n\n    Server listening on localhost:" + port + "\n\n");
 
+function signup(obj, res) {
+    const newUser = new User(obj);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader("Content-Type", "application/json");
+    newUser.save( function(error) {
+        if (error) {
+            console.log(error);
+            res.write(JSON.stringify({
+                success: false,
+                message: error.message,
+            }));
+        } else {
+            res.write(JSON.stringify({
+                success: true,
+                token: newUser.createToken(),
+            }));
+        }
+        res.end();
+    });
+    console.log("    Created new user with id:    " + newUser._id);
+}
+
+function signin(obj, res) {
+    User.findOne({ email : obj.email }, async function (error, result) {
+        if (error) throw error;
+        if (result === null) {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader("Content-Type", "application/json");
+            res.write(JSON.stringify({"email": false}));
+            res.end();
+        } else {
+            const value = await result.checkPassword(obj.password);
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader("Content-Type", "application/json");
+            if (!value)
+                res.write(JSON.stringify({"email": true, "password": value}));
+            else
+                res.write(JSON.stringify({"email": true, "password": value, token: result.createToken() }));
+            res.end();
+            ActivePlayer.findOneAndRemove({playerid:result._id}, { sort: { 'created_at' : 1 }}, function() {
+                const newActivePlayer = new ActivePlayer({playerid: result._id, location: obj.position});
+                newActivePlayer.save();
+            });
+        }
+    });
+}
+
+function signout(obj, res) {
+    jwt.verify(obj.token, secret, async function(err, token) {
+        if (err) {
+            console.log("invalid token");
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader("Content-Type", "ERROR");
+            res.end();
+            throw err;
+        } else {
+            console.log(token);
+            User.findById(token.id).then(
+                async function (user) {
+                    if (user !== null)
+                        if (!(await user.checkToken(token))) {
+                            console.log("invalid token");
+                            res.setHeader('Access-Control-Allow-Origin', '*');
+                            res.setHeader("Content-Type", "ERROR");
+                            res.end();
+                        } else {
+                            ActivePlayer.findOne({playerid: user._id}, (err, result) => {
+                                if (result !== null) {
+                                    result.delete();
+                                    res.setHeader('Access-Control-Allow-Origin', '*');
+                                    res.setHeader("Content-Type", "application/json");
+                                    res.write(JSON.stringify({result: true}));
+                                    res.end();
+                                } else {
+                                    console.log("user not logged in");
+                                    res.setHeader('Access-Control-Allow-Origin', '*');
+                                    res.setHeader("Content-Type", "ERROR");
+                                    res.end();
+                                }
+                            });
+                        }
+                });
+        }
+    });
+}
+
+function verifyJWT(obj, res) {
+    jwt.verify(obj.token, secret, async function(err, token) {
+        if (err) {
+            console.log("invalid token");
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader("Content-Type", "ERROR");
+            res.end();
+            throw err;
+        } else {
+            console.log(token);
+            User.findById(token.id).then(
+                async function (user) {
+                    console.log(user);
+                    let value = false;
+                    if (user !== null)
+                        value = await user.checkToken(token);
+                    console.log(value);
+                    res.setHeader('Access-Control-Allow-Origin', '*');
+                    res.setHeader("Content-Type", "application/json");
+                    res.write(JSON.stringify({result: value}));
+                    res.end();
+                });
+        }
+    });
+}
+
 function getFrequency(jsonData,res){
     jsonData.frequency = frequency;
     jsonData.update = "true";
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader("Content-Type", "ERROR");
+    // res.setHeader("Content-Type", "ERROR");
     res.write(JSON.stringify(jsonData));
     res.end();
 }
@@ -218,9 +216,35 @@ function updateFrequency(jsonData,res){
     res.end();
 }
 
+async function radar(obj, res) {
+    if (obj.token) {
+        console.log("token");
+        jwt.verify(obj.token, secret, async function(err, token) {
+            if (err) {
+                console.log("invalid token");
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.setHeader("Content-Type", "ERROR");
+                res.end();
+            } else {
+                obj.playerId = token.id;
+            }
+        });
+    }
+    if(obj.playerId !== null &&
+        (await ActivePlayer.findOne({playerid: obj.playerId})) !== null) {
+        getPlayerPositionRadar(obj, res);
+    } else {
+        console.log("invalid playerid");
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader("Content-Type", "ERROR");
+        res.end();
+    }
+}
+
 async function getPlayerPositionRadar(jsonData,res) {
     let fp = await getFirstActivePlayer();
     fp = { firstPlayer : fp };
+
     var playerId = jsonData.playerId;
     var playerLongitude = jsonData.longitude;
     var playerLatitude = jsonData.latitude;
