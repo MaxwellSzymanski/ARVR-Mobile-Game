@@ -6,7 +6,7 @@ const cookies = new Cookies();
 
 // const $ = require('jQuery');
 
-const url = 'https://localhost:8080';
+const url = require('./serveradress.js');
 
 class SignUpForm extends React.Component {
     constructor() {
@@ -114,7 +114,7 @@ class SignUpForm extends React.Component {
                             {button}</Link></div>
                     <div className="FormField">
                         <label className="FormField__Label" htmlFor="name">Username</label>
-                        <input type="text" id="name" className="FormField__Input" placeholder="Enter your full name" name="name" value={this.state.name} onChange={this.handleChange} />
+                        <input type="text" id="name" className="FormField__Input" placeholder="Enter a username" name="name" value={this.state.name} onChange={this.handleChange} />
                     </div>
                     <div className="FormField">
                         <label className="FormField__Label" htmlFor="email">E-Mail Address</label>

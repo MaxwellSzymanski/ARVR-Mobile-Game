@@ -4,7 +4,7 @@ import axios from "axios";
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 
-const url = 'https://localhost:8080';
+const url = require('./serveradress.js');
 
 class SignInForm extends React.Component {
     constructor() {

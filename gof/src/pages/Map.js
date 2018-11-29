@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Radar from './Radar.js';
 
+const url = require('./serveradress.js');
 
 class Map extends React.Component {
 
