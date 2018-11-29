@@ -29,7 +29,7 @@ const https_options = {
     cert: fs.readFileSync('./ssl/team12.pem')
 };
 
-const port = 8080;
+const port = 80;
 
 //create a server object:
 https.createServer(https_options, async function (req, res) {
