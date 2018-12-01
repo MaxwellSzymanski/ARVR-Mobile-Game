@@ -1,52 +1,61 @@
 const axios = require('axios');
 const https = require('https');
-const syncLoop = require('sync-loop');
-const numberOfRequests = 10;
-const requestPeriod = 5000 // miliseconds between two requests from the same user.
+const numberOfUsers = 60;
+const numberOfRequests = 5;
+const requestPeriod = 2500; // miliseconds between two requests from the same user.
 
 const url = 'https://35.241.198.186:80';
 const agent = new https.Agent({
     rejectUnauthorized: false
 });
 
-for(let i = 0; i < 60; i++) {
+const results ={};
+
+for(let i = 0; i < numberOfUsers; i++) {
     const name = "username_" + i.toString();
     const email = name + "@testusers.com";
     const password = "password";
-    const long = 4.6951758 + 0.000001;
-    const lat = 50.864949499969994 + 0.0000005;
+    const long = 4.6951758 + 0.0001 * Math.random();
+    const lat = 50.864949499969994 + 0.0001 * Math.random();
     const signin = {
-        email : email,
-        password : password,
-        request : "signin",
-        position :
+        email: email,
+        password: password,
+        request: "signin",
+        position:
             {
-                longitude : long,
-                latitude : lat
+                longitude: long,
+                latitude: lat
             }
     };
-    axios.post(url, JSON.stringify(signin), { httpsAgent: agent }).then(
+    results.i = [];
+    setTimeout(function () {
+        axios.post(url, JSON.stringify(signin), {httpsAgent: agent}).then(
         function (json) {
 
-            const radar = {
-                request : "radar",
-            };
-            syncLoop(numberOfRequests, function (loop) {
-                // loop body
-                var index = loop.iteration(); // index of loop, value from 0 to (numberOfLoop - 1)
-                doAsyncJob(function() {
-                    setTimeout(function() {
+            if (!json.data.email || !json.data.password) console.log("\n\n!!!\n\nERROR at user  " + i + "   |   response:  " + json + "\n\n!!!\n\n");
+            else {
+                const radar = {
+                    request: "radar",
+                    token: json.data.token,
+                    longitude: 4.6951758 + 0.0001 * Math.random(),
+                    latitude: 50.864949499969994 + 0.0001 * Math.random(),
+                };
+                for (let j = 0; j < numberOfRequests; j++) {
+                    setTimeout(function () {
+                        const send = new Date();
                         axios.post(url, JSON.stringify(radar), {httpsAgent: agent}).then(
-                            function() {
-                                console.log(name + "|" + index + ":    " + Date.now().toTimeString())
+                            function () {
+                                const recieve = new Date();
+                                const milis = recieve - send;
+                                results.i.push(milis);
+                                console.log(name + "|" + j + ":         " + new Date().toLocaleTimeString());
+                                console.log("                " + milis + "\n");
                             }
                         );
-                        loop.next(); // call `loop.next()` for next iteration
-                    }, requestPeriod)
-                })
-            }, function () {
-                console.log(numberOfRequests + " radar requests were sent.")
-            });
-        }
-    );
+                    }, j * requestPeriod);
+                }
+            }
+        });
+    console.log("result_" + i + ":    " + (results.i).toString());
+    }, i * 200);
 }
