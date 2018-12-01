@@ -45,7 +45,7 @@ https.createServer(https_options, async function (req, res) {
         let obj = JSON.parse(body);
         const request = (obj.request).toLowerCase();
 
-        console.log("\n\n\nRequest:    " + request + "    ===============    current time:    " + new Date().toLocaleTimeString());
+        // console.log("\n\n\nRequest:    " + request + "    ===============    current time:    " + new Date().toLocaleTimeString());
         switch (request) {
             case "signup":
                 signup(obj, res);
@@ -81,7 +81,7 @@ https.createServer(https_options, async function (req, res) {
                 res.end();
                 break;
         }
-        console.log("\n");
+        // console.log("\n");
     });
 }).listen(port);
 console.log("\n\n    Server listening on localhost:" + port + "\n\n");
@@ -105,7 +105,6 @@ function signup(obj, res) {
         }
         res.end();
     });
-    console.log("    Created new user with id:    " + newUser._id);
 }
 
 function signin(obj, res) {
@@ -142,7 +141,6 @@ function signout(obj, res) {
             res.end();
             throw err;
         } else {
-            console.log(token);
             User.findById(token.id).then(
                 async function (user) {
                     if (user !== null)
@@ -181,7 +179,6 @@ function verifyJWT(obj, res) {
             res.end();
             throw err;
         } else {
-            console.log(token);
             User.findById(token.id).then(
                 async function (user) {
                     console.log(user);
@@ -218,7 +215,6 @@ function updateFrequency(jsonData,res){
 
 async function radar(obj, res) {
     if (obj.token) {
-        console.log("token");
         jwt.verify(obj.token, secret, async function(err, token) {
             if (err) {
                 console.log("invalid token");
@@ -267,7 +263,6 @@ async function getPlayerPositionRadar(jsonData,res) {
             throw error;
         } else {
             result.forEach(function (elem) {
-                console.log(elem);
                 elem.playerId = elem.playerid;
                 delete elem.playerid;
                 elem.longitude = elem.location.longitude;
@@ -290,7 +285,6 @@ async function getPlayerPositionRadar(jsonData,res) {
                     result.dataSignal = null;
                     result.save();
                 }
-                console.log("sendSignal to false for player with id: " + playerId + ", result query: " + res);
             });
         }
     });

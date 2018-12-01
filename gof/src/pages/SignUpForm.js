@@ -114,7 +114,7 @@ class SignUpForm extends React.Component {
                             {button}</Link></div>
                     <div className="FormField">
                         <label className="FormField__Label" htmlFor="name">Username</label>
-                        <input type="text" id="name" className="FormField__Input" placeholder="Enter a username" name="name" value={this.state.name} onChange={this.handleChange} />
+                        <input type="text" id="name" className="FormField__Input" placeholder="Enter your username" name="name" value={this.state.name} onChange={this.handleChange} />
                     </div>
                     <div className="FormField">
                         <label className="FormField__Label" htmlFor="email">E-Mail Address</label>
@@ -127,7 +127,7 @@ class SignUpForm extends React.Component {
 
                     <div className="FormField">
                         <label className="FormField__CheckboxLabel">
-                            <input className="FormField__Checkbox" type="checkbox" name="hasAgreed" value={this.state.hasAgreed} onChange={this.handleChange} /> I agree all statements in <a className="FormField__TermsLink" onClick={this.openTerms}>terms of service</a>
+                            <input className="FormField__Checkbox" type="checkbox" name="hasAgreed" value={this.state.hasAgreed} onChange={this.handleChange} /> I agree to all statements in <a className="FormField__TermsLink" onClick={this.openTerms}>terms of service</a>
                         </label>
                     </div>
                     <div className="FormField">

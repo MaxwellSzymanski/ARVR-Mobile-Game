@@ -1,15 +1,19 @@
 const axios = require('axios');
 const https = require('https');
+const fs = require('fs');
+
 const numberOfUsers = 60;
 const numberOfRequests = 5;
-const requestPeriod = 2500; // miliseconds between two requests from the same user.
+const requestPeriod = 5000; // miliseconds between two requests from the same user.
 
 const url = 'https://35.241.198.186:80';
 const agent = new https.Agent({
     rejectUnauthorized: false
 });
 
-const results ={};
+// const results ={};
+
+const totalstream = fs.createWriteStream('./results/all.txt', {flags:'a'});
 
 for(let i = 0; i < numberOfUsers; i++) {
     const name = "username_" + i.toString();
@@ -27,7 +31,9 @@ for(let i = 0; i < numberOfUsers; i++) {
                 latitude: lat
             }
     };
-    results.i = [];
+    // results.i = [];
+    const path = './results/' + name + ".txt";
+    const stream = fs.createWriteStream(path, {flags:'a'});
     setTimeout(function () {
         axios.post(url, JSON.stringify(signin), {httpsAgent: agent}).then(
         function (json) {
@@ -45,17 +51,21 @@ for(let i = 0; i < numberOfUsers; i++) {
                         const send = new Date();
                         axios.post(url, JSON.stringify(radar), {httpsAgent: agent}).then(
                             function () {
-                                const recieve = new Date();
-                                const milis = recieve - send;
-                                results.i.push(milis);
-                                console.log(name + "|" + j + ":         " + new Date().toLocaleTimeString());
-                                console.log("                " + milis + "\n");
+                                const receive = new Date();
+                                let milis = receive - send;
+                                milis = milis.toString() + "\n";
+                                // results.i.push(milis);
+                                stream.write(milis);
+                                totalstream.write(milis);
+                                // console.log(name + "|" + j + ":         " + new Date().toLocaleTimeString());
+                                // console.log("                " + milis + "\n");
                             }
                         );
                     }, j * requestPeriod);
                 }
             }
         });
-    console.log("result_" + i + ":    " + (results.i).toString());
-    }, i * 200);
+    // console.log("result_" + i + ":    " + Math.max(results.i));
+    }, i * 300);
 }
+// console.log(results);
