@@ -3,8 +3,8 @@ const https = require('https');
 const fs = require('fs');
 
 const numberOfUsers = 60;
-const numberOfRequests = 10;
-const requestPeriod = 4000; // miliseconds between two requests from the same user.
+const numberOfRequests = 5;
+const requestPeriod = 5000; // miliseconds between two requests from the same user.
 
 const url = 'https://35.241.198.186:80';
 const agent = new https.Agent({
