@@ -54,7 +54,7 @@
 <script>
 
     var urlD = 'https://35.241.198.186:80'; // adres server
-    
+
     var dataCookie = {};
 
     dataCookie.playerId="5bf1d5a3b373a15628ea2b81";
@@ -229,7 +229,6 @@
         function createRadar(dataHTTP){
 
             var cookie = (document.cookie);
-            alert(cookie);
 
             var playerLongitude = parseFloat(JSON.parse(cookie).longitude);
             var playerLatitude =  parseFloat(JSON.parse(cookie).latitude);
