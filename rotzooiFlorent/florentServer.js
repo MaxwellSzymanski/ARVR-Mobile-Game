@@ -3,9 +3,10 @@ const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const secret = require('./db/config.js');
 
-var MongoClient = require('mongodb').MongoClient;
+// var MongoClient = require('mongodb').MongoClient;
 // var url = "mongodb://localhost:27017/userdb";
-var url = 'mongodb://team12:mongoDBteam12@35.241.198.186:27017/?authMechanism=SCRAM-SHA-1&authSource=userdb';
+// var url = 'mongodb://team12:mongoDBteam12@35.241.198.186:27017/?authMechanism=SCRAM-SHA-1&authSource=userdb';
+
 var frequency = 4000;
 
 const mongoose = require('mongoose');
@@ -124,8 +125,8 @@ function signin(obj, res) {
             else
                 res.write(JSON.stringify({"email": true, "password": value, token: result.createToken() }));
             res.end();
-            ActivePlayer.findOneAndRemove({playerid:result._id}, { sort: { 'created_at' : 1 }}, function() {
-                const newActivePlayer = new ActivePlayer({playerid: result._id, location: obj.position});
+            ActivePlayer.findOneAndRemove({playerid:result.name}, function() {
+                const newActivePlayer = new ActivePlayer({playerid: result.name, location: obj.position});
                 newActivePlayer.save();
             });
         }
@@ -150,7 +151,7 @@ function signout(obj, res) {
                             res.setHeader("Content-Type", "ERROR");
                             res.end();
                         } else {
-                            ActivePlayer.findOne({playerid: user._id}, (err, result) => {
+                            ActivePlayer.findOne({playerid: user.name}, (err, result) => {
                                 if (result !== null) {
                                     result.delete();
                                     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -222,7 +223,7 @@ async function radar(obj, res) {
                 res.setHeader("Content-Type", "ERROR");
                 res.end();
             } else {
-                obj.playerId = token.id;
+                obj.playerId = token.name;
             }
         });
     }

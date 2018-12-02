@@ -68,7 +68,6 @@ Schema.methods.getUserData = function() {
     return {
         name: this.name,
         email: this.email,
-        token: this.createToken(),
         image: this.image
     };
 };
