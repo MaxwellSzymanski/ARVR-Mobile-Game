@@ -57,8 +57,8 @@ for(let i = 0; i < numberOfUsers; i++) {
                                 // results.i.push(milis);
                                 stream.write(milis);
                                 totalstream.write(milis);
-                                // console.log(name + "|" + j + ":         " + new Date().toLocaleTimeString());
-                                // console.log("                " + milis + "\n");
+                                console.log(name + "|" + j + ":         " + receive.toLocaleTimeString());
+                                console.log("                " + milis);
                             }
                         );
                     }, j * requestPeriod);
