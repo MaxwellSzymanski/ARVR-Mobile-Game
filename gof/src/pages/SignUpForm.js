@@ -59,7 +59,7 @@ class SignUpForm extends React.Component {
                 if (json.data.success) {
                     cookies.set('loginCookie', json.data.token, {path: '/'});
                     console.log(cookies.get('loginCookie'));
-                    this.goToMap();
+                    this.setState({redirect: true};
                 }
                 else alert(json.data.message);
             }
@@ -104,7 +104,7 @@ class SignUpForm extends React.Component {
         return (
 
         <div className="FormCenter">
-
+        {this.renderRedirect()}
             <form onSubmit={this.handleSubmit} className="FormFields">
             <div id="text">
             <label id="text">Take a picture</label></div>
