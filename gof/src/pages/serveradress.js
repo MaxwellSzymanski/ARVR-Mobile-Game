@@ -1,1 +1,1 @@
-module.exports = "https://35.241.198.186:80";
+module.exports = "https://localhost:80";
