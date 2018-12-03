@@ -4,8 +4,6 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 
-// const $ = require('jQuery');
-
 const url = require('./serveradress.js');
 
 class SignUpForm extends React.Component {
@@ -25,7 +23,7 @@ class SignUpForm extends React.Component {
 
     fileSelectorHandler = event => {
         console.log(event);
-    }
+    };
 
     handleChange(e) {
         let target = e.target;
@@ -77,19 +75,19 @@ class SignUpForm extends React.Component {
     }
 
     state = {
-        redirect : false }
+        redirect : false };
 
     setRedirect = () => {
         this.setState({redirect: true})
-    }
+    };
 
     renderRedirect = () => {
         if (this.state.redirect) {return <Redirect to="/map" />}
-    }
+    };
 
     goToMap = () => {
         this.setRedirect();
-    }
+    };
 
     render() {
 
@@ -97,7 +95,7 @@ class SignUpForm extends React.Component {
         if (localStorage.getItem("PhotoOfMe") === null) {
             button = <img className="button" alt="" src={ require('../camera2.png') } />;
         } else {
-            var img = localStorage.getItem("PhotoOfMe")
+            var img = localStorage.getItem("PhotoOfMe");
             button = <img  className="imageButton" alt="" src={img} />
         }
 

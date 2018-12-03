@@ -18,6 +18,8 @@ class CameraComp extends React.Component {
   onTakePhoto (dataUri) {
     // TODO: Check face
 
+
+
       if (false) {
         alert("No face detected, try again.")
       }
@@ -34,13 +36,14 @@ class CameraComp extends React.Component {
 
   render () {
     return (
-      <div className="Title">
+      <div className="background">
         {this.renderRedirect()}
-        <Camera
-          onTakePhoto = { (dataUri) => { this.onTakePhoto(dataUri); } }
-          isImageMirror = {true}
-        />
-
+        <div className="polaroid">
+            <Camera
+                onTakePhoto = { (dataUri) => { this.onTakePhoto(dataUri); } }
+                isImageMirror = {true}
+            />
+        </div>
       </div>
 
 

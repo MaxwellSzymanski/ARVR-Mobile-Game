@@ -1,3 +1,30 @@
+/* Landing Page */
+
+ltitle {
+    font-size: 50px;
+    font-family: 'Orkney Bold';
+    color: white;
+}
+
+lsubtitle {
+    font-size: 30px;
+    font-family: 'Orkney Bold';
+    color: black;
+}
+
+@font-face {
+    font-family: "Orkney Regular";
+    src: url("fonts/orkney-regular.otf");
+}
+
+@font-face {
+    font-family: "Orkney Bold";
+    src: url("fonts/orkney-bold.otf");
+}
+
+
+/* Rest of app */
+
 .App {
   height: 100%;
   display: block;
@@ -5,18 +32,26 @@
 }
 
 .Title {
-  width: 100%;
-  background-color: #cc1f10;
-  padding: 10px;
-  padding-bottom: 50px;
-  padding-top: 50px;
-  text-align: center;
+    width: 100%;
+    background-color:#cc1f10;
+    padding: 5px 10px;
+    overflow: auto;
+    height: 100%;
+}
+
+.background {
+    width: 100%;
+    background-image: linear-gradient(to bottom, #cc1f10, #921304);
+    padding: 10px;
+    padding-bottom: 50px;
+    padding-top: 50px;
+    text-align: center;
+    height: 100vh;
 }
 
 h1 {
   color: #421f1c;
-  font-size: 90px;
-
+  font-size:10vw;
 }
 
 h2 {
@@ -37,7 +72,7 @@ p {
 
 .App__Form {
   width: 100%;
-  background-color: #cc1f10;
+  background-image: linear-gradient(to bottom, #cc1f10, #921304);
   padding: 25px 40px;
   overflow: auto;
   height: 100%;
@@ -46,7 +81,7 @@ p {
 .PageSwitcher {
   display: block;
   justify-content: flex-start;
-  margin-bottom: 10%;
+  margin-bottom: 4%;
   text-align: center;
 }
 
@@ -114,18 +149,20 @@ p {
   text-transform: uppercase;
   font-size: .9em;
   color: white;
+    font-family: 'Karla', sans-serif;
 }
+
 .FormField__Input {
   width: 85%;
   background-color: transparent;
-  border: none;
-  color: white;
+  color: #4d0c04;
   outline: none;
-  border-bottom: 1px solid #fc3c2d;
+    border: none;
+    border-bottom: 1px solid #fc3c2d;
+
   font-size: 1em;
   font-weight: 300;
   padding-bottom: 10px;
-  margin-top: 10px;
   display: block;
   margin: auto;
 }
@@ -173,7 +210,6 @@ p {
 }
 
 .button {
-
     height:190px;
     width: 190px;
     margin-top: 20px;
@@ -198,7 +234,6 @@ p {
 
 #centerButton {
   text-align: center;
-
 }
 
 #text {
@@ -206,102 +241,15 @@ p {
   text-align: center;
 }
 
-/* Buttons */
-
-
-.button{
-    display: inline-block;
-    *display: inline;
-    zoom: 1;
-    padding: 6px 20px;
-    margin: 0;
-    cursor: pointer;
-    border: 1px solid #bbb;
-    overflow: visible;
-    font-family: 'Karla', sans-serif;
-    text-decoration: none;
-    white-space: nowrap;
-    height:40px;
-    color: #555;
-
-    background-color: #ddd;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,1)), to(rgba(255,255,255,0)));
-    background-image: -webkit-linear-gradient(top, rgba(255,255,255,1), rgba(255,255,255,0));
-    background-image: -moz-linear-gradient(top, rgba(255,255,255,1), rgba(255,255,255,0));
-    background-image: -ms-linear-gradient(top, rgba(255,255,255,1), rgba(255,255,255,0));
-    background-image: -o-linear-gradient(top, rgba(255,255,255,1), rgba(255,255,255,0));
-    background-image: linear-gradient(top, rgba(255,255,255,1), rgba(255,255,255,0));
-
-    -webkit-transition: background-color .2s ease-out;
-    -moz-transition: background-color .2s ease-out;
-    -ms-transition: background-color .2s ease-out;
-    -o-transition: background-color .2s ease-out;
-    transition: background-color .2s ease-out;
-    background-clip: padding-box; /* Fix bleeding */
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    border-radius: 3px;
-    -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 2px 2px -1px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .3) inset;
-    -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 2px 2px -1px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .3) inset;
-    box-shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 2px 2px -1px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .3) inset;
-    text-shadow: 0 1px 0 rgba(255,255,255, .9);
-
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+.polaroid {
+    padding: 20px 20px 50px;
+    background-color: white;
+    margin-right: auto;
+    margin-left: auto;
+    max-height: 690px;
+    max-width: 830px;
 }
 
-
-
-/* Larger buttons styles */
-
-.button.large{
-    padding: 12px 30px;
-    text-transform: uppercase;
-}
-
-.button.large:active{
-    top: 2px;
-}
-
-.button.red {
-    color: #fff;
-    text-shadow: 0 1px 0 rgba(0,0,0,.2);
-
-    background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,.3)), to(rgba(255,255,255,0)));
-    background-image: -webkit-linear-gradient(top, rgba(255,255,255,.3), rgba(255,255,255,0));
-    background-image: -moz-linear-gradient(top, rgba(255,255,255,.3), rgba(255,255,255,0));
-    background-image: -ms-linear-gradient(top, rgba(255,255,255,.3), rgba(255,255,255,0));
-    background-image: -o-linear-gradient(top, rgba(255,255,255,.3), rgba(255,255,255,0));
-    background-image: linear-gradient(top, rgba(255,255,255,.3), rgba(255,255,255,0));
-}
-
-/* */
-
-.button.red{
-    background-color: #750c04;
-    border-color: #4d0c04;
-}
-
-.button.red:hover{
-    background-color: #803737;
-}
-
-.button.red:active{
-    background: #c43c35;
-}
-
-
-.red[disabled], .red[disabled]:hover, .red[disabled]:active{
-    border-color: #7a2623;
-    background: #7c2720;
-    color: #FFD3D3;
-}
-
-/* END BUTTON */
 
 .divider{
     width:5px;
