@@ -57,12 +57,12 @@ class SignInForm extends React.Component {
             rejectUnauthorized: false
         });
 
-        let config = {
-            headers: {
-                Access-Control-Allow-Origin: '*'
-                // Content-Type: "application/json"
-            },
-        };
+        // let config = {
+        //     headers: {
+        //         // Access-Control-Allow-Origin: '*'
+        //         // Content-Type: "application/json"
+        //     },
+        // };
 
         let obj = JSON.stringify(dataToSend);
         // send HTTP request with login data and receive value about correctness of data.
