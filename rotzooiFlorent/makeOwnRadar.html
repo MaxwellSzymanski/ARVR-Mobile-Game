@@ -8,7 +8,12 @@
         html, body {
             height: 100%;
             margin: 0;
-            background: black;
+            background-image: url('radarScanner.gif');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            background-color: black;
+            back
         }
         h1 {
             color: rgba(100,255,0,0.5);
@@ -16,25 +21,21 @@
         }
         #north {
             position:absolute;
-            background: rgba(100,255,0,0.5);
             top: 5%;
             left: 50%;
         }
         #east {
             position:absolute;
-            background: rgba(100,255,0,0.5);
             top: 50%;
             left: 95%;
         }
         #south {
             position:absolute;
-            background: rgba(100,255,0,0.5);
             top: 95%;
             left: 50%;
         }
         #west {
             position:absolute;
-            background: rgba(100,255,0,0.5);
             top: 50%;
             left: 5%;
         }
@@ -57,12 +58,35 @@
 
         .button{
             background: #cc1f10;
+            color: white;
+            border: none;
 
+        }
+        .buttons{
+          width:70%;
+          display: inline-block;
+        }
+        .head{
+          
+        }
+        .link{
+          width:30%;
+          display: inline-block;
+
+        }
+        #map {
+          text-align: left;
+          color: red;
+          position: absolute;
+          right: 10%;
+          text-decoration: none;
+          color:white;
+          background: #cc1f10;
         }
     </style>
 </head>
 <body>
-
+<div class="head">
 <button class='button' onclick="increaseNumberPixelPerMeter()">Enlarge Radar!</button>
 <button class='button' onclick="decreaseNumberPixelPerMeter()">Reduce Radar!</button>
 <button class='button' onclick="sendSpecialSignal()">send Special Signal</button>
@@ -70,12 +94,14 @@
 <button class='button' onclick="autozoom()">AutoZoom!</button>
 <button class='button' onclick="increaseUpdateFrequency()" id="increaseFrequencyButton">Increase update frequency!</button>
 <button class='button' onclick="decreaseUpdateFrequency()" id="decreaseFrequencyButton">Decrease update frequency!</button>
-<button id="north">N</button>
-<button id="east">E</button>
-<button id="south">S</button>
-<button id="west">W</button>
+<a id='map' href="http://localhost/testGetPlayers.html">  <button class='button'>Go To Map</button>  </a>
+</div>
+<button class = "button" id="north">N</button>
+<button class="button" id="east">E</button>
+<button class="button" id="south">S</button>
+<button class="button" id="west">W</button>
 <input type="text" id="playerId" type="submit" value="">
-<a id='map' href="http://localhost/testGetPlayers.html">Go to the Map</a>
+
 
 
 
@@ -370,25 +396,28 @@
 
             var $obj = $('.obj');
 
-            $obj.each(function(){
+            $obj.each(function() {
                 var pos = $(this).data();
 
                 if (pos.x < screen.width && pos.x > 0 && pos.y < screen.height && pos.y > 0) {
 
-                                } else {
-                                    if (pos.x < 0) {
-                                        pos.x = 0;
-                                    } else {
-                                        pos.x = screen.width;
-                                    }
-                                    if (pos.y < 0){
-                                        pos.y = 0;
-                                    } else {
-                                        pos.y = screen.height;
-                                    }
-                                }
-
-                $(this).css({left:pos.x, top:pos.y}).attr('data-atDeg', "10");
+                } else {
+                    if (pos.x < 0) {
+                        pos.x = 0;
+                    } else {
+                        pos.x = screen.width;
+                    }
+                    if (pos.y < 0){
+                        pos.y = 0;
+                    } else {
+                        pos.y = screen.height;
+                    }
+                }
+                var newX = (50+pos.x/screen.width*100);
+                var newY = (50+pos.y/screen.height*100);
+                var posX = newX + "%";
+                var posY = newY + "%";
+                $(this).css({left:posX, top:posY}).attr('data-atDeg', "10");
             });
         }
 
