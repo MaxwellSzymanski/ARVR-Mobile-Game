@@ -14,6 +14,30 @@
             color: rgba(100,255,0,0.5);
 
         }
+        #north {
+            position:absolute;
+            background: rgba(100,255,0,0.5);
+            top: 5%;
+            left: 50%;
+        }
+        #east {
+            position:absolute;
+            background: rgba(100,255,0,0.5);
+            top: 50%;
+            left: 95%;
+        }
+        #south {
+            position:absolute;
+            background: rgba(100,255,0,0.5);
+            top: 95%;
+            left: 50%;
+        }
+        #west {
+            position:absolute;
+            background: rgba(100,255,0,0.5);
+            top: 50%;
+            left: 5%;
+        }
         .obj{
             background:#cf5;
             position:absolute;
@@ -41,6 +65,10 @@
 <button onclick="autozoom()">AutoZoom!</button>
 <button onclick="increaseUpdateFrequency()" id="increaseFrequencyButton">Increase update frequency!</button>
 <button onclick="decreaseUpdateFrequency()" id="decreaseFrequencyButton">Decrease update frequency!</button>
+<button id="north">N</button>
+<button id="east">E</button>
+<button id="south">S</button>
+<button id="west">W</button>
 <input type="text" id="playerId" type="submit" value="">
 
 
@@ -289,7 +317,7 @@
                 } else {
                     document.getElementById("increaseFrequencyButton").style.visibility="hidden";
                     document.getElementById("decreaseFrequencyButton").style.visibility="hidden";                }
-        
+
                 // check for enemy!
                 if( object2[i].playerId === thisPlayer && object2[i].hasOwnProperty("enemyPlayerId") &&object2[i].enemyPlayerId !== null ) {
                     document.getElementById(object2[i].enemyPlayerId).className = "objEnemy";
