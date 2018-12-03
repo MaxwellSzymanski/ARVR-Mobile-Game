@@ -40,6 +40,7 @@ var loadFile2 = function(event) {
 }
 
 async function updateResults() {
+  
   descriptor1 = await getDescriptorImg1()
   descriptor2 = await getDescriptorImg2()
 

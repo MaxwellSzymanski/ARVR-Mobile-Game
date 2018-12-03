@@ -5,10 +5,8 @@
   <script type="text/javascript" src="GoW/faceRecognition.js"></script>
   <script type="text/javascript" src="GoW/tests.js"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
   <link rel="stylesheet" type="text/css" href="GoW/style.css">
   <script src="/socket.io/socket.io.js"></script>
-  <script src="/GoW/mongoDB.js"></script>
 
 
 </head>
@@ -53,7 +51,6 @@
   async function getBestMatch(result) {
     descriptor1 = await getDescriptorImg1()
     var distances = []
-
 
 
     for (i = 0; i < result.length; i++) {

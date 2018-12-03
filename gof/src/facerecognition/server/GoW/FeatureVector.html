@@ -1,0 +1,85 @@
+<html>
+<head>
+  <script src="face-api.js"></script>
+  <script src="commons.js"></script>
+  <script type="text/javascript" src="GoW/faceRecognition.js"></script>
+  <script type="text/javascript" src="GoW/tests.js"></script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="GoW/styleFeatureVector.css">
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="GoW/plotly-latest.min.js"></script>
+
+</head>
+<body>
+    <div id="div1">
+      <img class ="image" id="inputImg1" src="" alt="inputImg" style="max-width: 400px; max-height: 400px;" />
+      <p></p>
+      <input type="file"  accept="image/*" name="image" id="file1"  onchange="loadFile1(event)">
+      <p></p>
+    <div>
+    <div id="div2">
+      <img class ="image" id="inputImg2" src="" alt="inputImg2" style="max-width: 400px; max-height: 400px;" />
+      <p></p>
+      <input type="file"  accept="image/*" name="image" id="file2"  onchange="loadFile2(event)">
+      <button for="imgUrlInput" onclick="detect()" style="cursor: pointer;">DETECT</button>
+    </div>
+    <p></p>
+    <div id="myDiv"><!-- Plotly chart --></div>
+</body>
+
+<script>
+
+    var socket = io.connect('http://localhost:3000');
+
+    var x = [];
+
+
+    function makePlot(desc1, desc2) {
+      for (i = 0; i < 128; i++) {
+        x.push(i)
+      }
+
+      var FV1 = {
+      x: x,
+      y: desc1,
+      mode: 'lines',
+      name: "feature vector 1"
+      };
+
+      var FV2 = {
+      x: x,
+      y: desc2,
+      mode: 'lines',
+      name: "feature vector 2"
+      };
+
+      var data = [ FV1, FV2 ];
+      var layout = {};
+
+      var obj = {
+        id: 0,
+        fv:desc1
+      };
+
+      var json = JSON.stringify(obj);
+      socket.emit('addToJSON', json);
+
+      Plotly.newPlot('myDiv', data, layout, {staticPlot: false});
+    }
+
+
+
+  async function detect() {
+    descriptor1 = await getDescriptorImg1()
+    descriptor2 = await getDescriptorImg2()
+    makePlot(descriptor1, descriptor2)
+
+  }
+
+  $(document).ready(function() {
+    run()
+  })
+
+
+
+</script>
