@@ -83,9 +83,8 @@
 
     var urlD = 'https://35.241.198.186:80'; // adres server
 
-    var dataCookie = {};
-
-    dataCookie.playerId="5bf1d5a3b373a15628ea2b81";
+    var dataCookie = JSON.parse(document.cookie);
+    dataCookie.playerId = dataCookie.name;
     dataCookie.numberPixelPerMeter="1";
     dataCookie.updateFrequency="4000";
     dataCookie.autozoom="on";
