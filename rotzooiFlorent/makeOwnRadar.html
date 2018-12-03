@@ -413,10 +413,13 @@
                         pos.y = screen.height;
                     }
                 }
-                var newX = (50+pos.x/screen.width*100);
-                var newY = (50+pos.y/screen.height*100);
+                var newX = (pos.x/screen.width*100);
+                var newY = (pos.y/screen.height*100);
                 var posX = newX + "%";
                 var posY = newY + "%";
+                alert(poxX + " posX position");
+                alert(poxY + " posY position");
+
                 $(this).css({left:posX, top:posY}).attr('data-atDeg', "10");
             });
         }
