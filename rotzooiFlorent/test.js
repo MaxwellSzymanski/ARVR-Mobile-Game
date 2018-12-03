@@ -8,7 +8,7 @@ const https_options = {
     cert: fs.readFileSync('./ssl/team12.pem')
 };
 
-const path = './makeOwnRadar.html';
+const path = './testGetPlayers.html';
 
 https.createServer(https_options, function (req, res) {
     fs.readFile(path, function(err, data) {
