@@ -11,7 +11,7 @@ class Map extends React.Component {
 
     render() {
       return(
-      <div></div>
+      <div><Radar></Radar></div>
       );
     }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
@@ -59,7 +59,7 @@ class SignUpForm extends React.Component {
                 if (json.data.success) {
                     cookies.set('loginCookie', json.data.token, {path: '/'});
                     console.log(cookies.get('loginCookie'));
-                    goToMap();
+                    this.goToMap();
                 }
                 else alert(json.data.message);
             }
@@ -104,7 +104,7 @@ class SignUpForm extends React.Component {
         return (
 
         <div className="FormCenter">
-            
+
             <form onSubmit={this.handleSubmit} className="FormFields">
             <div id="text">
             <label id="text">Take a picture</label></div>
