@@ -11,7 +11,7 @@ class Map extends React.Component {
 
     render() {
       return(
-      <div><Radar></Radar></div>
+      <div><a href="www.google.nl">GO</a></div>
       );
     }
 }
