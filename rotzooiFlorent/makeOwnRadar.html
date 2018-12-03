@@ -8,7 +8,7 @@
         html, body {
             height: 100%;
             margin: 0;
-            background-image: url('radarScanner.gif');
+            background-image: url('./radarScanner.gif');
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;
@@ -415,10 +415,12 @@
                 }
                 var newX = (pos.x/screen.width*100);
                 var newY = (pos.y/screen.height*100);
+                if (newX > 95) newX = 95;
+                if (newX < 5) newX = 5;
+                if (newY > 95) newY = 95;
+                if (newY < 5) newY = 5;
                 var posX = newX + "%";
                 var posY = newY + "%";
-                alert(posX + " posX position");
-                alert(posY + " posY position");
 
                 $(this).css({left:posX, top:posY}).attr('data-atDeg', "10");
             });
