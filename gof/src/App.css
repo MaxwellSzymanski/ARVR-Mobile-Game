@@ -335,5 +335,7 @@ p {
 }
 
 .loader {
-  background-image: url('./pages/WOLF0.png');
+  height: 200px;
+  width: 200px;
+
 }

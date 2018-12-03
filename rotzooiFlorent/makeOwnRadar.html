@@ -54,23 +54,29 @@
             box-shadow:0 0 10px 5px rgba(255, 0, 0, 1);
             opacity:0.2;
         }
+
+        .button{
+            background: #cc1f10;
+
+        }
     </style>
 </head>
 <body>
 
-<button onclick="increaseNumberPixelPerMeter()">Enlarge Radar!</button>
-<button onclick="decreaseNumberPixelPerMeter()">Reduce Radar!</button>
-<button onclick="sendSpecialSignal()">send Special Signal</button>
-<button onclick="sendHandShake()">send HandShake</button>
-<button onclick="autozoom()">AutoZoom!</button>
-<button onclick="increaseUpdateFrequency()" id="increaseFrequencyButton">Increase update frequency!</button>
-<button onclick="decreaseUpdateFrequency()" id="decreaseFrequencyButton">Decrease update frequency!</button>
-<a href="https://www.google.com">MAP</a>
+<button class='button' onclick="increaseNumberPixelPerMeter()">Enlarge Radar!</button>
+<button class='button' onclick="decreaseNumberPixelPerMeter()">Reduce Radar!</button>
+<button class='button' onclick="sendSpecialSignal()">send Special Signal</button>
+<button class='button' onclick="sendHandShake()">send HandShake</button>
+<button class='button' onclick="autozoom()">AutoZoom!</button>
+<button class='button' onclick="increaseUpdateFrequency()" id="increaseFrequencyButton">Increase update frequency!</button>
+<button class='button' onclick="decreaseUpdateFrequency()" id="decreaseFrequencyButton">Decrease update frequency!</button>
 <button id="north">N</button>
 <button id="east">E</button>
 <button id="south">S</button>
 <button id="west">W</button>
 <input type="text" id="playerId" type="submit" value="">
+<a id='map' href="http://localhost/testGetPlayers.html">Go to the Map</a>
+
 
 
 <h1 id="typeSignal"></h1>
@@ -82,9 +88,11 @@
 </div>
 <script>
 
-    var urlD = 'https://35.241.198.186:80'; // adres server
+    var urlD = 'http://localhost:8080'; // adres server
 
-    var dataCookie = JSON.parse(document.cookie);
+    //var dataCookie = JSON.parse(document.cookie);
+    var dataCookie = {};
+
     dataCookie.playerId = dataCookie.name;
     dataCookie.numberPixelPerMeter="1";
     dataCookie.updateFrequency="4000";
@@ -364,6 +372,22 @@
 
             $obj.each(function(){
                 var pos = $(this).data();
+
+                if (pos.x < screen.width && pos.x > 0 && pos.y < screen.height && pos.y > 0) {
+
+                                } else {
+                                    if (pos.x < 0) {
+                                        pos.x = 0;
+                                    } else {
+                                        pos.x = screen.width;
+                                    }
+                                    if (pos.y < 0){
+                                        pos.y = 0;
+                                    } else {
+                                        pos.y = screen.height;
+                                    }
+                                }
+
                 $(this).css({left:pos.x, top:pos.y}).attr('data-atDeg', "10");
             });
         }

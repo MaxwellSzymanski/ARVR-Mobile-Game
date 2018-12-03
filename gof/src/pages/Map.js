@@ -10,9 +10,8 @@ class Map extends React.Component {
 
     render() {
       return(
-        <div className="background">
-        <div className="loader"></div>
-        <meta http-equiv="refresh" content="1; url=https://35.241.198.186/"></meta>
+        <div>
+        <meta http-equiv="refresh" content="1; url=https://35.241.198.186:443/"></meta>
         </div>);
 
     }
