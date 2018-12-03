@@ -28,7 +28,8 @@ lsubtitle {
 .App {
   height: 100%;
   display: block;
-  color: white;
+  color: #cc1f10;
+  background-color: #cc1f10;
 }
 
 .Title {
@@ -333,19 +334,8 @@ p {
     to {opacity: 1}
 }
 
-#loader-wrapper .loader-section {
-    position: fixed;
-    top: 0;
-    width: 51%;
-    height: 100%;
-    background: #222222;
-    z-index: 1000;
-}
+.loader {
+  height: 200px;
+  width: 200px;
 
-#loader-wrapper .loader-section.section-left {
-    left: 0;
-}
-
-#loader-wrapper .loader-section.section-right {
-    right: 0;
 }
