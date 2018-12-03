@@ -387,9 +387,10 @@
                         pos.y = screen.height;
                     }
                 }
-
-                var posX = pos.x + "%";
-                var posY = pos.y + "%";
+                var newX = (50+pos.x/screen.width*100);
+                var newY = (50+pos.y/screen.height*100);
+                var posX = newX + "%";
+                var posY = newY + "%";
                 $(this).css({left:posX, top:posY}).attr('data-atDeg', "10");
             });
         }
