@@ -50,12 +50,19 @@ class SignInForm extends React.Component {
         const dataToSend = this.state;
         dataToSend.request = "signin";
 
-        console.log('The form was submitted with the following data:');
+        console.log('The form was submitted to '+ url + ' with the following data:');
         console.log(this.state);
 
         const agent = new https.Agent({
             rejectUnauthorized: false
         });
+
+        // let config = {
+        //     headers: {
+        //         // Access-Control-Allow-Origin: '*'
+        //         // Content-Type: "application/json"
+        //     },
+        // };
 
         let obj = JSON.stringify(dataToSend);
         // send HTTP request with login data and receive value about correctness of data.
@@ -64,7 +71,7 @@ class SignInForm extends React.Component {
         // { email: true, password: false }                 if e-mail registered and password incorrect
         // { email: true, password: true, token: jwt }      if e-mail registered and password correct, the jwt token
         //                                                      is further on stored in a cookie in the browser
-        await axios.post(url, obj, {headers: {'Access-Control-Allow-Origin': '*', "Content-Type": "application/json"}}).then(
+        await axios.post(url, obj,  { crossdomain: true }).then(
             function(json) {
                 if (!json.data.email)
                     alert("invalid e-mail");
