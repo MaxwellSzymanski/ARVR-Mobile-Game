@@ -3,6 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import axios from "axios";
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
+const https = require('https');
 
 const url = require('./serveradress.js');
 
@@ -52,6 +53,10 @@ class SignInForm extends React.Component {
         console.log('The form was submitted with the following data:');
         console.log(this.state);
 
+        const agent = new https.Agent({
+            rejectUnauthorized: false
+        });
+
         let obj = JSON.stringify(dataToSend);
         // send HTTP request with login data and receive value about correctness of data.
         //      received object:
@@ -59,7 +64,7 @@ class SignInForm extends React.Component {
         // { email: true, password: false }                 if e-mail registered and password incorrect
         // { email: true, password: true, token: jwt }      if e-mail registered and password correct, the jwt token
         //                                                      is further on stored in a cookie in the browser
-        await axios.post(url, obj).then(
+        await axios.post(url, obj, {httpsAgent: agent}).then(
             function(json) {
                 if (!json.data.email)
                     alert("invalid e-mail");
