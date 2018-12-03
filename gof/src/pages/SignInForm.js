@@ -64,7 +64,7 @@ class SignInForm extends React.Component {
         // { email: true, password: false }                 if e-mail registered and password incorrect
         // { email: true, password: true, token: jwt }      if e-mail registered and password correct, the jwt token
         //                                                      is further on stored in a cookie in the browser
-        await axios.post(url, obj, {httpsAgent: agent}).then(
+        await axios.post(url, obj, {headers: {'Access-Control-Allow-Origin': '*'}}).then(
             function(json) {
                 if (!json.data.email)
                     alert("invalid e-mail");

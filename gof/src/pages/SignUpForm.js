@@ -62,7 +62,7 @@ class SignUpForm extends React.Component {
         });
 
         // receive success value (and error if the e-mail/username is already taken.
-        await axios.post(url, obj, {httpsAgent: agent}).then(
+        await axios.post(url, obj, {headers: {'Access-Control-Allow-Origin': '*'}}).then(
             function (json) {
                 if (json.data.success) {
                     cookies.set('loginCookie', json.data.token, {path: '/'});
