@@ -4,9 +4,13 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 
+<<<<<<< HEAD
+const url = require('./serveradress.js');
+=======
 // const $ = require('jQuery');
 
 const url = 'https://localhost:8080';
+>>>>>>> f201e2d30ab568a1e2d3194675705fbb04e1e531
 
 class SignUpForm extends React.Component {
     constructor() {
@@ -24,8 +28,13 @@ class SignUpForm extends React.Component {
     }
 
     fileSelectorHandler = event => {
+<<<<<<< HEAD
+        console.log(event);
+    };
+=======
       console.log(event);
     }
+>>>>>>> f201e2d30ab568a1e2d3194675705fbb04e1e531
 
     handleChange(e) {
         let target = e.target;
@@ -77,22 +86,31 @@ class SignUpForm extends React.Component {
     }
 
     state = {
-        redirect : false }
+        redirect : false };
 
     setRedirect = () => {
         this.setState({redirect: true})
-    }
+    };
 
     renderRedirect = () => {
         if (this.state.redirect) {return <Redirect to="/map" />}
-    }
+    };
 
     goToMap() {
         this.setRedirect();
-    }
+    };
 
     render() {
 
+<<<<<<< HEAD
+        let button;
+        if (localStorage.getItem("PhotoOfMe") === null) {
+            button = <img className="button" alt="" src={ require('../camera2.png') } />;
+        } else {
+            var img = localStorage.getItem("PhotoOfMe");
+            button = <img  className="imageButton" alt="" src={img} />
+        }
+=======
       let button;
       if (localStorage.getItem("PhotoOfMe") === null) {
         button = <img className="button" alt="" src={ require('../camera2.png') } />;
@@ -100,6 +118,7 @@ class SignUpForm extends React.Component {
         var img = localStorage.getItem("PhotoOfMe")
         button = <img  className="imageButton" alt="" src={img} />
       }
+>>>>>>> f201e2d30ab568a1e2d3194675705fbb04e1e531
 
         return (
 

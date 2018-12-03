@@ -43,7 +43,7 @@ class SignInForm extends React.Component {
         function storePosition(pos) {
             position.longitude = pos.coords.longitude;
             position.latitude = pos.coords.latitude;
-        };
+        }
 
         this.state.position = position;
         const dataToSend = this.state;
@@ -75,26 +75,26 @@ class SignInForm extends React.Component {
     }
 
     state = {
-        redirect : false }
+        redirect : false };
 
     setRedirect = () => {
         this.setState({redirect: true})
-    }
+    };
 
     renderRedirect = () => {
         if (this.state.redirect) {return <Redirect to="/map" />}
-    }
+    };
 
     goToMap() {
         this.setRedirect();
-    }
+    };
 
     render() {
         return (
             <div className="FormCenter">
                 {this.renderRedirect()}
                 {/* eslint-disable-next-line*/}
-                <form onSubmit={this.handleSubmit} className="FormFields" onSubmit={this.handleSubmit}>
+                <form onSubmit={this.handleSubmit} className="FormFields">
                     <div className="FormField">
                         <label className="FormField__Label" htmlFor="email">E-Mail Address</label>
                         <input type="email" id="email" className="FormField__Input" placeholder="Enter your email" name="email" value={this.state.email} onChange={this.handleChange} />

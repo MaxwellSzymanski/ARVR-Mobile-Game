@@ -5,6 +5,7 @@ import FirstPage from './FirstPage';
 import CameraComp from './pages/CameraComp';
 import Map from './pages/Map.js';
 import View from './pages/View.js';
+import LandingPage from './pages/LandingPage.js';
 
 import './App.css';
 import ImageConfirm from "./pages/ImageConfirm";
@@ -23,6 +24,7 @@ class App extends Component {
             <Route exact path="/map" component={Map}></Route>
             <Route exact path="/view" component={View}></Route>
             <Route exact path="/imageConfirm" component={ImageConfirm}></Route>
+            <Route exact path="/landingPage" component={LandingPage}></Route>
           </Switch>
 
         </div>
