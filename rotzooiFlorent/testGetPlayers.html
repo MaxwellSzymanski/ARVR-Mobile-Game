@@ -17,19 +17,19 @@
 <script type="text/javascript">
 
 
-/*
-    var dataCookie = {};
+    /*
+        var dataCookie = {};
 
-    dataCookie.idPlayer="2";
-    dataCookie.numberPixelPerMeter="1";
-    dataCookie.updateFrequency="4000";
-    dataCookie.autozoom="on";
-    dataCookie.typeSignal= null;
-    dataCookie.longitude ="4.361721";
-    dataCookie.latitude ="50.850346";
+        dataCookie.idPlayer="2";
+        dataCookie.numberPixelPerMeter="1";
+        dataCookie.updateFrequency="4000";
+        dataCookie.autozoom="on";
+        dataCookie.typeSignal= null;
+        dataCookie.longitude ="4.361721";
+        dataCookie.latitude ="50.850346";
 
-    document.cookie = JSON.stringify(dataCookie);
-*/
+        document.cookie = JSON.stringify(dataCookie);
+    */
 
     var dataCookie = {};
 
@@ -138,70 +138,70 @@
 
         }
 
-    setTimeout(d, 8000); //
+        setTimeout(d, 8000); //
     };
 
 
-function getPlayerLayers(players, map) {
+    function getPlayerLayers(players, map) {
 
 
-    obj = (JSON.parse(players));
+        obj = (JSON.parse(players));
 
-    let i = 0;
-    for (x in obj) {
+        let i = 0;
+        for (x in obj) {
 
-        // create icon
-        // Source: https://stackoverflow.com/questions/48902253/how-to-add-icon-marker-to-osm-map-using-openlayers-4-6-4
+            // create icon
+            // Source: https://stackoverflow.com/questions/48902253/how-to-add-icon-marker-to-osm-map-using-openlayers-4-6-4
 
-        let longitude = obj[i].longitude;
-        let latitude = obj[i].latitude;
-        let name = JSON.stringify(obj[i]);
-
-
-        var icon1 = new ol.Feature({
-            geometry: new ol.geom.Point(ol.proj.fromLonLat([longitude, latitude]),),
-            name: name
-        });
+            let longitude = obj[i].longitude;
+            let latitude = obj[i].latitude;
+            let name = JSON.stringify(obj[i]);
 
 
-        let iconLayerSource = new ol.source.Vector({
-            features: [icon1]
-        });
+            var icon1 = new ol.Feature({
+                geometry: new ol.geom.Point(ol.proj.fromLonLat([longitude, latitude]),),
+                name: name
+            });
 
-        let iconLayer = new ol.layer.Vector({
-            source: iconLayerSource,
-            style: new ol.style.Style({
-                image: new ol.style.Icon({
-                    anchor: [0.5, 0.5],
-                    anchorXUnits: 'fraction',
-                    anchorYUnits: 'fraction',
-                    scale: 0.1,
-                    src: 'https://img.freepik.com/free-icon/frontal-standing-man-silhouette_318-29133.jpg?size=338c&ext=jpg'
+
+            let iconLayerSource = new ol.source.Vector({
+                features: [icon1]
+            });
+
+            let iconLayer = new ol.layer.Vector({
+                source: iconLayerSource,
+                style: new ol.style.Style({
+                    image: new ol.style.Icon({
+                        anchor: [0.5, 0.5],
+                        anchorXUnits: 'fraction',
+                        anchorYUnits: 'fraction',
+                        scale: 0.1,
+                        src: 'https://img.freepik.com/free-icon/frontal-standing-man-silhouette_318-29133.jpg?size=338c&ext=jpg'
+                    })
                 })
-            })
-        });
-        i++;
+            });
+            i++;
 
-        // adding every player icon to map!
-        map.addLayer(iconLayer);
+            // adding every player icon to map!
+            map.addLayer(iconLayer);
 
+        }
     }
-}
 
-/*
-<button onclick="autozoom()">Autozoom</button>
+    /*
+    <button onclick="autozoom()">Autozoom</button>
 
-function autozoom(){
+    function autozoom(){
 
-    var cookie = JSON.parse(document.cookie);
+        var cookie = JSON.parse(document.cookie);
 
-    cookie.zoom = 14;
+        cookie.zoom = 14;
 
-    document.cookie = JSON.stringify(cookie);
+        document.cookie = JSON.stringify(cookie);
 
-    alert("AUTOZOOM ACITVATED");
-}
-*/
+        alert("AUTOZOOM ACITVATED");
+    }
+    */
 
 
 </script>
