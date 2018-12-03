@@ -2,6 +2,7 @@ const express = require('express')
 const path = require('path')
 const { get } = require('request')
 var http = require('http');
+var fs = require('fs');
 
 
 const app = express()
@@ -20,7 +21,8 @@ app.use(express.static(path.join(__dirname, '../weights')))
 app.use(express.static(path.join(__dirname, '../dist')))
 app.use(express.static(path.join(__dirname, './node_modules/axios/dist')))
 
-app.get('/peno', (req, res) => res.sendFile(path.join(viewsDir, 'GoW/PenO.html')))
+app.get('/main', (req, res) => res.sendFile(path.join(viewsDir, 'GoW/PenO.html')))
+app.get('/featurevector', (req, res) => res.sendFile(path.join(viewsDir, 'GoW/featureVector.html')))
 
 server.listen(3000, () => console.log('Listening on port 3000!'))
 
@@ -37,6 +39,10 @@ io.sockets.on('connection', function (socket) {
         getFeatureVectorsFromDB(function(result) {
           socket.emit('sendFV', result);
         })
+    });
+
+    socket.on('addToJSON', function(json, callback) {
+        fs.writeFile('testFeatureVectors.json', json, 'utf8', callback);
     });
 });
 
