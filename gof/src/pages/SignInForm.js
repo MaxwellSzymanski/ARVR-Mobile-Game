@@ -68,7 +68,7 @@ class SignInForm extends React.Component {
                 else {
                     cookies.set('loginCookie', json.data.token, {path: '/'});
                     console.log(cookies.get('loginCookie'));
-                    // goToMap();
+                    this.goToMap();
                 }
             }
         );
