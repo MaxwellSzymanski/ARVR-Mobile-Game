@@ -110,63 +110,63 @@
           cursor: pointer;
         }
 
-/* Dropdown button on hover & focus */
-.dropbtn:hover, .dropbtn:focus {
-    background-color: ;
-}
+        /* Dropdown button on hover & focus */
+        .dropbtn:hover, .dropbtn:focus {
+          background-color: ;
+        }
 
-/* The container <div> - needed to position the dropdown content */
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
+        /* The container <div> - needed to position the dropdown content */
+        .dropdown {
+          position: relative;
+          display: inline-block;
+        }
 
-/* Dropdown Content (Hidden by Default) */
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #cc1f10;
-    min-width: 50%;
-    box-shadow: 50% #cc1f10;
-    z-index: 1;
-}
+        /* Dropdown Content (Hidden by Default) */
+        .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #cc1f10;
+          min-width: 50%;
+          box-shadow: 50% #cc1f10;
+          z-index: 1;
+        }
 
-/* Links inside the dropdown */
-.dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-}
+        /* Links inside the dropdown */
+        .dropdown-content a {
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+        }
 
-/* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #ddd}
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {background-color: #ddd}
 
-/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
-.show {display:block;}
-    </style>
-</head>
-<body>
-<div class="head">
-  <div class="dropdown">
-    <button onclick="myFunction()" class="dropbtn">More Functions</button>
-    <div id="myDropdown" class="dropdown-content">
-      <button class='button' onclick="increaseNumberPixelPerMeter()">Zoom in</button>
-      <button class='button' onclick="decreaseNumberPixelPerMeter()">Zoom out</button>
-      <button class='button' onclick="sendSpecialSignal()">Special Signal</button>
-      <button class='button' onclick="sendHandShake()">HandShake</button>
-      <button class='button' onclick="autozoom()">AutoZoom</button>
-      <button class='button' onclick="increaseUpdateFrequency()" id="increaseFrequencyButton">frequency +</button>
-      <button class='button' onclick="decreaseUpdateFrequency()" id="decreaseFrequencyButton">frequency -</button>
-    </div>
-  </div>
-<a id='map' href="http://localhost/testGetPlayers.html">  <button class='button'>Go To Map</button>  </a>
-</div>
-<button class = "button" id="north">N</button>
-<button class="button" id="east">E</button>
-<button class="button" id="south">S</button>
-<button class="button" id="west">W</button>
-<input type="text" id="playerId" type="submit" value="">
+        /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+        .show {display:block;}
+        </style>
+      </head>
+      <body>
+        <div class="head">
+          <div class="dropdown">
+            <button onclick="myFunction()" class="dropbtn">More Functions</button>
+              <div id="myDropdown" class="dropdown-content">
+                <button class='button' onclick="increaseNumberPixelPerMeter()">Zoom in</button>
+                <button class='button' onclick="decreaseNumberPixelPerMeter()">Zoom out</button>
+                <button class='button' onclick="sendSpecialSignal()">Special Signal</button>
+                <button class='button' onclick="sendHandShake()">HandShake</button>
+                <button class='button' onclick="autozoom()">AutoZoom</button>
+                <button class='button' onclick="increaseUpdateFrequency()" id="increaseFrequencyButton">Frequency +</button>
+                <button class='button' onclick="decreaseUpdateFrequency()" id="decreaseFrequencyButton">Frequency -</button>
+              </div>
+            </div>
+            <a id='map' href="http://localhost/testGetPlayers.html">  <button class='button'>Go To Map</button>  </a>
+          </div>
+          <button class = "button" id="north">N</button>
+          <button class="button" id="east">E</button>
+          <button class="button" id="south">S</button>
+          <button class="button" id="west">W</button>
+          <input type="text" id="playerId" type="submit" value="">
 
 
 
