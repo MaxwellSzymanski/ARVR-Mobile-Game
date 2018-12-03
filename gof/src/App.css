@@ -28,7 +28,8 @@ lsubtitle {
 .App {
   height: 100%;
   display: block;
-  color: white;
+  color: #cc1f10;
+  background-color: #cc1f10;
 }
 
 .Title {
@@ -331,4 +332,8 @@ p {
 @keyframes fadeIn {
     from {opacity: 0}
     to {opacity: 1}
+}
+
+.loader {
+  background-image: url('./pages/WOLF0.png');
 }
