@@ -66,7 +66,11 @@ class SignInForm extends React.Component {
                 else if(!json.data.password)
                     alert("invalid password");
                 else {
-                    cookies.set('loginCookie', json.data.token, {path: '/'});
+                    const cookie = {
+                        token: json.data.token,
+                        name: json.data.name
+                    };
+                    cookies.set('loginCookie', cookie, {path: '/'});
                     console.log(cookies.get('loginCookie'));
                     this.goToMap();
                 }

@@ -123,7 +123,7 @@ function signin(obj, res) {
             if (!value)
                 res.write(JSON.stringify({"email": true, "password": value}));
             else
-                res.write(JSON.stringify({"email": true, "password": value, token: result.createToken() }));
+                res.write(JSON.stringify({"email": true, "password": value, token: result.createToken(), name: result.name }));
             res.end();
             ActivePlayer.findOneAndRemove({playerid:result.name}, function() {
                 const newActivePlayer = new ActivePlayer({playerid: result.name, location: obj.position});
