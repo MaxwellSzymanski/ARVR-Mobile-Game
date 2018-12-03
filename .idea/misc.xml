@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptSettings">
+<<<<<<< HEAD
     <option name="languageLevel" value="JSX" />
+=======
+>>>>>>> f201e2d30ab568a1e2d3194675705fbb04e1e531
   </component>
 </project>

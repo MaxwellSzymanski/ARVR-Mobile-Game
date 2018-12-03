@@ -12,15 +12,20 @@ const agent = new https.Agent({
 });
 
 // const results ={};
-
-const totalstream = fs.createWriteStream('./results/all.txt', {flags:'a'});
+const now = new Date();
+const dir = './results/' + now.getHours().toString() + now.getMinutes().toString() + now.getSeconds().toString();
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+}
+const PATH = dir + '/all.txt';
+const totalstream = fs.createWriteStream(PATH, {flags:'a'});
 
 for(let i = 0; i < numberOfUsers; i++) {
     const name = "username_" + i.toString();
     const email = name + "@testusers.com";
     const password = "password";
-    const long = 4.6951758 + 0.0001 * Math.random();
-    const lat = 50.864949499969994 + 0.0001 * Math.random();
+    const long = 4.6951758 + 0.001 * Math.random();
+    const lat = 50.864949499969994 + 0.001 * Math.random();
     const signin = {
         email: email,
         password: password,
@@ -32,7 +37,7 @@ for(let i = 0; i < numberOfUsers; i++) {
             }
     };
     // results.i = [];
-    const path = './results/' + name + ".txt";
+    const path = dir + '/' + name + ".txt";
     const stream = fs.createWriteStream(path, {flags:'a'});
     setTimeout(function () {
         axios.post(url, JSON.stringify(signin), {httpsAgent: agent}).then(
@@ -43,8 +48,8 @@ for(let i = 0; i < numberOfUsers; i++) {
                 const radar = {
                     request: "radar",
                     token: json.data.token,
-                    longitude: 4.6951758 + 0.0001 * Math.random(),
-                    latitude: 50.864949499969994 + 0.0001 * Math.random(),
+                    longitude: 4.6951756 + 0.001 * Math.random(),
+                    latitude: 50.864949499994123 + 0.001 * Math.random(),
                 };
                 for (let j = 0; j < numberOfRequests; j++) {
                     setTimeout(function () {

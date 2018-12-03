@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="29f36fa8-fd6b-4474-913f-d4bdadfeeb6d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/gof/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/gof/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gof/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/gof/package.json" afterDir="false" />
@@ -10,6 +11,11 @@
       <change beforePath="$PROJECT_DIR$/gof/src/pages/ImageConfirm.js" beforeDir="false" afterPath="$PROJECT_DIR$/gof/src/pages/ImageConfirm.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gof/src/pages/SignInForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/gof/src/pages/SignInForm.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gof/src/pages/SignUpForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/gof/src/pages/SignUpForm.js" afterDir="false" />
+=======
+    <list default="true" id="a341ecc4-e9a4-4fe5-8127-bad514080f76" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/Server tests/all results.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/Server tests/all results.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server tests/radartest.js" beforeDir="false" afterPath="$PROJECT_DIR$/Server tests/radartest.js" afterDir="false" />
+>>>>>>> f201e2d30ab568a1e2d3194675705fbb04e1e531
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -21,6 +27,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FUSProjectUsageTrigger">
+<<<<<<< HEAD
     <session id="-538080663">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
@@ -58,11 +65,39 @@
         <counts>
           <entry key="CSS" value="609" />
           <entry key="JavaScript" value="948" />
+=======
+    <session id="-210270940">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.open.time.3" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="js" value="3" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="JavaScript" value="3" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="js" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="JavaScript" value="1" />
+>>>>>>> f201e2d30ab568a1e2d3194675705fbb04e1e531
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
+<<<<<<< HEAD
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/gof/src/App.css">
@@ -125,10 +160,19 @@
               <folding>
                 <element signature="e#70#150#0" expanded="true" />
               </folding>
+=======
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Server tests/radartest.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="207">
+              <caret line="9" column="31" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
+>>>>>>> f201e2d30ab568a1e2d3194675705fbb04e1e531
             </state>
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gof/src/index.css">
           <provider selected="true" editor-type-id="text-editor" />
@@ -172,12 +216,24 @@
       </list>
     </option>
   </component>
+=======
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/rotzooiFlorent/db/userModel.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1060" />
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+>>>>>>> f201e2d30ab568a1e2d3194675705fbb04e1e531
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/gof/src/pages/Radar.js" />
         <option value="$PROJECT_DIR$/gof/package.json" />
         <option value="$PROJECT_DIR$/gof/src/pages/SignUpForm.js" />
@@ -188,6 +244,9 @@
         <option value="$PROJECT_DIR$/gof/src/App.js" />
         <option value="$PROJECT_DIR$/gof/src/pages/CameraComp.js" />
         <option value="$PROJECT_DIR$/gof/src/App.css" />
+=======
+        <option value="$PROJECT_DIR$/Server tests/radartest.js" />
+>>>>>>> f201e2d30ab568a1e2d3194675705fbb04e1e531
       </list>
     </option>
   </component>
@@ -197,9 +256,12 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
+<<<<<<< HEAD
   <component name="NodeModulesDirectoryManager">
     <handled-path value="$PROJECT_DIR$/gof/node_modules" />
   </component>
+=======
+>>>>>>> f201e2d30ab568a1e2d3194675705fbb04e1e531
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths>
       <path value="$PROJECT_DIR$/FaceRecognition/examples/package.json" />
@@ -210,16 +272,30 @@
       <path value="$PROJECT_DIR$/gof/package.json" />
     </packageJsonPaths>
   </component>
+<<<<<<< HEAD
   <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
     <option name="y" value="23" />
     <option name="width" value="1440" />
     <option name="height" value="877" />
   </component>
+=======
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-1914" />
+    <option name="y" value="-23" />
+    <option name="width" value="1618" />
+    <option name="height" value="1100" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+>>>>>>> f201e2d30ab568a1e2d3194675705fbb04e1e531
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+<<<<<<< HEAD
+=======
+      <pane id="Scope" />
+>>>>>>> f201e2d30ab568a1e2d3194675705fbb04e1e531
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -230,6 +306,7 @@
             <path>
               <item name="Perseus" type="b2602c69:ProjectViewProjectNode" />
               <item name="Perseus" type="462c0819:PsiDirectoryNode" />
+<<<<<<< HEAD
               <item name="gof" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -237,33 +314,54 @@
               <item name="Perseus" type="462c0819:PsiDirectoryNode" />
               <item name="gof" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+=======
+              <item name="rotzooiFlorent" type="462c0819:PsiDirectoryNode" />
+>>>>>>> f201e2d30ab568a1e2d3194675705fbb04e1e531
             </path>
             <path>
               <item name="Perseus" type="b2602c69:ProjectViewProjectNode" />
               <item name="Perseus" type="462c0819:PsiDirectoryNode" />
+<<<<<<< HEAD
               <item name="gof" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="fonts" type="462c0819:PsiDirectoryNode" />
+=======
+              <item name="rotzooiFlorent" type="462c0819:PsiDirectoryNode" />
+              <item name="db" type="462c0819:PsiDirectoryNode" />
+>>>>>>> f201e2d30ab568a1e2d3194675705fbb04e1e531
             </path>
             <path>
               <item name="Perseus" type="b2602c69:ProjectViewProjectNode" />
               <item name="Perseus" type="462c0819:PsiDirectoryNode" />
+<<<<<<< HEAD
               <item name="gof" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="pages" type="462c0819:PsiDirectoryNode" />
+=======
+              <item name="Server tests" type="462c0819:PsiDirectoryNode" />
+>>>>>>> f201e2d30ab568a1e2d3194675705fbb04e1e531
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+<<<<<<< HEAD
       <pane id="Scope" />
+=======
+>>>>>>> f201e2d30ab568a1e2d3194675705fbb04e1e531
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
+<<<<<<< HEAD
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
+=======
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+>>>>>>> f201e2d30ab568a1e2d3194675705fbb04e1e531
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -282,6 +380,7 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
+<<<<<<< HEAD
       <changelist id="29f36fa8-fd6b-4474-913f-d4bdadfeeb6d" name="Default Changelist" comment="" />
       <created>1543252600901</created>
       <option name="number" value="Default" />
@@ -289,10 +388,19 @@
       <updated>1543252600901</updated>
       <workItem from="1543252603536" duration="889000" />
       <workItem from="1543704352777" duration="16329000" />
+=======
+      <changelist id="a341ecc4-e9a4-4fe5-8127-bad514080f76" name="Default Changelist" comment="" />
+      <created>1543762778788</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1543762778788</updated>
+      <workItem from="1543762781100" duration="2457000" />
+>>>>>>> f201e2d30ab568a1e2d3194675705fbb04e1e531
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="17218000" />
   </component>
   <component name="ToolWindowManager">
@@ -305,14 +413,35 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32891566" />
+=======
+    <option name="totallyTimeSpent" value="2457000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-1927" y="-7" width="1550" height="878" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Favorites" side_tool="true" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24983476" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Terminal" />
+      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+>>>>>>> f201e2d30ab568a1e2d3194675705fbb04e1e531
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
+<<<<<<< HEAD
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+=======
+>>>>>>> f201e2d30ab568a1e2d3194675705fbb04e1e531
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -325,6 +454,7 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/gof/src/pages/service-worker.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -489,6 +619,18 @@
         <state relative-caret-position="392">
           <caret line="159" column="4" selection-start-line="159" selection-start-column="4" selection-end-line="159" selection-end-column="4" />
         </state>
+=======
+    <entry file="file://$PROJECT_DIR$/Server tests/radartest.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="9" column="31" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rotzooiFlorent/db/userModel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1060" />
+>>>>>>> f201e2d30ab568a1e2d3194675705fbb04e1e531
       </provider>
     </entry>
   </component>

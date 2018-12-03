@@ -4,8 +4,7 @@ const mongoose = require('mongoose');
 
 const Schema = new mongoose.Schema({
     playerid: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        type: String,
     },
     location: {
         longitude: {
@@ -26,8 +25,7 @@ const Schema = new mongoose.Schema({
         required: false,
     },
     enemyPlayerId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        type: String,
     },
     created_at: {
         type: Date,
@@ -35,7 +33,7 @@ const Schema = new mongoose.Schema({
     },
     updated_at: {
         type: Date,
-        expires: 30,
+        expires: 30,        // this document is removed if it is not updated each 30 seconds
         default: Date.now()
     },
 });
