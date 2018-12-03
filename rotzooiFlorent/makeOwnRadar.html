@@ -8,7 +8,7 @@
         html, body {
             height: 100%;
             margin: 0;
-            background-image: url('radarScanner.gif');
+            background-image: url('https://i2djs.github.io/I2Djs/examples/snaps/radarScanner.gif');
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;
@@ -67,7 +67,7 @@
             position:absolute;
             border-radius: 50%;
             width:4px; height:4px; margin:-2px;
-            box-shadow:0 0 10px 5px rgba(255, 0, 0, 1);
+            box-shadow:0 0 10px 5px rgba(100,255,0,0.5);
             opacity:0.2;
         }
 
@@ -500,10 +500,15 @@ window.onclick = function(event) {
                         pos.y = screen.height;
                     }
                 }
-                var newX = (50+pos.x/screen.width*100);
-                var newY = (50+pos.y/screen.height*100);
+                var newX = (pos.x/screen.width*100);
+                var newY = (pos.y/screen.height*100);
+                if (newX > 95) newX = 95;
+                if (newX < 5) newX = 5;
+                if (newY > 95) newY = 95;
+                if (newY < 5) newY = 5;
                 var posX = newX + "%";
                 var posY = newY + "%";
+
                 $(this).css({left:posX, top:posY}).attr('data-atDeg', "10");
             });
         }
