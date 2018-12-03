@@ -14,15 +14,14 @@ var io = require('socket.io').listen(server);
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-const viewsDir = path.join(__dirname, 'views')
 app.use(express.static(viewsDir))
 app.use(express.static(path.join(__dirname, './public')))
 app.use(express.static(path.join(__dirname, '../weights')))
 app.use(express.static(path.join(__dirname, '../dist')))
 app.use(express.static(path.join(__dirname, './node_modules/axios/dist')))
 
-app.get('/main', (req, res) => res.sendFile(path.join(viewsDir, 'GoW/PenO.html')))
-app.get('/featurevector', (req, res) => res.sendFile(path.join(viewsDir, 'GoW/featureVector.html')))
+app.get('/main', (req, res) => res.sendFile(path.join(__dirname, 'GoW/PenO.html')))
+app.get('/featurevector', (req, res) => res.sendFile(path.join(__dirname, 'GoW/featureVector.html')))
 
 server.listen(3000, () => console.log('Listening on port 3000!'))
 
