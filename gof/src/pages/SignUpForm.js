@@ -3,13 +3,11 @@ import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
-
+const https = require('https');
 
 const url = require('./serveradress.js');
 
 // const $ = require('jQuery');
-
-
 
 class SignUpForm extends React.Component {
     constructor() {
@@ -59,8 +57,12 @@ class SignUpForm extends React.Component {
         console.log('The form was submitted with the following data:');
         console.log(this.state);
 
+        const agent = new https.Agent({
+            rejectUnauthorized: false
+        });
+
         // receive success value (and error if the e-mail/username is already taken.
-        await axios.post(url, obj).then(
+        await axios.post(url, obj, {headers: {'Access-Control-Allow-Origin': '*'}}).then(
             function (json) {
                 if (json.data.success) {
                     cookies.set('loginCookie', json.data.token, {path: '/'});
