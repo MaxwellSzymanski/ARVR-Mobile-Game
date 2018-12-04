@@ -204,8 +204,8 @@
 
     const loginCookie = getCookie("loginCookie");
 
-    alert("doc.cookie: " + document.cookie);
     alert("loginCookie: " + loginCookie);
+    alert(loginCookie.name +", " + loginCookie.token);
 
     dataCookie.token = loginCookie.token;
     dataCookie.playerId = loginCookie.name;
