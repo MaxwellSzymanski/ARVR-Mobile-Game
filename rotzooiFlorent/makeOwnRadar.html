@@ -59,7 +59,7 @@
             position:absolute;
             border-radius: 50%;
             width:4px; height:4px; margin:-2px;
-            box-shadow:0 0 7px 6px rgba(100,255,0,0.5);
+            box-shadow:0 0 10px 5px rgba(100,255,0,0.5);
             opacity:0.2;
         }
         .objEnemy{
@@ -67,7 +67,7 @@
             position:absolute;
             border-radius: 50%;
             width:4px; height:4px; margin:-2px;
-            box-shadow:0 0 7px 6px rgba(100,255,0,0.5);
+            box-shadow:0 0 10px 5px rgba(100,255,0,0.5);
             opacity:0.2;
         }
 
@@ -346,7 +346,7 @@ window.onclick = function(event) {
 
         var data = {};
 
-        cookie = JSON.parse(getCookie("radarCookie"));
+        var cookie = JSON.parse(getCookie("radarCookie"));
 
         // update input Field playerId
         // cookie.playerId = document.getElementById("playerId").value;
@@ -368,7 +368,7 @@ window.onclick = function(event) {
             var cookieJson = JSON.parse(document.cookie);
             cookieJson.longitude = position.coords.longitude;
             cookieJson.latitude = position.coords.latitude;
-            document.cookie = JSON.stringify(cookieJson);
+            document.cookie = "radarCookie=" + JSON.stringify(cookieJson) +";";
         }
 
         data.sendSignal = cookie.sendSignal;
@@ -383,10 +383,10 @@ window.onclick = function(event) {
 
         function createRadar(dataHTTP){
 
-            var cookie = (document.cookie);
+            var cookie = JSON.parse(getCookie("radarCookie"));
 
-            var playerLongitude = parseFloat(JSON.parse(cookie).longitude);
-            var playerLatitude =  parseFloat(JSON.parse(cookie).latitude);
+            var playerLongitude = parseFloat(cookie.longitude);
+            var playerLatitude =  parseFloat(cookie.latitude);
 
 
             var i = 0;
@@ -395,10 +395,9 @@ window.onclick = function(event) {
 
             var object1 = JSON.parse(dataHTTP);
 
-            var cookie = document.cookie;
+            var cookie = JSON.parse(getCookie("radarCookie"));
 
-
-            if(JSON.parse(cookie).autozoom === "on") {
+            if(cookie.autozoom === "on") {
                 for( x in object1){
 
                     var distancePlayer = distanceBetween(playerLongitude,playerLatitude,object1[i].longitude,object1[i].latitude);
@@ -430,7 +429,7 @@ window.onclick = function(event) {
 
             var object2 = JSON.parse(dataHTTP);
 
-            var cookie = JSON.parse(document.cookie);
+            var cookie = JSON.parse(getCookie("radarCookie"));
             var thisPlayer = cookie.playerId;
             //var thisPlayer = document.getElementById("radar").setAttribute("playerId",thisPlayer);
 
@@ -521,8 +520,8 @@ window.onclick = function(event) {
 
         function longLatToXandY(playerLogitude,playerLatitude,longitude, latitude){
 
-            var cookie = (document.cookie);
-            var numberPixelPerMeter = parseFloat(JSON.parse(cookie).numberPixelPerMeter);
+            var cookie = JSON.parse(getCookie("radarCookie"));
+            var numberPixelPerMeter = parseFloat(cookie.numberPixelPerMeter);
 
 
             var m_per_deg_lat = 111132.954 - 559.822 * Math.cos( 2.0 * parseFloat(latitude) ) + 1.175 * Math.cos( 4.0 * parseFloat(latitude));
@@ -546,9 +545,9 @@ window.onclick = function(event) {
         }
 
 
-        var cookie = document.cookie;
+        var cookie = JSON.parse(getCookie("radarCookie"));
 
-        var updateFrequency = parseFloat(JSON.parse(cookie).updateFrequency);
+        var updateFrequency = parseFloat(cookie.updateFrequency);
 
         setTimeout(d, updateFrequency); // LOOP
 
@@ -580,7 +579,7 @@ window.onclick = function(event) {
     });
 
     function sendFixedSignal(id){
-        var cookie = JSON.parse(document.cookie);
+        var cookie = JSON.parse(getCookie("radarCookie"));
         var thisPlayer = cookie.playerId;
 
         if (thisPlayer === id){
@@ -619,7 +618,7 @@ window.onclick = function(event) {
         data.playerId = id;
         data.sendSignal = "handShakeSignal";
 
-        var cookie = JSON.parse(document.cookie);
+        var cookie = JSON.parse(getCookie("radarCookie"));
 
         var dataSignal ={};
         dataSignal.playerId = cookie.playerId;
@@ -639,7 +638,7 @@ window.onclick = function(event) {
 
         data.request = "fight";
 
-        var cookie = JSON.parse(document.cookie);
+        var cookie = JSON.parse(getCookie("radarCookie"));
 
         data.playerId = cookie.playerId;
 
