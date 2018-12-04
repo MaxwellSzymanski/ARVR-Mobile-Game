@@ -395,10 +395,10 @@ window.onclick = function(event) {
 
         function createRadar(dataHTTP){
 
-            var cookie = (document.cookie);
+            cookie = JSON.parse(document.cookie);
 
-            var playerLongitude = parseFloat(JSON.parse(cookie).longitude);
-            var playerLatitude =  parseFloat(JSON.parse(cookie).latitude);
+            var playerLongitude = parseFloat(cookie.longitude);
+            var playerLatitude =  parseFloat(cookie.latitude);
 
 
             var i = 0;
@@ -407,7 +407,7 @@ window.onclick = function(event) {
 
             var object1 = JSON.parse(dataHTTP);
 
-            var cookie = document.cookie;
+            // cookie = document.cookie;
 
 
             if(JSON.parse(cookie).autozoom === "on") {
@@ -442,7 +442,7 @@ window.onclick = function(event) {
 
             var object2 = JSON.parse(dataHTTP);
 
-            var cookie = JSON.parse(document.cookie);
+            cookie = JSON.parse(document.cookie);
             var thisPlayer = cookie.playerId;
             //var thisPlayer = document.getElementById("radar").setAttribute("playerId",thisPlayer);
 
@@ -533,8 +533,8 @@ window.onclick = function(event) {
 
         function longLatToXandY(playerLogitude,playerLatitude,longitude, latitude){
 
-            var cookie = (document.cookie);
-            var numberPixelPerMeter = parseFloat(JSON.parse(cookie).numberPixelPerMeter);
+            cookie = JSON.parse(document.cookie);
+            var numberPixelPerMeter = parseFloat(cookie.numberPixelPerMeter);
 
 
             var m_per_deg_lat = 111132.954 - 559.822 * Math.cos( 2.0 * parseFloat(latitude) ) + 1.175 * Math.cos( 4.0 * parseFloat(latitude));
@@ -558,9 +558,9 @@ window.onclick = function(event) {
         }
 
 
-        var cookie = document.cookie;
+        cookie = cookie = JSON.parse(document.cookie);
 
-        var updateFrequency = parseFloat(JSON.parse(cookie).updateFrequency);
+        var updateFrequency = parseFloat(cookie.updateFrequency);
 
         setTimeout(d, updateFrequency); // LOOP
 
