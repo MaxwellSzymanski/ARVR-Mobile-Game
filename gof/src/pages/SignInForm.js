@@ -33,61 +33,57 @@ class SignInForm extends React.Component {
     async handleSubmit(e) {
         e.preventDefault();
 
-        const position = { longitude: 0.0, latitude: 0.0 };
-
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(storePosition);
+        if (!this.state.email || !this.state.password) {
+            alert("Please fill in all fields.")
         } else {
-            alert("No geolocation available");
-        }
+            const position = {longitude: 0.0, latitude: 0.0};
 
-        function storePosition(pos) {
-            position.longitude = pos.coords.longitude;
-            position.latitude = pos.coords.latitude;
-        }
-
-        this.state.position = position;
-        const dataToSend = this.state;
-        dataToSend.request = "signin";
-
-        console.log('The form was submitted to '+ url + ' with the following data:');
-        console.log(this.state);
-
-        const agent = new https.Agent({
-            rejectUnauthorized: false
-        });
-
-        // let config = {
-        //     headers: {
-        //         // Access-Control-Allow-Origin: '*'
-        //         // Content-Type: "application/json"
-        //     },
-        // };
-
-        let obj = JSON.stringify(dataToSend);
-        // send HTTP request with login data and receive value about correctness of data.
-        //      received object:
-        // { email: false }                                 if e-mail not registered
-        // { email: true, password: false }                 if e-mail registered and password incorrect
-        // { email: true, password: true, token: jwt }      if e-mail registered and password correct, the jwt token
-        //                                                      is further on stored in a cookie in the browser
-        await axios.post(url, obj).then(
-            function(json) {
-                if (!json.data.email)
-                    alert("invalid e-mail");
-                else if(!json.data.password)
-                    alert("invalid password");
-                else {
-                    const cookie = {
-                        token: json.data.token,
-                        name: json.data.name
-                    };
-                    cookies.set('loginCookie', cookie, {path: '/'});
-                    console.log(cookies.get('loginCookie'));
-                    this.goToMap();
-                }
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(storePosition);
+            } else {
+                alert("No geolocation available");
             }
-        );
+
+            function storePosition(pos) {
+                position.longitude = pos.coords.longitude;
+                position.latitude = pos.coords.latitude;
+            }
+
+            this.state.position = position;
+            const dataToSend = this.state;
+            dataToSend.request = "signin";
+
+            console.log('The form was submitted to ' + url + ' with the following data:');
+            console.log(this.state);
+
+            let redirect = this.state.redirect;
+
+            let obj = JSON.stringify(dataToSend);
+            // send HTTP request with login data and receive value about correctness of data.
+            //      received object:
+            // { email: false }                                 if e-mail not registered
+            // { email: true, password: false }                 if e-mail registered and password incorrect
+            // { email: true, password: true, token: jwt }      if e-mail registered and password correct, the jwt token
+            //                                                      is further on stored in a cookie in the browser
+            await axios.post(url, obj).then(
+                function (json) {
+                    if (!json.data.email)
+                        alert("invalid e-mail");
+                    else if (!json.data.password)
+                        alert("invalid password");
+                    else {
+                        const cookie = {
+                            token: json.data.token,
+                            name: json.data.name
+                        };
+                        cookies.set('loginCookie', cookie, {path: '/'});
+                        console.log(cookies.get('loginCookie'));
+                        redirect = true;
+                        // this.setState({redirect: true});
+                    }
+                }
+            );
+        }
     }
 
     state = {
