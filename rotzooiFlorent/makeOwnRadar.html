@@ -367,7 +367,7 @@ window.onclick = function(event) {
             cookieJson.longitude = position.coords.longitude;
             cookieJson.latitude = position.coords.latitude;
             document.cookie = "radarCookie=" + JSON.stringify(cookieJson) +";";
-            console.log(JSON.parse(getCookie("radarCookie")));
+            alert(JSON.parse(getCookie("radarCookie")));
         }
 
         data.sendSignal = cookie.sendSignal;
