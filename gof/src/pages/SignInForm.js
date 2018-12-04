@@ -79,9 +79,9 @@ class SignInForm extends React.Component {
                         };
                         cookies.set('loginCookie', cookie, {path: '/'});
                         console.log(cookies.get('loginCookie'));
-                        red = true;
-                        that.state.redirect = true;
-                        // this.setState({redirect: true});
+                        // red = true;
+                        // that.state.redirect = true;
+                        that.setState({redirect: true});
                     }
                 }
             );
