@@ -211,7 +211,7 @@
     dataCookie.playerId = getCookie("name");
     dataCookie.token = getCookie("token");
 
-    document.cookie = "expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = JSON.stringify("expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;");
 
     // dataCookie.playerId = loginCookie.name;
     dataCookie.numberPixelPerMeter="1";
