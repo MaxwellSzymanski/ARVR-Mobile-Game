@@ -204,11 +204,6 @@
 
     dataCookie.playerId = getCookie("name");
     dataCookie.token = getCookie("token");
-
-    alert("name: " + dataCookie.playerId);
-    alert("token: " + dataCookie.token);
-
-
     // dataCookie.playerId = loginCookie.name;
     dataCookie.numberPixelPerMeter="1";
     dataCookie.updateFrequency="4000";
@@ -258,7 +253,6 @@ window.onclick = function(event) {
                 cookieJson.frequency = returnObject.frequency;
                 document.cookie = JSON.stringify(cookieJson);
             }
-
         });
     }
 
@@ -371,8 +365,8 @@ window.onclick = function(event) {
 
         data.request = "Radar";
         //data.playerId = cookie.playerId;
-        data.playerId = document.getElementById("playerId").value;
-
+        // data.playerId = document.getElementById("playerId").value;
+        data.token = getCookie("token");
         data.longitude = cookie.longitude;
         data.latitude =  cookie.latitude;
 
