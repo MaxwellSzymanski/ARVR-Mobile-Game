@@ -234,7 +234,7 @@ async function radar(obj, res) {
             }
         });
     }
-    if(obj.playerId !== null) {
+    if(obj.playerId !== null && obj.playerId !== "") {
         if (await ActivePlayer.findOne({playerid: obj.playerId}) === null) {
             const newActivePlayer = new ActivePlayer({
                 playerid: obj.playerId,

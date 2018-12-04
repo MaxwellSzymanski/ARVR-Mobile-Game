@@ -198,10 +198,10 @@
         var ca = decodedCookie.split(';');
         for(var i = 0; i <ca.length; i++) {
             var c = ca[i];
-            while (c.charAt(0) == ' ') {
+            while (c.charAt(0) === ' ') {
                 c = c.substring(1);
             }
-            if (c.indexOf(name) == 0) {
+            if (c.indexOf(name) === 0) {
                 return c.substring(name.length, c.length);
             }
         }
@@ -210,6 +210,9 @@
 
     dataCookie.playerId = getCookie("name");
     dataCookie.token = getCookie("token");
+
+    document.cookie = "expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
     // dataCookie.playerId = loginCookie.name;
     dataCookie.numberPixelPerMeter="1";
     dataCookie.updateFrequency="4000";
@@ -355,11 +358,11 @@ window.onclick = function(event) {
 
         // get latest update frequency
         getFrequency();
-        alert("freq->check");
+
         var data = {};
-        alert("1");
+
         cookie = JSON.parse(document.cookie);
-        alert("2");
+        alert("cookie parsed!");
         // update input Field playerId
         // cookie.playerId = document.getElementById("playerId").value;
         // document.cookie = JSON.stringify(cookie);
