@@ -239,7 +239,7 @@ window.onclick = function(event) {
       }
     }
   }
-}
+};
 
 
     function specialSignalReceived(){
@@ -353,21 +353,16 @@ window.onclick = function(event) {
     // https://stackoverflow.com/questions/18353107/radar-scanner-effect-using-jquery
     $(function d () {
 
-
-
         // get latest update frequency
         getFrequency();
-
 
         var data = {};
 
         var cookie = JSON.parse(document.cookie);
 
-
         // update input Field playerId
         // cookie.playerId = document.getElementById("playerId").value;
         // document.cookie = JSON.stringify(cookie);
-
 
         data.request = "Radar";
         //data.playerId = cookie.playerId;
@@ -388,9 +383,7 @@ window.onclick = function(event) {
             document.cookie = JSON.stringify(cookieJson);
         }
 
-
         data.sendSignal = cookie.sendSignal;
-
 
         obj = JSON.stringify(data);
         // Send get request use jquery ajax.

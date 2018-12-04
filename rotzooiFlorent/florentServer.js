@@ -7,7 +7,7 @@ const secret = require('./db/config.js');
 // var url = "mongodb://localhost:27017/userdb";
 // var url = 'mongodb://team12:mongoDBteam12@35.241.198.186:27017/?authMechanism=SCRAM-SHA-1&authSource=userdb';
 
-var frequency = 4000;
+var frequency = 3000;
 
 const mongoose = require('mongoose');
 // mongoose.connect("mongodb://localhost:27017/userdb", { useNewUrlParser: true });
