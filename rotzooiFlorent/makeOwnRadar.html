@@ -211,8 +211,6 @@
     dataCookie.playerId = getCookie("name");
     dataCookie.token = getCookie("token");
 
-    document.cookie = JSON.stringify("expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;");
-
     // dataCookie.playerId = loginCookie.name;
     dataCookie.numberPixelPerMeter="1";
     dataCookie.updateFrequency="4000";
@@ -361,7 +359,7 @@ window.onclick = function(event) {
 
         var data = {};
 
-        cookie = JSON.parse(document.cookie);
+        cookie = JSON.parse(getCookie(""));
         alert("cookie parsed!");
         // update input Field playerId
         // cookie.playerId = document.getElementById("playerId").value;
