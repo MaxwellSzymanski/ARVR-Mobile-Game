@@ -220,7 +220,7 @@
     dataCookie.latitude ="50.850346";
 
     document.cookie = "radarCookie=" + JSON.stringify(dataCookie) +";";
-    
+
     // $.cookie('radarCookie', JSON.stringify(dataCookie));
 
     /* When the user clicks on the button,
@@ -349,7 +349,7 @@ window.onclick = function(event) {
 
         alert(getCookie("") + " 1");
         alert(getCookie(" ") + " 2");
-        alert(getCookie("radarCookie" + "  rad"));
+        alert(getCookie("radarCookie") + "  rad");
 
         cookie = JSON.parse(getCookie("radarCookie"));
         alert("cookie parsed!");
