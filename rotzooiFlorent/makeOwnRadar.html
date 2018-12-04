@@ -202,13 +202,14 @@
         return "";
     }
 
-    const loginCookie = getCookie("loginCookie");
+    dataCookie.playerId = getCookie("name");
+    dataCookie.token = getCookie("token");
 
-    alert("loginCookie: " + loginCookie);
-    alert(loginCookie.name +", " + loginCookie.token);
+    alert("name: " + dataCookie.playerId);
+    alert("token: " + dataCookie.token);
 
-    dataCookie.token = loginCookie.token;
-    dataCookie.playerId = loginCookie.name;
+
+    // dataCookie.playerId = loginCookie.name;
     dataCookie.numberPixelPerMeter="1";
     dataCookie.updateFrequency="4000";
     dataCookie.autozoom="on";
