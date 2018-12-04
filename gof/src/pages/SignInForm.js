@@ -3,7 +3,6 @@ import { Link, Redirect } from 'react-router-dom';
 import axios from "axios";
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
-const https = require('https');
 
 const url = require('./serveradress.js');
 
@@ -34,6 +33,7 @@ class SignInForm extends React.Component {
         e.preventDefault();
 
         let that = this;
+
         if (!this.state.email || !this.state.password) {
             alert("Please fill in all fields.")
         } else {
@@ -57,8 +57,6 @@ class SignInForm extends React.Component {
             console.log('The form was submitted to ' + url + ' with the following data:');
             console.log(this.state);
 
-            let red = false;
-
             let obj = JSON.stringify(dataToSend);
             // send HTTP request with login data and receive value about correctness of data.
             //      received object:
@@ -79,14 +77,10 @@ class SignInForm extends React.Component {
                         };
                         cookies.set('loginCookie', cookie, {path: '/'});
                         console.log(cookies.get('loginCookie'));
-                        // red = true;
-                        // that.state.redirect = true;
                         that.setState({redirect: true});
                     }
                 }
             );
-            this.state.redirect = await red;
-            console.log(this.state.redirect);
         }
     }
 

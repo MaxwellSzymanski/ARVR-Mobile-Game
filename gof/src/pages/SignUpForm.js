@@ -3,7 +3,6 @@ import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
-const https = require('https');
 
 const url = require('./serveradress.js');
 
@@ -44,7 +43,11 @@ class SignUpForm extends React.Component {
     async handleSubmit(e) {
         e.preventDefault();
 
-        if (!this.state.hasAgreed) {
+        let that = this;
+
+        if (!this.state.name || !this.state.email || !this.state.password) {
+            alert("Please fill in all fields.");
+        } else if (!this.state.hasAgreed) {
             alert("You need to agree to the terms and conditions in order to continue.")
         } else {
             const dataToSend = this.state;
@@ -60,22 +63,17 @@ class SignUpForm extends React.Component {
             console.log('The form was submitted with the following data:');
             console.log(this.state);
 
-            let red = false;
-
             // receive success value (and error if the e-mail/username is already taken.
             await axios.post(url, obj).then(
                 function (json) {
                     if (json.data.success) {
                         cookies.set('loginCookie', json.data.token, {path: '/'});
                         console.log(cookies.get('loginCookie'));
-                        red = true;
-                        // this.setState({redirect: true});
+                        that.setState({redirect: true});
                     }
                     else alert(json.data.message);
                 }
             );
-            this.state.redirect = await red;
-            console.log(this.state.redirect);
         }
     }
 
