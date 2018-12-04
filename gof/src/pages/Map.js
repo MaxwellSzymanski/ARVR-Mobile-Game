@@ -11,7 +11,7 @@ class Map extends React.Component {
     render() {
       return(
         <div>
-        <meta http-equiv="refresh" content="1; url=https://35.241.198.186:443/"></meta>
+        <meta http-equiv="refresh" content="1; url=https://35.241.198.186:80/"></meta>
         </div>);
 
     }

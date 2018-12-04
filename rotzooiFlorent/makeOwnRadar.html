@@ -59,7 +59,7 @@
             position:absolute;
             border-radius: 50%;
             width:4px; height:4px; margin:-2px;
-            box-shadow:0 0 10px 5px rgba(100,255,0,0.5);
+            box-shadow:0 0 7px 6px rgba(100,255,0,0.5);
             opacity:0.2;
         }
         .objEnemy{
@@ -67,7 +67,7 @@
             position:absolute;
             border-radius: 50%;
             width:4px; height:4px; margin:-2px;
-            box-shadow:0 0 10px 5px rgba(100,255,0,0.5);
+            box-shadow:0 0 7px 6px rgba(100,255,0,0.5);
             opacity:0.2;
         }
 
@@ -186,12 +186,31 @@
 </div>
 <script>
 
-    var urlD = 'https://35.241.198.186:80'; // adres server
+    var urlD = 'https://35.241.198.186:8080'; // adres server
 
     //var dataCookie = JSON.parse(document.cookie);
     var dataCookie = {};
 
-    dataCookie.playerId = dataCookie.name;
+    // BRON: https://www.w3schools.com/js/js_cookies.asp
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+    dataCookie.playerId = getCookie("name");
+    dataCookie.token = getCookie("token");
+    // dataCookie.playerId = loginCookie.name;
     dataCookie.numberPixelPerMeter="1";
     dataCookie.updateFrequency="4000";
     dataCookie.autozoom="on";
@@ -240,7 +259,6 @@ window.onclick = function(event) {
                 cookieJson.frequency = returnObject.frequency;
                 document.cookie = JSON.stringify(cookieJson);
             }
-
         });
     }
 
@@ -347,14 +365,14 @@ window.onclick = function(event) {
 
 
         // update input Field playerId
-        cookie.playerId = document.getElementById("playerId").value;
-        document.cookie = JSON.stringify(cookie);
+        // cookie.playerId = document.getElementById("playerId").value;
+        // document.cookie = JSON.stringify(cookie);
 
 
         data.request = "Radar";
         //data.playerId = cookie.playerId;
-        data.playerId = document.getElementById("playerId").value;
-
+        // data.playerId = document.getElementById("playerId").value;
+        data.token = getCookie("token");
         data.longitude = cookie.longitude;
         data.latitude =  cookie.latitude;
 

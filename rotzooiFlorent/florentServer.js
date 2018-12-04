@@ -30,7 +30,7 @@ const https_options = {
     cert: fs.readFileSync('./ssl/team12.pem')
 };
 
-const port = 80;
+const port = 8080;
 
 //create a server object:
 https.createServer(https_options, async function (req, res) {
@@ -89,16 +89,18 @@ console.log("\n\n    Server listening on localhost:" + port + "\n\n");
 
 function signup(obj, res) {
     const newUser = new User(obj);
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader("Content-Type", "application/json");
     newUser.save( function(error) {
         if (error) {
             console.log(error);
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader("Content-Type", "ERROR");
             res.write(JSON.stringify({
                 success: false,
                 message: error.message,
             }));
         } else {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader("Content-Type", "application/json");
             res.write(JSON.stringify({
                 success: true,
                 token: newUser.createToken(),
@@ -106,29 +108,34 @@ function signup(obj, res) {
         }
         res.end();
     });
+    const newActivePlayer = new ActivePlayer({playerid: result.name, location: obj.position});
+    newActivePlayer.save();
 }
 
 function signin(obj, res) {
     User.findOne({ email : obj.email }, async function (error, result) {
         if (error) throw error;
         if (result === null) {
-            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader('Access-Control-Allow-Origin', 'https://35.241.198.186');
             res.setHeader("Content-Type", "application/json");
             res.write(JSON.stringify({"email": false}));
             res.end();
         } else {
             const value = await result.checkPassword(obj.password);
-            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader('Access-Control-Allow-Origin', 'https://35.241.198.186');
             res.setHeader("Content-Type", "application/json");
             if (!value)
                 res.write(JSON.stringify({"email": true, "password": value}));
             else
-                res.write(JSON.stringify({"email": true, "password": value, token: result.createToken(), name: result.name }));
+                res.write(JSON.stringify({
+                    "email": true,
+                    "password": value,
+                    token: result.createToken(),
+                    name: result.name
+                }));
             res.end();
-            ActivePlayer.findOneAndRemove({playerid:result.name}, function() {
-                const newActivePlayer = new ActivePlayer({playerid: result.name, location: obj.position});
-                newActivePlayer.save();
-            });
+            const newActivePlayer = new ActivePlayer({playerid: result.name, location: obj.position});
+            newActivePlayer.save();
         }
     });
 }
@@ -227,8 +234,17 @@ async function radar(obj, res) {
             }
         });
     }
-    if(obj.playerId !== null &&
-        (await ActivePlayer.findOne({playerid: obj.playerId})) !== null) {
+    if(obj.playerId !== null) {
+        if (await ActivePlayer.findOne({playerid: obj.playerId}) === null) {
+            const newActivePlayer = new ActivePlayer({
+                playerid: obj.playerId,
+                location: {
+                    latitude: obj.latitude,
+                    longitude: obj.longitude,
+                }
+            });
+            newActivePlayer.save();
+        }
         getPlayerPositionRadar(obj, res);
     } else {
         console.log("invalid playerid");

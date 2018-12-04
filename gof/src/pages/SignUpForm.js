@@ -3,7 +3,6 @@ import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
-const https = require('https');
 
 const url = require('./serveradress.js');
 
@@ -44,34 +43,52 @@ class SignUpForm extends React.Component {
     async handleSubmit(e) {
         e.preventDefault();
 
-        const dataToSend = this.state;
-        dataToSend.request = "signup";
+        let that = this;
 
-        // const image = fs.readFileSync(PATH);
-        const image = localStorage.getItem("PhotoOfMe");
-        dataToSend.image = new Buffer(image).toString('base64');
+        if (!this.state.name || !this.state.email || !this.state.password) {
+            alert("Please fill in all fields.");
+        } else if (!this.state.hasAgreed) {
+            alert("You need to agree to the terms and conditions in order to continue.")
+        } else {
+            const position = {longitude: 0.0, latitude: 0.0};
 
-        // send HTTP request with sign up data.
-        let obj = JSON.stringify(dataToSend);
-
-        console.log('The form was submitted with the following data:');
-        console.log(this.state);
-
-        const agent = new https.Agent({
-            rejectUnauthorized: false
-        });
-
-        // receive success value (and error if the e-mail/username is already taken.
-        await axios.post(url, obj, {headers: {'Access-Control-Allow-Origin': '*'}}).then(
-            function (json) {
-                if (json.data.success) {
-                    cookies.set('loginCookie', json.data.token, {path: '/'});
-                    console.log(cookies.get('loginCookie'));
-                    this.setState({redirect: true});
-                }
-                else alert(json.data.message);
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(storePosition);
+            } else {
+                alert("No geolocation available");
             }
-        );
+
+            function storePosition(pos) {
+                position.longitude = pos.coords.longitude;
+                position.latitude = pos.coords.latitude;
+            }
+
+            this.state.position = position;
+            const dataToSend = this.state;
+            dataToSend.request = "signup";
+
+            // const image = fs.readFileSync(PATH);
+            const image = localStorage.getItem("PhotoOfMe");
+            dataToSend.image = new Buffer(image).toString('base64');
+
+            // send HTTP request with sign up data.
+            let obj = JSON.stringify(dataToSend);
+
+            console.log('The form was submitted to ' + url + ' with the following data:');
+            console.log(this.state);
+
+            // receive success value (and error if the e-mail/username is already taken.
+            await axios.post(url, obj).then(
+                function (json) {
+                    if (json.data.success) {
+                        cookies.set('token', json.data.token, {path: '/'});
+                        cookies.set('name', json.data.name,  {path: '/'});
+                        that.setState({redirect: true});
+                    }
+                    else alert(json.data.message);
+                }
+            );
+        }
     }
 
     openTerms() {
@@ -122,16 +139,16 @@ class SignUpForm extends React.Component {
           <Link to="/takePicture">
             {button}</Link></div>
               <div className="FormField">
-                <label className="FormField__Label" htmlFor="name">Full Name</label>
-                <input type="text" id="name" className="FormField__Input" placeholder="Enter your full name" name="name" value={this.state.name} onChange={this.handleChange} />
+                <label className="FormField__Label" htmlFor="name">User name</label>
+                <input type="text" id="name" className="FormField__Input" placeholder="Enter your user name" name="name" value={this.state.name} onChange={this.handleChange} />
+              </div>
+              <div className="FormField">
+                    <label className="FormField__Label" htmlFor="email">E-Mail Address</label>
+                    <input type="email" id="email" className="FormField__Input" placeholder="Enter your email" name="email" value={this.state.email} onChange={this.handleChange} />
               </div>
               <div className="FormField">
                 <label className="FormField__Label" htmlFor="password">Password</label>
                 <input type="password" id="password" className="FormField__Input" placeholder="Enter your password" name="password" value={this.state.password} onChange={this.handleChange} />
-              </div>
-              <div className="FormField">
-                <label className="FormField__Label" htmlFor="email">E-Mail Address</label>
-                <input type="email" id="email" className="FormField__Input" placeholder="Enter your email" name="email" value={this.state.email} onChange={this.handleChange} />
               </div>
 
               <div className="FormField">
