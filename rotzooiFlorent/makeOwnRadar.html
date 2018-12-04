@@ -357,7 +357,7 @@ window.onclick = function(event) {
         data.request = "Radar";
         data.playerId = cookie.playerId;
         // data.playerId = document.getElementById("playerId").value;
-        data.token = getCookie("token");
+        data.token = cookie.token;
         data.longitude = cookie.longitude;
         data.latitude =  cookie.latitude;
 
@@ -377,7 +377,7 @@ window.onclick = function(event) {
 
         obj = JSON.stringify(data);
         // Send get request use jquery ajax.
-        alert("sent this:\n" + data);
+        alert("sent this:\n" + data + "\n-->\n" + obj);
         $.post(urlD,obj, function (data) {
             alert("request send \nreturned data:\n" + data);
             createRadar(data);
