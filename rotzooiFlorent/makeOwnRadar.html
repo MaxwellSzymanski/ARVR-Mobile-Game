@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Radar</title>
     <style>
 
         html, body {
@@ -13,7 +13,6 @@
             background-position: center;
             background-size: contain;
             background-color: black;
-            back
         }
         h1 {
             color: rgba(100,255,0,0.5);
@@ -21,23 +20,39 @@
         }
         #north {
             position:absolute;
-            top: 5%;
+            top: 0%;
             left: 50%;
+            border-radius: 100%;
+            color: #cc1f10;
+            background-color: black;
+            z-index: 1;
         }
         #east {
             position:absolute;
             top: 50%;
             left: 95%;
+            border-radius: 100%;
+            color: #cc1f10;
+            background-color: black;
+            z-index: 1;
         }
         #south {
             position:absolute;
             top: 95%;
             left: 50%;
+            border-radius: 100%;
+            color: #cc1f10;
+            background-color: black;
+            z-index: 1;
         }
         #west {
             position:absolute;
             top: 50%;
             left: 5%;
+            border-radius: 100%;
+            color: #cc1f10;
+            background-color: black;
+            z-index: 1;
         }
         .obj{
             background:#cf5;
@@ -60,14 +75,16 @@
             background: #cc1f10;
             color: white;
             border: none;
-
+            z-index: 3;
+            position:relative
         }
         .buttons{
           width:70%;
           display: inline-block;
+
         }
         .head{
-          
+
         }
         .link{
           width:30%;
@@ -78,29 +95,78 @@
           text-align: left;
           color: red;
           position: absolute;
-          right: 10%;
           text-decoration: none;
           color:white;
           background: #cc1f10;
+          margin-left: 3%;
+          font-size: 16px;
         }
-    </style>
-</head>
-<body>
-<div class="head">
-<button class='button' onclick="increaseNumberPixelPerMeter()">Enlarge Radar!</button>
-<button class='button' onclick="decreaseNumberPixelPerMeter()">Reduce Radar!</button>
-<button class='button' onclick="sendSpecialSignal()">send Special Signal</button>
-<button class='button' onclick="sendHandShake()">send HandShake</button>
-<button class='button' onclick="autozoom()">AutoZoom!</button>
-<button class='button' onclick="increaseUpdateFrequency()" id="increaseFrequencyButton">Increase update frequency!</button>
-<button class='button' onclick="decreaseUpdateFrequency()" id="decreaseFrequencyButton">Decrease update frequency!</button>
-<a id='map' href="http://localhost/testGetPlayers.html">  <button class='button'>Go To Map</button>  </a>
-</div>
-<button class = "button" id="north">N</button>
-<button class="button" id="east">E</button>
-<button class="button" id="south">S</button>
-<button class="button" id="west">W</button>
-<input type="text" id="playerId" type="submit" value="">
+
+        /* Dropdown Button */
+        .dropbtn {
+          background-color: #cc1f10;
+          color: white;
+          border: none;
+          cursor: pointer;
+        }
+
+        /* Dropdown button on hover & focus */
+        .dropbtn:hover, .dropbtn:focus {
+          background-color: ;
+        }
+
+        /* The container <div> - needed to position the dropdown content */
+        .dropdown {
+          position: relative;
+          display: inline-block;
+        }
+
+        /* Dropdown Content (Hidden by Default) */
+        .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #cc1f10;
+          min-width: 50%;
+          box-shadow: 50% #cc1f10;
+          z-index: 1;
+        }
+
+        /* Links inside the dropdown */
+        .dropdown-content a {
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+        }
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {background-color: #ddd}
+
+        /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+        .show {display:block;}
+        </style>
+      </head>
+      <body>
+        <div class="head">
+          <div class="dropdown">
+            <button onclick="myFunction()" class="dropbtn">More Functions</button>
+              <div id="myDropdown" class="dropdown-content">
+                <button class='button' onclick="increaseNumberPixelPerMeter()">Zoom in</button>
+                <button class='button' onclick="decreaseNumberPixelPerMeter()">Zoom out</button>
+                <button class='button' onclick="sendSpecialSignal()">Special Signal</button>
+                <button class='button' onclick="sendHandShake()">HandShake</button>
+                <button class='button' onclick="autozoom()">AutoZoom</button>
+                <button class='button' onclick="increaseUpdateFrequency()" id="increaseFrequencyButton">Frequency +</button>
+                <button class='button' onclick="decreaseUpdateFrequency()" id="decreaseFrequencyButton">Frequency -</button>
+              </div>
+            </div>
+            <a id='map' href="http://localhost/testGetPlayers.html">  <button class='button'>Go To Map</button>  </a>
+          </div>
+          <button class = "button" id="north">N</button>
+          <button class="button" id="east">E</button>
+          <button class="button" id="south">S</button>
+          <button class="button" id="west">W</button>
+          <input type="text" id="playerId" type="submit" value="">
 
 
 
@@ -128,6 +194,27 @@
     dataCookie.latitude ="50.850346";
 
     document.cookie = JSON.stringify(dataCookie);
+
+    /* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+}
+
+// Close the dropdown menu if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
 
 
     function specialSignalReceived(){
