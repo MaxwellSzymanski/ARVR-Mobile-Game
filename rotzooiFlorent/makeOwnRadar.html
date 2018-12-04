@@ -355,7 +355,7 @@ window.onclick = function(event) {
 
         // get latest update frequency
         getFrequency();
-
+        alert("freq->check");
         var data = {};
 
         var cookie = JSON.parse(document.cookie);
@@ -387,8 +387,9 @@ window.onclick = function(event) {
 
         obj = JSON.stringify(data);
         // Send get request use jquery ajax.
-
+        alert("got here");
         $.post(urlD,obj, function (data) {
+            alert("request send \nreturned data:\n" + data);
             createRadar(data);
         });
 
