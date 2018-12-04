@@ -364,9 +364,10 @@ window.onclick = function(event) {
         }
         function showPosition(position) {
             var cookieJson = JSON.parse(document.cookie);
-            cookieJson.longitude = 1;
+            cookieJson.longitude = position.coords.longitude;
             cookieJson.latitude = position.coords.latitude;
             document.cookie = "radarCookie=" + JSON.stringify(cookieJson) +";";
+            console.log(JSON.parse(getCookie("radarCookie")));
         }
 
         data.sendSignal = cookie.sendSignal;
