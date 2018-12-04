@@ -44,34 +44,34 @@ class SignUpForm extends React.Component {
     async handleSubmit(e) {
         e.preventDefault();
 
-        const dataToSend = this.state;
-        dataToSend.request = "signup";
+        if (!this.state.hasAgreed) {
+            alert("You need to agree to the terms and conditions in order to continue.")
+        } else {
+            const dataToSend = this.state;
+            dataToSend.request = "signup";
 
-        // const image = fs.readFileSync(PATH);
-        const image = localStorage.getItem("PhotoOfMe");
-        dataToSend.image = new Buffer(image).toString('base64');
+            // const image = fs.readFileSync(PATH);
+            const image = localStorage.getItem("PhotoOfMe");
+            dataToSend.image = new Buffer(image).toString('base64');
 
-        // send HTTP request with sign up data.
-        let obj = JSON.stringify(dataToSend);
+            // send HTTP request with sign up data.
+            let obj = JSON.stringify(dataToSend);
 
-        console.log('The form was submitted with the following data:');
-        console.log(this.state);
+            console.log('The form was submitted with the following data:');
+            console.log(this.state);
 
-        const agent = new https.Agent({
-            rejectUnauthorized: false
-        });
-
-        // receive success value (and error if the e-mail/username is already taken.
-        await axios.post(url, obj, {headers: {'Access-Control-Allow-Origin': '*'}}).then(
-            function (json) {
-                if (json.data.success) {
-                    cookies.set('loginCookie', json.data.token, {path: '/'});
-                    console.log(cookies.get('loginCookie'));
-                    this.setState({redirect: true});
+            // receive success value (and error if the e-mail/username is already taken.
+            await axios.post(url, obj).then(
+                function (json) {
+                    if (json.data.success) {
+                        cookies.set('loginCookie', json.data.token, {path: '/'});
+                        console.log(cookies.get('loginCookie'));
+                        this.setState({redirect: true});
+                    }
+                    else alert(json.data.message);
                 }
-                else alert(json.data.message);
-            }
-        );
+            );
+        }
     }
 
     openTerms() {
@@ -122,16 +122,16 @@ class SignUpForm extends React.Component {
           <Link to="/takePicture">
             {button}</Link></div>
               <div className="FormField">
-                <label className="FormField__Label" htmlFor="name">Full Name</label>
-                <input type="text" id="name" className="FormField__Input" placeholder="Enter your full name" name="name" value={this.state.name} onChange={this.handleChange} />
+                <label className="FormField__Label" htmlFor="name">User name</label>
+                <input type="text" id="name" className="FormField__Input" placeholder="Enter your user name" name="name" value={this.state.name} onChange={this.handleChange} />
+              </div>
+              <div className="FormField">
+                    <label className="FormField__Label" htmlFor="email">E-Mail Address</label>
+                    <input type="email" id="email" className="FormField__Input" placeholder="Enter your email" name="email" value={this.state.email} onChange={this.handleChange} />
               </div>
               <div className="FormField">
                 <label className="FormField__Label" htmlFor="password">Password</label>
                 <input type="password" id="password" className="FormField__Input" placeholder="Enter your password" name="password" value={this.state.password} onChange={this.handleChange} />
-              </div>
-              <div className="FormField">
-                <label className="FormField__Label" htmlFor="email">E-Mail Address</label>
-                <input type="email" id="email" className="FormField__Input" placeholder="Enter your email" name="email" value={this.state.email} onChange={this.handleChange} />
               </div>
 
               <div className="FormField">

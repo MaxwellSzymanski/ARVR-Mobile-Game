@@ -1,6 +1,6 @@
 const axios = require('axios');
 const https = require('https');
-const numberOfUsers = 10;
+const numberOfUsers = 3;
 
 const url = 'https://35.241.198.186:80';
 const agent = new https.Agent({
