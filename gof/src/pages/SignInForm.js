@@ -33,6 +33,7 @@ class SignInForm extends React.Component {
     async handleSubmit(e) {
         e.preventDefault();
 
+        let that = this;
         if (!this.state.email || !this.state.password) {
             alert("Please fill in all fields.")
         } else {
@@ -79,6 +80,7 @@ class SignInForm extends React.Component {
                         cookies.set('loginCookie', cookie, {path: '/'});
                         console.log(cookies.get('loginCookie'));
                         red = true;
+                        that.state.redirect = true;
                         // this.setState({redirect: true});
                     }
                 }
