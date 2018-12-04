@@ -60,19 +60,22 @@ class SignUpForm extends React.Component {
             console.log('The form was submitted with the following data:');
             console.log(this.state);
 
+            let red = false;
+
             // receive success value (and error if the e-mail/username is already taken.
-            this.state.redirect = await axios.post(url, obj).then(
+            await axios.post(url, obj).then(
                 function (json) {
                     if (json.data.success) {
                         cookies.set('loginCookie', json.data.token, {path: '/'});
                         console.log(cookies.get('loginCookie'));
-                        return true;
+                        red = true;
                         // this.setState({redirect: true});
                     }
                     else alert(json.data.message);
-                    return false;
                 }
             );
+            this.state.redirect = await red;
+            console.log(this.state.redirect);
         }
     }
 

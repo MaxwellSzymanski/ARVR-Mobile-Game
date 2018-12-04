@@ -56,7 +56,7 @@ class SignInForm extends React.Component {
             console.log('The form was submitted to ' + url + ' with the following data:');
             console.log(this.state);
 
-            let redirect = this.state.redirect;
+            let red = false;
 
             let obj = JSON.stringify(dataToSend);
             // send HTTP request with login data and receive value about correctness of data.
@@ -78,11 +78,13 @@ class SignInForm extends React.Component {
                         };
                         cookies.set('loginCookie', cookie, {path: '/'});
                         console.log(cookies.get('loginCookie'));
-                        redirect = true;
+                        red = true;
                         // this.setState({redirect: true});
                     }
                 }
             );
+            this.state.redirect = await red;
+            console.log(this.state.redirect);
         }
     }
 
