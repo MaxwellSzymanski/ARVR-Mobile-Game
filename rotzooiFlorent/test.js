@@ -10,12 +10,14 @@ const https_options = {
 
 const path = './makeOwnRadar.html';
 
+const port = 80;
+
 https.createServer(https_options, function (req, res) {
     fs.readFile(path, function(err, data) {
         res.writeHead(200, {'Content-Type': 'text/html'});
         res.write(data);
         res.end();
     });
-}).listen(443);
-console.log("Server listening on https://35.241.198.186:443");
+}).listen(port);
+console.log("Server listening on https://35.241.198.186:" + port);
 console.log("Server is responding with " + path);

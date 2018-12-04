@@ -2,18 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Radar</title>
     <style>
 
         html, body {
             height: 100%;
             margin: 0;
-            background-image: url('./radarScanner.gif');
+            background-image: url('https://i2djs.github.io/I2Djs/examples/snaps/radarScanner.gif');
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;
             background-color: black;
-            back
         }
         h1 {
             color: rgba(100,255,0,0.5);
@@ -21,23 +20,39 @@
         }
         #north {
             position:absolute;
-            top: 5%;
+            top: 0%;
             left: 50%;
+            border-radius: 100%;
+            color: #cc1f10;
+            background-color: black;
+            z-index: 1;
         }
         #east {
             position:absolute;
             top: 50%;
             left: 95%;
+            border-radius: 100%;
+            color: #cc1f10;
+            background-color: black;
+            z-index: 1;
         }
         #south {
             position:absolute;
             top: 95%;
             left: 50%;
+            border-radius: 100%;
+            color: #cc1f10;
+            background-color: black;
+            z-index: 1;
         }
         #west {
             position:absolute;
             top: 50%;
             left: 5%;
+            border-radius: 100%;
+            color: #cc1f10;
+            background-color: black;
+            z-index: 1;
         }
         .obj{
             background:#cf5;
@@ -52,19 +67,22 @@
             position:absolute;
             border-radius: 50%;
             width:4px; height:4px; margin:-2px;
-            box-shadow:0 0 10px 5px rgba(255, 0, 0, 1);
+            box-shadow:0 0 10px 5px rgba(100,255,0,0.5);
             opacity:0.2;
         }
 
         .button{
             background: #cc1f10;
             color: white;
+            z-index: 3;
+            position:relative;
+            font-size: 18px;
             border: none;
-
         }
         .buttons{
           width:70%;
           display: inline-block;
+
         }
         .head{
 
@@ -78,29 +96,83 @@
           text-align: left;
           color: red;
           position: absolute;
-          right: 10%;
           text-decoration: none;
           color:white;
           background: #cc1f10;
+          margin-left: 3%;
+          font-size: 16px;
+          top: 1px;
         }
-    </style>
-</head>
-<body>
-<div class="head">
-<button class='button' onclick="increaseNumberPixelPerMeter()">Enlarge Radar!</button>
-<button class='button' onclick="decreaseNumberPixelPerMeter()">Reduce Radar!</button>
-<button class='button' onclick="sendSpecialSignal()">send Special Signal</button>
-<button class='button' onclick="sendHandShake()">send HandShake</button>
-<button class='button' onclick="autozoom()">AutoZoom!</button>
-<button class='button' onclick="increaseUpdateFrequency()" id="increaseFrequencyButton">Increase update frequency!</button>
-<button class='button' onclick="decreaseUpdateFrequency()" id="decreaseFrequencyButton">Decrease update frequency!</button>
-<a id='map' href="http://localhost/testGetPlayers.html">  <button class='button'>Go To Map</button>  </a>
-</div>
-<button class = "button" id="north">N</button>
-<button class="button" id="east">E</button>
-<button class="button" id="south">S</button>
-<button class="button" id="west">W</button>
-<input type="text" id="playerId" type="submit" value="">
+
+        /* Dropdown Button */
+        .dropbtn {
+          background-color: #cc1f10;
+          color: white;
+          border: none;
+          cursor: pointer;
+          font-size: 18px;
+          padding-top: 4px;
+          padding-bottom: 4px;
+
+        }
+
+        /* Dropdown button on hover & focus */
+        .dropbtn:hover, .dropbtn:focus {
+          background-color: ;
+        }
+
+        /* The container <div> - needed to position the dropdown content */
+        .dropdown {
+          position: relative;
+          display: inline-block;
+        }
+
+        /* Dropdown Content (Hidden by Default) */
+        .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #cc1f10;
+          min-width: 100%;
+          box-shadow: 0% #cc1f10;
+          z-index: 1;
+        }
+
+        /* Links inside the dropdown */
+        .dropdown-content a {
+          color: black;
+          padding: 0px 0px;
+          text-decoration: none;
+          display: block;
+        }
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {background-color: #ddd}
+
+        /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+        .show {display:block;}
+        </style>
+      </head>
+      <body>
+        <div class="head">
+          <div class="dropdown">
+            <button onclick="myFunction()" class="dropbtn">More Functions</button>
+              <div id="myDropdown" class="dropdown-content">
+                <button class='button' onclick="increaseNumberPixelPerMeter()">Zoom in</button>
+                <button class='button' onclick="decreaseNumberPixelPerMeter()">Zoom out</button>
+                <button class='button' onclick="sendSpecialSignal()">Special Signal</button>
+                <button class='button' onclick="sendHandShake()">HandShake</button>
+                <button class='button' onclick="autozoom()">AutoZoom</button>
+                <button class='button' onclick="increaseUpdateFrequency()" id="increaseFrequencyButton">Frequency +</button>
+                <button class='button' onclick="decreaseUpdateFrequency()" id="decreaseFrequencyButton">Frequency -</button>
+              </div>
+            </div>
+            <a id='map' href="http://localhost/testGetPlayers.html">  <button class='button'>Go To Map</button>  </a>
+          </div>
+          <button class = "button" id="north">N</button>
+          <button class="button" id="east">E</button>
+          <button class="button" id="south">S</button>
+          <button class="button" id="west">W</button>
+          <input type="text" id="playerId" type="submit" value="">
 
 
 
@@ -114,12 +186,32 @@
 </div>
 <script>
 
-    var urlD = 'https://35.241.198.186:80'; // adres server
+    var urlD = 'https://35.241.198.186:8080'; // adres server
 
     //var dataCookie = JSON.parse(document.cookie);
     var dataCookie = {};
 
-    dataCookie.playerId = dataCookie.name;
+    // BRON: https://www.w3schools.com/js/js_cookies.asp
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) === 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+    dataCookie.playerId = getCookie("name");
+    dataCookie.token = getCookie("token");
+
+    // dataCookie.playerId = loginCookie.name;
     dataCookie.numberPixelPerMeter="1";
     dataCookie.updateFrequency="4000";
     dataCookie.autozoom="on";
@@ -127,7 +219,28 @@
     dataCookie.longitude ="4.361721";
     dataCookie.latitude ="50.850346";
 
-    document.cookie = JSON.stringify(dataCookie);
+    document.cookie = "radarCookie=" + JSON.stringify(dataCookie) +";";
+
+    /* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+}
+
+// Close the dropdown menu if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+};
 
 
     function specialSignalReceived(){
@@ -147,7 +260,6 @@
                 cookieJson.frequency = returnObject.frequency;
                 document.cookie = JSON.stringify(cookieJson);
             }
-
         });
     }
 
@@ -224,44 +336,24 @@
         return degrees * Math.PI / 180;
     }
 
-    function distanceBetween(lat1, lon1, lat2, lon2) {
-        var earthRadiusKm = 6371;
-
-        var dLat = this.degreesToRadians(lat2-lat1);
-        var dLon = this.degreesToRadians(lon2-lon1);
-
-        lat1 = this.degreesToRadians(lat1);
-        lat2 = this.degreesToRadians(lat2);
-
-        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-            Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
-        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        return earthRadiusKm * c * 1000; // * 1000 (answer in meters)
-    }
-
     // https://stackoverflow.com/questions/18353107/radar-scanner-effect-using-jquery
     $(function d () {
-
-
 
         // get latest update frequency
         getFrequency();
 
-
         var data = {};
 
-        var cookie = JSON.parse(document.cookie);
-
+        var cookie = JSON.parse(getCookie("radarCookie"));
 
         // update input Field playerId
-        cookie.playerId = document.getElementById("playerId").value;
-        document.cookie = JSON.stringify(cookie);
-
+        // cookie.playerId = document.getElementById("playerId").value;
+        // document.cookie = JSON.stringify(cookie);
 
         data.request = "Radar";
-        //data.playerId = cookie.playerId;
-        data.playerId = document.getElementById("playerId").value;
-
+        data.playerId = cookie.playerId;
+        // data.playerId = document.getElementById("playerId").value;
+        data.token = cookie.token;
         data.longitude = cookie.longitude;
         data.latitude =  cookie.latitude;
 
@@ -274,26 +366,26 @@
             var cookieJson = JSON.parse(document.cookie);
             cookieJson.longitude = position.coords.longitude;
             cookieJson.latitude = position.coords.latitude;
-            document.cookie = JSON.stringify(cookieJson);
+            document.cookie = "radarCookie=" + JSON.stringify(cookieJson) +";";
+            alert(JSON.parse(getCookie("radarCookie")));
         }
-
 
         data.sendSignal = cookie.sendSignal;
 
-
         obj = JSON.stringify(data);
         // Send get request use jquery ajax.
-
+        alert("sent this:\n" + obj);
         $.post(urlD,obj, function (data) {
+            alert("request sent \nreturned data:\n" + data);
             createRadar(data);
         });
 
         function createRadar(dataHTTP){
 
-            var cookie = (document.cookie);
+            var cookie = JSON.parse(getCookie("radarCookie"));
 
-            var playerLongitude = parseFloat(JSON.parse(cookie).longitude);
-            var playerLatitude =  parseFloat(JSON.parse(cookie).latitude);
+            var playerLongitude = parseFloat(cookie.longitude);
+            var playerLatitude =  parseFloat(cookie.latitude);
 
 
             var i = 0;
@@ -302,10 +394,9 @@
 
             var object1 = JSON.parse(dataHTTP);
 
-            var cookie = document.cookie;
+            var cookie = JSON.parse(getCookie("radarCookie"));
 
-
-            if(JSON.parse(cookie).autozoom === "on") {
+            if(cookie.autozoom === "on") {
                 for( x in object1){
 
                     var distancePlayer = distanceBetween(playerLongitude,playerLatitude,object1[i].longitude,object1[i].latitude);
@@ -340,7 +431,7 @@
 
             var object2 = JSON.parse(dataHTTP);
 
-            var cookie = JSON.parse(document.cookie);
+            var cookie = JSON.parse(getCookie("radarCookie"));
             var thisPlayer = cookie.playerId;
             //var thisPlayer = document.getElementById("radar").setAttribute("playerId",thisPlayer);
 
@@ -433,8 +524,8 @@
 
         function longLatToXandY(playerLogitude,playerLatitude,longitude, latitude){
 
-            var cookie = (document.cookie);
-            var numberPixelPerMeter = parseFloat(JSON.parse(cookie).numberPixelPerMeter);
+            var cookie = JSON.parse(getCookie("radarCookie"));
+            var numberPixelPerMeter = parseFloat(cookie.numberPixelPerMeter);
 
 
             var m_per_deg_lat = 111132.954 - 559.822 * Math.cos( 2.0 * parseFloat(latitude) ) + 1.175 * Math.cos( 4.0 * parseFloat(latitude));
@@ -458,13 +549,28 @@
         }
 
 
-        var cookie = document.cookie;
+        var cookie = JSON.parse(getCookie("radarCookie"));
 
-        var updateFrequency = parseFloat(JSON.parse(cookie).updateFrequency);
+        var updateFrequency = parseFloat(cookie.updateFrequency);
 
         setTimeout(d, updateFrequency); // LOOP
 
     });
+
+    function distanceBetween(lat1, lon1, lat2, lon2) {
+        var earthRadiusKm = 6371;
+
+        var dLat = this.degreesToRadians(lat2-lat1);
+        var dLon = this.degreesToRadians(lon2-lon1);
+
+        lat1 = this.degreesToRadians(lat1);
+        lat2 = this.degreesToRadians(lat2);
+
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return earthRadiusKm * c * 1000; // * 1000 (answer in meters)
+    }
     $(function() {
         var deg = 0;
         (function rotate() {
@@ -477,7 +583,7 @@
     });
 
     function sendFixedSignal(id){
-        var cookie = JSON.parse(document.cookie);
+        var cookie = JSON.parse(getCookie("radarCookie"));
         var thisPlayer = cookie.playerId;
 
         if (thisPlayer === id){
@@ -516,7 +622,7 @@
         data.playerId = id;
         data.sendSignal = "handShakeSignal";
 
-        var cookie = JSON.parse(document.cookie);
+        var cookie = JSON.parse(getCookie("radarCookie"));
 
         var dataSignal ={};
         dataSignal.playerId = cookie.playerId;
@@ -536,7 +642,7 @@
 
         data.request = "fight";
 
-        var cookie = JSON.parse(document.cookie);
+        var cookie = JSON.parse(getCookie("radarCookie"));
 
         data.playerId = cookie.playerId;
 
