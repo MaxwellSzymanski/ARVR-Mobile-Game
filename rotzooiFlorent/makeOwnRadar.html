@@ -357,15 +357,15 @@ window.onclick = function(event) {
         getFrequency();
         alert("freq->check");
         var data = {};
-
+        alert("1");
         var cookie = JSON.parse(document.cookie);
-
+        alert("2");
         // update input Field playerId
         // cookie.playerId = document.getElementById("playerId").value;
         // document.cookie = JSON.stringify(cookie);
 
         data.request = "Radar";
-        //data.playerId = cookie.playerId;
+        data.playerId = cookie.playerId;
         // data.playerId = document.getElementById("playerId").value;
         data.token = getCookie("token");
         data.longitude = cookie.longitude;
@@ -395,10 +395,10 @@ window.onclick = function(event) {
 
         function createRadar(dataHTTP){
 
-            cookie = JSON.parse(document.cookie);
+            var cookie = (document.cookie);
 
-            var playerLongitude = parseFloat(cookie.longitude);
-            var playerLatitude =  parseFloat(cookie.latitude);
+            var playerLongitude = parseFloat(JSON.parse(cookie).longitude);
+            var playerLatitude =  parseFloat(JSON.parse(cookie).latitude);
 
 
             var i = 0;
@@ -407,7 +407,7 @@ window.onclick = function(event) {
 
             var object1 = JSON.parse(dataHTTP);
 
-            // cookie = document.cookie;
+            var cookie = document.cookie;
 
 
             if(JSON.parse(cookie).autozoom === "on") {
@@ -442,7 +442,7 @@ window.onclick = function(event) {
 
             var object2 = JSON.parse(dataHTTP);
 
-            cookie = JSON.parse(document.cookie);
+            var cookie = JSON.parse(document.cookie);
             var thisPlayer = cookie.playerId;
             //var thisPlayer = document.getElementById("radar").setAttribute("playerId",thisPlayer);
 
@@ -533,8 +533,8 @@ window.onclick = function(event) {
 
         function longLatToXandY(playerLogitude,playerLatitude,longitude, latitude){
 
-            cookie = JSON.parse(document.cookie);
-            var numberPixelPerMeter = parseFloat(cookie.numberPixelPerMeter);
+            var cookie = (document.cookie);
+            var numberPixelPerMeter = parseFloat(JSON.parse(cookie).numberPixelPerMeter);
 
 
             var m_per_deg_lat = 111132.954 - 559.822 * Math.cos( 2.0 * parseFloat(latitude) ) + 1.175 * Math.cos( 4.0 * parseFloat(latitude));
@@ -558,9 +558,9 @@ window.onclick = function(event) {
         }
 
 
-        cookie = cookie = JSON.parse(document.cookie);
+        var cookie = document.cookie;
 
-        var updateFrequency = parseFloat(cookie.updateFrequency);
+        var updateFrequency = parseFloat(JSON.parse(cookie).updateFrequency);
 
         setTimeout(d, updateFrequency); // LOOP
 
