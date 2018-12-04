@@ -204,6 +204,9 @@
 
     const loginCookie = getCookie("loginCookie");
 
+    alert("doc.cookie: " + document.cookie);
+    alert("loginCookie: " + loginCookie);
+
     dataCookie.token = loginCookie.token;
     dataCookie.playerId = loginCookie.name;
     dataCookie.numberPixelPerMeter="1";
