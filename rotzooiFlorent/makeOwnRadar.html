@@ -59,7 +59,7 @@
             position:absolute;
             border-radius: 50%;
             width:4px; height:4px; margin:-2px;
-            box-shadow:0 0 10px 5px rgba(100,255,0,0.5);
+            box-shadow:0 0 7px 6px rgba(100,255,0,0.5);
             opacity:0.2;
         }
         .objEnemy{
@@ -67,7 +67,7 @@
             position:absolute;
             border-radius: 50%;
             width:4px; height:4px; margin:-2px;
-            box-shadow:0 0 10px 5px rgba(100,255,0,0.5);
+            box-shadow:0 0 7px 6px rgba(100,255,0,0.5);
             opacity:0.2;
         }
 
@@ -185,7 +185,27 @@
     //var dataCookie = JSON.parse(document.cookie);
     var dataCookie = {};
 
-    dataCookie.playerId = dataCookie.name;
+    // BRON: https://www.w3schools.com/js/js_cookies.asp
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+    const loginCookie = getCookie("loginCookie");
+
+    dataCookie.token = loginCookie.token;
+    dataCookie.playerId = loginCookie.name;
     dataCookie.numberPixelPerMeter="1";
     dataCookie.updateFrequency="4000";
     dataCookie.autozoom="on";

@@ -50,6 +50,20 @@ class SignUpForm extends React.Component {
         } else if (!this.state.hasAgreed) {
             alert("You need to agree to the terms and conditions in order to continue.")
         } else {
+            const position = {longitude: 0.0, latitude: 0.0};
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(storePosition);
+            } else {
+                alert("No geolocation available");
+            }
+
+            function storePosition(pos) {
+                position.longitude = pos.coords.longitude;
+                position.latitude = pos.coords.latitude;
+            }
+
+            this.state.position = position;
             const dataToSend = this.state;
             dataToSend.request = "signup";
 
@@ -60,7 +74,7 @@ class SignUpForm extends React.Component {
             // send HTTP request with sign up data.
             let obj = JSON.stringify(dataToSend);
 
-            console.log('The form was submitted with the following data:');
+            console.log('The form was submitted to ' + url + ' with the following data:');
             console.log(this.state);
 
             // receive success value (and error if the e-mail/username is already taken.
