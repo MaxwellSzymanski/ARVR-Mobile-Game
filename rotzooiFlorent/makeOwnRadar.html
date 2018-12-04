@@ -219,8 +219,9 @@
     dataCookie.longitude ="4.361721";
     dataCookie.latitude ="50.850346";
 
-    document.cookie = JSON.stringify(dataCookie);
-    $.cookie('radarCookie', JSON.stringify(dataCookie));
+    document.cookie = "radarCookie=" + JSON.stringify(dataCookie) +";";
+    
+    // $.cookie('radarCookie', JSON.stringify(dataCookie));
 
     /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
