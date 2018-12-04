@@ -221,8 +221,6 @@
 
     document.cookie = "radarCookie=" + JSON.stringify(dataCookie) +";";
 
-    // $.cookie('radarCookie', JSON.stringify(dataCookie));
-
     /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
 function myFunction() {
@@ -366,7 +364,7 @@ window.onclick = function(event) {
         }
         function showPosition(position) {
             var cookieJson = JSON.parse(document.cookie);
-            cookieJson.longitude = position.coords.longitude;
+            cookieJson.longitude = 1;
             cookieJson.latitude = position.coords.latitude;
             document.cookie = "radarCookie=" + JSON.stringify(cookieJson) +";";
         }
@@ -375,9 +373,9 @@ window.onclick = function(event) {
 
         obj = JSON.stringify(data);
         // Send get request use jquery ajax.
-        alert("sent this:\n" + data + "\n-->\n" + obj);
+        alert("sent this:\n" + obj);
         $.post(urlD,obj, function (data) {
-            alert("request send \nreturned data:\n" + data);
+            alert("request sent \nreturned data:\n" + data);
             createRadar(data);
         });
 
