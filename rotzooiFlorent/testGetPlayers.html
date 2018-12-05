@@ -15,7 +15,31 @@
 <script src="https://openlayers.org/en/v4.6.5/build/ol.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
+    
+    var urlD = 'https://35.241.198.186:8080';
 
+    // determine whether someone is logged in
+    // if not, redirect.
+    function loggedIn() {
+        const loginToken = getCookie("token");
+        if (loginToken) {
+            console.log("token found");
+            const obj = JSON.stringify({token: loginToken, request: "jwt"});
+            $.post(urlD, obj,
+                function (json) {
+                    if (!json.data.result) {
+                        alert('Please log in first.');
+                        window.location.replace('https://35.241.198.186:443/');
+                    }
+                }
+            );
+        } else {
+            alert('Please log in first.');
+            window.location.replace('https://35.241.198.186:443/');
+        }
+    }
+
+    loggedIn();
 
     /*
         var dataCookie = {};
@@ -68,31 +92,6 @@
 
 
         // send HTTP request to get JSON object with players
-
-        var urlD = 'https://35.241.198.186:8080';
-
-        // determine whether someone is logged in
-        // if not, redirect.
-        function loggedIn() {
-            const loginToken = getCookie("token");
-            if (loginToken) {
-                console.log("token found");
-                const obj = JSON.stringify({token: loginToken, request: "jwt"});
-                $.post(urlD, obj,
-                    function (json) {
-                        if (!json.data.result) {
-                            alert('Please log in first.');
-                            window.location.replace('https://35.241.198.186:443/');
-                        }
-                    }
-                );
-            } else {
-                alert('Please log in first.');
-                window.location.replace('https://35.241.198.186:443/');
-            }
-        }
-
-        loggedIn();
 
         var data = {};
 
