@@ -421,7 +421,7 @@ window.onclick = function(event) {
                 if( !object[i].hasOwnProperty("firstPlayer") && object[i].playerId!==getCookie("name")) {
                     addElement(pos.x, pos.y, object[i].playerId);
                 } else if (object[i].playerId===getCookie("name")) {
-                    addElement(0, 0, object[i].playerId);
+                    addElement(screen.width/2, screen.height/2, object[i].playerId);
                 }
                 i++;
             }
