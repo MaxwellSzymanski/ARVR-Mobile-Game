@@ -71,6 +71,29 @@
 
         var urlD = 'https://35.241.198.186:8080';
 
+        // determine whether someone is logged in
+        // if not, redirect.
+        function loggedIn() {
+            const loginToken = getCookie("token");
+            if (loginToken) {
+                console.log("token found");
+                const obj = JSON.stringify({token: loginToken, request: "jwt"});
+                $.post(urlD, obj,
+                    function (json) {
+                        if (!json.data.result) {
+                            alert('Please log in first.');
+                            window.location.replace('https://35.241.198.186:443/');
+                        }
+                    }
+                );
+            } else {
+                alert('Please log in first.');
+                window.location.replace('https://35.241.198.186:443/');
+            }
+        }
+
+        loggedIn();
+
         var data = {};
 
         //data.playerId = "5bf1d5a3b373a15628ea2b81";
