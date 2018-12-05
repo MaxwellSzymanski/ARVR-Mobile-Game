@@ -415,6 +415,9 @@ window.onclick = function(event) {
 
             var object = JSON.parse(dataHTTP);
 
+
+            $('.obj').remove();
+
             i = 0;
             for( x in object) {
                 let pos = JSON.parse(longLatToXandY(playerLongitude, playerLatitude, object[i].longitude, object[i].latitude));
@@ -477,10 +480,12 @@ window.onclick = function(event) {
 
         function addElement (xValue,yValue,playerId) {
             // delete old div elements
+            /*
             if (document.getElementById(playerId)) {
                 var element = document.getElementById(playerId);
                 element.parentNode.removeChild(element);
             }
+            */
 
             let html = '<button onclick="sendFixedSignal(this.id)" id=' +playerId+ ' class="obj" data-x="'+xValue+'" data-y="'+yValue+'" ></button>'
             $('body').append(html);
