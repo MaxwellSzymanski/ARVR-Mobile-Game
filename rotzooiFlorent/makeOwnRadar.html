@@ -366,18 +366,14 @@ window.onclick = function(event) {
             var cookieJson = JSON.parse(getCookie("radarCookie"));
             cookieJson.longitude = position.coords.longitude;
             cookieJson.latitude = position.coords.latitude;
-            alert("got position");
             document.cookie = "radarCookie=" + JSON.stringify(cookieJson) +";";
-            alert(JSON.parse(getCookie("radarCookie")));
         }
 
         data.sendSignal = cookie.sendSignal;
 
         obj = JSON.stringify(data);
         // Send get request use jquery ajax.
-        alert("sent this:\n" + obj);
         $.post(urlD,obj, function (data) {
-            alert("request sent \nreturned data:\n" + data);
             createRadar(data);
         });
 
@@ -422,8 +418,10 @@ window.onclick = function(event) {
             i = 0;
             for( x in object) {
                 let pos = JSON.parse(longLatToXandY(playerLongitude, playerLatitude, object[i].longitude, object[i].latitude));
-                if( !object[i].hasOwnProperty("firstPlayer") ){
+                if( !object[i].hasOwnProperty("firstPlayer") && object[i].playerId!==getCookie("name")) {
                     addElement(pos.x, pos.y, object[i].playerId);
+                } else if (object.playerId===getCookie("name")) {
+                    addElement(0, 0, object[i].playerId);
                 }
                 i++;
             }
