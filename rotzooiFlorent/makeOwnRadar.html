@@ -166,13 +166,13 @@
                 <button class='button' onclick="decreaseUpdateFrequency()" id="decreaseFrequencyButton">Frequency -</button>
               </div>
             </div>
-            <a id='map' href="http://localhost/testGetPlayers.html">  <button class='button'>Go To Map</button>  </a>
+            <a id='map' href="https://35.241.198.186:81/">  <button class='button'>Go To Map</button>  </a>
           </div>
           <button class = "button" id="north">N</button>
           <button class="button" id="east">E</button>
           <button class="button" id="south">S</button>
           <button class="button" id="west">W</button>
-          <input type="text" id="playerId" type="submit" value="">
+          <!--<input type="text" id="playerId" type="submit" value="">-->
 
 
 
@@ -188,7 +188,7 @@
 
     var urlD = 'https://35.241.198.186:8080'; // adres server
 
-    //var dataCookie = JSON.parse(document.cookie);
+    //var dataCookie = JSON.parse(getCookie("radarCookie"));
     var dataCookie = {};
 
     // BRON: https://www.w3schools.com/js/js_cookies.asp
@@ -209,7 +209,7 @@
     }
 
     dataCookie.playerId = getCookie("name");
-    dataCookie.token = getCookie("token");
+    // dataCookie.token = getCookie("token");
 
     // dataCookie.playerId = loginCookie.name;
     dataCookie.numberPixelPerMeter="1";
@@ -256,9 +256,9 @@ window.onclick = function(event) {
         $.post(urlD,'{ "request": "frequency" }', function (dataHTTP) {
             var returnObject = JSON.parse(dataHTTP);
             if(returnObject.hasOwnProperty("frequency") && returnObject.hasOwnProperty("update") && returnObject.update === "true"){
-                var cookieJson = JSON.parse(document.cookie);
+                var cookieJson = JSON.parse(getCookie("radarCookie"));
                 cookieJson.frequency = returnObject.frequency;
-                document.cookie = JSON.stringify(cookieJson);
+                document.cookie = "radarCookie=" + JSON.stringify(cookieJson) +";";
             }
         });
     }
@@ -272,7 +272,7 @@ window.onclick = function(event) {
     }
 
     function sendUpdateFrequency(increase){
-        var cookieJson = JSON.parse(document.cookie);
+        var cookieJson = JSON.parse(getCookie("radarCookie"));
         var frequency = Number(cookieJson.updateFrequency);
         if(increase && frequency > 1000) {
             frequency -= 1000;
@@ -280,7 +280,7 @@ window.onclick = function(event) {
             frequency += 1000;
         }
         cookieJson.updateFrequency = frequency.toString();
-        document.cookie = JSON.stringify(cookieJson);
+        document.cookie = "radarCookie=" + JSON.stringify(cookieJson) +";";
 
         var data = {};
 
@@ -292,7 +292,7 @@ window.onclick = function(event) {
         $.post(urlD,obj, function (dataHTTP) {
             var returnObject = JSON.parse(dataHTTP);
             if(returnObject.hasOwnProperty("frequency") && returnObject.hasOwnProperty("update") && returnObject.update === "true"){
-                var cookieJson = JSON.parse(document.cookie);
+                var cookieJson = JSON.parse(getCookie("radarCookie"));
                 cookieJson.frequency = returnObject.frequency;
                 alert("Frequency is adjusted => frequency now: "+cookieJson.frequency);
             }
@@ -301,35 +301,35 @@ window.onclick = function(event) {
     }
 
     function sendSpecialSignal(){
-        var cookieJson = JSON.parse(document.cookie);
+        var cookieJson = JSON.parse(getCookie("radarCookie"));
         cookieJson.typeSignal = "specialSignal";
-        document.cookie = JSON.stringify(cookieJson);
+        document.cookie = "radarCookie=" + JSON.stringify(cookieJson) +";";
         document.getElementById("typeSignal").innerHTML = "Type signal: specialSignal"
     }
 
     function sendHandShake(){
-        var cookieJson = JSON.parse(document.cookie);
+        var cookieJson = JSON.parse(getCookie("radarCookie"));
         cookieJson.typeSignal = "handShake";
-        document.cookie = JSON.stringify(cookieJson);
+        document.cookie = "radarCookie=" + JSON.stringify(cookieJson) +";";
         document.getElementById("typeSignal").innerHTML = "Type signal: handShakeSignal"
     }
 
     function increaseNumberPixelPerMeter(){
-        var cookieJson = JSON.parse(document.cookie);
+        var cookieJson = JSON.parse(getCookie("radarCookie"));
         cookieJson.autozoom = "off";
         cookieJson.numberPixelPerMeter += 0.5;
-        document.cookie = JSON.stringify(cookieJson);
+        document.cookie = "radarCookie=" + JSON.stringify(cookieJson) +";";
     }
     function decreaseNumberPixelPerMeter(){
-        var cookieJson = JSON.parse(document.cookie);
+        var cookieJson = JSON.parse(getCookie("radarCookie"));
         cookieJson.autozoom = "off";
         cookieJson.numberPixelPerMeter -= 0.5;
-        document.cookie = JSON.stringify(cookieJson);
+        document.cookie = "radarCookie=" + JSON.stringify(cookieJson) +";";
     }
     function autozoom(){
-        var cookieJson = JSON.parse(document.cookie);
+        var cookieJson = JSON.parse(getCookie("radarCookie"));
         cookieJson.autozoom = "on";
-        document.cookie = JSON.stringify(cookieJson);
+        document.cookie = "radarCookie=" + JSON.stringify(cookieJson) +";";
     }
 
     function degreesToRadians(degrees){
@@ -348,7 +348,7 @@ window.onclick = function(event) {
 
         // update input Field playerId
         // cookie.playerId = document.getElementById("playerId").value;
-        // document.cookie = JSON.stringify(cookie);
+        // document.cookie = "radarCookie=" + JSON.stringify(cookie) +";";
 
         data.request = "Radar";
         data.playerId = cookie.playerId;
@@ -409,9 +409,9 @@ window.onclick = function(event) {
                 }
                 var newRatioPixelMeter = smallestDistancePlayer/(screen.height/4);
 
-                dataCookie = JSON.parse(document.cookie);
+                dataCookie = JSON.parse(getCookie("radarCookie"));
                 dataCookie.numberPixelPerMeter = parseFloat(newRatioPixelMeter);
-                document.cookie = JSON.stringify(dataCookie);
+                document.cookie = "radarCookie=" + JSON.stringify(dataCookie) +";";
             }
 
             var object = JSON.parse(dataHTTP);
