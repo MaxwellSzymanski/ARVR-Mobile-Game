@@ -44,8 +44,9 @@ class SignUpForm extends React.Component {
         e.preventDefault();
 
         let that = this;
+        const image = localStorage.getItem("PhotoOfMe");
 
-        if (!this.state.name || !this.state.email || !this.state.password) {
+        if (!this.state.name || !this.state.email || !this.state.password || !image) {
             alert("Please fill in all fields.");
         } else if (!this.state.hasAgreed) {
             alert("You need to agree to the terms and conditions in order to continue.")
@@ -68,7 +69,6 @@ class SignUpForm extends React.Component {
             dataToSend.request = "signup";
 
             // const image = fs.readFileSync(PATH);
-            const image = localStorage.getItem("PhotoOfMe");
             dataToSend.image = new Buffer(image).toString('base64');
 
             // send HTTP request with sign up data.

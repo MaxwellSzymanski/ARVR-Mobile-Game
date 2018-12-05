@@ -31,11 +31,28 @@
         document.cookie = JSON.stringify(dataCookie);
     */
 
+    // BRON: https://www.w3schools.com/js/js_cookies.asp
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) === 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
     var dataCookie = {};
 
     dataCookie.zoom=14;
     dataCookie.autozoom = "false";
-    document.cookie = JSON.stringify(dataCookie);
+    document.cookie = "mapCookie=" + JSON.stringify(dataCookie) +";";
 
 
     var longitude = 4.361721;
@@ -52,22 +69,23 @@
 
         // send HTTP request to get JSON object with players
 
-        var urlD = 'https://35.241.198.186:80';
+        var urlD = 'https://35.241.198.186:8080';
 
         var data = {};
 
         //data.playerId = "5bf1d5a3b373a15628ea2b81";
-        data.playerId = document.getElementById("idPlayer").value;
+        // data.playerId = document.getElementById("idPlayer").value;
 
         data.request = "Radar";
-
+        data.token = getCookie("token");
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition);
         } else {
-            return;
-            data.longitude = longitude;
-            data.latitude = latitude;
+            alert("Please allow access to your location.");
+            // return;
+            // data.longitude = longitude;
+            // data.latitude = latitude;
         }
 
         function showPosition(position) {
@@ -115,7 +133,7 @@
                 if( feature) {
                     var att = feature.getProperties();
                     var json = JSON.parse(att.name);
-                    alert("Id player: "+json.playerId);
+                    alert("Player: "+json.playerId);
                 }
             });
 
@@ -134,11 +152,11 @@
                 document.cookie = JSON.stringify(cookie);
 
 
-            }, 7000);
+            }, 1000);
 
         }
 
-        setTimeout(d, 20000); //
+        setTimeout(d, 3000); //
     };
 
 
@@ -175,8 +193,9 @@
                         anchor: [0.5, 0.5],
                         anchorXUnits: 'fraction',
                         anchorYUnits: 'fraction',
-                        scale: 0.1,
-                        src: 'https://img.freepik.com/free-icon/frontal-standing-man-silhouette_318-29133.jpg?size=338c&ext=jpg'
+                        scale: 0.025,
+                        src: 'https://img.icons8.com/ios/1600/men-age-group-4-filled.png'
+                        // BRON: https://icons8.com/icon/37170/man
                     })
                 })
             });

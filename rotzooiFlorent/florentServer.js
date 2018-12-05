@@ -46,7 +46,7 @@ https.createServer(https_options, async function (req, res) {
         let obj = JSON.parse(body);
         const request = (obj.request).toLowerCase();
 
-        console.log("\n\n\nRequest:    " + request + "    ===============    current time:    " + new Date().toLocaleTimeString());
+        // console.log("\n\n\nRequest:    " + request + "    ===============    current time:    " + new Date().toLocaleTimeString());
         switch (request) {
             case "signup":
                 signup(obj, res);
@@ -189,7 +189,6 @@ function verifyJWT(obj, res) {
         } else {
             User.findById(token.id).then(
                 async function (user) {
-                    console.log(user);
                     let value = false;
                     if (user !== null)
                         value = await user.checkToken(token);
