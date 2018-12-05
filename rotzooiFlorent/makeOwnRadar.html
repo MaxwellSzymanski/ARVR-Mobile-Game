@@ -110,7 +110,7 @@
           color: white;
           border: none;
           cursor: pointer;
-          font-size: 18px;
+          font-size: 24px;
           padding-top: 4px;
           padding-bottom: 4px;
 
@@ -398,8 +398,8 @@ window.onclick = function(event) {
 
                     var distancePlayer = distanceBetween(playerLongitude,playerLatitude,object1[i].longitude,object1[i].latitude);
 
-                    if( distancePlayer > 10 && distancePlayer < smallestDistancePlayer){
-                        smallestDistancePlayer = Math.max(distancePlayer, 10);
+                    if( distancePlayer > 5 && distancePlayer < smallestDistancePlayer){
+                        smallestDistancePlayer = Math.max(distancePlayer, 5);
                     }
                     i++;
                 }
