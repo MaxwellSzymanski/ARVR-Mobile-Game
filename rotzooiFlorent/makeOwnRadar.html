@@ -59,7 +59,7 @@
             position:absolute;
             border-radius: 50%;
             width:4px; height:4px; margin:-2px;
-            box-shadow:0 0 10px 5px rgba(100,255,0,0.5);
+            box-shadow:0 0 20px 12px rgba(100,255,0,0.5);
             opacity:0.2;
         }
         .objEnemy{
@@ -67,7 +67,7 @@
             position:absolute;
             border-radius: 50%;
             width:4px; height:4px; margin:-2px;
-            box-shadow:0 0 10px 5px rgba(100,255,0,0.5);
+            box-shadow:0 0 20px 12px rgba(100,255,0,0.5);
             opacity:0.2;
         }
 
@@ -100,7 +100,7 @@
           color:white;
           background: #cc1f10;
           margin-left: 3%;
-          font-size: 16px;
+          font-size: 22px;
           top: 1px;
         }
 
@@ -173,10 +173,6 @@
           <button class="button" id="south">S</button>
           <button class="button" id="west">W</button>
           <!--<input type="text" id="playerId" type="submit" value="">-->
-
-
-
-
 <h1 id="typeSignal"></h1>
 
 
@@ -186,7 +182,31 @@
 </div>
 <script>
 
+
     var urlD = 'https://35.241.198.186:8080'; // adres server
+
+    // determine whether someone is logged in
+    // if not, redirect.
+    function loggedIn() {
+        const loginToken = getCookie("token");
+        if (loginToken) {
+            console.log("token found");
+            const obj = JSON.stringify({token: loginToken, request: "jwt"});
+            $.post(urlD, obj,
+                    function (json) {
+                        if (!json.data.result) {
+                            alert('Please log in first.');
+                            window.location.replace('https://35.241.198.186:443/');
+                        }
+                    }
+                );
+        } else {
+            alert('Please log in first.');
+            window.location.replace('https://35.241.198.186:443/');
+        }
+    }
+
+    loggedIn();
 
     //var dataCookie = JSON.parse(getCookie("radarCookie"));
     var dataCookie = {};
@@ -351,9 +371,8 @@ window.onclick = function(event) {
         // document.cookie = "radarCookie=" + JSON.stringify(cookie) +";";
 
         data.request = "Radar";
-        data.playerId = cookie.playerId;
         // data.playerId = document.getElementById("playerId").value;
-        data.token = cookie.token;
+        data.token = getCookie("token");
         data.longitude = cookie.longitude;
         data.latitude =  cookie.latitude;
 
