@@ -6,16 +6,16 @@ config:
     # Responses have to be sent within 25 seconds or the request will be aborted
     timeout: 25
   phases:
-    - duration: 60
-      arrivalRate: 20
+    - duration: 120
+      arrivalRate: 1
 scenarios:
   - flow:
-    - log: "New virtual user running"
+    - log: "New virtual user running."
     - post:
         url: "/"
         json:
           request: "signin"
-          email: "username_0@testusers.com"
+          email: "username_1@testusers.com"
           password: "password"
           position:
             longitude: 4.69517589
@@ -23,13 +23,14 @@ scenarios:
         capture:
           json: "$.token"
           as: "token"
-    - loop:      
+    - loop:
+        - think: 2
         - post:
             url: "/"
             json:
               request: "radar"
               token: "{{ token }}"
               longitude: 4.695176
-              latitude: 50.86495     
-      count: 20
+              latitude: 50.86495   
+      count: 120
           

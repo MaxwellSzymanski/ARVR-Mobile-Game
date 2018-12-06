@@ -7,13 +7,11 @@
             background-color: darkred;
         }
         .map {
-            /*height: 100%;*/
-            /*width: 99vw;*/
             position: absolute;
-            top: 25px;
-            bottom: 25px;
-            left: 25px;
-            right: 25px;
+            top: 50px;
+            bottom: 50px;
+            left: 50px;
+            right: 50px;
         }
         .button{
             background: #cc1f10;
@@ -34,6 +32,13 @@
             font-size: 28px;
             top: 1px;
         }
+        #iconsource {
+            text-align: right;
+            position: absolute;
+            bottom: 5px;
+            left: 50px;
+            right: 50px;
+        }
     </style>
     <title>GoW - Map</title>
 </head>
@@ -44,6 +49,7 @@
 
 <div id="mapInfo" ></div>
 <div id="map" class="map" ></div>
+<div id="iconsource">The icons indicating other players are property of <a href="https://icons8.com">Icons8</a> and are used under a Creative Commons licence.</div>
 <script src="https://openlayers.org/en/v4.6.5/build/ol.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
@@ -71,7 +77,7 @@
         }
     }
 
-    loggedIn();
+    // loggedIn();
 
     /*
         var dataCookie = {};
@@ -243,7 +249,7 @@
                             anchor: [0.5, 1],
                             anchorXUnits: 'fraction',
                             anchorYUnits: 'fraction',
-                            scale: 0.025,
+                            scale: 0.05,
                             src: 'https://img.icons8.com/ios/1600/men-age-group-4-filled.png'
                             // BRON: https://icons8.com/icon/37170/man
                         })
@@ -258,7 +264,7 @@
                             anchor: [0.5, 1],
                             anchorXUnits: 'fraction',
                             anchorYUnits: 'fraction',
-                            scale: 0.075,
+                            scale: 0.1,
                             src: 'https://cdn.icon-icons.com/icons2/510/PNG/512/location_icon-icons.com_50109.png'
                             // BRON: https://icon-icons.com/nl/pictogram/locatie/50109
                         })

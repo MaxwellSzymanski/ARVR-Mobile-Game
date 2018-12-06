@@ -15,7 +15,7 @@ import ImageConfirm from "./pages/ImageConfirm";
 class App extends Component {
   render() {
     return (
-      <Router basename="/react-auth-ui/">
+      <Router basename="/">
         <div className="App">
           <Switch>
             <Route exact path="/" component={FirstPage}></Route>

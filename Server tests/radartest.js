@@ -6,7 +6,7 @@ const numberOfUsers = 60;
 const numberOfRequests = 5;
 const requestPeriod = 5000; // miliseconds between two requests from the same user.
 
-const url = 'https://35.241.198.186:80';
+const url = 'https://35.241.198.186:8080';
 const agent = new https.Agent({
     rejectUnauthorized: false
 });
