@@ -71,7 +71,7 @@
         }
     }
 
-    loggedIn();
+    // loggedIn();
 
     /*
         var dataCookie = {};
@@ -240,7 +240,7 @@
                     source: iconLayerSource,
                     style: new ol.style.Style({
                         image: new ol.style.Icon({
-                            anchor: [0.5, 0.5],
+                            anchor: [0.5, 1],
                             anchorXUnits: 'fraction',
                             anchorYUnits: 'fraction',
                             scale: 0.025,
@@ -255,17 +255,16 @@
                     source: iconLayerSource,
                     style: new ol.style.Style({
                         image: new ol.style.Icon({
-                            anchor: [0.5, 0.5],
+                            anchor: [0.5, 1],
                             anchorXUnits: 'fraction',
                             anchorYUnits: 'fraction',
-                            scale: 100,
+                            scale: 0.75,
                             src: 'https://cdn.icon-icons.com/icons2/510/PNG/512/location_icon-icons.com_50109.png'
                             // BRON: https://icon-icons.com/nl/pictogram/locatie/50109
                         })
                     })
                 });
                 map.addLayer(iconLayer);
-
             }
 
                 i++;
