@@ -3,12 +3,36 @@
 <head>
     <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.2.0/css/ol.css" type="text/css">
     <style>
-
+        .map {
+            height: 100%;
+            width: 100%;
+        }
+        .button{
+            background: #cc1f10;
+            color: white;
+            z-index: 3;
+            position:relative;
+            font-size: 30px;
+            border: none;
+        }
+        #radar {
+            text-align: left;
+            color: red;
+            position: absolute;
+            text-decoration: none;
+            color:white;
+            background: #cc1f10;
+            margin-left: 3%;
+            font-size: 28px;
+            top: 1px;
+        }
     </style>
-    <title>OpenLayers example</title>
+    <title>GoW - Map</title>
 </head>
 <body>
-<input type="text" id="idPlayer" type="submit" value="">
+<!--<input type="text" id="idPlayer" type="submit" value="">-->
+
+<a id='radar' href="https://35.241.198.186:80/">  <button class='button'>Go To Radar</button>  </a>
 
 <div id="mapInfo" ></div>
 <div id="map" class="map" ></div>
@@ -74,7 +98,7 @@
 
     var dataCookie = {};
 
-    dataCookie.zoom=14;
+    dataCookie.zoom=10;
     dataCookie.autozoom = "false";
     document.cookie = "mapCookie=" + JSON.stringify(dataCookie) +";";
 
@@ -140,7 +164,6 @@
                     center: ol.proj.fromLonLat([longitude, latitude]),
                     rotation: rotationMap
                 })
-
             });
 
             var cookie = JSON.parse(getCookie("mapCookie"));
