@@ -3,9 +3,17 @@
 <head>
     <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.2.0/css/ol.css" type="text/css">
     <style>
+        body {
+            background-color: darkred;
+        }
         .map {
-            height: 100%;
-            width: 100%;
+            /*height: 100%;*/
+            /*width: 99vw;*/
+            position: absolute;
+            top: 10px;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
         }
         .button{
             background: #cc1f10;
@@ -22,7 +30,7 @@
             text-decoration: none;
             color:white;
             background: #cc1f10;
-            margin-left: 3%;
+            margin-left: 10%;
             font-size: 28px;
             top: 1px;
         }
@@ -63,7 +71,7 @@
         }
     }
 
-    loggedIn();
+    // loggedIn();
 
     /*
         var dataCookie = {};
@@ -129,9 +137,6 @@
             navigator.geolocation.getCurrentPosition(showPosition);
         } else {
             alert("Please allow access to your location.");
-            // return;
-            // data.longitude = longitude;
-            // data.latitude = latitude;
         }
 
         function showPosition(position) {
