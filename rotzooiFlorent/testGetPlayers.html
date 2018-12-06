@@ -106,7 +106,7 @@
 
     var dataCookie = {};
 
-    dataCookie.zoom=18;
+    dataCookie.zoom=16;
     dataCookie.autozoom = "false";
     document.cookie = "mapCookie=" + JSON.stringify(dataCookie) +";";
 
@@ -235,22 +235,22 @@
                 features: [icon1]
             });
 
-            // if (!obj[i].hasOwnProperty("firstPlayer") && obj[i].playerId!==getCookie("name")) {
-            //     let iconLayer = new ol.layer.Vector({
-            //         source: iconLayerSource,
-            //         style: new ol.style.Style({
-            //             image: new ol.style.Icon({
-            //                 anchor: [0.5, 1],
-            //                 anchorXUnits: 'fraction',
-            //                 anchorYUnits: 'fraction',
-            //                 scale: 0.025,
-            //                 src: 'https://img.icons8.com/ios/1600/men-age-group-4-filled.png'
-            //                 // BRON: https://icons8.com/icon/37170/man
-            //             })
-            //         })
-            //     });
-            //     map.addLayer(iconLayer);
-            // } else if (obj[i].playerId===getCookie("name")) {
+            if (!obj[i].hasOwnProperty("firstPlayer") && obj[i].playerId!==getCookie("name")) {
+                let iconLayer = new ol.layer.Vector({
+                    source: iconLayerSource,
+                    style: new ol.style.Style({
+                        image: new ol.style.Icon({
+                            anchor: [0.5, 1],
+                            anchorXUnits: 'fraction',
+                            anchorYUnits: 'fraction',
+                            scale: 0.025,
+                            src: 'https://img.icons8.com/ios/1600/men-age-group-4-filled.png'
+                            // BRON: https://icons8.com/icon/37170/man
+                        })
+                    })
+                });
+                map.addLayer(iconLayer);
+            } else if (obj[i].playerId===getCookie("name")) {
                 let iconLayer = new ol.layer.Vector({
                     source: iconLayerSource,
                     style: new ol.style.Style({
@@ -265,7 +265,7 @@
                     })
                 });
                 map.addLayer(iconLayer);
-            // }
+            }
 
                 i++;
 
