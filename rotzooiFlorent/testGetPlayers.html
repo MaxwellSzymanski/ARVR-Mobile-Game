@@ -111,9 +111,9 @@
     document.cookie = "mapCookie=" + JSON.stringify(dataCookie) +";";
 
 
-    var longitude = 4.361721;
-    var latitude = 50.850346;
-
+    var longitude = 4.678975;
+    var latitude = 50.86401;
+    var name = getCookie("name");
 
     d();
 
@@ -235,7 +235,7 @@
                 features: [icon1]
             });
 
-            if (!obj[i].hasOwnProperty("firstPlayer") && obj[i].playerId!==getCookie("name")) {
+            if (!obj[i].hasOwnProperty("firstPlayer") && obj[i].playerId!==name) {
                 let iconLayer = new ol.layer.Vector({
                     source: iconLayerSource,
                     style: new ol.style.Style({
@@ -250,7 +250,7 @@
                     })
                 });
                 map.addLayer(iconLayer);
-            } else if (obj[i].playerId===getCookie("name")) {
+            } else if (obj[i].playerId===name) {
                 let iconLayer = new ol.layer.Vector({
                     source: iconLayerSource,
                     style: new ol.style.Style({
