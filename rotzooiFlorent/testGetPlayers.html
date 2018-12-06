@@ -235,23 +235,43 @@
                 features: [icon1]
             });
 
-            let iconLayer = new ol.layer.Vector({
-                source: iconLayerSource,
-                style: new ol.style.Style({
-                    image: new ol.style.Icon({
-                        anchor: [0.5, 0.5],
-                        anchorXUnits: 'fraction',
-                        anchorYUnits: 'fraction',
-                        scale: 0.025,
-                        src: 'https://img.icons8.com/ios/1600/men-age-group-4-filled.png'
-                        // BRON: https://icons8.com/icon/37170/man
+            if (!obj[i].hasOwnProperty("firstPlayer") && obj[i].playerId!==getCookie("name")) {
+                let iconLayer = new ol.layer.Vector({
+                    source: iconLayerSource,
+                    style: new ol.style.Style({
+                        image: new ol.style.Icon({
+                            anchor: [0.5, 0.5],
+                            anchorXUnits: 'fraction',
+                            anchorYUnits: 'fraction',
+                            scale: 0.025,
+                            src: 'https://img.icons8.com/ios/1600/men-age-group-4-filled.png'
+                            // BRON: https://icons8.com/icon/37170/man
+                        })
                     })
-                })
-            });
-            i++;
+                });
+                map.addLayer(iconLayer);
+            } else if (obj[i].playerId===getCookie("name")) {
+                let iconLayer = new ol.layer.Vector({
+                    source: iconLayerSource,
+                    style: new ol.style.Style({
+                        image: new ol.style.Icon({
+                            anchor: [0.5, 0.5],
+                            anchorXUnits: 'fraction',
+                            anchorYUnits: 'fraction',
+                            scale: 100,
+                            src: 'https://cdn.icon-icons.com/icons2/510/PNG/512/location_icon-icons.com_50109.png'
+                            // BRON: https://icon-icons.com/nl/pictogram/locatie/50109
+                        })
+                    })
+                });
+                map.addLayer(iconLayer);
+
+            }
+
+                i++;
 
             // adding every player icon to map!
-            map.addLayer(iconLayer);
+            // map.addLayer(iconLayer);
 
         }
     }
