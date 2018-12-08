@@ -279,6 +279,9 @@ async function getPlayerPositionRadar(jsonData,res) {
             res.write("No player positions available");
             throw error;
         } else {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader("Content-Type", "application/json");
+
             result.forEach(function (elem) {
                 elem.playerId = elem.playerid;
                 delete elem.playerid;
@@ -291,7 +294,6 @@ async function getPlayerPositionRadar(jsonData,res) {
 
             result.push(fp);
 
-            res.setHeader('Access-Control-Allow-Origin', '*');
             res.write(JSON.stringify(result)); //write a response to the client
             res.end(); //end the response
 
