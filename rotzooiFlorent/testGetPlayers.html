@@ -50,7 +50,7 @@
 
 <div id="mapInfo" ></div>
 <div id="map" class="map" ></div>
-<div id="iconsource">The icon indicating other players is property of <a href="https://icons8.com">Icons8</a> and are used under a Creative Commons license.</div>
+<div id="iconsource">The icon indicating other players is property of <a href="https://icons8.com">Icons8</a> and is used under a Creative Commons license.</div>
 <script src="https://openlayers.org/en/v4.6.5/build/ol.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
@@ -78,7 +78,7 @@
         }
     }
 
-    // loggedIn();
+    loggedIn();
 
     /*
         var dataCookie = {};
@@ -120,7 +120,7 @@
 
     var longitude = 4.700518;
     var latitude = 50.879845;
-    var name = getCookie("name");
+    var thisname = getCookie("name");
 
     // Create Map
     let rotationMap = 0;
@@ -249,7 +249,7 @@
                 features: [icon1]
             });
 
-            if (!obj[i].hasOwnProperty("firstPlayer") && obj[i].playerId!==name) {
+            if (!obj[i].hasOwnProperty("firstPlayer") && obj[i].playerId!==thisname) {
                 let iconLayer = new ol.layer.Vector({
                     source: iconLayerSource,
                     style: new ol.style.Style({
@@ -264,7 +264,7 @@
                     })
                 });
                 map.addLayer(iconLayer);
-            } else if (obj[i].playerId===name) {
+            } else if (obj[i].playerId===thisname) {
                 let iconLayer = new ol.layer.Vector({
                     source: iconLayerSource,
                     style: new ol.style.Style({
