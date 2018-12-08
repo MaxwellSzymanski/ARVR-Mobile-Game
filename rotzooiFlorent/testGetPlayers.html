@@ -118,9 +118,38 @@
     document.cookie = "mapCookie=" + JSON.stringify(dataCookie) +";";
 
 
-    var longitude = 4.678975;
-    var latitude = 50.86401;
+    var longitude = 4.700518;
+    var latitude = 50.879845;
     var name = getCookie("name");
+
+    // Create Map
+    let rotationMap = 0;
+
+    var map = new ol.Map({
+        target: 'map',
+        layers: [new ol.layer.Tile({
+            source: new ol.source.OSM(),
+        })],
+        view: new ol.View({
+            center: ol.proj.fromLonLat([longitude, latitude]),
+            rotation: rotationMap
+        })
+    });
+
+    map.getView().setZoom(cookie.zoom);
+
+    map.on('click', function(evt) {
+        var feature = map.forEachFeatureAtPixel(evt.pixel,
+            function(feature, layer) {
+                return feature;
+            });
+        if( feature) {
+            var att = feature.getProperties();
+            var json = JSON.parse(att.name);
+            alert("Player: "+json.playerId);
+        }
+    });
+
 
     d();
 
@@ -144,55 +173,30 @@
             navigator.geolocation.getCurrentPosition(showPosition);
         } else {
             alert("Please allow access to your location.");
+            setTimeout(d, 15000);  // wait for 15 seconds and try again
         }
 
         function showPosition(position) {
             longitude = position.coords.longitude;
             latitude = position.coords.latitude;
-        }
 
-        data.longitude = longitude;
-        data.latitude = latitude;
+            data.longitude = longitude;
+            data.latitude = latitude;
 
-        obj = JSON.stringify(data);
-        // Send get request use jquery ajax.
+            map.getView().setCenter(ol.proj.fromLonLat([longitude, latitude]));
 
-        $.post(urlD, obj, function (data) {
-            create(data);
-        });
-
-
-        function create(players) {
-
-            // Create Map
-            let rotationMap = 0;
-
-            const map = new ol.Map({
-                target: 'map',
-                layers: [new ol.layer.Tile({
-                    source: new ol.source.OSM(),
-                })],
-                view: new ol.View({
-                    center: ol.proj.fromLonLat([longitude, latitude]),
-                    rotation: rotationMap
-                })
-            });
+            obj = JSON.stringify(data);
+            // Send get request use jquery ajax.
 
             var cookie = JSON.parse(getCookie("mapCookie"));
 
-            map.getView().setZoom(cookie.zoom);
-
-            map.on('click', function(evt) {
-                var feature = map.forEachFeatureAtPixel(evt.pixel,
-                    function(feature, layer) {
-                        return feature;
-                    });
-                if( feature) {
-                    var att = feature.getProperties();
-                    var json = JSON.parse(att.name);
-                    alert("Player: "+json.playerId);
-                }
+            $.post(urlD, obj, function (data) {
+                create(data);
             });
+        }
+
+
+        function create(players) {
 
             // add every player to map
             getPlayerLayers(players, map);
@@ -217,7 +221,10 @@
 
 
     function getPlayerLayers(players, map) {
-
+        var a = map.layers.length - 1
+        for (a; a >= 0; a--) {
+            map.removeLayer(map.layers[a]);
+        }
 
         obj = (JSON.parse(players));
 
