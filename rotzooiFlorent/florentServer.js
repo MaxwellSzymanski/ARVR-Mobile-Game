@@ -273,9 +273,9 @@ async function getPlayerPositionRadar(jsonData,res) {
 
     ActivePlayer.find({}, '-created_at -_id -updated_at -__v', {lean: true}, async function(error, result) {
         if (error) {
-            res.write("No player positions available");
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.setHeader("Content-Type", "ERROR");
+            res.write("No player positions available");
             throw error;
         } else {
             result.forEach(function (elem) {
