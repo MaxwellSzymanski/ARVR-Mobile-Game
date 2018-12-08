@@ -183,6 +183,8 @@
             data.longitude = longitude;
             data.latitude = latitude;
 
+            map.getView().setCenter(ol.proj.fromLonLat([longitude, latitude]));
+
             obj = JSON.stringify(data);
             // Send get request use jquery ajax.
 
