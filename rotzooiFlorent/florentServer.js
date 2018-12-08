@@ -46,7 +46,8 @@ https.createServer(https_options, async function (req, res) {
         let obj = JSON.parse(body);
         const request = (obj.request).toLowerCase();
 
-        // console.log("\n\n\nRequest:    " + request + "    ===============    current time:    " + new Date().toLocaleTimeString());
+        console.log("\n\n\nRequest:    " + request + "    ===============    current time:    " + new Date().toLocaleTimeString());
+        console.log(body);
         switch (request) {
             case "signup":
                 signup(obj, res);
@@ -230,26 +231,26 @@ async function radar(obj, res) {
                 res.end();
             } else {
                 obj.playerId = token.name;
+                if(obj.playerId !== null && obj.playerId !== "") {
+                    if (await ActivePlayer.findOne({playerid: obj.playerId}) === null) {
+                        const newActivePlayer = new ActivePlayer({
+                            playerid: obj.playerId,
+                            location: {
+                                latitude: obj.latitude,
+                                longitude: obj.longitude,
+                            }
+                        });
+                        newActivePlayer.save();
+                    }
+                    getPlayerPositionRadar(obj, res);
+                } else {
+                    console.log("invalid playerid");
+                    res.setHeader('Access-Control-Allow-Origin', '*');
+                    res.setHeader("Content-Type", "ERROR");
+                    res.end();
+                }
             }
         });
-    }
-    if(obj.playerId !== null && obj.playerId !== "") {
-        if (await ActivePlayer.findOne({playerid: obj.playerId}) === null) {
-            const newActivePlayer = new ActivePlayer({
-                playerid: obj.playerId,
-                location: {
-                    latitude: obj.latitude,
-                    longitude: obj.longitude,
-                }
-            });
-            newActivePlayer.save();
-        }
-        getPlayerPositionRadar(obj, res);
-    } else {
-        console.log("invalid playerid");
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.setHeader("Content-Type", "ERROR");
-        res.end();
     }
 }
 
@@ -273,11 +274,14 @@ async function getPlayerPositionRadar(jsonData,res) {
 
     ActivePlayer.find({}, '-created_at -_id -updated_at -__v', {lean: true}, async function(error, result) {
         if (error) {
-            res.write("No player positions available");
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.setHeader("Content-Type", "ERROR");
+            res.write("No player positions available");
             throw error;
         } else {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader("Content-Type", "application/json");
+
             result.forEach(function (elem) {
                 elem.playerId = elem.playerid;
                 delete elem.playerid;
@@ -290,7 +294,6 @@ async function getPlayerPositionRadar(jsonData,res) {
 
             result.push(fp);
 
-            res.setHeader('Access-Control-Allow-Origin', '*');
             res.write(JSON.stringify(result)); //write a response to the client
             res.end(); //end the response
 
