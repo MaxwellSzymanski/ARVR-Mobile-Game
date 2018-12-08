@@ -231,26 +231,26 @@ async function radar(obj, res) {
                 res.end();
             } else {
                 obj.playerId = token.name;
+                if(obj.playerId !== null && obj.playerId !== "") {
+                    if (await ActivePlayer.findOne({playerid: obj.playerId}) === null) {
+                        const newActivePlayer = new ActivePlayer({
+                            playerid: obj.playerId,
+                            location: {
+                                latitude: obj.latitude,
+                                longitude: obj.longitude,
+                            }
+                        });
+                        newActivePlayer.save();
+                    }
+                    getPlayerPositionRadar(obj, res);
+                } else {
+                    console.log("invalid playerid");
+                    res.setHeader('Access-Control-Allow-Origin', '*');
+                    res.setHeader("Content-Type", "ERROR");
+                    res.end();
+                }
             }
         });
-    }
-    if(obj.playerId !== null && obj.playerId !== "") {
-        if (await ActivePlayer.findOne({playerid: obj.playerId}) === null) {
-            const newActivePlayer = new ActivePlayer({
-                playerid: obj.playerId,
-                location: {
-                    latitude: obj.latitude,
-                    longitude: obj.longitude,
-                }
-            });
-            newActivePlayer.save();
-        }
-        getPlayerPositionRadar(obj, res);
-    } else {
-        console.log("invalid playerid");
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.setHeader("Content-Type", "ERROR");
-        res.end();
     }
 }
 
