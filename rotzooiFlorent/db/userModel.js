@@ -49,6 +49,8 @@ Schema.methods.checkPassword = async function(password) {
 };
 
 Schema.methods.createToken = function() {
+    // var currentDate = new Date();
+    // currentDate.setDate(currentDate.getDate() + 1);
     let exp = new Date();
     const days = exp.getDate() + 1;
     exp.setDate(days);
@@ -56,7 +58,7 @@ Schema.methods.createToken = function() {
     return jwt.sign({
         id: this._id,
         name: this.name,
-        exp: parseInt(exp.getDate())
+        exp: parseInt(exp)
     }, secret);
 };
 
