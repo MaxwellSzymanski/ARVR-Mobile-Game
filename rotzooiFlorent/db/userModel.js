@@ -58,7 +58,7 @@ Schema.methods.createToken = function() {
     return jwt.sign({
         id: this._id,
         name: this.name,
-        exp: parseInt(exp)
+        // exp: parseInt(exp)
     }, secret);
 };
 
