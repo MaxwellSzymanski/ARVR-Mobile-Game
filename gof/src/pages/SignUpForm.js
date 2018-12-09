@@ -78,7 +78,7 @@ class SignUpForm extends React.Component {
             console.log(this.state);
 
             // receive success value (and error if the e-mail/username is already taken.
-            await axios.post(url, obj).then(
+            await axios.post(url, obj, { headers: { 'crossDomain': true, 'Content-Type': 'application/json'}}).then(
                 function (json) {
                     if (json.data.success) {
                         const options = {

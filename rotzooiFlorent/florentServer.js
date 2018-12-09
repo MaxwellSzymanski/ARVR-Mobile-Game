@@ -54,7 +54,6 @@ https.createServer(https_options, async function (req, res) {
         const request = (obj.request).toLowerCase();
 
         console.log("\n\n\nRequest:    " + request + "    ===============    current time:    " + new Date().toLocaleTimeString());
-        console.log(body);
         switch (request) {
             case "signup":
                 signup(obj, res);
