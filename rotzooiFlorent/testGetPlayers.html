@@ -66,7 +66,7 @@
             const obj = JSON.stringify({token: loginToken, request: "jwt"});
             $.post(urlD, obj,
                 function (json) {
-                    if (!json.data.result) {
+                    if (!json.result) {
                         alert('Please log in first.');
                         window.location.replace('https://35.241.198.186:443/');
                     }
@@ -247,42 +247,41 @@
                 features: [icon1]
             });
 
-            if (!obj[i].hasOwnProperty("firstPlayer") && obj[i].playerId!==thisname) {
-                let iconLayer = new ol.layer.Vector({
+            let iconLayer = new ol.layer.Vector({
                     source: iconLayerSource,
                     style: new ol.style.Style({
                         image: new ol.style.Icon({
                             anchor: [0.5, 1],
                             anchorXUnits: 'fraction',
                             anchorYUnits: 'fraction',
-                            scale: 0.05,
+                            scale: 0.04,
                             src: 'https://img.icons8.com/ios/1600/men-age-group-4-filled.png'
                             // BRON: https://icons8.com/icon/37170/man
                         })
                     })
                 });
-                map.addLayer(iconLayer);
-            } else if (obj[i].playerId===thisname) {
-                let iconLayer = new ol.layer.Vector({
-                    source: iconLayerSource,
-                    style: new ol.style.Style({
-                        image: new ol.style.Icon({
-                            anchor: [0.5, 1],
-                            anchorXUnits: 'fraction',
-                            anchorYUnits: 'fraction',
-                            scale: 0.1,
-                            src: 'https://cdn.icon-icons.com/icons2/510/PNG/512/location_icon-icons.com_50109.png'
-                            // BRON: https://icon-icons.com/nl/pictogram/locatie/50109
-                        })
-                    })
-                });
-                map.addLayer(iconLayer);
-            }
+                // map.addLayer(iconLayer);
+            // } else if (!obj[i].hasOwnProperty("firstPlayer") && obj[i].playerId===thisname) {
+            //     let iconLayer = new ol.layer.Vector({
+            //         source: iconLayerSource,
+            //         style: new ol.style.Style({
+            //             image: new ol.style.Icon({
+            //                 anchor: [0.5, 1],
+            //                 anchorXUnits: 'fraction',
+            //                 anchorYUnits: 'fraction',
+            //                 scale: 0.1,
+            //                 src: 'https://cdn.icon-icons.com/icons2/510/PNG/512/location_icon-icons.com_50109.png'
+            //                 // BRON: https://icon-icons.com/nl/pictogram/locatie/50109
+            //             })
+            //         })
+            //     });
+            //     map.addLayer(iconLayer);
+            // }
 
                 i++;
 
             // adding every player icon to map!
-            // map.addLayer(iconLayer);
+            map.addLayer(iconLayer);
 
         }
     }

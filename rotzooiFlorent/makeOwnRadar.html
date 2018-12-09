@@ -67,7 +67,7 @@
             position:absolute;
             border-radius: 50%;
             width:4px; height:4px; margin:-2px;
-            box-shadow:0 0 20px 12px rgba(100,255,0,0.5);
+            box-shadow:0 0 20px 12px rgba(255,0,0,0.5);
             opacity:0.2;
         }
 
@@ -442,7 +442,7 @@ window.onclick = function(event) {
 
             // check if acknowledgement/specialSignal is send to player
 
-            var object2 = JSON.parse(dataHTTP);
+            var object2 = dataHTTP;
 
             var cookie = JSON.parse(getCookie("radarCookie"));
             var thisPlayer = cookie.playerId;
