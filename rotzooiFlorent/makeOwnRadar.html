@@ -59,7 +59,7 @@
             position:absolute;
             border-radius: 50%;
             width:4px; height:4px; margin:-2px;
-            box-shadow:0 0 20px 12px rgba(50,255,0,0.5);
+            box-shadow:0 0 20px 12px rgba(100,255,0,0.5);
             opacity:0.2;
         }
         .objEnemy{
@@ -67,13 +67,12 @@
             position:absolute;
             border-radius: 50%;
             width:4px; height:4px; margin:-2px;
-            box-shadow:0 0 20px 12px rgba(255,0,0,0.5);
+            box-shadow:0 0 20px 12px rgba(100,255,0,0.5);
             opacity:0.2;
         }
 
         .button{
             background: #cc1f10;
-            color: white;
             z-index: 3;
             position:relative;
             font-size: 30px;
@@ -407,7 +406,7 @@ window.onclick = function(event) {
             var i = 0;
 
             var smallestDistancePlayer = 1000000;
-
+            alert(dataHTTP);
             var object1 = JSON.parse(dataHTTP);
 
             var cookie = JSON.parse(getCookie("radarCookie"));
@@ -513,20 +512,20 @@ window.onclick = function(event) {
             $obj.each(function() {
                 var pos = $(this).data();
 
-                // if (pos.x < screen.width && pos.x > 0 && pos.y < screen.height && pos.y > 0) {
-                //
-                // } else {
-                //     if (pos.x < 0) {
-                //         pos.x = 0;
-                //     } else {
-                //         pos.x = screen.width;
-                //     }
-                //     if (pos.y < 0){
-                //         pos.y = 0;
-                //     } else {
-                //         pos.y = screen.height;
-                //     }
-                // }
+                if (pos.x < screen.width && pos.x > 0 && pos.y < screen.height && pos.y > 0) {
+
+                } else {
+                    if (pos.x < 0) {
+                        pos.x = 0;
+                    } else {
+                        pos.x = screen.width;
+                    }
+                    if (pos.y < 0){
+                        pos.y = 0;
+                    } else {
+                        pos.y = screen.height;
+                    }
+                }
                 var newX = (pos.x/screen.width*100);
                 var newY = (pos.y/screen.height*100);
                 if (newX > 95) newX = 95;
