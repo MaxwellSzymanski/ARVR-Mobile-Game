@@ -135,14 +135,14 @@ function signin(obj, res) {
                     name: result.name
                 }));
             res.end();
-            ActivePlayer.findOne({playerid: result.name}, function(error, result) {
-                if (result === null) {
+            ActivePlayer.findOne({playerid: result.name}, function(error, act) {
+                if (act === null) {
                     const newActivePlayer = new ActivePlayer({playerid: result.name, location: obj.position});
                     newActivePlayer.save();
                 } else {
-                    result.location = obj.position;
-                    result.updated_at = Date.now();
-                    result.save();
+                    act.location = obj.position;
+                    act.updated_at = Date.now();
+                    act.save();
                 }
             })
 
