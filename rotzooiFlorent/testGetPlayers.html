@@ -218,6 +218,7 @@
 
 
     function getPlayerLayers(players, map) {
+      alert(map.getLayers().length)
         var a = map.getLayers().length - 1;
         for (a; a >= 0; a--) {
             map.removeLayer(map.getLayers()[a]);
