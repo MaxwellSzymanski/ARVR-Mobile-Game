@@ -33,7 +33,6 @@ const https_options = {
 const port = 8080;
 
 const respond = function(res, data) {
-    res.setHeader('Access-Control-Allow-Origin', 'https://35.241.198.186');
     res.setHeader("Content-Type", "application/json");
     res.write(JSON.stringify(data));
     res.end();
@@ -41,6 +40,8 @@ const respond = function(res, data) {
 
 //create a server object:
 https.createServer(https_options, async function (req, res) {
+
+    res.setHeader('Access-Control-Allow-Origin', 'https://35.241.198.186');
 
     let body = [];
     req.on('error', (err) => {
