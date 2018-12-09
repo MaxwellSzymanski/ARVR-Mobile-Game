@@ -41,6 +41,7 @@ const respond = function(res, data) {
 //create a server object:
 https.createServer(https_options, async function (req, res) {
 
+    console.log(req);
     // Set CORS headers
     res.setHeader('Access-Control-Allow-Origin', req.header.origin);
     res.setHeader('Access-Control-Request-Method', '*');
