@@ -403,13 +403,12 @@ window.onclick = function(event) {
             var playerLongitude = parseFloat(cookie.longitude);
             var playerLatitude =  parseFloat(cookie.latitude);
 
-
             var i = 0;
 
             var smallestDistancePlayer = 1000000;
-
+            alert(dataHTTP);
             var object1 = JSON.parse(dataHTTP);
-
+            alert(object1);
             var cookie = JSON.parse(getCookie("radarCookie"));
 
             if(cookie.autozoom === "on") {
