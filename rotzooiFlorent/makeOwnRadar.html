@@ -442,7 +442,7 @@ window.onclick = function(event) {
 
             // check if acknowledgement/specialSignal is send to player
 
-            var object2 = JSON.parse(dataHTTP);
+            var object2 = dataHTTP;
 
             var cookie = JSON.parse(getCookie("radarCookie"));
             var thisPlayer = cookie.playerId;

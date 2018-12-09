@@ -255,14 +255,14 @@
                             anchor: [0.5, 1],
                             anchorXUnits: 'fraction',
                             anchorYUnits: 'fraction',
-                            scale: 0.05,
+                            scale: 0.04,
                             src: 'https://img.icons8.com/ios/1600/men-age-group-4-filled.png'
                             // BRON: https://icons8.com/icon/37170/man
                         })
                     })
                 });
                 map.addLayer(iconLayer);
-            } else if (obj[i].playerId===thisname) {
+            } else if (!obj[i].hasOwnProperty("firstPlayer") && obj[i].playerId===thisname) {
                 let iconLayer = new ol.layer.Vector({
                     source: iconLayerSource,
                     style: new ol.style.Style({
