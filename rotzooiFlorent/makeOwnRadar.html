@@ -405,7 +405,7 @@ window.onclick = function(event) {
             var i = 0;
 
             var smallestDistancePlayer = 1000000;
-            alert(dataHTTP[0]);
+            alert(JSON.parse(dataHTTP[0]));
             var object1 = JSON.parse(dataHTTP);
             alert(object1);
             var cookie = JSON.parse(getCookie("radarCookie"));
