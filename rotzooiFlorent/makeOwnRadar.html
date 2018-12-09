@@ -414,7 +414,7 @@ window.onclick = function(event) {
             if(cookie.autozoom === "on") {
                 for( x in object1){
                     alert(x);
-
+                    alert(object1[x]);
                     var distancePlayer = distanceBetween(playerLongitude,playerLatitude,object1[i].longitude,object1[i].latitude);
 
                     if( distancePlayer > 5 && distancePlayer < smallestDistancePlayer){
