@@ -247,10 +247,7 @@
                 features: [icon1]
             });
 
-            let iconLayer;
-
-            if (!obj[i].hasOwnProperty("firstPlayer")) {
-                iconLayer = new ol.layer.Vector({
+            let iconLayer = new ol.layer.Vector({
                     source: iconLayerSource,
                     style: new ol.style.Style({
                         image: new ol.style.Icon({
@@ -264,7 +261,6 @@
                     })
                 });
                 // map.addLayer(iconLayer);
-            }
             // } else if (!obj[i].hasOwnProperty("firstPlayer") && obj[i].playerId===thisname) {
             //     let iconLayer = new ol.layer.Vector({
             //         source: iconLayerSource,
