@@ -66,11 +66,7 @@
             const obj = JSON.stringify({token: loginToken, request: "jwt"});
             $.post(urlD, obj,
                 function (json) {
-                    alert(json);
-                    alert(json.data);
-                    alert(json.result);
-                    alert(JSON.stringify(json));
-                    if (!json.data.result) {
+                    if (!json.result) {
                         alert('Please log in first.');
                         window.location.replace('https://35.241.198.186:443/');
                     }
