@@ -103,6 +103,18 @@
           top: 1px;
         }
 
+        #logout {
+          text-align: right;
+          color: red;
+          position: absolute;
+          text-decoration: none;
+          color:white;
+          background: #cc1f10;
+          right: 3%;
+          font-size: 28px;
+          top: 1px;
+        }
+
         /* Dropdown Button */
         .dropbtn {
           background-color: #cc1f10;
@@ -163,10 +175,11 @@
                 <button class='button' onclick="autozoom()">AutoZoom</button>
                 <button class='button' onclick="increaseUpdateFrequency()" id="increaseFrequencyButton">Frequency +</button>
                 <button class='button' onclick="decreaseUpdateFrequency()" id="decreaseFrequencyButton">Frequency -</button>
+                <button class='button' onclick="logOut()">Log out</button>
               </div>
             </div>
             <a id='map' href="https://35.241.198.186:80/map">  <button class='button'>Go To Map</button>  </a>
-          </div>
+        </div>
           <button class = "button" id="north">N</button>
           <button class="button" id="east">E</button>
           <button class="button" id="south">S</button>
@@ -206,6 +219,23 @@
     }
 
     loggedIn();
+
+    function logOut() {
+        data = {
+            request: "signout",
+            token: getCookie("token")
+        };
+        $.post(urlD, JSON.stringify(data), function(json) {
+            if (json.result) {
+                // remove all cookies:     (source: https://stackoverflow.com/questions/179355/clearing-all-cookies-with-javascript)
+                document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
+                // redirect to login page
+                window.location.replace('https://35.241.198.186:443/#/sign-in/');
+            } else {
+                alert("Something went wrong.\nPlease try again.")
+            }
+        })
+    }
 
     //var dataCookie = JSON.parse(getCookie("radarCookie"));
     var dataCookie = {};

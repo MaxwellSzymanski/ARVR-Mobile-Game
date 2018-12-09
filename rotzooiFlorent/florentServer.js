@@ -32,6 +32,13 @@ const https_options = {
 
 const port = 8080;
 
+const respond = function(res, data) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader("Content-Type", "application/json");
+    res.write(JSON.stringify(data));
+    res.end();
+};
+
 //create a server object:
 https.createServer(https_options, async function (req, res) {
 
@@ -100,12 +107,11 @@ function signup(obj, res) {
                 message: error.message,
             }));
         } else {
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.setHeader("Content-Type", "application/json");
-            res.write(JSON.stringify({
+            respond(res, {
                 success: true,
+                name: newUser.name,
                 token: newUser.createToken(),
-            }));
+            });
         }
         res.end();
     });
@@ -118,7 +124,7 @@ function signin(obj, res) {
         if (error) throw error;
         if (result === null) {
             // res.setHeader('Access-Control-Allow-Origin', '*');
-            res.setHeader('Access-Control-Allow-Origin', 'https://35.241.198.186/#/sign-in');
+            res.setHeader('Access-Control-Allow-Origin', 'https://35.241.198.186/#/sign-in:');
             res.setHeader("Content-Type", "application/json");
             res.write(JSON.stringify({"email": false}));
             res.end();
