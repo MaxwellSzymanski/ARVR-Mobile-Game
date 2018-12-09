@@ -405,16 +405,13 @@ window.onclick = function(event) {
             var i = 0;
 
             var smallestDistancePlayer = 1000000;
-            var test = JSON.stringify(dataHTTP);
-            alert(test);
-            var object1 = JSON.parse(test);
-            alert(object1);
+            // var test = JSON.stringify(dataHTTP);
+            // var object1 = JSON.parse(test);
             var cookie = JSON.parse(getCookie("radarCookie"));
 
             if(cookie.autozoom === "on") {
                 for( x in dataHTTP){
-                    alert(x);
-                    alert(object1[x].longitude);
+                    alert(object1[x].longitude +", " + object1[x].latitude);
                     var distancePlayer = distanceBetween(playerLongitude,playerLatitude,object1[i].longitude,object1[i].latitude);
 
                     if( distancePlayer > 5 && distancePlayer < smallestDistancePlayer){
@@ -429,7 +426,7 @@ window.onclick = function(event) {
                 document.cookie = "radarCookie=" + JSON.stringify(dataCookie) +";";
             }
 
-            var object = JSON.parse(dataHTTP);
+            var object = dataHTTP;
 
 
             $('.obj').remove();
