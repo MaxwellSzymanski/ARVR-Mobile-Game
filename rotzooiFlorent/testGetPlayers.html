@@ -66,6 +66,7 @@
             const obj = JSON.stringify({token: loginToken, request: "jwt"});
             $.post(urlD, obj,
                 function (json) {
+                    alert(JSON.parse(json));
                     alert(json);
                     alert(json.data);
                     if (!json.data.result) {
