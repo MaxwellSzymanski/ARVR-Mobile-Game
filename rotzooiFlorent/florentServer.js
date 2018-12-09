@@ -117,13 +117,13 @@ function signin(obj, res) {
     User.findOne({ email : obj.email }, async function (error, result) {
         if (error) throw error;
         if (result === null) {
-            res.setHeader('Access-Control-Allow-Origin', 'https://35.241.198.186');
+            res.setHeader('Access-Control-Allow-Origin', 'https://35.241.198.186:443');
             res.setHeader("Content-Type", "application/json");
             res.write(JSON.stringify({"email": false}));
             res.end();
         } else {
             const value = await result.checkPassword(obj.password);
-            res.setHeader('Access-Control-Allow-Origin', 'https://35.241.198.186');
+            res.setHeader('Access-Control-Allow-Origin', 'https://35.241.198.186:443');
             res.setHeader("Content-Type", "application/json");
             if (!value)
                 res.write(JSON.stringify({"email": true, "password": value}));
@@ -135,8 +135,17 @@ function signin(obj, res) {
                     name: result.name
                 }));
             res.end();
-            const newActivePlayer = new ActivePlayer({playerid: result.name, location: obj.position});
-            newActivePlayer.save();
+            ActivePlayer.findOne({playerid: result.name}, function(error, result) {
+                if (result === null) {
+                    const newActivePlayer = new ActivePlayer({playerid: result.name, location: obj.position});
+                    newActivePlayer.save();
+                } else {
+                    result.location = obj.position;
+                    result.updated_at = Date.now();
+                    result.save();
+                }
+            })
+
         }
     });
 }
