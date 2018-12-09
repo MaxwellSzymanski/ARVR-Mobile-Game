@@ -405,13 +405,11 @@ window.onclick = function(event) {
             var i = 0;
 
             var smallestDistancePlayer = 1000000;
-            // var test = JSON.stringify(dataHTTP);
             var object1 = dataHTTP;
             var cookie = JSON.parse(getCookie("radarCookie"));
 
             if(cookie.autozoom === "on") {
                 for( x in object1){
-                    alert(object1[x].longitude);
                     var distancePlayer = distanceBetween(playerLongitude,playerLatitude,object1[i].longitude,object1[i].latitude);
 
                     if( distancePlayer > 5 && distancePlayer < smallestDistancePlayer){
@@ -433,7 +431,6 @@ window.onclick = function(event) {
 
             i = 0;
             for( x in object) {
-                alert(object[x]);
                 let pos = JSON.parse(longLatToXandY(playerLongitude, playerLatitude, object[i].longitude, object[i].latitude));
                 if( !object[i].hasOwnProperty("firstPlayer") && object[i].playerId!==getCookie("name")) {
                     addElement(pos.x, pos.y, object[i].playerId);

@@ -218,12 +218,13 @@
 
 
     function getPlayerLayers(players, map) {
-        var a = map.getLayers().length - 1
+        var a = map.getLayers().length - 1;
         for (a; a >= 0; a--) {
             map.removeLayer(map.layers[a]);
         }
 
-        obj = (JSON.parse(players));
+        // obj = (JSON.parse(players));
+        obj = players;
 
         let i = 0;
         for (x in obj) {
