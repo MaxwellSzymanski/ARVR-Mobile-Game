@@ -412,7 +412,7 @@ window.onclick = function(event) {
             var cookie = JSON.parse(getCookie("radarCookie"));
 
             if(cookie.autozoom === "on") {
-                for( x in object1){
+                for( x in dataHTTP){
                     alert(x);
                     alert(object1[x].longitude);
                     var distancePlayer = distanceBetween(playerLongitude,playerLatitude,object1[i].longitude,object1[i].latitude);
