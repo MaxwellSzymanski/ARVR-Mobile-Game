@@ -156,8 +156,8 @@
           <div class="dropdown">
             <button onclick="myFunction()" class="dropbtn">More Functions</button>
               <div id="myDropdown" class="dropdown-content">
-                <button class='button' onclick="increaseNumberPixelPerMeter()">Zoom in</button>
-                <button class='button' onclick="decreaseNumberPixelPerMeter()">Zoom out</button>
+                <button class='button' onclick="decreaseNumberPixelPerMeter()">Zoom in</button>
+                <button class='button' onclick="increaseNumberPixelPerMeter()">Zoom out</button>
                 <button class='button' onclick="sendSpecialSignal()">Special Signal</button>
                 <button class='button' onclick="sendHandShake()">HandShake</button>
                 <button class='button' onclick="autozoom()">AutoZoom</button>
@@ -468,14 +468,14 @@ window.onclick = function(event) {
 
                 if (object2[i].sendSignal === "specialSignal" && object2[i].playerId === thisPlayer){
                     //alert("acknowledgement received!");
-                    alert("specialSignal received!");
+                    alert("SpecialSignal received!");
                     specialSignalReceived();
                     break;
                 }
 
                 if (object2[i].sendSignal === "handShakeSignal" && object2[i].playerId === thisPlayer){
                     //alert("acknowledgement received!");
-                    alert("handShakeSignal received!");
+                    alert("HandShakeSignal received!");
 
                     var dataSignal = JSON.parse(object2[i].dataSignal);
 
@@ -484,7 +484,7 @@ window.onclick = function(event) {
                         break;
                     }
                     else if(dataSignal.acknowledged === "trueACK"){
-                        alert("handshake is acknowledged!!! You are nog in a fight!!!");
+                        alert("Handshake is acknowledged!!! You are in a fight!!!");
                         fight(dataSignal.playerId);
                         break;
                     }}
