@@ -174,7 +174,7 @@
         if( feature) {
             var att = feature.getProperties();
             var json = JSON.parse(att.name);
-            alert("Player: "+json.playerId);
+            sendFixedSignal(json.playerId);
         }
     });
 
@@ -312,7 +312,54 @@
             // adding every player icon to map!
             map.addLayer(iconLayer);
 
+
+            // special signal received?
+            if (object[i].sendSignal === "specialSignal" && object[i].playerId === thisPlayer){
+                //alert("acknowledgement received!");
+                alert("SpecialSignal received!");
+                specialSignalReceived();
+            }
+
         }
+    }
+
+    function sendFixedSignal(id){
+        var cookie = JSON.parse(getCookie("radarCookie"));
+        var thisPlayer = cookie.playerId;
+
+        if (thisPlayer === id){
+            alert("cannot send signal to yourself :)")
+        } else {
+
+            var data = {};
+
+            data.request = "sendSignal";
+            data.playerId = id;
+            var typeSignal = cookie.typeSignal;
+            var dataSignal = {};
+            if (typeSignal === "specialSignal") {
+                data.sendSignal = "specialSignal";
+                alert("send speciaSignal to player with id: " + id);
+            } else {
+                data.sendSignal = "handShakeSignal";
+                dataSignal.acknowledged = "falseACK";
+                alert("send acknowledgeHandshake to id: "+id);
+
+            }
+            dataSignal.playerId = thisPlayer;
+            data.dataSignal = JSON.stringify(dataSignal);
+
+            obj = JSON.stringify(data);
+
+            $.post(urlD, obj); // send ajax object to server
+        }
+    }
+
+    function specialSignalReceived(){
+        document.body.style.backgroundColor = "black";
+        setTimeout(function(){
+            document.body.style.backgroundColor = "darkred";
+        }, 3000);
     }
 
     /*
