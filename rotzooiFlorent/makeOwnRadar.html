@@ -446,6 +446,8 @@ window.onclick = function(event) {
 
 
             $('.obj').remove();
+            $('.objEnemy').remove();
+
 
             i = 0;
             for( x in object) {
@@ -511,7 +513,7 @@ window.onclick = function(event) {
 
         function addElement (xValue,yValue,playerId) {
             // delete old div elements
-            
+
             if (document.getElementById(playerId)) {
                 var element = document.getElementById(playerId);
                 element.parentNode.removeChild(element);
