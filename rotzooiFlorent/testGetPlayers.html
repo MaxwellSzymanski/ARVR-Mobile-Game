@@ -32,6 +32,17 @@
             font-size: 28px;
             top: 1px;
         }
+        #logout {
+            text-align: right;
+            color: red;
+            position: absolute;
+            text-decoration: none;
+            color:white;
+            background: #cc1f10;
+            right: 3%;
+            font-size: 28px;
+            top: 1px;
+        }
         #iconsource {
             font-size: 14px;
             text-align: right;
@@ -47,10 +58,10 @@
 <!--<input type="text" id="idPlayer" type="submit" value="">-->
 
 <a id='radar' href="https://35.241.198.186:80/">  <button class='button'>Go To Radar</button>  </a>
-
+<div id='logout'>  <button class='button' onclick="logOut()">Log out</button>  </div>
 <div id="mapInfo" ></div>
 <div id="map" class="map" ></div>
-<div id="iconsource">The icon indicating other players is property of <a href="https://icons8.com">Icons8</a> and is used under a Creative Commons license.</div>
+<div id="iconsource">The icon indicating players is property of <a href="https://icons8.com">Icons8</a> and is used under a Creative Commons license.</div>
 <script src="https://openlayers.org/en/v4.6.5/build/ol.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
@@ -79,6 +90,23 @@
     }
 
     loggedIn();
+
+    function logOut() {
+        data = {
+            request: "signout",
+            token: getCookie("token")
+        };
+        $.post(urlD, JSON.stringify(data), function(json) {
+            if (json.result) {
+                // remove all cookies:     (source: https://stackoverflow.com/questions/179355/clearing-all-cookies-with-javascript)
+                document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
+                // redirect to login page
+                window.location.replace('https://35.241.198.186:443/#/sign-in/');
+            } else {
+                alert("Something went wrong.\nPlease try again.")
+            }
+        })
+    }
 
     /*
         var dataCookie = {};

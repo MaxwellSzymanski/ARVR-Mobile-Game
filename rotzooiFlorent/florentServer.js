@@ -32,8 +32,25 @@ const https_options = {
 
 const port = 8080;
 
+const respond = function(res, data) {
+    res.setHeader("Content-Type", "application/json");
+    res.write(JSON.stringify(data));
+    res.end();
+};
+
 //create a server object:
 https.createServer(https_options, async function (req, res) {
+
+    // Set CORS headers
+    res.setHeader('Access-Control-Allow-Origin', 'https://35.241.198.186');
+    res.setHeader('Access-Control-Request-Method', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST');
+    res.setHeader('Access-Control-Allow-Headers', '*');
+    if ( req.method === 'OPTIONS' ) {
+        res.writeHead(200);
+        res.end();
+        return;
+    }
 
     let body = [];
     req.on('error', (err) => {
@@ -47,7 +64,6 @@ https.createServer(https_options, async function (req, res) {
         const request = (obj.request).toLowerCase();
 
         console.log("\n\n\nRequest:    " + request + "    ===============    current time:    " + new Date().toLocaleTimeString());
-        console.log(body);
         switch (request) {
             case "signup":
                 signup(obj, res);
@@ -79,7 +95,11 @@ https.createServer(https_options, async function (req, res) {
                 getFrequency(obj,res);
                 break;
             default:
-                console.log("!!!  unknown request  !!!");
+                console.log("\n\n\n-------------------------");
+                console.log("|                       |");
+                console.log("|  ! unknown request !  |");
+                console.log("|                       |");
+                console.log("-------------------------\n\n\n");
                 res.end();
                 break;
         }
@@ -100,12 +120,11 @@ function signup(obj, res) {
                 message: error.message,
             }));
         } else {
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.setHeader("Content-Type", "application/json");
-            res.write(JSON.stringify({
+            respond(res, {
                 success: true,
+                name: newUser.name,
                 token: newUser.createToken(),
-            }));
+            });
         }
         res.end();
     });
@@ -117,26 +136,18 @@ function signin(obj, res) {
     User.findOne({ email : obj.email }, async function (error, result) {
         if (error) throw error;
         if (result === null) {
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            // res.setHeader('Access-Control-Allow-Origin', 'https://35.241.198.186:443');
-            res.setHeader("Content-Type", "application/json");
-            res.write(JSON.stringify({"email": false}));
-            res.end();
+            respond(res, {"email": false});
         } else {
             const value = await result.checkPassword(obj.password);
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            // res.setHeader('Access-Control-Allow-Origin', 'https://35.241.198.186:443');
-            res.setHeader("Content-Type", "application/json");
             if (!value)
-                res.write(JSON.stringify({"email": true, "password": value}));
+                respond(res, {"email": true, "password": value});
             else
-                res.write(JSON.stringify({
+                respond(res, {
                     "email": true,
                     "password": value,
                     token: result.createToken(),
                     name: result.name
-                }));
-            res.end();
+                });
             ActivePlayer.findOne({playerid: result.name}, function(error, act) {
                 if (act === null) {
                     const newActivePlayer = new ActivePlayer({playerid: result.name, location: obj.position});

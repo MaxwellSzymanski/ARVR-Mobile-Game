@@ -81,8 +81,12 @@ class SignUpForm extends React.Component {
             await axios.post(url, obj).then(
                 function (json) {
                     if (json.data.success) {
-                        cookies.set('token', json.data.token, {path: '/'});
-                        cookies.set('name', json.data.name,  {path: '/'});
+                        const options = {
+                            path: '/',
+                            expires: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)   // expires in 24 hours
+                        };
+                        cookies.set('token', json.data.token, options);
+                        cookies.set('name', json.data.name, options);
                         that.setState({redirect: true});
                     }
                     else alert(json.data.message);
