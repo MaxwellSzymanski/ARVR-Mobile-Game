@@ -33,7 +33,7 @@ class ImageConfirm extends React.Component {
     render () {
         return (
             <div className="background">
-                <img src={localStorage.getItem("PhotoOfMe")} alt="Photo of me"/>
+                <img className="polaroid"  src={localStorage.getItem("PhotoOfMe")} alt="Photo of me"/>
                 <div><h2>Happy with this picture?</h2></div>
                 <div>
                     <Link to="/takePicture"><button >No</button></Link>

@@ -28,7 +28,12 @@ class CameraComp extends React.Component {
 
       if (fv === null) {
         console.log("No face detected!")
-        alert("No face detected, try again.")
+          swal({
+              title: "No face detected",
+              text: "Make sure you are facing the camera with good lighting conditions.",
+              icon: "warning",
+              button: "I'll try!",
+          });
       }
       else{
           localStorage.setItem("PhotoOfMe", dataUri);
