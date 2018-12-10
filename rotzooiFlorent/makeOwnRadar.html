@@ -163,11 +163,10 @@
                 <button class='button' onclick="autozoom()">AutoZoom</button>
                 <button class='button' onclick="increaseUpdateFrequency()" id="increaseFrequencyButton">Frequency +</button>
                 <button class='button' onclick="decreaseUpdateFrequency()" id="decreaseFrequencyButton">Frequency -</button>
-                <button class='button' onclick="logOut()">Log out</button>
               </div>
             </div>
             <a id='map' href="https://35.241.198.186:80/map">  <button class='button'>Go To Map</button>  </a>
-        </div>
+          </div>
           <button class = "button" id="north">N</button>
           <button class="button" id="east">E</button>
           <button class="button" id="south">S</button>
@@ -207,23 +206,6 @@
     }
 
     loggedIn();
-
-    function logOut() {
-        data = {
-            request: "signout",
-            token: getCookie("token")
-        };
-        $.post(urlD, JSON.stringify(data), function(json) {
-            if (json.result) {
-                // remove all cookies:     (source: https://stackoverflow.com/questions/179355/clearing-all-cookies-with-javascript)
-                document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
-                // redirect to login page
-                window.location.replace('https://35.241.198.186:443/#/sign-in/');
-            } else {
-                alert("Something went wrong.\nPlease try again.")
-            }
-        })
-    }
 
     //var dataCookie = JSON.parse(getCookie("radarCookie"));
     var dataCookie = {};
@@ -446,6 +428,8 @@ window.onclick = function(event) {
 
 
             $('.obj').remove();
+            $('.objEnemy').remove();
+
 
             i = 0;
             for( x in object) {
@@ -511,7 +495,7 @@ window.onclick = function(event) {
 
         function addElement (xValue,yValue,playerId) {
             // delete old div elements
-            
+
             if (document.getElementById(playerId)) {
                 var element = document.getElementById(playerId);
                 element.parentNode.removeChild(element);
@@ -549,7 +533,7 @@ window.onclick = function(event) {
                 var posX = newX + "%";
                 var posY = newY + "%";
 
-                $(this).css({left:posX, top:posY}).attr('data-atDeg', "10");
+                $(this).css({right:posX, top:posY}).attr('data-atDeg', "10");
             });
         }
 
@@ -633,7 +617,7 @@ window.onclick = function(event) {
             } else {
                 data.sendSignal = "handShakeSignal";
                 dataSignal.acknowledged = "falseACK";
-                alert("send acknowledgeHandshake");
+                alert("send acknowledgeHandshake to id: "+id);
 
             }
             dataSignal.playerId = thisPlayer;
@@ -660,7 +644,7 @@ window.onclick = function(event) {
         dataSignal.acknowledged = "trueACK";
         data.dataSignal = JSON.stringify( dataSignal);
 
-        alert("send acknowledgeHandshake");
+        alert("send acknowledgeHandshake to id: "+id);
 
         obj = JSON.stringify(data);
 
