@@ -3,6 +3,7 @@ import Camera from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
 import { Redirect } from 'react-router';
 import { getFeatureVector } from '../facerecognition/FaceRecognition';
+import swal from '@sweetalert/with-react';
 
 class CameraComp extends React.Component {
 
@@ -28,7 +29,12 @@ class CameraComp extends React.Component {
 
       if (fv === null) {
         console.log("No face detected!")
-        alert("No face detected, try again.")
+          swal({
+              title: "No face detected",
+              text: "Make sure you are facing the camera with good lighting conditions.",
+              icon: "warning",
+              button: "I'll try!",
+          });
       }
       else{
           localStorage.setItem("PhotoOfMe", dataUri);
