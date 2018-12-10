@@ -5,29 +5,6 @@
     <title>Radar</title>
     <style>
 
-    #dialogoverlay{
-      display: none;
-      opacity: .8;
-      position: fixed;
-      top: 0px;
-      left: 0px;
-      background: #FFF;
-      width: 100%;
-      z-index: 10;
-    }
-    #dialogbox{
-      display: none;
-      position: fixed;
-      background: #0000;
-      border-radius:100%;
-      width:30%;
-      z-index: 10;
-    }
-    #dialogbox > div{ background:#FFF; margin:8px; }
-    #dialogbox > div > #dialogboxhead{ background: #cc1f10; font-size:19px; padding:10px; color:white; }
-    #dialogbox > div > #dialogboxbody{ background:#cc1f10; opacity: .8;padding:20px; color:#FFF; }
-    #dialogbox > div > #dialogboxfoot{ background: #cc1f10; padding:10px; text-align:right; }
-
         html, body {
             height: 100%;
             margin: 0;
@@ -176,19 +153,10 @@
         </style>
       </head>
       <body>
-        <div id="dialogoverlay"></div>
-          <div id="dialogbox">
-            <div>
-                <div id="dialogboxhead"></div>
-                <div id="dialogboxbody"></div>
-                <div id="dialogboxfoot"></div>
-            </div>
-        </div>
         <div class="head">
           <div class="dropdown">
             <button onclick="myFunction()" class="dropbtn">More Functions</button>
               <div id="myDropdown" class="dropdown-content">
-
                 <button class='button' onclick="increaseNumberPixelPerMeter()">Zoom in</button>
                 <button class='button' onclick="decreaseNumberPixelPerMeter()">Zoom out</button>
                 <button class='button' onclick="sendSpecialSignal()">Special Signal</button>
@@ -325,7 +293,7 @@ window.onclick = function(event) {
             if(returnObject.hasOwnProperty("frequency") && returnObject.hasOwnProperty("update") && returnObject.update === "true"){
                 var cookieJson = JSON.parse(document.cookie);
                 cookieJson.frequency = returnObject.frequency;
-                Alert.render("Frequency is adjusted => frequency now: "+cookieJson.frequency);
+                alert("Frequency is adjusted => frequency now: "+cookieJson.frequency);
             }
 
         });
@@ -411,7 +379,7 @@ window.onclick = function(event) {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition);
         } else {
-            Alert.render("No geolocation available");
+            alert("No geolocation available");
         }
         function showPosition(position) {
             var cookieJson = JSON.parse(document.cookie);
@@ -501,15 +469,15 @@ window.onclick = function(event) {
                 }
 
                 if (object2[i].sendSignal === "specialSignal" && object2[i].playerId === thisPlayer){
-                    //Alert.render("acknowledgement received!");
-                    Alert.render("specialSignal received!");
+                    //alert("acknowledgement received!");
+                    alert("specialSignal received!");
                     specialSignalReceived();
                     break;
                 }
 
                 if (object2[i].sendSignal === "handShakeSignal" && object2[i].playerId === thisPlayer){
-                    //Alert.render("acknowledgement received!");
-                    Alert.render("handShakeSignal received!");
+                    //alert("acknowledgement received!");
+                    alert("handShakeSignal received!");
 
                     var dataSignal = JSON.parse(object2[i].dataSignal);
 
@@ -518,7 +486,7 @@ window.onclick = function(event) {
                         break;
                     }
                     else if(dataSignal.acknowledged === "trueACK"){
-                        Alert.render("handshake is acknowledged!!! You are nog in a fight!!!");
+                        alert("handshake is acknowledged!!! You are nog in a fight!!!");
                         fight(dataSignal.playerId);
                         break;
                     }}
@@ -619,7 +587,7 @@ window.onclick = function(event) {
         var thisPlayer = cookie.playerId;
 
         if (thisPlayer === id){
-            Alert.render("cannot send signal to yourself :)")
+            alert("cannot send signal to yourself :)")
         } else {
 
             var data = {};
@@ -630,11 +598,11 @@ window.onclick = function(event) {
             var dataSignal = {};
             if (typeSignal === "specialSignal") {
                 data.sendSignal = "specialSignal";
-                Alert.render("send speciaSignal to player with id: " + id);
+                alert("send speciaSignal to player with id: " + id);
             } else {
                 data.sendSignal = "handShakeSignal";
                 dataSignal.acknowledged = "falseACK";
-                Alert.render("send acknowledgeHandshake falseACK signal to player with id: "+id);
+                alert("send acknowledgeHandshake falseACK signal to player with id: "+id);
 
             }
             dataSignal.playerId = thisPlayer;
@@ -661,7 +629,7 @@ window.onclick = function(event) {
         dataSignal.acknowledged = "trueACK";
         data.dataSignal = JSON.stringify( dataSignal);
 
-        Alert.render("send acknowledgeHandshake trueACK signal to player with id: "+id);
+        alert("send acknowledgeHandshake trueACK signal to player with id: "+id);
 
         obj = JSON.stringify(data);
 
@@ -680,36 +648,13 @@ window.onclick = function(event) {
 
         data.enemyPlayerId = String(idEnemyPlayer);
 
-        Alert.render(data.playerId+" player id fight enemey with id:" + idEnemyPlayer);
+        alert(data.playerId+" player id fight enemey with id:" + idEnemyPlayer);
 
         obj = JSON.stringify(data);
 
         $.post(urlD,obj); // send ajax object to server
 
     }
-
-
-    function CustomAlert(){
-    this.render = function(dialog){
-        var winW = window.innerWidth;
-        var winH = window.innerHeight;
-        var dialogoverlay = document.getElementById('dialogoverlay');
-        var dialogbox = document.getElementById('dialogbox');
-        dialogoverlay.style.display = "block";
-        dialogoverlay.style.height = winH+"px";
-        dialogbox.style.left = (winW/2) - (550 * .5)+"px";
-        dialogbox.style.top = "100px";
-        dialogbox.style.display = "block";
-        document.getElementById('dialogboxhead').innerHTML = "MESSAGE";
-        document.getElementById('dialogboxbody').innerHTML = dialog;
-        document.getElementById('dialogboxfoot').innerHTML = '<button onclick="Alert.ok()">OK</button>';
-    }
-	this.ok = function(){
-		document.getElementById('dialogbox').style.display = "none";
-		document.getElementById('dialogoverlay').style.display = "none";
-	}
-}
-  var Alert = new CustomAlert();
 </script>
 </body>
 </html><!DOCTYPE html>
