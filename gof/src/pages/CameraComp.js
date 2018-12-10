@@ -19,7 +19,7 @@ class CameraComp extends React.Component {
   }
   async onTakePhoto (dataUri) {
     // TODO: Check face
-	  var photoSrc = localStorage.getItem("PhotoOfMe", dataUri);
+	  var photoSrc = dataUri;
     var photo = new Image;
     photo.src = photoSrc;
     console.log(photo);
