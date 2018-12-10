@@ -38,7 +38,7 @@ const Schema = new mongoose.Schema({
     attack: {
         type: Number,
         default: 100
-    ,
+    },
     defence: {
         type: Number,
         default: 100
