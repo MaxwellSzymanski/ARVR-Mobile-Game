@@ -112,13 +112,13 @@
             $.post(urlD, obj,
                 function (json) {
                     if (!json.result) {
-                        Alert.render('Please log in first.');
+                        alert('Please log in first.');
                         window.location.replace('https://35.241.198.186:443/');
                     }
                 }
             );
         } else {
-            Alert.render('Please log in first.');
+            alert('Please log in first.');
             window.location.replace('https://35.241.198.186:443/');
         }
     }

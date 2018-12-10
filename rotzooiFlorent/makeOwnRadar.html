@@ -237,13 +237,13 @@
             $.post(urlD, obj,
                     function (json) {
                         if (!json.data.result) {
-                            Alert.render('Please log in first.');
+                            alert('Please log in first.');
                             window.location.replace('https://35.241.198.186:443/');
                         }
                     }
                 );
         } else {
-            Alert.render('Please log in first.');
+            alert('Please log in first.');
             window.location.replace('https://35.241.198.186:443/');
         }
     }
@@ -729,7 +729,7 @@ window.onclick = function(event) {
   var Alert = new CustomAlert();
 
 
-  function ErrorAlert(){
+  function Error(){
   this.render = function(dialog){
       var winW = window.innerWidth;
       var winH = window.innerHeight;
