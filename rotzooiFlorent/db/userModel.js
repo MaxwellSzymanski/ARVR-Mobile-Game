@@ -34,6 +34,26 @@ const Schema = new mongoose.Schema({
     featureVector: {
         type: Object,
         // required: true
+    },
+    attack: {
+        type: Number,
+        default: 100
+    ,
+    defence: {
+        type: Number,
+        default: 100
+    },
+    health: {
+        type: Number,
+        default: 100
+    },
+    level: {
+        type: Number,
+        default: 1
+    },
+    experience: {
+        type: Number,
+        default: 0
     }
 }, {timestamps: true});
 
