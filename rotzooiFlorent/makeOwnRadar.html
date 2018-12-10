@@ -633,7 +633,7 @@ window.onclick = function(event) {
             } else {
                 data.sendSignal = "handShakeSignal";
                 dataSignal.acknowledged = "falseACK";
-                alert("send acknowledgeHandshake falseACK signal to player with id: "+id);
+                alert("send acknowledgeHandshake");
 
             }
             dataSignal.playerId = thisPlayer;
@@ -660,7 +660,7 @@ window.onclick = function(event) {
         dataSignal.acknowledged = "trueACK";
         data.dataSignal = JSON.stringify( dataSignal);
 
-        alert("send acknowledgeHandshake trueACK signal to player with id: "+id);
+        alert("send acknowledgeHandshake");
 
         obj = JSON.stringify(data);
 
