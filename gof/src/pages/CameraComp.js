@@ -3,6 +3,7 @@ import Camera from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
 import { Redirect } from 'react-router';
 import { getFeatureVector } from '../facerecognition/FaceRecognition';
+import swal from '@sweetalert/with-react';
 
 class CameraComp extends React.Component {
 
