@@ -45,6 +45,7 @@ class SignUpForm extends React.Component {
 
         let that = this;
         const image = localStorage.getItem("PhotoOfMe");
+		const featureVector = localStorage.getItem("fv");
 
         if (!this.state.name || !this.state.email || !this.state.password || !image) {
             alert("Please fill in all fields.");
@@ -70,7 +71,10 @@ class SignUpForm extends React.Component {
 
             // const image = fs.readFileSync(PATH);
             dataToSend.image = new Buffer(image).toString('base64');
-
+			
+			// sent featureVector
+			dataToSend.featureVector = new Buffer(featureVector).toString('base64');
+			
             // send HTTP request with sign up data.
             let obj = JSON.stringify(dataToSend);
 
