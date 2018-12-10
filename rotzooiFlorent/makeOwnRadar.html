@@ -5,6 +5,29 @@
     <title>GoW - Radar</title>
     <style>
 
+    #dialogoverlay{
+      display: none;
+      opacity: .8;
+      position: fixed;
+      top: 0px;
+      left: 0px;
+      background: #FFF;
+      width: 100%;
+      z-index: 10;
+    }
+    #dialogbox{
+      display: none;
+      position: fixed;
+      background: #0000;
+      border-radius:100%;
+      width:30%;
+      z-index: 10;
+    }
+    #dialogbox > div{ background:#FFF; margin:8px; }
+    #dialogbox > div > #dialogboxhead{ background: #cc1f10; font-size:19px; padding:10px; color:white; }
+    #dialogbox > div > #dialogboxbody{ background:#cc1f10; opacity: .8;padding:20px; color:#FFF; }
+    #dialogbox > div > #dialogboxfoot{ background: #cc1f10; padding:10px; text-align:right; }
+
         html, body {
             height: 100%;
             margin: 0;
@@ -163,6 +186,14 @@
         </style>
       </head>
       <body>
+        <div id="dialogoverlay"></div>
+          <div id="dialogbox">
+            <div>
+                <div id="dialogboxhead"></div>
+                <div id="dialogboxbody"></div>
+                <div id="dialogboxfoot"></div>
+            </div>
+        </div>
         <div class="head">
           <div class="dropdown">
             <button onclick="myFunction()" class="dropbtn">More Functions</button>
@@ -206,13 +237,13 @@
             $.post(urlD, obj,
                     function (json) {
                         if (!json.data.result) {
-                            alert('Please log in first.');
+                            Alert.render('Please log in first.');
                             window.location.replace('https://35.241.198.186:443/');
                         }
                     }
                 );
         } else {
-            alert('Please log in first.');
+            Alert.render('Please log in first.');
             window.location.replace('https://35.241.198.186:443/');
         }
     }
@@ -325,7 +356,7 @@ window.onclick = function(event) {
             if(returnObject.hasOwnProperty("frequency") && returnObject.hasOwnProperty("update") && returnObject.update === "true"){
                 var cookieJson = JSON.parse(getCookie("radarCookie"));
                 cookieJson.frequency = returnObject.frequency;
-                alert("Frequency is adjusted => frequency now: "+cookieJson.frequency);
+                Alert.render("Frequency is adjusted => frequency now: "+cookieJson.frequency);
             }
 
         });
@@ -390,7 +421,7 @@ window.onclick = function(event) {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition);
         } else {
-            alert("No geolocation available");
+            Alert.render("No geolocation available");
         }
         function showPosition(position) {
             var cookieJson = JSON.parse(getCookie("radarCookie"));
@@ -479,15 +510,15 @@ window.onclick = function(event) {
                 }
 
                 if (object2[i].sendSignal === "specialSignal" && object2[i].playerId === thisPlayer){
-                    //alert("acknowledgement received!");
-                    alert("SpecialSignal received!");
+                    //Alert.render("acknowledgement received!");
+                    Alert.render("SpecialSignal received!");
                     specialSignalReceived();
                     break;
                 }
 
                 if (object2[i].sendSignal === "handShakeSignal" && object2[i].playerId === thisPlayer){
-                    //alert("acknowledgement received!");
-                    alert("HandShakeSignal received!");
+                    //Alert.render("acknowledgement received!");
+                    Alert.render("HandShakeSignal received!");
 
                     var dataSignal = JSON.parse(object2[i].dataSignal);
 
@@ -496,7 +527,7 @@ window.onclick = function(event) {
                         break;
                     }
                     else if(dataSignal.acknowledged === "trueACK"){
-                        alert("Handshake is acknowledged!!! You are in a fight!!!");
+                        Alert.render("Handshake is acknowledged!!! You are in a fight!!!");
                         fight(dataSignal.playerId);
                         break;
                     }}
@@ -614,7 +645,7 @@ window.onclick = function(event) {
         var thisPlayer = cookie.playerId;
 
         if (thisPlayer === id){
-            alert("cannot send signal to yourself :)")
+            Alert.render("cannot send signal to yourself :)")
         } else {
 
             var data = {};
@@ -625,11 +656,11 @@ window.onclick = function(event) {
             var dataSignal = {};
             if (typeSignal === "specialSignal") {
                 data.sendSignal = "specialSignal";
-                alert("send speciaSignal to player with id: " + id);
+                Alert.render("send speciaSignal to player with id: " + id);
             } else {
                 data.sendSignal = "handShakeSignal";
                 dataSignal.acknowledged = "falseACK";
-                alert("send acknowledgeHandshake to id: "+id);
+                Alert.render("send acknowledgeHandshake to id: "+id);
 
             }
             dataSignal.playerId = thisPlayer;
@@ -656,7 +687,7 @@ window.onclick = function(event) {
         dataSignal.acknowledged = "trueACK";
         data.dataSignal = JSON.stringify( dataSignal);
 
-        alert("send acknowledgeHandshake to id: "+id);
+        Alert.render("send acknowledgeHandshake to id: "+id);
 
         obj = JSON.stringify(data);
 
@@ -675,13 +706,35 @@ window.onclick = function(event) {
 
         data.enemyPlayerId = String(idEnemyPlayer);
 
-        alert(data.playerId+" player id fight enemey with id:" + idEnemyPlayer);
+        Alert.render(data.playerId+" player id fight enemey with id:" + idEnemyPlayer);
 
         obj = JSON.stringify(data);
 
         $.post(urlD,obj); // send ajax object to server
 
     }
+
+    function CustomAlert(){
+    this.render = function(dialog){
+        var winW = window.innerWidth;
+        var winH = window.innerHeight;
+        var dialogoverlay = document.getElementById('dialogoverlay');
+        var dialogbox = document.getElementById('dialogbox');
+        dialogoverlay.style.display = "block";
+        dialogoverlay.style.height = winH+"px";
+        dialogbox.style.left = (winW/2) - (550 * .5)+"px";
+        dialogbox.style.top = "100px";
+        dialogbox.style.display = "block";
+        document.getElementById('dialogboxhead').innerHTML = "MESSAGE";
+        document.getElementById('dialogboxbody').innerHTML = dialog;
+        document.getElementById('dialogboxfoot').innerHTML = '<button onclick="Alert.ok()">OK</button>';
+    }
+	this.ok = function(){
+		document.getElementById('dialogbox').style.display = "none";
+		document.getElementById('dialogoverlay').style.display = "none";
+	}
+}
+  var Alert = new CustomAlert();
 </script>
 </body>
 </html><!DOCTYPE html>
