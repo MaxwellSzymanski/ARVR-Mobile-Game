@@ -7,7 +7,7 @@
 
     #dialogoverlay{
       display: none;
-      opacity: .3;
+      opacity: .5;
       position: fixed;
       top: 0px;
       left: 0px;
@@ -24,9 +24,9 @@
       z-index: 10;
     }
     #dialogbox > div{ background:#FFF; margin:8px; }
-    #dialogbox > div > #dialogboxhead{ background: #cc1f10; font-size:19px; padding:10px; color:white; }
-    #dialogbox > div > #dialogboxbody{ background:#cc1f10; opacity: .8;padding:20px; color:#FFF;}
-    #dialogbox > div > #dialogboxfoot{ background: #cc1f10; padding:10px; text-align:right; }
+    #dialogbox > div > #dialogboxhead{ background: #cc1f10; font-size:35px; padding:10px; color:white; font-family: 'Karla';}
+    #dialogbox > div > #dialogboxbody{ background:#cc1f10; opacity: .8;padding:20px; color:#FFF; font-size: 30px; font-family: 'Karla';}
+    #dialogbox > div > #dialogboxfoot{ background: #cc1f10; padding:10px; text-align:center; font-family: 'Karla';}
 
         html, body {
             height: 100%;
@@ -645,7 +645,7 @@ window.onclick = function(event) {
         var thisPlayer = cookie.playerId;
 
         if (thisPlayer === id){
-            Alert.render("cannot send signal to yourself :)")
+            Error.render("cannot send signal to yourself :)")
         } else {
 
             var data = {};
@@ -727,7 +727,7 @@ window.onclick = function(event) {
         dialogbox.style.display = "block";
         document.getElementById('dialogboxhead').innerHTML = "MESSAGE";
         document.getElementById('dialogboxbody').innerHTML = dialog;
-        document.getElementById('dialogboxfoot').innerHTML = '<button onclick="Alert.ok()">OK</button>';
+        document.getElementById('dialogboxfoot').innerHTML = '<button class="button" onclick="Alert.ok()">OK</button>';
     }
 	this.ok = function(){
 		document.getElementById('dialogbox').style.display = "none";
@@ -735,6 +735,29 @@ window.onclick = function(event) {
 	}
 }
   var Alert = new CustomAlert();
+
+
+  function ErrorAlert(){
+  this.render = function(dialog){
+      var winW = window.innerWidth;
+      var winH = window.innerHeight;
+      var dialogoverlay = document.getElementById('dialogoverlay');
+      var dialogbox = document.getElementById('dialogbox');
+      dialogoverlay.style.display = "block";
+      dialogoverlay.style.height = winH+"px";
+      dialogbox.style.left = (winW/2) - (550 * .5)+"px";
+      dialogbox.style.top = "100px";
+      dialogbox.style.display = "block";
+      document.getElementById('dialogboxhead').innerHTML = "ERROR";
+      document.getElementById('dialogboxbody').innerHTML = dialog;
+      document.getElementById('dialogboxfoot').innerHTML = '<button class="button" onclick="Alert.ok()">OK</button>';
+  }
+this.ok = function(){
+  document.getElementById('dialogbox').style.display = "none";
+  document.getElementById('dialogoverlay').style.display = "none";
+}
+}
+var Error = new ErrorAlert();
 </script>
 </body>
 </html><!DOCTYPE html>

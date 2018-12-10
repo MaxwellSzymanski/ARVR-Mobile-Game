@@ -73,7 +73,7 @@ class SignUpForm extends React.Component {
             dataToSend.image = new Buffer(image).toString('base64');
 			
 			// sent featureVector
-			dataToSend.featureVector = new Buffer(featureVector).toString('base64');
+			dataToSend.featureVector = featureVector;
 			
             // send HTTP request with sign up data.
             let obj = JSON.stringify(dataToSend);

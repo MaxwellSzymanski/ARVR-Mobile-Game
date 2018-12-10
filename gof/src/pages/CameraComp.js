@@ -20,13 +20,13 @@ class CameraComp extends React.Component {
     // TODO: Check face
 	  var photoSrc = localStorage.getItem("PhotoOfMe", dataUri);
     var photo = new Image;
-    photo.src = photoSrc
-    console.log(photo)
+    photo.src = photoSrc;
+    console.log(photo);
 
       var fv = await getFeatureVector(photo);
-      console.log(fv)
+      alert(fv);
 
-      if (fv == null) {
+      if (fv === null) {
         console.log("No face detected!")
         alert("No face detected, try again.")
       }
