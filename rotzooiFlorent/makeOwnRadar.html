@@ -91,6 +91,17 @@
           display: inline-block;
 
         }
+        #logout {
+          text-align: right;
+          color: red;
+          position: absolute;
+          text-decoration: none;
+          color:white;
+          background: #cc1f10;
+          right: 3%;
+          font-size: 28px;
+          top: 1px;
+        }
         #map {
           text-align: left;
           color: red;
@@ -166,7 +177,8 @@
               </div>
             </div>
             <a id='map' href="https://35.241.198.186:80/map">  <button class='button'>Go To Map</button>  </a>
-          </div>
+          <div id='logout'>  <button class='button' onclick="logOut()">Log out</button>  </div>
+        </div>
           <button class = "button" id="north">N</button>
           <button class="button" id="east">E</button>
           <button class="button" id="south">S</button>
