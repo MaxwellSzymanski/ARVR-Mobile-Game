@@ -7,7 +7,7 @@ const secret = require('./db/config.js');
 // var url = "mongodb://localhost:27017/userdb";
 // var url = 'mongodb://team12:mongoDBteam12@35.241.198.186:27017/?authMechanism=SCRAM-SHA-1&authSource=userdb';
 
-var frequency = 4000;
+var frequency = 3000;
 
 const mongoose = require('mongoose');
 // mongoose.connect("mongodb://localhost:27017/userdb", { useNewUrlParser: true });
@@ -32,8 +32,25 @@ const https_options = {
 
 const port = 8080;
 
+const respond = function(res, data) {
+    res.setHeader("Content-Type", "application/json");
+    res.write(JSON.stringify(data));
+    res.end();
+};
+
 //create a server object:
 https.createServer(https_options, async function (req, res) {
+
+    // Set CORS headers
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Request-Method', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST');
+    res.setHeader('Access-Control-Allow-Headers', '*');
+    if ( req.method === 'OPTIONS' ) {
+        res.writeHead(200);
+        res.end();
+        return;
+    }
 
     let body = [];
     req.on('error', (err) => {
@@ -78,7 +95,11 @@ https.createServer(https_options, async function (req, res) {
                 getFrequency(obj,res);
                 break;
             default:
-                console.log("!!!  unknown request  !!!");
+                console.log("\n\n\n-------------------------");
+                console.log("|                       |");
+                console.log("|  ! unknown request !  |");
+                console.log("|                       |");
+                console.log("-------------------------\n\n\n");
                 res.end();
                 break;
         }
@@ -99,12 +120,11 @@ function signup(obj, res) {
                 message: error.message,
             }));
         } else {
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.setHeader("Content-Type", "application/json");
-            res.write(JSON.stringify({
+            respond(res, {
                 success: true,
+                name: newUser.name,
                 token: newUser.createToken(),
-            }));
+            });
         }
         res.end();
     });
@@ -116,26 +136,29 @@ function signin(obj, res) {
     User.findOne({ email : obj.email }, async function (error, result) {
         if (error) throw error;
         if (result === null) {
-            res.setHeader('Access-Control-Allow-Origin', 'https://35.241.198.186');
-            res.setHeader("Content-Type", "application/json");
-            res.write(JSON.stringify({"email": false}));
-            res.end();
+            respond(res, {"email": false});
         } else {
             const value = await result.checkPassword(obj.password);
-            res.setHeader('Access-Control-Allow-Origin', 'https://35.241.198.186');
-            res.setHeader("Content-Type", "application/json");
             if (!value)
-                res.write(JSON.stringify({"email": true, "password": value}));
+                respond(res, {"email": true, "password": value});
             else
-                res.write(JSON.stringify({
+                respond(res, {
                     "email": true,
                     "password": value,
                     token: result.createToken(),
                     name: result.name
-                }));
-            res.end();
-            const newActivePlayer = new ActivePlayer({playerid: result.name, location: obj.position});
-            newActivePlayer.save();
+                });
+            ActivePlayer.findOne({playerid: result.name}, function(error, act) {
+                if (act === null) {
+                    const newActivePlayer = new ActivePlayer({playerid: result.name, location: obj.position});
+                    newActivePlayer.save();
+                } else {
+                    act.location = obj.position;
+                    act.updated_at = Date.now();
+                    act.save();
+                }
+            })
+
         }
     });
 }
@@ -189,7 +212,6 @@ function verifyJWT(obj, res) {
         } else {
             User.findById(token.id).then(
                 async function (user) {
-                    console.log(user);
                     let value = false;
                     if (user !== null)
                         value = await user.checkToken(token);
@@ -231,26 +253,26 @@ async function radar(obj, res) {
                 res.end();
             } else {
                 obj.playerId = token.name;
+                if(obj.playerId !== null && obj.playerId !== "") {
+                    if (await ActivePlayer.findOne({playerid: obj.playerId}) === null) {
+                        const newActivePlayer = new ActivePlayer({
+                            playerid: obj.playerId,
+                            location: {
+                                latitude: obj.latitude,
+                                longitude: obj.longitude,
+                            }
+                        });
+                        newActivePlayer.save();
+                    }
+                    getPlayerPositionRadar(obj, res);
+                } else {
+                    console.log("invalid playerid");
+                    res.setHeader('Access-Control-Allow-Origin', '*');
+                    res.setHeader("Content-Type", "ERROR");
+                    res.end();
+                }
             }
         });
-    }
-    if(obj.playerId !== null) {
-        if (await ActivePlayer.findOne({playerid: obj.playerId}) === null) {
-            const newActivePlayer = new ActivePlayer({
-                playerid: obj.playerId,
-                location: {
-                    latitude: obj.latitude,
-                    longitude: obj.longitude,
-                }
-            });
-            newActivePlayer.save();
-        }
-        getPlayerPositionRadar(obj, res);
-    } else {
-        console.log("invalid playerid");
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.setHeader("Content-Type", "ERROR");
-        res.end();
     }
 }
 
@@ -274,11 +296,14 @@ async function getPlayerPositionRadar(jsonData,res) {
 
     ActivePlayer.find({}, '-created_at -_id -updated_at -__v', {lean: true}, async function(error, result) {
         if (error) {
-            res.write("No player positions available");
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.setHeader("Content-Type", "ERROR");
+            res.write("No player positions available");
             throw error;
         } else {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader("Content-Type", "application/json");
+
             result.forEach(function (elem) {
                 elem.playerId = elem.playerid;
                 delete elem.playerid;
@@ -291,7 +316,6 @@ async function getPlayerPositionRadar(jsonData,res) {
 
             result.push(fp);
 
-            res.setHeader('Access-Control-Allow-Origin', '*');
             res.write(JSON.stringify(result)); //write a response to the client
             res.end(); //end the response
 

@@ -3,19 +3,111 @@
 <head>
     <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.2.0/css/ol.css" type="text/css">
     <style>
-
+        body {
+            background-color: darkred;
+        }
+        .map {
+            position: absolute;
+            top: 30px;
+            bottom: 30px;
+            left: 30px;
+            right: 30px;
+        }
+        .button{
+            background: #cc1f10;
+            color: white;
+            z-index: 3;
+            position:relative;
+            font-size: 30px;
+            border: none;
+        }
+        #radar {
+            text-align: left;
+            color: red;
+            position: absolute;
+            text-decoration: none;
+            color:white;
+            background: #cc1f10;
+            margin-left: 10%;
+            font-size: 28px;
+            top: 1px;
+        }
+        #logout {
+            text-align: right;
+            color: red;
+            position: absolute;
+            text-decoration: none;
+            color:white;
+            background: #cc1f10;
+            right: 3%;
+            font-size: 28px;
+            top: 1px;
+        }
+        #iconsource {
+            color: white;
+            font-size: 14px;
+            text-align: right;
+            position: absolute;
+            bottom: 11px;
+            left: 50px;
+            right: 50px;
+        }
     </style>
-    <title>OpenLayers example</title>
+    <title>GoW - Map</title>
 </head>
 <body>
-<input type="text" id="idPlayer" type="submit" value="">
+<!--<input type="text" id="idPlayer" type="submit" value="">-->
 
+<a id='radar' href="https://35.241.198.186:80/">  <button class='button'>Go To Radar</button>  </a>
+<div id='logout'>  <button class='button' onclick="logOut()">Log out</button>  </div>
 <div id="mapInfo" ></div>
 <div id="map" class="map" ></div>
+<div id="iconsource">The icon indicating players is property of <a href="https://icons8.com">Icons8</a> and is used under a Creative Commons license.</div>
 <script src="https://openlayers.org/en/v4.6.5/build/ol.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
 
+    var urlD = 'https://35.241.198.186:8080';
+
+    // determine whether someone is logged in
+    // if not, redirect.
+    function loggedIn() {
+        const loginToken = getCookie("token");
+        if (loginToken) {
+            console.log("token found");
+            const obj = JSON.stringify({token: loginToken, request: "jwt"});
+            $.post(urlD, obj,
+                function (json) {
+                    if (!json.result) {
+                        alert('Please log in first.');
+                        window.location.replace('https://35.241.198.186:443/');
+                    }
+                }
+            );
+        } else {
+            alert('Please log in first.');
+            window.location.replace('https://35.241.198.186:443/');
+        }
+    }
+
+    loggedIn();
+
+    function logOut() {
+        data = {
+            request: "signout",
+            token: getCookie("token")
+        };
+        $.post(urlD, JSON.stringify(data), function(json) {
+            if (json.result) {
+                // remove all cookies:     (source: https://stackoverflow.com/questions/179355/clearing-all-cookies-with-javascript)
+                document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
+                // redirect to login page
+                window.location.replace('https://35.241.198.186:443/#/sign-in/');
+            } else {
+                alert("Something went wrong.\nPlease try again.")
+            }
+        })
+    }
 
     /*
         var dataCookie = {};
@@ -31,15 +123,61 @@
         document.cookie = JSON.stringify(dataCookie);
     */
 
+    // BRON: https://www.w3schools.com/js/js_cookies.asp
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) === 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
     var dataCookie = {};
 
-    dataCookie.zoom=14;
+    dataCookie.zoom=16;
     dataCookie.autozoom = "false";
-    document.cookie = JSON.stringify(dataCookie);
+    document.cookie = "mapCookie=" + JSON.stringify(dataCookie) +";";
 
 
-    var longitude = 4.361721;
-    var latitude = 50.850346;
+    var longitude = 4.700518;
+    var latitude = 50.879845;
+    var thisname = getCookie("name");
+
+    // Create Map
+    let rotationMap = 0;
+
+    var map = new ol.Map({
+        target: 'map',
+        layers: [new ol.layer.Tile({
+            source: new ol.source.OSM(),
+        })],
+        view: new ol.View({
+            center: ol.proj.fromLonLat([longitude, latitude]),
+            rotation: rotationMap
+        })
+    });
+
+    map.getView().setZoom(14);
+
+    map.on('click', function(evt) {
+        var feature = map.forEachFeatureAtPixel(evt.pixel,
+            function(feature, layer) {
+                return feature;
+            });
+        if( feature) {
+            var att = feature.getProperties();
+            var json = JSON.parse(att.name);
+            sendFixedSignal(json.playerId);
+        }
+    });
 
 
     d();
@@ -47,77 +185,44 @@
 
     function d () {
 
-        document.getElementById("map").innerHTML = "";
-
-
         // send HTTP request to get JSON object with players
-
-        var urlD = 'https://35.241.198.186:80';
 
         var data = {};
 
         //data.playerId = "5bf1d5a3b373a15628ea2b81";
-        data.playerId = document.getElementById("idPlayer").value;
+        // data.playerId = document.getElementById("idPlayer").value;
 
         data.request = "Radar";
-
+        data.token = getCookie("token");
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition);
         } else {
-            return;
-            data.longitude = longitude;
-            data.latitude = latitude;
+            alert("Please allow access to your location.");
+            setTimeout(d, 15000);  // wait for 15 seconds and try again
         }
 
         function showPosition(position) {
             longitude = position.coords.longitude;
             latitude = position.coords.latitude;
+
+            data.longitude = longitude;
+            data.latitude = latitude;
+
+            map.getView().setCenter(ol.proj.fromLonLat([longitude, latitude]));
+
+            obj = JSON.stringify(data);
+            // Send get request use jquery ajax.
+
+            var cookie = JSON.parse(getCookie("mapCookie"));
+
+            $.post(urlD, obj, function (data) {
+                create(data);
+            });
         }
-
-        data.longitude = longitude;
-        data.latitude = latitude;
-
-        obj = JSON.stringify(data);
-        // Send get request use jquery ajax.
-
-        $.post(urlD, obj, function (data) {
-            create(data);
-        });
 
 
         function create(players) {
-
-            // Create Map
-            let rotationMap = 0;
-
-            const map = new ol.Map({
-                target: 'map',
-                layers: [new ol.layer.Tile({
-                    source: new ol.source.OSM(),
-                })],
-                view: new ol.View({
-                    center: ol.proj.fromLonLat([longitude, latitude]),
-                    rotation: rotationMap
-                })
-
-            });
-
-            var cookie = JSON.parse(document.cookie);
-
-            map.getView().setZoom(cookie.zoom);
-
-            map.on('click', function(evt) {
-                var feature = map.forEachFeatureAtPixel(evt.pixel,
-                    function(feature, layer) {
-                        return feature;
-                    });
-                if( feature) {
-                    var att = feature.getProperties();
-                    var json = JSON.parse(att.name);
-                    alert("Id player: "+json.playerId);
-                }
-            });
 
             // add every player to map
             getPlayerLayers(players, map);
@@ -127,25 +232,29 @@
 
                 var zoom = map.getView().getZoom();
 
-                var cookie = JSON.parse(document.cookie);
+                var cookie = JSON.parse(getCookie("mapCookie"));
 
                 cookie.zoom = zoom;
 
-                document.cookie = JSON.stringify(cookie);
+                document.cookie = "mapCookie=" + JSON.stringify(dataCookie) +";";
 
-
-            }, 7000);
+            }, 2000);
 
         }
 
-        setTimeout(d, 20000); //
+        setTimeout(d, 4000); //
     };
 
 
     function getPlayerLayers(players, map) {
 
+        var a = map.getLayers().getLength() - 1;
+        for (a; a > 0; a--) {
+            map.removeLayer(map.getLayers().getArray()[a]);
+        }
 
-        obj = (JSON.parse(players));
+        // obj = (JSON.parse(players));
+        obj = players;
 
         let i = 0;
         for (x in obj) {
@@ -169,23 +278,81 @@
             });
 
             let iconLayer = new ol.layer.Vector({
-                source: iconLayerSource,
-                style: new ol.style.Style({
-                    image: new ol.style.Icon({
-                        anchor: [0.5, 0.5],
-                        anchorXUnits: 'fraction',
-                        anchorYUnits: 'fraction',
-                        scale: 0.1,
-                        src: 'https://img.freepik.com/free-icon/frontal-standing-man-silhouette_318-29133.jpg?size=338c&ext=jpg'
+                    source: iconLayerSource,
+                    style: new ol.style.Style({
+                        image: new ol.style.Icon({
+                            anchor: [0.5, 1],
+                            anchorXUnits: 'fraction',
+                            anchorYUnits: 'fraction',
+                            scale: 0.04,
+                            src: 'https://img.icons8.com/ios/1600/men-age-group-4-filled.png'
+                            // BRON: https://icons8.com/icon/37170/man
+                        })
                     })
-                })
-            });
-            i++;
+                });
+                // map.addLayer(iconLayer);
+            // } else if (!obj[i].hasOwnProperty("firstPlayer") && obj[i].playerId===thisname) {
+            //     let iconLayer = new ol.layer.Vector({
+            //         source: iconLayerSource,
+            //         style: new ol.style.Style({
+            //             image: new ol.style.Icon({
+            //                 anchor: [0.5, 1],
+            //                 anchorXUnits: 'fraction',
+            //                 anchorYUnits: 'fraction',
+            //                 scale: 0.1,
+            //                 src: 'https://cdn.icon-icons.com/icons2/510/PNG/512/location_icon-icons.com_50109.png'
+            //                 // BRON: https://icon-icons.com/nl/pictogram/locatie/50109
+            //             })
+            //         })
+            //     });
+            //     map.addLayer(iconLayer);
+            // }
+
+                i++;
 
             // adding every player icon to map!
             map.addLayer(iconLayer);
 
+
+            // special signal received?
+            if (obj[i].sendSignal === "specialSignal" && obj[i].playerId === thisname){
+                //alert("acknowledgement received!");
+                alert("SpecialSignal received!");
+                specialSignalReceived();
+            }
+
         }
+    }
+
+    function sendFixedSignal(id){
+        var cookie = JSON.parse(getCookie("radarCookie"));
+        var thisPlayer = cookie.playerId;
+
+        if (thisPlayer === id){
+            alert("cannot send signal to yourself :)")
+        } else {
+
+            var data = {};
+
+            data.request = "sendSignal";
+            data.playerId = id;
+            var dataSignal = {};
+            data.sendSignal = "specialSignal";
+            alert("send speciaSignal to player with id: " + id);
+            dataSignal.playerId = thisPlayer;
+            data.dataSignal = JSON.stringify(dataSignal);
+
+            obj = JSON.stringify(data);
+
+            $.post(urlD, obj); // send ajax object to server
+        }
+    }
+
+    function specialSignalReceived(){
+        document.body.style.backgroundColor = "black";
+        setTimeout(function(){
+            document.body.style.backgroundColor = "darkred";
+        }, 3000);
     }
 
     /*

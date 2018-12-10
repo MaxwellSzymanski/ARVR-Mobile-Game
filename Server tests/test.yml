@@ -1,0 +1,36 @@
+config:
+  target: 'https://35.241.198.186:8080/'
+  tls:
+    rejectUnauthorized: false
+  http:
+    # Responses have to be sent within 25 seconds or the request will be aborted
+    timeout: 25
+  phases:
+    - duration: 120
+      arrivalRate: 1
+scenarios:
+  - flow:
+    - log: "New virtual user running."
+    - post:
+        url: "/"
+        json:
+          request: "signin"
+          email: "username_1@testusers.com"
+          password: "password"
+          position:
+            longitude: 4.69517589
+            latitude: 50.8649495
+        capture:
+          json: "$.token"
+          as: "token"
+    - loop:
+        - think: 2
+        - post:
+            url: "/"
+            json:
+              request: "radar"
+              token: "{{ token }}"
+              longitude: 4.695176
+              latitude: 50.86495   
+      count: 120
+          

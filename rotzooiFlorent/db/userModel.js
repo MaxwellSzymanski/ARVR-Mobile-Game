@@ -34,6 +34,26 @@ const Schema = new mongoose.Schema({
     featureVector: {
         type: Object,
         // required: true
+    },
+    attack: {
+        type: Number,
+        default: 100
+    },
+    defence: {
+        type: Number,
+        default: 100
+    },
+    health: {
+        type: Number,
+        default: 100
+    },
+    level: {
+        type: Number,
+        default: 1
+    },
+    experience: {
+        type: Number,
+        default: 0
     }
 }, {timestamps: true});
 
@@ -49,15 +69,20 @@ Schema.methods.checkPassword = async function(password) {
 };
 
 Schema.methods.createToken = function() {
-    const today = new Date();
-    let exp = new Date(today);
-    exp.setDate(today.getDate() + 1);
+    // var currentDate = new Date();
+    // currentDate.setDate(currentDate.getDate() + 1);
+    // let exp = new Date();
+    // const days = exp.getDate() + 1;
+    // exp.setDate(days);
+
+    let exp = 1;            // Number of days before expiry
+    exp *= 60 * 60 * 24;    // days * 60 sec * 60 min * 24 h
 
     return jwt.sign({
         id: this._id,
         name: this.name,
-        exp: parseInt(exp.getTime() / 1000),
-    }, secret);
+        // exp: parseInt(exp)
+    }, secret, {expiresIn : exp});
 };
 
 Schema.methods.checkToken = function(token) {

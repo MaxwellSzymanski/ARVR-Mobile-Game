@@ -44,8 +44,10 @@ class SignUpForm extends React.Component {
         e.preventDefault();
 
         let that = this;
+        const image = localStorage.getItem("PhotoOfMe");
+		const featureVector = localStorage.getItem("fv");
 
-        if (!this.state.name || !this.state.email || !this.state.password) {
+        if (!this.state.name || !this.state.email || !this.state.password || !image) {
             alert("Please fill in all fields.");
         } else if (!this.state.hasAgreed) {
             alert("You need to agree to the terms and conditions in order to continue.")
@@ -68,9 +70,11 @@ class SignUpForm extends React.Component {
             dataToSend.request = "signup";
 
             // const image = fs.readFileSync(PATH);
-            const image = localStorage.getItem("PhotoOfMe");
             dataToSend.image = new Buffer(image).toString('base64');
-
+			
+			// sent featureVector
+			dataToSend.featureVector = new Buffer(featureVector).toString('base64');
+			
             // send HTTP request with sign up data.
             let obj = JSON.stringify(dataToSend);
 
@@ -81,8 +85,12 @@ class SignUpForm extends React.Component {
             await axios.post(url, obj).then(
                 function (json) {
                     if (json.data.success) {
-                        cookies.set('token', json.data.token, {path: '/'});
-                        cookies.set('name', json.data.name,  {path: '/'});
+                        const options = {
+                            path: '/',
+                            expires: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)   // expires in 24 hours
+                        };
+                        cookies.set('token', json.data.token, options);
+                        cookies.set('name', json.data.name, options);
                         that.setState({redirect: true});
                     }
                     else alert(json.data.message);
