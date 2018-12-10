@@ -645,7 +645,7 @@ window.onclick = function(event) {
         var thisPlayer = cookie.playerId;
 
         if (thisPlayer === id){
-            Error.render("cannot send signal to yourself :)")
+            Error.render("Cannot send signal to yourself.")
         } else {
 
             var data = {};
@@ -656,11 +656,11 @@ window.onclick = function(event) {
             var dataSignal = {};
             if (typeSignal === "specialSignal") {
                 data.sendSignal = "specialSignal";
-                Alert.render("send speciaSignal to player with id: " + id);
+                Alert.render("Send special signal to player " + id);
             } else {
                 data.sendSignal = "handShakeSignal";
                 dataSignal.acknowledged = "falseACK";
-                Alert.render("send acknowledgeHandshake to id: "+id);
+                Alert.render("Send acknowledgeHandshake to id: "+id);
 
             }
             dataSignal.playerId = thisPlayer;
@@ -687,7 +687,7 @@ window.onclick = function(event) {
         dataSignal.acknowledged = "trueACK";
         data.dataSignal = JSON.stringify( dataSignal);
 
-        Alert.render("send acknowledgeHandshake to id: "+id);
+        Alert.render("Handshake received!\nSend acknowledge handshake to "+id);
 
         obj = JSON.stringify(data);
 
@@ -706,7 +706,7 @@ window.onclick = function(event) {
 
         data.enemyPlayerId = String(idEnemyPlayer);
 
-        Alert.render(data.playerId+" player id fight enemey with id:" + idEnemyPlayer);
+        Alert.render("You are now in a fight with " + idEnemyPlayer);
 
         obj = JSON.stringify(data);
 

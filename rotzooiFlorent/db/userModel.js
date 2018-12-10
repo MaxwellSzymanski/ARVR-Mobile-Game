@@ -69,12 +69,6 @@ Schema.methods.checkPassword = async function(password) {
 };
 
 Schema.methods.createToken = function() {
-    // var currentDate = new Date();
-    // currentDate.setDate(currentDate.getDate() + 1);
-    // let exp = new Date();
-    // const days = exp.getDate() + 1;
-    // exp.setDate(days);
-
     let exp = 1;            // Number of days before expiry
     exp *= 60 * 60 * 24;    // days * 60 sec * 60 min * 24 h
 
@@ -92,8 +86,11 @@ Schema.methods.checkToken = function(token) {
 Schema.methods.getUserData = function() {
     return {
         name: this.name,
-        email: this.email,
-        image: this.image
+        attack: this.attack,
+        defence: this.defence,
+        health: this.health,
+        level: this.level,
+        experience: this.experience
     };
 };
 
