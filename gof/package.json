@@ -6,6 +6,7 @@
     "@material/button": "^0.41.0",
     "@sweetalert/with-react": "^0.1.1",
     "axios": "^0.18.0",
+    "face-api.js": "^0.16.1",
     "react": "^16.6.3",
     "react-dom": "^16.6.0",
     "react-html5-camera-photo": "^1.2.9",
