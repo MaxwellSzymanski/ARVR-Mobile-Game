@@ -25,9 +25,9 @@ class CameraComp extends React.Component {
     console.log(photo)
 
       var fv = await getFeatureVector(photo);
-      console.log(fv)
+      alert(fv);
 
-      if (fv == null) {
+      if (fv === null) {
         console.log("No face detected!")
         alert("No face detected, try again.")
       }
