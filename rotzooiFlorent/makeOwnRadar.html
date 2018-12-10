@@ -616,18 +616,10 @@ window.onclick = function(event) {
     });
 
     function distanceBetween(lat1, lon1, lat2, lon2) {
-        var earthRadiusKm = 6371;
-
-        var dLat = this.degreesToRadians(lat2-lat1);
-        var dLon = this.degreesToRadians(lon2-lon1);
-
-        lat1 = this.degreesToRadians(lat1);
-        lat2 = this.degreesToRadians(lat2);
-
-        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-            Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
-        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        return earthRadiusKm * c * 1000; // * 1000 (answer in meters)
+        var x = this.degreesToRadians(lon2-lon1) * Math.cos(this.degreesToRadians(lat2+lat1)/2);
+        var y = this.degreesToRadians(lat2-lat1);
+        var d = Math.sqrt(x*x + y*y) * 6371;
+        return d * 1000; // * 1000 (answer in meters)
     }
     $(function() {
         var deg = 0;
