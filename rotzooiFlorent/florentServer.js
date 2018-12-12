@@ -377,7 +377,12 @@ function fight(obj){
         User.findOne({name: obj.enemyPlayerId}, function (error, enemy) {
             if (self !== null && enemy !== null) {
                 const enemyDamage = calculateAttack(self, enemy);
-                enemy.health = enemy.health - enemyDamage;
+                enemy.health = Math.floor(enemy.health - enemyDamage);
+                if (enemy.health <= 0) {
+                    enemy.health = 100;
+                    self.level = self.level + 1;
+                    self.save();
+                }
                 enemy.save();
             }
         });

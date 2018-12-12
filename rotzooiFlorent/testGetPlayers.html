@@ -179,6 +179,17 @@
     dataCookie.autozoom = "false";
     document.cookie = "mapCookie=" + JSON.stringify(dataCookie) +";";
 
+    function updateOwnStats() {
+        var dataToSend = {
+            request: "stats",
+            token: getCookie("token")
+        };
+        $.post(urlD, JSON.stringify(dataToSend), function (response) {
+            document.cookie = "stats=" + JSON.stringify(response) + ";";
+        })
+    }
+
+    updateOwnStats();
 
     var longitude = 4.700518;
     var latitude = 50.879845;
@@ -361,8 +372,16 @@
         var cookie = JSON.parse(getCookie("radarCookie"));
         var thisPlayer = cookie.playerId;
 
-        if (thisPlayer === id){
-            Error.render("Cannot send signal to yourself.")
+        if (thisPlayer === id) {
+            var stats = JSON.parse(getCookie("stats"));
+            // Error.render("Cannot send signal to yourself.")
+            Alert.render("This is you: " +
+                "\n  username:    " + stats.name +
+                ",\n  attack:    " + stats.attack +
+                ",\n  defence:    " + stats.defence +
+                ",\n  health:    " + stats.health +
+                ",\n  level:    " + stats.level +
+                ",\n  experience:    " + stats.experience);
         } else {
 
             var data = {};
