@@ -224,7 +224,7 @@ function stats(obj, res) {
                     }
             });
         }
-    }
+    })
 }
 
 function verifyJWT(obj, res) {
