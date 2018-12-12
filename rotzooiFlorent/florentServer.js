@@ -133,7 +133,7 @@ function signup(obj, res) {
 }
 
 function signin(obj, res) {
-    User.findOne({ email : obj.email }, async function (error, result) {
+    User.findOne({ email : obj.email }, async function(error, result) {
         if (error) throw error;
         if (result === null) {
             respond(res, {"email": false});
@@ -141,24 +141,24 @@ function signin(obj, res) {
             const value = await result.checkPassword(obj.password);
             if (!value)
                 respond(res, {"email": true, "password": value});
-            else
+            else {
                 respond(res, {
                     "email": true,
                     "password": value,
                     token: result.createToken(),
                     name: result.name
                 });
-            ActivePlayer.findOne({playerid: result.name}, function(error, act) {
-                if (act === null) {
-                    const newActivePlayer = new ActivePlayer({playerid: result.name, location: obj.position});
-                    newActivePlayer.save();
-                } else {
-                    act.location = obj.position;
-                    act.updated_at = Date.now();
-                    act.save();
-                }
-            })
-
+                ActivePlayer.findOne({playerid: result.name}, function(error, act) {
+                    if (act === null) {
+                        const newActivePlayer = new ActivePlayer({playerid: result.name, location: obj.position});
+                        newActivePlayer.save();
+                    } else {
+                        act.location = obj.position;
+                        act.updated_at = Date.now();
+                        act.save();
+                    }
+                })
+            }
         }
     });
 }
@@ -342,7 +342,21 @@ function sendSignal(obj) {
     });
 }
 
+function calculateAttack(self, other) {
+    return (self.attack * self.attack / (self.attack + other.defence)) * (Math.random() * 11 + 5) / 20;
+}
+
 function fight(obj){
+    User.findOne({ name: obj.playerId}, function(error, self) {
+        User.findOne({name: obj.enemyPlayerId}, function (error, enemy) {
+            if (self !== null && enemy !== null) {
+                const enemyDamage = calculateAttack(self, enemy);
+                enemy.health = enemy.health - enemyDamage;
+                enemy.save();
+            }
+        });
+    });
+
     ActivePlayer.findOne({ playerid: obj.playerId }, function(error, result) {
         if (error) throw error;
         if (result !== null) {
@@ -359,5 +373,5 @@ function fight(obj){
         }
     });
 
-    console.log("Enemies are created");
+    console.log(obj.playerId + " kicked " + obj.enemyPlayerId +"!");
 }
