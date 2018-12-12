@@ -293,6 +293,8 @@
         })
     }
 
+    updateOwnStats();
+
     /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
 function myFunction() {
@@ -647,7 +649,7 @@ window.onclick = function(event) {
         var thisPlayer = cookie.playerId;
 
         if (thisPlayer === id){
-            var stats = JSON.parse(getCookie("stats"));
+            var stats = getCookie("stats");
             // Error.render("Cannot send signal to yourself.")
             Alert.render(stats);
         } else {
