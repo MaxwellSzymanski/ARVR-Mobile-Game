@@ -177,20 +177,15 @@ class SignUpForm extends React.Component {
                     </div>
                     <div className="modal-body">
                         <h3>Your Content</h3>
-                        <p>In these Website Standard Terms and Conditions, “Your Content” shall mean any audio, video text,
-                            images or other material you choose to display on this Website. By displaying Your Content,
-                            you grant Company Name a non-exclusive, worldwide irrevocable, sub licensable license to use,
-                            reproduce, adapt, publish, translate and distribute it in any and all media.
-
-                            Your Content must be your own and must not be invading any third-party's rights.
-                            Company Name reserves the right to remove any of Your Content from this Website at any time without notice.</p>
+                        <p>By 'your content', any pictures and usernames you use are meant. By registering, you agree
+                        to having your content used within the website, modified, and deleted without warning.</p>
 
 
                          <h3>No warranties</h3>
 
-                        <p>This Website is provided “as is,” with all faults, and Company Name express no representations
-                            or warranties, of any kind related to this Website or the materials contained on this Website.
-                            Also, nothing contained on this Website shall be interpreted as advising you.</p>
+                        <p>This Website is provided “as is,” with all faults, and GOW expresses no representations
+                            or warranties, of any kind related to this website or the materials contained on this website.
+                            </p>
 
                     </div>
                 </div>
