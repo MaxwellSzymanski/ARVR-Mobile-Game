@@ -651,7 +651,13 @@ window.onclick = function(event) {
         if (thisPlayer === id){
             var stats = getCookie("stats");
             // Error.render("Cannot send signal to yourself.")
-            Alert.render(stats);
+            Alert.render("This is you!" +
+                "\n  username:    " + stats.name +
+                "\n  attack:    " + stats.attack +
+                "\n  defence:    " + stats.defence +
+                "\n  health:    " +stats.health +
+                "\n  level:    " + stats.level +
+                "\n  experience:    " + stats.experience);
         } else {
 
             var data = {};
