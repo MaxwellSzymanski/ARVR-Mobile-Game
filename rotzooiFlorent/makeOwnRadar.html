@@ -289,7 +289,7 @@
             token: getCookie("token")
         };
         $.post(urlD, JSON.stringify(dataToSend), function (response) {
-            document.cookie = "userStats=" + JSON.stringify(response) + ";";
+            document.cookie = "stats=" + JSON.stringify(response) + ";";
         })
     }
 
