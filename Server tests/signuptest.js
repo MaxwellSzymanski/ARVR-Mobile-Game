@@ -1,16 +1,16 @@
 const axios = require('axios');
 const fs = require('fs');
 const https = require('https');
-const numberOfUsers = 60;
+const numberOfUsers = 10;
 
-const url = 'https://35.241.198.186:80';
+const url = 'https://35.241.198.186:8080';
 const agent = new https.Agent({
     rejectUnauthorized: false
 });
 
 for(let i = 0; i < numberOfUsers; i++) {
-    const name = "username_" + i.toString();
-    const email = name + "@testusers.com";
+    const name = "user_" + i.toString();
+    const email = name + "@users.com";
     const password = "password";
     let image = fs.readFileSync('./image.png');
     image = new Buffer(image).toString('base64');

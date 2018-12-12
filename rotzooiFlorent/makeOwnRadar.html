@@ -275,7 +275,7 @@
 
     // dataCookie.playerId = loginCookie.name;
     dataCookie.numberPixelPerMeter="1";
-    dataCookie.updateFrequency="4000";
+    dataCookie.updateFrequency="3000";
     dataCookie.autozoom="on";
     dataCookie.typeSignal= null;
     dataCookie.longitude ="4.361721";
@@ -704,7 +704,7 @@ window.onclick = function(event) {
         obj = JSON.stringify(data);
 
         $.post(urlD,obj); // send ajax object to server
-        setTimeout(updateOwnStats, 2000);
+        setTimeout(updateOwnStats, 1000);
     }
     function fight(idEnemyPlayer) {
 
@@ -723,7 +723,7 @@ window.onclick = function(event) {
         obj = JSON.stringify(data);
 
         $.post(urlD,obj); // send ajax object to server
-        setTimeout(updateOwnStats, 2000);
+        setTimeout(updateOwnStats, 1000);
     }
 
     function CustomAlert(){
