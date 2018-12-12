@@ -369,7 +369,7 @@ function sendSignal(obj) {
 }
 
 function calculateAttack(self, other) {
-    return (self.attack * self.attack / (self.attack + other.defence)) * (Math.random() * 11 + 5) / 20;
+    return (self.attack * self.attack / (self.attack + other.defence)) * (Math.random() * 11 + 4 + self.level) / (20 + self.level);
 }
 
 function fight(obj){
