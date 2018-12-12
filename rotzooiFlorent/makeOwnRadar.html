@@ -283,6 +283,16 @@
 
     document.cookie = "radarCookie=" + JSON.stringify(dataCookie) +";";
 
+    function updateOwnStats() {
+        var dataToSend = {
+            request: "stats",
+            token: getCookie("token")
+        };
+        $.post(urlD, JSON.stringify(dataToSend), function (response) {
+            document.cookie = "userStats=" + JSON.stringify(response) + ";";
+        })
+    }
+
     /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
 function myFunction() {
@@ -637,7 +647,9 @@ window.onclick = function(event) {
         var thisPlayer = cookie.playerId;
 
         if (thisPlayer === id){
-            Error.render("Cannot send signal to yourself.")
+            var stats = JSON.parse(getCookie("stats"));
+            // Error.render("Cannot send signal to yourself.")
+            Alert.render(stats);
         } else {
 
             var data = {};
@@ -684,7 +696,7 @@ window.onclick = function(event) {
         obj = JSON.stringify(data);
 
         $.post(urlD,obj); // send ajax object to server
-
+        setTimeout(updateOwnStats, 2000);
     }
     function fight(idEnemyPlayer) {
 

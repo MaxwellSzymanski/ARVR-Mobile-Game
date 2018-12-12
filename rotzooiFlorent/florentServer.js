@@ -74,6 +74,9 @@ https.createServer(https_options, async function (req, res) {
             case "signout":
                 signout(obj, res);
                 break;
+            case "stats":
+                stats(obj, res);
+                break;
             case "jwt":
                 verifyJWT(obj, res);
                 break;
@@ -199,6 +202,29 @@ function signout(obj, res) {
                 });
         }
     });
+}
+
+function stats(obj, res) {
+    jwt.verify(obj.token, secret, async function(err, token) {
+        if (err) {
+            console.log("invalid token");
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader("Content-Type", "ERROR");
+            res.end();
+        } else {
+            User.findById(token.id).then(
+                function (user) {
+                    if (user === null) {
+                        console.log("No user found");
+                        res.setHeader('Access-Control-Allow-Origin', '*');
+                        res.setHeader("Content-Type", "ERROR");
+                        res.end();
+                    } else {
+                        respond(res, user.getUserData());
+                    }
+            });
+        }
+    }
 }
 
 function verifyJWT(obj, res) {
