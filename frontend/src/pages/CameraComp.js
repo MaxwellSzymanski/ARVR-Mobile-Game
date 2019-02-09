@@ -18,17 +18,16 @@ class CameraComp extends React.Component {
     if (this.state.redirect) {return <Redirect to="/imageConfirm" />}
   }
   async onTakePhoto (dataUri) {
-    // TODO: Check face
-	  var photoSrc = dataUri;
-    var photo = new Image;
-    photo.src = photoSrc;
-    console.log(photo);
+      // TODO: Check face
+      var photoSrc = dataUri;
+      var photo = new Image;
+      photo.src = photoSrc;
+      console.log(photo);
 
       var fv = await getFeatureVector(photo);
-      alert(fv);
 
       if (fv === null) {
-        console.log("No face detected!")
+          console.log("No face detected!")
           swal({
               title: "No face detected",
               text: "Make sure you are facing the camera with good lighting conditions.",
@@ -36,7 +35,7 @@ class CameraComp extends React.Component {
               button: "I'll try!",
           });
       }
-      else{
+      else {
           localStorage.setItem("PhotoOfMe", dataUri);
           localStorage.setItem("fv", fv);
           this.setRedirect();

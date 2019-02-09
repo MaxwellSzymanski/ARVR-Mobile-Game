@@ -10,7 +10,7 @@ import LandingPage from './pages/LandingPage.js';
 import './App.css';
 import ImageConfirm from "./pages/ImageConfirm";
 
-
+import EmailVerif from "./pages/EmailVerif.js";
 
 class App extends Component {
   render() {
@@ -25,6 +25,7 @@ class App extends Component {
             <Route exact path="/view" component={View}></Route>
             <Route exact path="/imageConfirm" component={ImageConfirm}></Route>
             <Route exact path="/landingPage" component={LandingPage}></Route>
+            <Route exact path="/verify" component={EmailVerif}></Route>
           </Switch>
 
         </div>

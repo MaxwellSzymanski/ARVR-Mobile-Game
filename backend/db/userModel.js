@@ -7,6 +7,15 @@ const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 const secret = require('./config.js');
 
+const nodemailer = require('nodemailer');
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'gameofwolves12@gmail.com',
+        pass: 'peno12perseus'
+    }
+});
+
 const Schema = new mongoose.Schema({
     name: {
         type: String,
@@ -22,6 +31,13 @@ const Schema = new mongoose.Schema({
         required: true,
         match: /\S+@\S+\.\S+/,
         index: true         // index to optimise queries that search on email
+    },
+    verified: {
+        type: Boolean,
+        default: false
+    },
+    verifCode: {
+        type: Number
     },
     password: {
         type: String,
@@ -92,6 +108,38 @@ Schema.methods.getUserData = function() {
         level: this.level,
         experience: this.experience
     };
+};
+
+Schema.methods.sendVerifMail = function() {
+    this.verifCode = Math.trunc(100000 + 899998*(Math.random()));
+    this.save();
+
+    let message = this.name + ",\n\n\nUse the following code to activate your account:\n\n" +
+        this.verifCode.toString() + "\n\n\nThe Game of Wolves team";
+
+    const options = {
+        from: 'Game Of Wolves',
+        to: this.email,
+        subject: 'Verify your e-mail',
+        text: message
+    };
+
+    transporter.sendMail(options, function(error, res){
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + res.response);
+        }
+    });
+};
+
+Schema.methods.verify = function(code) {
+    if(this.verifCode === code) {
+        this.verified = true;
+        this.save();
+        return true;
+    }
+    return false;
 };
 
 module.exports = mongoose.model('User', Schema);

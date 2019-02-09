@@ -68,6 +68,9 @@ https.createServer(https_options, async function (req, res) {
             case "signup":
                 signup(obj, res);
                 break;
+            case "verify":
+                verifyEmail(obj, res);
+                break;
             case "signin":
                 signin(obj, res);
                 break;
@@ -98,11 +101,11 @@ https.createServer(https_options, async function (req, res) {
                 getFrequency(obj,res);
                 break;
             default:
-                console.log("\n\n\n-------------------------");
-                console.log("|                       |");
+                console.log("\n\n\n ----------------------- ");
+                console.log("/                       \\");
                 console.log("|  ! unknown request !  |");
-                console.log("|                       |");
-                console.log("-------------------------\n\n\n");
+                console.log("\\                       /");
+                console.log(" ----------------------- \n\n\n");
                 res.end();
                 break;
         }
@@ -128,11 +131,32 @@ function signup(obj, res) {
                 name: newUser.name,
                 token: newUser.createToken(),
             });
+            newUser.sendVerifMail();
         }
         res.end();
     });
-    const newActivePlayer = new ActivePlayer({playerid: result.name, location: obj.position});
+    const newActivePlayer = new ActivePlayer({playerid: obj.name, location: obj.position});
     newActivePlayer.save();
+}
+
+function verifyEmail(obj, res) {
+    jwt.verify(obj.token, secret, async function(err, token) {
+        if (err) {
+            console.log("invalid token");
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader("Content-Type", "ERROR");
+            res.end();
+            throw err;
+        } else {
+            User.findById(token.id).then(
+                async function(user) {
+                    const result = await user.verify(obj.code);
+                    respond(res, {
+                        success: result
+                    });
+                })
+        }
+    })
 }
 
 function signin(obj, res) {
@@ -238,13 +262,17 @@ function verifyJWT(obj, res) {
         } else {
             User.findById(token.id).then(
                 async function (user) {
-                    let value = false;
-                    if (user !== null)
-                        value = await user.checkToken(token);
-                    console.log(value);
+                    let jwtValid = false;
+                    let emailVerified = false;
+                    if (user !== null) {
+                        jwtValid = await user.checkToken(token);
+                        emailVerified = user.verified;
+                    }
+                    console.log(jwtValid);
                     res.setHeader('Access-Control-Allow-Origin', '*');
                     res.setHeader("Content-Type", "application/json");
-                    res.write(JSON.stringify({result: value}));
+                    res.write(JSON.stringify({jwt: jwtValid,
+                                              verified: emailVerified}));
                     res.end();
                 });
         }

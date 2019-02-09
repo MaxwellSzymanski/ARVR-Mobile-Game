@@ -1,0 +1,151 @@
+import React from 'react';
+import { Link, Redirect } from 'react-router-dom';
+import axios from 'axios';
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
+
+const url = 'https://localhost:8080';
+
+class EmailVerif extends React.Component {
+    componentDidMount() {
+        this.refs["code_1"].focus();
+    }
+    constructor() {
+        super();
+
+        this.state = {
+            firstTry: true
+        };
+
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    formComplete() {
+        let a = this.state;
+        return (a.code_1 && a.code_2 && a.code_3 && a.code_4 && a.code_5 && a.code_6);
+    }
+
+    async handleChange(e) {
+        let target = e.target;
+        if (target.value > 9 || target.value < 0) {
+            target.value = target.value % 10;
+        }
+        let value = target.type === 'checkbox' ? target.checked : target.value;
+        let name = target.name + "_" + target.id;
+
+        this.setState({
+            [name]: value
+        });
+
+        let next = target.name + "_" + (parseInt(target.id) + 1).toString();
+
+        if (value === "") {
+
+        } else {
+            if (next && next === "code_7") {
+                this.refs["code_1"].focus();
+            } else if (next) {
+                this.refs[next].focus();
+            }
+        }
+    }
+
+    async handleSubmit(e) {
+        e.preventDefault();
+
+        let that = this;
+        let a = this.state;
+        let code = parseInt(a.code_1 + a.code_2 + a.code_3 + a.code_4 + a.code_5 + a.code_6);
+
+        const dataToSend = {
+            code: code,
+            request: "verify",
+            token: cookies.get('token')
+        };
+
+        let obj = JSON.stringify(dataToSend);
+
+
+        axios.post(url, obj).then(
+            function (json) {
+                if (json.data.success) {
+                    alert("Your e-mail has been verified.");
+                    that.setState({redirect: true});
+                } else {
+                    alert("That code seems to be wrong.");
+                    that.setState({firstTry: false});
+                }
+            }
+        );
+
+        console.log('The form was submitted to ' + url + ' with the following data:');
+        console.log(dataToSend);
+    }
+
+    state = {
+        redirect : false };
+
+    setRedirect = () => {
+        this.setState({redirect: true})
+    };
+
+    renderRedirect = () => {
+        if (this.state.redirect) {return <Redirect to="/map" />}
+    };
+
+    goToMap()   {
+        this.setRedirect();
+    };
+
+    setPage() {
+        document.body.style = 'background: #cc1f10'
+    };
+
+    render() {
+
+        return (
+            <div>
+                {this.setPage()}
+                <div className="Title">
+                    <h1>Game Of Wolves</h1>
+                </div>
+                <div className="FormCenter">
+                    <form onSubmit={this.handleSubmit} className="FormFields">
+                    <div className="FormField">
+                        <p>A six digit verification code has been sent to your e-mail account. Please enter it below.</p>
+                        <p>If you don't find it in your inbox, you might find it in your spam.</p>
+                        <div className="VerificationCode">
+                            <div className="VerificationCodeDigit">
+                                <input type="number" ref="code_1" id="1" name="code" className="VerificationCodeDigit__Input" value={this.state.code} onChange={this.handleChange} min="0" max="9"/>
+                            </div>
+                            <div className="VerificationCodeDigit">
+                                <input type="number" ref="code_2" id="2" name="code" className="VerificationCodeDigit__Input" value={this.state.code} onChange={this.handleChange} min="0" max="9"/>
+                            </div>
+                            <div className="VerificationCodeDigit">
+                                <input type="number" ref="code_3" id="3" name="code" className="VerificationCodeDigit__Input" value={this.state.code} onChange={this.handleChange} min="0" max="9"/>
+                            </div>
+                            <div className="VerificationCodeDigit">
+                                <input type="number" ref="code_4" id="4" name="code" className="VerificationCodeDigit__Input" value={this.state.code} onChange={this.handleChange} min="0" max="9"/>
+                            </div>
+                            <div className="VerificationCodeDigit">
+                                <input type="number" ref="code_5" id="5" name="code" className="VerificationCodeDigit__Input" value={this.state.code} onChange={this.handleChange} min="0" max="9"/>
+                            </div>
+                            <div className="VerificationCodeDigit">
+                                <input type="number" ref="code_6" id="6" name="code" className="VerificationCodeDigit__Input" value={this.state.code} onChange={this.handleChange} min="0" max="9"/>
+                            </div>
+                        </div>
+                        <div className="FormField">
+                            {this.formComplete() && <button className="FormField__Button mr-20">Verify me!</button>}
+                        </div>
+                        <div className="FormField">
+                            {!this.state.firstTry && <button className="FormField__Button mr-20">Send me another code</button>}
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        );
+    }
+}
+export default EmailVerif;

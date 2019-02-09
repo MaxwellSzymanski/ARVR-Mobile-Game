@@ -4,7 +4,7 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 
-const url = require('./serveradress.js');
+const url = 'https://localhost:8080';
 
 // const $ = require('jQuery');
 
@@ -71,7 +71,7 @@ class SignUpForm extends React.Component {
 
             // const image = fs.readFileSync(PATH);
             dataToSend.image = new Buffer(image).toString('base64');
-			
+
 			// sent featureVector
 			dataToSend.featureVector = featureVector;
 			
@@ -117,7 +117,7 @@ class SignUpForm extends React.Component {
     };
 
     renderRedirect = () => {
-        if (this.state.redirect) {return <Redirect to="/map" />}
+        if (this.state.redirect) {return <Redirect to="/verify" />}
     };
 
     goToMap() {
