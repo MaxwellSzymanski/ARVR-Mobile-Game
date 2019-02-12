@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const url = require('./serveradress.js');
 
 
-class Map extends React.Component {
+class MapFout extends React.Component {
 
 
 
@@ -19,4 +19,4 @@ class Map extends React.Component {
 
 
 
-export default Map;
+export default MapFout;

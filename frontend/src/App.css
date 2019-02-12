@@ -22,6 +22,20 @@ lsubtitle {
     src: url("fonts/orkney-bold.otf");
 }
 
+body {
+  margin: 0px;
+  width: 100vw;
+   height: 100vh;
+}
+
+#root {
+  height: 100%;
+}
+
+
+.mapss {
+  height: 100%;
+}
 
 /* E-mail verification page (EmailVerif) */
 
@@ -83,9 +97,19 @@ lsubtitle {
     height: 100%;
 }
 
+.titelGOF{
+  font-size: 60pt;
+  color: #750c04;
+}
+
+.denWolf {
+  height: 30vh;
+}
+
+
 .background {
     width: 100%;
-    background-image: linear-gradient(to bottom, #cc1f10, #921304);
+    background-color: #cc1f10;
     padding: 10px;
     padding-bottom: 50px;
     padding-top: 50px;
@@ -118,7 +142,7 @@ p {
 
 .App__Form {
   width: 100%;
-  background-image: linear-gradient(to bottom, #cc1f10, #921304);
+  background-color: #cc1f10;
   padding: 25px 40px;
   overflow: auto;
   height: 100%;
