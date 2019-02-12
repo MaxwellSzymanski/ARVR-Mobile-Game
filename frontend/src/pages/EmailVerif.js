@@ -105,16 +105,16 @@ class EmailVerif extends React.Component {
     render() {
 
         return (
-            <div>
+            <div className="background">
                 {this.setPage()}
-                <div className="Title">
+                <div>
                     <h1>Game Of Wolves</h1>
                 </div>
                 <div className="FormCenter">
                     <form onSubmit={this.handleSubmit} className="FormFields">
                     <div className="FormField">
-                        <p>A six digit verification code has been sent to your e-mail account. Please enter it below.</p>
-                        <p>If you don't find it in your inbox, you might find it in your spam.</p>
+                        <p>A six digit verification code has been sent to your e-mail account. Enter it below.</p>
+                        <p>If you can't find it in your inbox, check your spam folder.</p>
                         <div className="VerificationCode">
                             <div className="VerificationCodeDigit">
                                 <input type="number" ref="code_1" id="1" name="code" className="VerificationCodeDigit__Input" value={this.state.code} onChange={this.handleChange} min="0" max="9"/>
