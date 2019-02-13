@@ -1,9 +1,15 @@
 import openSocket from 'socket.io-client';
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
-// const url = require('./serveradress.js');
-const url = "https://localhost:8080";
-const socket = openSocket(url, { secure: true, reconnect: true, rejectUnauthorized : false });
+// const fs = require('fs');
+const url = require('./serveradress.js');
+// const url = "https://localhost:8080";
+// const cert = fs.readFileSync('../backend/ssl/team12.pem');
+const socketOptions = {
+    secure: true,
+    rejectUnauthorized: false
+};
+const socket = openSocket(url, socketOptions);
 
 function signup(userData, that) {
     socket.emit('signup', userData);

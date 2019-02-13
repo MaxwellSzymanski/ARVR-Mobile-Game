@@ -121,6 +121,7 @@ server.listen(port);
 
 io.sockets.on('connection', function (socket) {
     socket.on('signup', function (data) {
+        console.log("signup");
         const newUser = new User(data);
         newUser.save( function(error) {
             if (error) {
