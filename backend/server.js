@@ -39,80 +39,113 @@ const respond = function(res, data) {
 };
 
 //create a server object:
-https.createServer(https_options, async function (req, res) {
-
-    // Set CORS headers
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Request-Method', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST');
-    res.setHeader('Access-Control-Allow-Headers', '*');
-    if ( req.method === 'OPTIONS' ) {
-        res.writeHead(200);
-        res.end();
-        return;
-    }
-
-    let body = [];
-    req.on('error', (err) => {
-        console.error(err);
-    }).on('data', (chunk) => {
-        body.push(chunk);
-    }).on('end', async () => {
-        body = Buffer.concat(body).toString();
-
-        let obj = JSON.parse(body);
-        const request = (obj.request).toLowerCase();
-
-        console.log("\n\n\nRequest:    " + request + "    ===============    current time:    " + new Date().toLocaleTimeString());
-        switch (request) {
-            case "signup":
-                signup(obj, res);
-                break;
-            case "verify":
-                verifyEmail(obj, res);
-                break;
-            case "signin":
-                signin(obj, res);
-                break;
-            case "signout":
-                signout(obj, res);
-                break;
-            case "stats":
-                stats(obj, res);
-                break;
-            case "jwt":
-                verifyJWT(obj, res);
-                break;
-            case "radar":
-                radar(obj, res);
-                break;
-            case "sendsignal":
-                sendSignal(obj);
-                res.end();
-                break;
-            case "fight":
-                fight(obj);
-                res.end();
-                break;
-            case "updatefrequency":
-                updateFrequency(obj,res);
-                break;
-            case "frequency":
-                getFrequency(obj,res);
-                break;
-            default:
-                console.log("\n\n\n ----------------------- ");
-                console.log("/                       \\");
-                console.log("|  ! unknown request !  |");
-                console.log("\\                       /");
-                console.log(" ----------------------- \n\n\n");
-                res.end();
-                break;
-        }
-        // console.log("\n");
-    });
-}).listen(port);
+// https.createServer(https_options, async function (req, res) {
+//
+//     // Set CORS headers
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+//     res.setHeader('Access-Control-Request-Method', '*');
+//     res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST');
+//     res.setHeader('Access-Control-Allow-Headers', '*');
+//     if ( req.method === 'OPTIONS' ) {
+//         res.writeHead(200);
+//         res.end();
+//         return;
+//     }
+//
+//     let body = [];
+//     req.on('error', (err) => {
+//         console.error(err);
+//     }).on('data', (chunk) => {
+//         body.push(chunk);
+//     }).on('end', async () => {
+//         body = Buffer.concat(body).toString();
+//
+//         let obj = JSON.parse(body);
+//         const request = (obj.request).toLowerCase();
+//
+//         console.log("\n\n\nRequest:    " + request + "    ===============    current time:    " + new Date().toLocaleTimeString());
+//         switch (request) {
+//             case "signup":
+//                 signup(obj, res);
+//                 break;
+//             case "verify":
+//                 verifyEmail(obj, res);
+//                 break;
+//             case "signin":
+//                 signin(obj, res);
+//                 break;
+//             case "signout":
+//                 signout(obj, res);
+//                 break;
+//             case "stats":
+//                 stats(obj, res);
+//                 break;
+//             case "jwt":
+//                 verifyJWT(obj, res);
+//                 break;
+//             case "radar":
+//                 radar(obj, res);
+//                 break;
+//             case "sendsignal":
+//                 sendSignal(obj);
+//                 res.end();
+//                 break;
+//             case "fight":
+//                 fight(obj);
+//                 res.end();
+//                 break;
+//             case "updatefrequency":
+//                 updateFrequency(obj,res);
+//                 break;
+//             case "frequency":
+//                 getFrequency(obj,res);
+//                 break;
+//             default:
+//                 console.log("\n\n\n ----------------------- ");
+//                 console.log("/                       \\");
+//                 console.log("|  ! unknown request !  |");
+//                 console.log("\\                       /");
+//                 console.log(" ----------------------- \n\n\n");
+//                 res.end();
+//                 break;
+//         }
+//         // console.log("\n");
+//     });
+// });
+// .listen(port);
 console.log("\n\n    Server listening on localhost:" + port + "\n\n");
+
+var server = https.createServer(https_options);
+var io = require('socket.io')(server);
+server.listen(port);
+
+io.sockets.on('connection', function (socket) {
+    socket.on('signup', function (data) {
+        const newUser = new User(data);
+        newUser.save( function(error) {
+            if (error) {
+                socket.emit('signupres', {
+                    success: false,
+                    message: error.message
+                });
+            } else {
+                socket.emit('signupres', {
+                    success: true,
+                    name: newUser.name,
+                    token: newUser.createToken(),
+                });
+                newUser.sendVerifMail();
+            }
+        });
+        const newActivePlayer = new ActivePlayer({playerid: data.name, location: data.position});
+        newActivePlayer.save();
+    });
+});
+
+// io.listen(port);
+
+// FUNCTIONS
+
 
 function signup(obj, res) {
     const newUser = new User(obj);

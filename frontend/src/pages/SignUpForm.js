@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
+import { signup } from './socket.js'
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
-
 const url = require('./serveradress.js');
 
 // const $ = require('jQuery');
@@ -29,7 +29,6 @@ class SignUpForm extends React.Component {
         console.log(event);
     };
 
-
     handleChange(e) {
         let target = e.target;
         let value = target.type === 'checkbox' ? target.checked : target.value;
@@ -43,7 +42,7 @@ class SignUpForm extends React.Component {
     async handleSubmit(e) {
         e.preventDefault();
 
-        let that = this;
+        // let that = this;
         const image = localStorage.getItem("PhotoOfMe");
 		const featureVector = localStorage.getItem("fv");
 
@@ -69,33 +68,26 @@ class SignUpForm extends React.Component {
             const dataToSend = this.state;
             dataToSend.request = "signup";
 
-            // const image = fs.readFileSync(PATH);
             dataToSend.image = new Buffer(image).toString('base64');
-
-			// sent featureVector
-			dataToSend.featureVector = featureVector;
+            dataToSend.featureVector = featureVector;
 			
-            // send HTTP request with sign up data.
-            let obj = JSON.stringify(dataToSend);
+            signup(dataToSend, this);
 
-            console.log('The form was submitted to ' + url + ' with the following data:');
-            console.log(this.state);
 
-            // receive success value (and error if the e-mail/username is already taken.
-            await axios.post(url, obj).then(
-                function (json) {
-                    if (json.data.success) {
-                        const options = {
-                            path: '/',
-                            expires: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)   // expires in 24 hours
-                        };
-                        cookies.set('token', json.data.token, options);
-                        cookies.set('name', json.data.name, options);
-                        that.setState({redirect: true});
-                    }
-                    else alert(json.data.message);
-                }
-            );
+            // await axios.post(url, obj).then(
+            //     function (json) {
+            //         if (json.data.success) {
+            //             const options = {
+            //                 path: '/',
+            //                 expires: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)   // expires in 24 hours
+            //             };
+            //             cookies.set('token', json.data.token, options);
+            //             cookies.set('name', json.data.name, options);
+            //             that.setState({redirect: true});
+            //         }
+            //         else alert(json.data.message);
+            //     }
+            // );
         }
     }
 

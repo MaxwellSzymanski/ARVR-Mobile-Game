@@ -15,6 +15,7 @@
     "react-loading-screen": "0.0.17",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.1",
+    "socket.io-client": "^2.2.0",
     "sweetalert": "^2.1.2",
     "universal-cookie": "^3.0.7"
   },
