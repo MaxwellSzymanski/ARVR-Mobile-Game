@@ -100,6 +100,7 @@ body {
 .titelGOF{
   font-size: 60pt;
   color: #750c04;
+  font-family: Impact, Charcoal, sans-serif;
 }
 
 .denWolf {
@@ -165,6 +166,7 @@ p {
   outline: none;
   display: inline-block;
   text-decoration: none;
+  opacity: 0.8;
 }
 
 .PageSwitcher__Item--Active {
@@ -286,7 +288,6 @@ p {
     width: 190px;
     margin-top: 20px;
     margin-bottom: 50px;
-    border-radius: 100%;
     border: none;
     display: inline-block;
 }
