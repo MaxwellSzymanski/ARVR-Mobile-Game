@@ -4,7 +4,7 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 
-const url = 'https://localhost:8080';
+const url = require('./serveradress.js');
 
 class EmailVerif extends React.Component {
     componentDidMount() {
@@ -14,7 +14,8 @@ class EmailVerif extends React.Component {
         super();
 
         this.state = {
-            firstTry: true
+            firstTry: true,
+            loading: false
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -54,6 +55,7 @@ class EmailVerif extends React.Component {
     async handleSubmit(e) {
         e.preventDefault();
 
+        this.setState({loading: true});
         let that = this;
         let a = this.state;
         let code = parseInt(a.code_1 + a.code_2 + a.code_3 + a.code_4 + a.code_5 + a.code_6);
@@ -74,7 +76,7 @@ class EmailVerif extends React.Component {
                     that.setState({redirect: true});
                 } else {
                     alert("That code seems to be wrong.");
-                    that.setState({firstTry: false});
+                    that.setState({firstTry: false, loading: false});
                 }
             }
         );
@@ -105,16 +107,16 @@ class EmailVerif extends React.Component {
     render() {
 
         return (
-            <div>
+            <div className="background">
                 {this.setPage()}
-                <div className="Title">
+                <div>
                     <h1>Game Of Wolves</h1>
                 </div>
                 <div className="FormCenter">
                     <form onSubmit={this.handleSubmit} className="FormFields">
                     <div className="FormField">
-                        <p>A six digit verification code has been sent to your e-mail account. Please enter it below.</p>
-                        <p>If you don't find it in your inbox, you might find it in your spam.</p>
+                        <p>A six digit verification code has been sent to your e-mail account. Enter it below.</p>
+                        <p>If you can't find it in your inbox, check your spam folder.</p>
                         <div className="VerificationCode">
                             <div className="VerificationCodeDigit">
                                 <input type="number" ref="code_1" id="1" name="code" className="VerificationCodeDigit__Input" value={this.state.code} onChange={this.handleChange} min="0" max="9"/>
@@ -136,10 +138,11 @@ class EmailVerif extends React.Component {
                             </div>
                         </div>
                         <div className="FormField">
-                            {this.formComplete() && <button className="FormField__Button mr-20">Verify me!</button>}
+                            {this.formComplete() && !this.state.loading && <button className="FormField__Button mr-20">Verify me!</button>}
+                            {this.state.loading && <p>Checking your code ...</p>}
                         </div>
                         <div className="FormField">
-                            {!this.state.firstTry && <button className="FormField__Button mr-20">Send me another code</button>}
+                            {!this.state.firstTry && !this.state.loading && <button className="FormField__Button mr-20">Send me another code</button>}
                         </div>
                     </div>
                     </form>
