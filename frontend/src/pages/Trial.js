@@ -2,6 +2,7 @@ import React from 'react';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import '../App.css';
 import L from 'leaflet';
+import AlertBox from './AlertBox.js'
 
 
 //Gebruik dit voor je eigen icon
@@ -41,10 +42,11 @@ var enemyOffline = L.icon({
 });
 
 
-
-
-
 class Trial extends React.Component {
+
+  constructor(props){
+    super(props)
+  }
 
   //dit is gwn een standaard setting, van af blijven
   state = {
@@ -53,6 +55,12 @@ class Trial extends React.Component {
       lng: 4.6762872,
     },
     zoom: 3,
+    message: 1,
+    message2: 222,
+    id: "idPlayer1",
+    accuracy: 0,
+    dataPlayers: null,
+    counter: 1
   }
 
   //hier krijgen we de locatie van de mainuser door, en wordt de 'myIcon' op die locatie gezet
@@ -64,10 +72,119 @@ class Trial extends React.Component {
         lng: position.coords.longitude
       },
       haveUsersLocation: true,
-      zoom: 18,
-    })
-  });
+      zoom: 1,
+      id: this.state.id,
+      accuracy: position.coords.accuracy
+      })
+    });
+
+    this.interval = setInterval(() => {
+        this.receivePlayers();
+        this.createLayer();
+    }, 1000);
+
   }
+
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  // get players from server with time inverval
+  receivePlayers(){
+    // hard coded data players
+    var data = [{ idPlayer: "idPlayer1", longitude: 4.676,latitude: 50.8632811+this.state.counter,sendSignal:"specialSignal"  },{ idPlayer: "idPlayer2",longitude: 4.6762872,latitude: 50.8632811,enemyPlayerId:"idPlayer1" },{ idPlayer: "idPlayer3",longitude: 4.6762872,latitude: 50.8 }];
+    this.setState({ counter: this.state.counter + 1});
+    this.setState({ dataPlayers: data});
+  }
+
+  // Send signal to server
+  sendSpecialSignal(id,idEnemy){
+      console.log(id + "send special signal to "+ idEnemy);
+      this.setState({count: this.state.count + 1})
+  }
+
+  // Send special signal to server
+  sendHandShakeSignal(id,idEnemy){
+      console.log(id+"send handshake signal to: "+ idEnemy);
+  }
+
+  // Send acknowledgement to server
+  acknowledgeHandshake(id,idEnemy){
+    console.log(id+"send Handshake signal to: "+ idEnemy);
+  }
+
+  // Send fight signal to server (fight: id vs idEnemy)
+  fight(id,idEnemy){
+    console.log(id+"send fight signal to: "+ idEnemy);
+  }
+
+  // Create layer of players for map component + check for received signals from other players
+  createLayer(){
+    var rows = [];
+    var id = this.state.id;
+    //var jsonObject = JSON.parse(this.state.playerData);
+    var jsonObject = this.state.dataPlayers;
+
+    rows.push(<AlertBox content={JSON.stringify(this.state.dataPlayers)}/>);
+
+    jsonObject.forEach(function(key) {
+
+        //var playerData = JSON.stringify(key);
+        var playerData = (key);
+
+        var idEnemy = playerData.idPlayer;
+        // var pos = [parseFloat(JSON.stringify(key.longitude)),parseFloat(JSON.stringify(key.latitude))];
+        var pos = [playerData.longitude,playerData.latitude];
+
+
+        // check for enemy!
+        if(idEnemy=== id){
+
+            // special signal received from other player
+            if(key.sendSignal === "specialSignal"){
+              rows.push(<AlertBox content="Special Signal received!" ></AlertBox>);
+            }
+
+            // Handshake signal received. Response on the handshake signal is send
+            if(key.sendSignal === "handShakeSignal" && key.dataSignal.acknowledged === "falseACK"){
+              rows.push(<AlertBox content="HandShake Signal received! Send appropriate response." ></AlertBox>);
+              this.acknowledgeHandshake(id,key.dataSignal.idPlayer);
+            }
+
+            // Handshake signal is confirmed => fight with player
+            if(key.sendSignal === "handShakeSignal" && key.dataSignal.acknowledged === "trueACK"){
+              rows.push(<AlertBox content="You are now in fight" ></AlertBox>);
+              this.fight(id,key.dataSignal.idPlayer);
+            }
+
+        // Check if player is enemy
+        } else if ( key.hasOwnProperty("enemyPlayerId") &&key.enemyPlayerId !== null && key.enemyPlayerId === id ) {
+
+          rows.push(
+              <Marker position={pos} icon={enemyOnline}>
+                   <Popup>
+                     <button onClick={()=>this.sendSpecialSignal(id,idEnemy)}>Send signal</button>
+                     <button onClick={()=>this.acknowledgeHandshake(id,idEnemy)}>Send special signal</button>
+                   </Popup>
+             </Marker>
+          );
+
+       } else {
+         // NEW IMAGE NEEDED FOR NEUTRAL PLAYER
+         rows.push(
+             <Marker position={pos} icon={enemyOffline}>
+                  <Popup>
+                    <button onclick={()=>this.sendSpecialSignal(id,idEnemy)}>Send signal</button>
+                    <button onclick={()=>this.acknowledgeHandshake(id,idEnemy)}>Send special signal</button>
+                  </Popup>
+            </Marker>
+          );
+       }
+     });
+     this.setState({playerMarkers: rows});
+  }
+
 
   render() {
       const position = [this.state.location.lat, this.state.location.lng]
@@ -79,30 +196,13 @@ class Trial extends React.Component {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url='https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
           />
-          <Marker position={[50.86518,4.6762874]} icon={enemyOnline}>
-            <Popup>
-              A pretty CSS3 popup. <br /> Easily customizable.
-            </Popup>
-          </Marker>
-          <Marker position={[50.8628,4.6762874]} icon={enemyOnline}>
-            <Popup>
-              A pretty CSS3 popup. <br /> Easily customizable.
-            </Popup>
-          </Marker>
-          <Marker position={[50.86318,4.6792874]} icon={enemyOnline}>
-            <Popup>
-              A pretty CSS3 popup. <br /> Easily customizable.
-            </Popup>
-          </Marker>
-          <Marker position={[50.86318,4.682874]} icon={enemyOffline}>
-            <Popup>
-              A pretty CSS3 popup. <br /> Easily customizable.
-            </Popup>
-          </Marker>
+          {this.state.playerMarkers}
           {this.state.haveUsersLocation ?
             <Marker position={position} icon={myIcon}>
               <Popup>
-                A pretty CSS3 popup. <br /> Easily customizable.
+                <div>
+                  Accuracy: {this.state.accuracy} meter
+                </div>
               </Popup>
             </Marker> : ''
           }
