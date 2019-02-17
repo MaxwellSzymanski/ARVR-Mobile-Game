@@ -1,0 +1,133 @@
+
+body {
+    background-color: #910f0f;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* Carousel */
+.carousel {
+    margin-top: 50px;
+    background: #910f0f;
+}
+
+.carousel-cell {
+    width: 60%;
+    height: 350px;
+    margin-right: 10px;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+}
+
+.image {
+    background-image: url(../assets/artwork/lonewolf.jpg);
+
+}
+
+.carousel-cell.is-selected {
+    background: #d3cece;
+    width: 60%;
+    height: 400px;
+    margin-top: -20px;
+}
+
+/* Page dots */
+.flickity-page-dots {
+    bottom: 0px;
+    width: 100px;
+}
+
+.flickity-page-dots .dot {
+    width: 12px;
+    height: 12px;
+    opacity: 1;
+    background: transparent;
+    border: 2px solid white;
+    border-radius: 10px;
+}
+
+.flickity-page-dots .dot.is-selected {
+    background: white;
+}
+
+
+/* Text */
+.title {
+    color: white;
+    font-size: 30px;
+    margin-top: 30px;
+}
+
+/* Card */
+
+.cardImage {
+    width: 100%;
+    height: 100%;
+    border-radius: 0px 0px 20px 20px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.loneWolf {
+    background-image: url(../assets/artwork/lonewolf.jpg);
+    color: #CE613A;
+}
+
+.adventurer {
+    background-image: url(../assets/artwork/adventurer.png);
+    color: #00A0BA;
+}
+
+.scavenger {
+    background-image: url(../assets/artwork/scavenger.png);
+    background-position: 20% 50%;
+    color: #5C5AA4;
+}
+
+.header {
+    background: white;
+    border-radius: 20px 20px 0px 0px;
+    width: 100%;
+    height: 80px;
+    font-family: "Futura";
+    font-weight: bold;
+    font-size: 30px;
+    text-align: center;
+    line-height: 80px;
+}
+
+.white{
+    color: white;
+    font-family: "Futura";
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 600px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+    text-align: center;
+    bottom: -150px;
+    position: relative;
+    text-shadow: 2px 2px #727272;
+    padding: 20px;
+}
+
+.selectButton {
+     background: white;
+    color: #910f0f;
+     width: 150px;
+     border: none;
+     height: 40px;
+     border-radius: 20px;
+     font-family: "Futura";
+     font-weight: bold;
+     font-size: 20px;
+     margin-top: 130px;
+     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+ }
+
+.selectButton:active {
+    background: #cccccc;
+}

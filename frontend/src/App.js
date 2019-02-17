@@ -12,6 +12,9 @@ import './App.css';
 import ImageConfirm from "./pages/ImageConfirm";
 
 import EmailVerif from "./pages/EmailVerif.js";
+import ProfilePage from "./pages/ProfilePage";
+import FactionChooser from "./pages/factionChooser.js";
+
 
 class App extends Component {
   render() {
@@ -28,8 +31,9 @@ class App extends Component {
             <Route exact path="/landingPage" component={LandingPage}></Route>
             <Route exact path="/verify" component={EmailVerif}></Route>
             <Route exact path="/trial" component={Trial}></Route>
+            <Route exact path="/profilePage" component={ProfilePage}></Route>
+            <Route exact path="/factionChooser" component={FactionChooser}></Route>
           </Switch>
-
         </div>
       </Router>
     );

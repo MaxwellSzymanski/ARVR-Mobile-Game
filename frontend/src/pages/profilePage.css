@@ -1,0 +1,200 @@
+/* Cards */
+body {
+    background-color: #910f0f;
+}
+
+.contentCard {
+    padding-top: 20px;
+    margin: 40px auto;
+    margin-top: 20px;
+    resize: horizontal;
+    height: 300px;
+    background-color: white;
+    border-radius: 15px;
+    max-width: 580px;
+    position: center;
+    width: 80%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+}
+
+.statCard {
+    margin: 40px auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    resize: horizontal;
+    height: 80px;
+    background-color: white;
+    border-radius: 15px;
+    max-width: 580px;
+    position: center;
+    width: 80%;
+    display: flex;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+}
+
+.statContainer {
+    width: 34%;
+    height: 100%;
+    border-radius: 15px;
+}
+
+.statContainer:hover {
+    background: radial-gradient(#e7e7e7, #ffffff);
+}
+.statTitle {
+    font-family: "Orkney Light";
+    color: #737881;
+    font-size: 16px;
+}
+
+.divider{
+    border-left: 2px solid gray;
+    height: 55px;
+    position: relative;
+    left: 50%;
+    top: -100px;
+}
+
+.name {
+    font-family: "Orkney";
+    color: #454F63;
+    font-size: 25px;
+    position: relative;
+    top: -105px;
+}
+
+.smallText {
+    font-family: "Orkney Light";
+    color: #808080;
+    font-size: 15px;
+    position: relative;
+    top: -105px;
+}
+
+.statNumber {
+    position: relative;
+    top:-15px;
+    font-family: "Orkney";
+    font-weight: bold;
+    color: #454F63;
+    font-size: 25px;
+}
+
+.profileCard {
+    margin-top: 120px;
+    margin-right: auto;
+    margin-left: auto;
+    resize: horizontal;
+    max-width: 500px;
+    height: 190px;
+    background-color: white;
+    border-radius: 15px;
+    position: center;
+    align-content: center;
+    width: 70%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+}
+
+.profilePhoto {
+    background-image: url(../assets/temporary/profileImage.png);
+    position : relative;
+    top : -100px;
+    height : 140px;
+    width : 140px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 15px;
+    margin: 0 auto;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+}
+
+.container > * {
+    display: inline-block;
+}
+
+.attributeContainer {
+    width: 80%;
+    display: inline-block;
+    height: 50px;
+    justify-content: space-between;
+}
+
+.attributeTitle {
+    font-family: "Futura";
+    color: #454f63;
+    font-size: 22px;
+    padding-left: 20px;
+    float:left;
+    display: inline-block;
+    top:-13px;
+    position: relative;
+}
+
+.attributeNumber {
+    font-family: "Futura";
+    color: #454f63;
+    font-size: 22px;
+    padding-right: 10px;
+    float:left;
+    display: inline-block;
+    top:-23px;
+    position: relative;
+}
+
+.attributeValueContainer {
+    position: relative;
+    display: flex;
+    float:right;
+    display: inline-block;
+    top: 10px
+}
+
+.attributeValueActive {
+    width: 17px;
+    height: 17px;
+    border-radius: 5px;
+    margin: 5px;
+    background-color: #910f0f;
+    display: inline-block;
+}
+
+.attributeValue {
+    width: 17px;
+    height: 17px;
+    border-radius: 5px;
+    margin: 5px;
+    background-color: #e9cfcf;
+    display: inline-block;
+}
+
+.topRight {
+    position: absolute;
+    right: 70px;
+    top: 40px;
+}
+
+.topLeft {
+    position: absolute;
+    left: 70px;
+    top: 40px;
+}
+
+.xpBar {
+    background-color: #aaa5a5;
+    position: relative;
+    top: -110px;
+    border-radius: 20px;
+    width: 80%;
+    margin: auto;
+}
+
+.shorterLine {
+    width: 80%;
+    background-color: gray;
+}
+
+.xpGained {
+    padding: 5px;
+    border-radius: 20px;
+    width: 70%; background-color: #910f0f;
+}
