@@ -6,8 +6,6 @@ import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 const url = require('./serveradress.js');
 
-// const $ = require('jQuery');
-
 class SignUpForm extends React.Component {
     constructor() {
         super();
@@ -24,8 +22,6 @@ class SignUpForm extends React.Component {
     }
 
     fileSelectorHandler = event => {
-
-
         console.log(event);
     };
 
@@ -42,7 +38,6 @@ class SignUpForm extends React.Component {
     async handleSubmit(e) {
         e.preventDefault();
 
-        // let that = this;
         const image = localStorage.getItem("PhotoOfMe");
 		const featureVector = localStorage.getItem("fv");
 
@@ -169,7 +164,7 @@ class SignUpForm extends React.Component {
                     </div>
                     <div className="modal-body">
                         <h3>Your Content</h3>
-                        <p>By 'your content', any pictures and usernames you use are meant. By registering, you agree
+                        <p>By 'your Content', any pictures and usernames you use are meant. By registering, you agree
                         to having your content used within the website, modified, and deleted without warning.</p>
 
 
