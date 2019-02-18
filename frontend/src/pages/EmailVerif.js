@@ -108,6 +108,7 @@ class EmailVerif extends React.Component {
 
         return (
             <div className="background">
+                {this.renderRedirect()}
                 {this.setPage()}
                 <div>
                     <h1>Game Of Wolves</h1>

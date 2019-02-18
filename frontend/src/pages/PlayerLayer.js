@@ -69,7 +69,7 @@ class PlayerLayer extends React.Component {
     id: null,
     playerMarkers: null,
     historyDataPlayers:[]
-  }
+  };
 
   componentDidMount() {
     this.receivePlayers();
@@ -121,7 +121,7 @@ class PlayerLayer extends React.Component {
 
       let dataArray = this.state.historyDataPlayers;
       dataArray.push(data);
-      this.setState({historyDataPlayers: dataArray});
+      this.setState( {historyDataPlayers: dataArray});
 
       if( this.state.historyDataPlayers.length === 10 ){
           dataArray.splice(0,1);
