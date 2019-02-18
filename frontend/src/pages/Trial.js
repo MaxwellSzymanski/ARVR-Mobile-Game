@@ -94,7 +94,7 @@ class Trial extends React.Component {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url='https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
           />
-          <PlayerLayer id={this.state.id}/>
+          <PlayerLayer state={this.state}/>
           {this.state.haveUsersLocation ?
             <Marker position={position} icon={myIcon}>
               <Popup>

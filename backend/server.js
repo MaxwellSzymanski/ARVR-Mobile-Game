@@ -205,7 +205,8 @@ function signin(obj, res) {
             respond(res, {"email": false});
         } else {
             const value = await result.checkPassword(obj.password);
-            if (!value)
+            console.log("checkPassword:   " + await value);
+            if (!(await value))
                 respond(res, {"email": true, "password": value});
             else {
                 respond(res, {

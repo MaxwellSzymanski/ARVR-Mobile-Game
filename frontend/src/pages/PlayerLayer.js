@@ -59,7 +59,11 @@ class PlayerLayer extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state.id = props.id;
+    this.state = {
+        id: props.state.id,
+        location: props.state.location,
+        
+    };
   }
 
   state = {
@@ -106,7 +110,7 @@ class PlayerLayer extends React.Component {
           token: cookies.get('token'),
           longitude: this.state.location.lng,
           latitude: this.state.location.lat,
-          sendSignal: this.state.sendSignal
+          // sendSignal: this.state.sendSignal
       });
       const that = this;
       axios.post(url, obj).then(
@@ -119,7 +123,7 @@ class PlayerLayer extends React.Component {
       // this.setState({ counter: this.state.counter + 1});
       // this.setState({ dataPlayers: data});
 
-      let dataArray = this.state.historyDataPlayers;
+      var dataArray = this.state.historyDataPlayers;
       dataArray.push(data);
       this.setState( {historyDataPlayers: dataArray});
 
