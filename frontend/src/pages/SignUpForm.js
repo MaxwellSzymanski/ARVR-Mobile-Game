@@ -7,8 +7,8 @@ import io from 'socket.io-client';
 import Cookies from 'universal-cookie';
 import SocketContext from "../socketContext";
 const cookies = new Cookies();
-// const url = require('./serveradress.js');
-const url = "https://localhost:8080";
+const url = require('./serveradress.js');
+// const url = "https://localhost:8080";
 
 
 class SignUpForm extends React.Component {

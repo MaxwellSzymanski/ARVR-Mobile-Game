@@ -2,7 +2,11 @@ import React from 'react';
 import { Marker, Popup } from 'react-leaflet';
 import '../App.css';
 import L from 'leaflet';
-import AlertBox from './AlertBox.js'
+import AlertBox from './AlertBox.js';
+import axios from 'axios';
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
+const url = require('./serveradress.js');
 
 
 var myIcon = L.icon({
@@ -82,23 +86,38 @@ class PlayerLayer extends React.Component {
   // get players from server with time inverval
   receivePlayers(){
     // hard coded data players
-    var data = {
-      "data1": {
-        "idPlayer": "idPlayer1",
-        "latitude": 4.676,
-        "longitude": 50.8632811,
-        "sendSignal": "specialSignal"
-      },
-      "data2": {
-        "idPlayer": "idPlayer2",
-        "latitude": 4.6762872+this.state.counter,
-        "longitude": 50.8632811,
-        "enemyPlayerId": "idPlayer1"
-      }
-    };
+    // var data = {
+    //   "data1": {
+    //     "idPlayer": "idPlayer1",
+    //     "latitude": 4.676,
+    //     "longitude": 50.8632811,
+    //     "sendSignal": "specialSignal"
+    //   },
+    //   "data2": {
+    //     "idPlayer": "idPlayer2",
+    //     "latitude": 4.6762872+this.state.counter,
+    //     "longitude": 50.8632811,
+    //     "enemyPlayerId": "idPlayer1"
+    //   }
+        let data = {};
+        const obj = JSON.stringify({
+            request: "radar",
+            token: cookies.get('token'),
+            longitude: this.state.location.lng,
+            latitude: this.state.location.lat,
+            sendSignal: this.state.sendSignal
+        });
+        const that = this;
+        axios.post(url, obj).then(
+            function (json) {
+              that.setState({counter: that.state.counter + 1});
+              that.setState({dataPlayers: json.data});
+            }
+        );
+  };
 
-    this.setState({ counter: this.state.counter + 1});
-    this.setState({ dataPlayers: data});
+    // this.setState({ counter: this.state.counter + 1});
+    // this.setState({ dataPlayers: data});
 
     var dataArray = this.state.historyDataPlayers;
     dataArray.push(data);
