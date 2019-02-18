@@ -3,6 +3,9 @@ import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import '../App.css';
 import L from 'leaflet';
 import PlayerLayer from './PlayerLayer'
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 
 
@@ -54,7 +57,7 @@ class Trial extends React.Component {
     zoom: 3,
     message: 1,
     message2: 222,
-    id: "idPlayer1",
+    id: cookies.get('name'),
     accuracy: 0,
     dataPlayers: null,
     counter: 1

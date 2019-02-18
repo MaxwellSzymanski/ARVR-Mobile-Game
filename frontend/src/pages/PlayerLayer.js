@@ -62,8 +62,8 @@ class PlayerLayer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        id: props.id,
-        location: props.location
+        id: props.state.id,
+        location: props.state.location
     };
   }
 
@@ -108,7 +108,7 @@ class PlayerLayer extends React.Component {
              // "timeStamp": "timeStampPlayer22"
       //   }
       // };
-      let data = {};
+      // let data = {};
       const obj = JSON.stringify({
           request: "radar",
           token: cookies.get('token'),
