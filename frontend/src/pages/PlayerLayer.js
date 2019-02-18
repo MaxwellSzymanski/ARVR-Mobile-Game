@@ -72,7 +72,7 @@ class PlayerLayer extends React.Component {
     counter: 1,
     id: null,
     playerMarkers: null,
-    historyDataPlayers:[]
+    historyDataPlayers: []
   };
 
   componentDidMount() {
@@ -117,19 +117,18 @@ class PlayerLayer extends React.Component {
           function (json) {
               that.setState({counter: that.state.counter + 1});
               that.setState({dataPlayers: json.data});
+              var dataArray = that.state.historyDataPlayers;
+              dataArray.push(json.data);
+              that.setState( {historyDataPlayers: dataArray});
+              if( that.state.historyDataPlayers.length === 10 ){
+                  dataArray.splice(0,1);
+              }
           }
       );
 
       // this.setState({ counter: this.state.counter + 1});
       // this.setState({ dataPlayers: data});
 
-      var dataArray = this.state.historyDataPlayers;
-      dataArray.push(data);
-      this.setState( {historyDataPlayers: dataArray});
-
-      if( this.state.historyDataPlayers.length === 10 ){
-          dataArray.splice(0,1);
-      }
   }
 
   // Send signal to server
