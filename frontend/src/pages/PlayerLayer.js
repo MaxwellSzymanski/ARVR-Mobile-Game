@@ -1,12 +1,10 @@
 import React from 'react';
-import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import { Marker, Popup } from 'react-leaflet';
 import '../App.css';
 import L from 'leaflet';
 import AlertBox from './AlertBox.js'
-import PlayerLayer from './PlayerLayer'
 
 
-//Gebruik dit voor je eigen icon
 var myIcon = L.icon({
     iconUrl: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4Igp3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIKdmlld0JveD0iMCAwIDIyNCAyMjQiCnN0eWxlPSIgZmlsbDojMDAwMDAwOyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJub256ZXJvIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWxpbmVjYXA9ImJ1dHQiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiIHN0cm9rZS1taXRlcmxpbWl0PSIxMCIgc3Ryb2tlLWRhc2hhcnJheT0iIiBzdHJva2UtZGFzaG9mZnNldD0iMCIgZm9udC1mYW1pbHk9Im5vbmUiIGZvbnQtd2VpZ2h0PSJub25lIiBmb250LXNpemU9Im5vbmUiIHRleHQtYW5jaG9yPSJub25lIiBzdHlsZT0ibWl4LWJsZW5kLW1vZGU6IG5vcm1hbCI+PHBhdGggZD0iTTAsMjI0di0yMjRoMjI0djIyNHoiIGZpbGw9Im5vbmUiPjwvcGF0aD48ZyBmaWxsPSIjYmIxZDBjIj48cGF0aCBkPSJNMTg4LjEzMzc1LDQuNDcxMjVjLTAuODA2NCwwLjAwNTYgLTEuNjA2ODUsMC4yMzQ1IC0yLjMwMTI1LDAuNjgyNWMtMC40NDgsMC4yNjg4IC0yLjU1NjA1LDEuNTY2MjUgLTUuODcxMjUsMy44MDYyNWMwLDAgLTAuMjI1NzUsMC4xNzc0NSAtMC42NzM3NSwwLjQ0NjI1Yy02LjAwMzIsNC40OCAtNTAuMjYzNSwzOC4xMjY1NSAtNjIuODA3NSw3NS43MTM3NWwyMi40LC00LjQ4YzAsMCAtNDEuODg2NiwzNy42NzM2NSAtNTYuODA1LDEwMC45MzEyNWMwLC0wLjA0NDggLTEuOTk1LDguODMwMTUgLTIuNTU1LDE0Ljc0Mzc1YzAuNzYxNiwxLjc0NzIgMS41MjMyLDMuNTM0NjUgMi4yNCw1LjQxNjI1YzAuMDQ0OCwwLjEzNDQgMi41MDQ2LDYuNzE4OTUgMy41MzUsMTAuMTIzNzVjMC41ODI0LDEuODgxNiAyLjMzMzgsMy4xODUgNC4zMDUsMy4xODVoNDQuOGMxLjk3MTIsMCAzLjcyMjYsLTEuMzAzNCA0LjMwNSwtMy4xODVjMTYuODQ0OCwtNTQuNzkwNCA1My40MDA1NSwtNjMuNzg4OSA1NC45MjM3NSwtNjQuMTAyNWMxLjM4ODgsLTAuMzEzNiAyLjU1MDEsLTEuMjk4NSAzLjEzMjUsLTIuNjQyNWwxMy40NCwtMzEuMzZjMC42MjcyLC0xLjQzMzYgMC40NTA4LC0zLjA5NDM1IC0wLjQ5LC00LjM0ODc1bC0yMS40NjM3NSwtMzAuMDU2MjVsNC4zOTI1LC03MC4xMTM3NWMwLjA4OTYsLTEuNjU3NiAtMC43NjI2NSwtMy4yNzAwNSAtMi4xOTYyNSwtNC4xMjEyNWMtMC42OTQ0LC0wLjQyNTYgLTEuNTAzNiwtMC42NDQzNSAtMi4zMSwtMC42Mzg3NXpNMzUuMTc1LDQuNTMyNWMtMC40MzI2LDAuMDY1MSAtMC44NTY4LDAuMTkyMTUgLTEuMjYsMC4zOTM3NWMtMS42NTc2LDAuNzYxNiAtMi42NDQ2LDIuNTEzIC0yLjU1NSw0LjMwNWw0LjM5MjUsNzAuMTEzNzVsLTIxLjQ2Mzc1LDMwLjA1NjI1Yy0wLjk0MDgsMS4yNTQ0IC0xLjExNzIsMi45MTUxNSAtMC40OSw0LjM0ODc1bDEzLjQ0LDMxLjM2YzAuNTgyNCwxLjM0NCAxLjc0MzcsMi4zMjg5IDMuMTMyNSwyLjY0MjVjMC4xMzQ0LDAuMDQ0OCA1LjIwMzQ1LDEuMjA1MDUgMTIuNDE2MjUsNS40MTYyNWMwLjI2ODgsMC4xMzQ0IDYuOTM2NjUsNC4zOTYzNSAxMC4zODYyNSw3LjIxODc1bDEuNjYyNSwtMTAuMDM2MjVsMy40MDM3NSwtMjAuNDMxMjVoLTEzLjQ0YzcuNDgxNiwtMzguMzkzNiAzMy4yMzg0NSwtNjkuNjE2NCA0Mi42OTEyNSwtODAuMDFsLTQ4LjY1LC00NC4yNjYyNWMtMS4wMDgsLTAuOTA3MiAtMi4zNjg0NSwtMS4zMDY1NSAtMy42NjYyNSwtMS4xMTEyNXpNNjIuNzIsMTAzLjA0YzAsMCAzLjk4NTU5LDIyLjQgMTUuOTMzNzUsMjIuNGgxOS45MDYyNXpNMTYxLjI4LDEwMy4wNGMwLDAgLTMuOTg5NjUsMjIuNCAtMTUuOTUxMjUsMjIuNGgtMTkuODg4NzV6TTk0LjA4LDE2NS43NmgzNS44NGwtMTcuOTIsMjYuODh6Ij48L3BhdGg+PC9nPjwvZz48L3N2Zz4=",
     //shadowUrl: 'leaf-shadow.png',
@@ -42,72 +40,201 @@ var enemyOffline = L.icon({
     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 });
 
+var pathMark = L.icon({
+    iconUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Paw-print.svg/838px-Paw-print.svg.png",
+    //shadowUrl: 'leaf-shadow.png',
 
-class Trial extends React.Component {
+    iconSize:     [20, 20], // size of the icon
+    shadowSize:   [50, 64], // size of the shadow
+    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
 
-  //dit is gwn een standaard setting, van af blijven
+class PlayerLayer extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state.id = props.id;
+  }
+
   state = {
-    location: {
-      lat: 50.8632811,
-      lng: 4.6762872,
-    },
-    zoom: 3,
-    message: 1,
-    message2: 222,
-    id: "idPlayer1",
-    accuracy: 0,
+    players: null,
     dataPlayers: null,
-    counter: 1
+    counter: 1,
+    id: null,
+    playerMarkers: null,
+    historyDataPlayers:[]
   }
 
-  //hier krijgen we de locatie van de mainuser door, en wordt de 'myIcon' op die locatie gezet
   componentDidMount() {
-    navigator.geolocation.getCurrentPosition((position) =>
-    { this.setState({
-      location: {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      },
-      haveUsersLocation: true,
-      zoom: 1,
-      id: this.state.id,
-      accuracy: position.coords.accuracy
-      })
-    });
+    this.receivePlayers();
+    this.interval = setInterval(() => {
+        this.receivePlayers();
+        this.createLayer();
+    }, 1000);
+  }
 
-    // this.interval = setInterval(() => {
-    //     this.receivePlayers();
-    // }, 1000);
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  // get players from server with time inverval
+  receivePlayers(){
+    // hard coded data players
+    var data = {
+      "data1": {
+        "idPlayer": "idPlayer1",
+        "latitude": 4.676,
+        "longitude": 50.8632811,
+        "sendSignal": "specialSignal"
+      },
+      "data2": {
+        "idPlayer": "idPlayer2",
+        "latitude": 4.6762872+this.state.counter,
+        "longitude": 50.8632811,
+        "enemyPlayerId": "idPlayer1"
+      }
+    };
+
+    this.setState({ counter: this.state.counter + 1});
+    this.setState({ dataPlayers: data});
+
+    var dataArray = this.state.historyDataPlayers;
+    dataArray.push(data);
+    this.setState({historyDataPlayers: dataArray});
+
+    if( this.state.historyDataPlayers.length === 10 ){
+      dataArray.splice(0,1);
+    }
+  }
+
+  // Send signal to server
+  sendSpecialSignal(id,idEnemy){
+      console.log(id + "send special signal to "+ idEnemy);
+      this.setState({count: this.state.count + 1})
+  }
+
+  // Send special signal to server
+  sendHandShakeSignal(id,idEnemy){
+      console.log(id+"send handshake signal to: "+ idEnemy);
+  }
+
+  // Send acknowledgement to server
+  acknowledgeHandshake(id,idEnemy){
+    console.log(id+"send Handshake signal to: "+ idEnemy);
+  }
+
+  // Send fight signal to server (fight: id vs idEnemy)
+  fight(id,idEnemy){
+    console.log(id+"send fight signal to: "+ idEnemy);
+  }
+
+  // Create layer of players for map component + check for received signals from other players
+  createLayer(){
+
+    var rows = [];
+
+    var id = this.state.id;
+
+    //var jsonObject = JSON.parse(data);
+    var jsonObject = this.state.dataPlayers;
+
+    Object.keys(jsonObject).forEach(function(key) {
+
+        var playerData = jsonObject[key];
+
+        //rows.push(<AlertBox content={playerData.longitude} ></AlertBox>);
+
+
+        var idEnemy = playerData.idPlayer;
+
+        var pos = [playerData.longitude,playerData.latitude];
+
+        // check for enemy!
+        if(idEnemy === id){
+
+            // special signal received from other player
+            if(playerData.sendSignal === "specialSignal"){
+              rows.push(<AlertBox content="Special Signal received!" ></AlertBox>);
+            }
+
+            // Handshake signal received. Response on the handshake signal is send
+            if(playerData.sendSignal === "handShakeSignal" && playerData.dataSignal.acknowledged === "falseACK"){
+              rows.push(<AlertBox content="HandShake Signal received! Send appropriate response." ></AlertBox>);
+              this.acknowledgeHandshake(id,key.dataSignal.idPlayer);
+            }
+
+            // Handshake signal is confirmed => fight with player
+            if(playerData.sendSignal === "handShakeSignal" && playerData.dataSignal.acknowledged === "trueACK"){
+              rows.push(<AlertBox content="You are now in fight" ></AlertBox>);
+              this.fight(id,key.dataSignal.idPlayer);
+            }
+
+        // Check if player is enemy
+        } else if ( playerData.hasOwnProperty("enemyPlayerId") &&playerData.enemyPlayerId !== null && playerData.enemyPlayerId === id ) {
+
+          rows.push(
+              <Marker position={pos} icon={enemyOnline}>
+                   <Popup>
+                     <button onClick={() => () => this.sendSpecialSignal(id,idEnemy)}>Send signal</button>
+                     <button onClick={() => () => this.acknowledgeHandshake(id,idEnemy)}>Send special signal</button>
+                   </Popup>
+             </Marker>
+          );
+
+       } else {
+         // NEW IMAGE NEEDED FOR NEUTRAL PLAYER
+         rows.push(
+             <Marker position={pos} icon={enemyOffline}>
+                  <Popup>
+                    <button onclick={() => () => this.sendSpecialSignal(id,idEnemy)}>Send signal</button>
+                    <button onclick={() => () => this.acknowledgeHandshake(id,idEnemy)}>Send special signal</button>
+                  </Popup>
+            </Marker>
+          );
+       }
+     });
+
+     this.setState({playerMarkers: rows});
+
+     // Add path markers to layer
+     this.createPath();
 
   }
+
+  // Create path markers based on old data
+  createPath(){
+
+  var rows = this.state.playerMarkers;
+
+
+    var oldData = this.state.historyDataPlayers;
+
+    for( var x in oldData){
+
+      for(var y in oldData[x] ){
+
+        var playerData = oldData[x][y];
+
+        var pos = [playerData.longitude,playerData.latitude];
+
+        rows.push(<Marker position={pos} icon={pathMark}/> );
+      }
+    }
+    this.setState({playerMarkers: rows});
+  }
+
 
 
   render() {
-      const position = [this.state.location.lat, this.state.location.lng]
-
-
-      return (
-        <Map className="mapss" center={position} zoom={this.state.zoom}>
-          <TileLayer
-            //attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            //url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url='https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
-          />
-          <PlayerLayer id={this.state.id}/>
-          {this.state.haveUsersLocation ?
-            <Marker position={position} icon={myIcon}>
-              <Popup>
-                <div>
-                  Accuracy: {this.state.accuracy} meter
-                </div>
-              </Popup>
-            </Marker> : ''
-          }
-        </Map>
-      )
+    if(this.state.playerMarkers != null){
+      //var a = this.createLayer();
+      return(this.state.playerMarkers);
     }
+    return(null)
+  }
 
 }
 
-export default Trial;
+export default PlayerLayer;
