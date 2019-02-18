@@ -62,7 +62,7 @@ class PlayerLayer extends React.Component {
     this.state = {
         id: props.state.id,
         location: props.state.location,
-        
+
     };
   }
 
