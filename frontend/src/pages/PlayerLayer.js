@@ -74,12 +74,9 @@ class PlayerLayer extends React.Component {
     counter: 1,
     id: null,
     playerMarkers: null,
-<<<<<<< HEAD
     historyDataPlayers:[],
     showAlertBox: false
-=======
     historyDataPlayers: []
->>>>>>> 3d03936dd0ee7bad861429cdd8f82086a4c039cf
   };
 
   componentDidMount() {
