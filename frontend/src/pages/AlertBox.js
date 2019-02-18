@@ -1,6 +1,6 @@
 import React from 'react';
-import Popup from "reactjs-popup";
-import Modal from 'react-modal'
+// import Popup from "reactjs-popup";
+// import Modal from 'react-modal'
 import PopPop from 'react-poppop'
 
 class AlertBox extends React.Component {

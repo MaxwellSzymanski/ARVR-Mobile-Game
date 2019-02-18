@@ -39,90 +39,92 @@ const respond = function(res, data) {
 };
 
 //create a server object:
-// https.createServer(https_options, async function (req, res) {
-//
-//     // Set CORS headers
-//     res.setHeader('Access-Control-Allow-Origin', '*');
-//     res.setHeader('Access-Control-Request-Method', '*');
-//     res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST');
-//     res.setHeader('Access-Control-Allow-Headers', '*');
-//     if ( req.method === 'OPTIONS' ) {
-//         res.writeHead(200);
-//         res.end();
-//         return;
-//     }
-//
-//     let body = [];
-//     req.on('error', (err) => {
-//         console.error(err);
-//     }).on('data', (chunk) => {
-//         body.push(chunk);
-//     }).on('end', async () => {
-//         body = Buffer.concat(body).toString();
-//
-//         let obj = JSON.parse(body);
-//         const request = (obj.request).toLowerCase();
-//
-//         console.log("\n\n\nRequest:    " + request + "    ===============    current time:    " + new Date().toLocaleTimeString());
-//         switch (request) {
-//             case "signup":
-//                 signup(obj, res);
-//                 break;
-//             case "verify":
-//                 verifyEmail(obj, res);
-//                 break;
-//             case "signin":
-//                 signin(obj, res);
-//                 break;
-//             case "signout":
-//                 signout(obj, res);
-//                 break;
-//             case "stats":
-//                 stats(obj, res);
-//                 break;
-//             case "jwt":
-//                 verifyJWT(obj, res);
-//                 break;
-//             case "radar":
-//                 radar(obj, res);
-//                 break;
-//             case "sendsignal":
-//                 sendSignal(obj);
-//                 res.end();
-//                 break;
-//             case "fight":
-//                 fight(obj);
-//                 res.end();
-//                 break;
-//             case "updatefrequency":
-//                 updateFrequency(obj,res);
-//                 break;
-//             case "frequency":
-//                 getFrequency(obj,res);
-//                 break;
-//             default:
-//                 console.log("\n\n\n ----------------------- ");
-//                 console.log("/                       \\");
-//                 console.log("|  ! unknown request !  |");
-//                 console.log("\\                       /");
-//                 console.log(" ----------------------- \n\n\n");
-//                 res.end();
-//                 break;
-//         }
-//         // console.log("\n");
-//     });
-// });
-// .listen(port);
+https.createServer(https_options, async function (req, res) {
+
+    // Set CORS headers
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Request-Method', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST');
+    res.setHeader('Access-Control-Allow-Headers', '*');
+    if ( req.method === 'OPTIONS' ) {
+        res.writeHead(200);
+        res.end();
+        return;
+    }
+
+    let body = [];
+    req.on('error', (err) => {
+        console.error(err);
+    }).on('data', (chunk) => {
+        body.push(chunk);
+    }).on('end', async () => {
+        body = Buffer.concat(body).toString();
+
+        let obj = JSON.parse(body);
+        const request = (obj.request).toLowerCase();
+
+        console.log("\n\n\nRequest:    " + request + "    ===============    current time:    " + new Date().toLocaleTimeString());
+        switch (request) {
+            case "signup":
+                signup(obj, res);
+                break;
+            case "verify":
+                verifyEmail(obj, res);
+                break;
+            case "signin":
+                signin(obj, res);
+                break;
+            case "signout":
+                signout(obj, res);
+                break;
+            case "stats":
+                stats(obj, res);
+                break;
+            case "jwt":
+                verifyJWT(obj, res);
+                break;
+            case "radar":
+                radar(obj, res);
+                break;
+            case "sendsignal":
+                sendSignal(obj);
+                res.end();
+                break;
+            case "fight":
+                fight(obj);
+                res.end();
+                break;
+            case "updatefrequency":
+                updateFrequency(obj,res);
+                break;
+            case "frequency":
+                getFrequency(obj,res);
+                break;
+            default:
+                console.log("\n\n\n ----------------------- ");
+                console.log("/                       \\");
+                console.log("|  ! unknown request !  |");
+                console.log("\\                       /");
+                console.log(" ----------------------- \n\n\n");
+                res.end();
+                break;
+        }
+        // console.log("\n");
+    });
+}).listen(port);
 console.log("\n\n    Server listening on localhost:" + port + "\n\n");
 
-var server = https.createServer(https_options);
+/* socket code, work in progress
+
+// var server = https.createServer(https_options);
 var io = require('socket.io')(server);
-server.listen(port);
+// server.listen(port);
 
 io.sockets.on('connection', function (socket) {
-    console.log("new connection:  " + socket.toString());
+    socket.emit("test", {test: "test"});
+    console.log("new connection:  " + socket);
     socket.on('signup', function (data) {
-        console.log("signup");
+        console.log("signup:    " + data.email);
         const newUser = new User(data);
         newUser.save( function(error) {
             if (error) {
@@ -146,25 +148,27 @@ io.sockets.on('connection', function (socket) {
 
 // io.listen(port);
 
-// FUNCTIONS
+*/
 
+
+// REQUEST HANDLING
 
 function signup(obj, res) {
     const newUser = new User(obj);
     newUser.save( function(error) {
         if (error) {
             console.log(error);
-            res.setHeader('Access-Control-Allow-Origin', '*');
+            // res.setHeader('Access-Control-Allow-Origin', '*');
             res.setHeader("Content-Type", "ERROR");
             res.write(JSON.stringify({
                 success: false,
-                message: error.message,
+                message: error.message
             }));
         } else {
             respond(res, {
                 success: true,
                 name: newUser.name,
-                token: newUser.createToken(),
+                token: newUser.createToken()
             });
             newUser.sendVerifMail();
         }

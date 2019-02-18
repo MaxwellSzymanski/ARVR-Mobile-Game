@@ -1,4 +1,4 @@
-import openSocket from 'socket.io-client';
+import io from 'socket.io-client';
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 // const fs = require('fs');
@@ -9,7 +9,7 @@ const socketOptions = {
     secure: true,
     rejectUnauthorized: false
 };
-const socket = openSocket(url, socketOptions);
+const socket = io(url);
 
 function signup(userData, that) {
     socket.emit('signup', userData);

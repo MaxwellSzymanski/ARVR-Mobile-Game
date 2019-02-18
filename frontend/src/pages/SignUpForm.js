@@ -1,10 +1,15 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
-import { signup } from './socket.js'
+// import { signup } from './socket.js'
+import io from 'socket.io-client';
+
 import Cookies from 'universal-cookie';
+import SocketContext from "../socketContext";
 const cookies = new Cookies();
-const url = require('./serveradress.js');
+// const url = require('./serveradress.js');
+const url = "https://localhost:8080";
+
 
 class SignUpForm extends React.Component {
     constructor() {
@@ -14,11 +19,13 @@ class SignUpForm extends React.Component {
             email: '',
             password: '',
             name: '',
-            hasAgreed: false
+            hasAgreed: false,
         };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+
+
     }
 
     fileSelectorHandler = event => {
@@ -33,11 +40,13 @@ class SignUpForm extends React.Component {
         this.setState({
           [name]: value
         });
+
     }
 
     async handleSubmit(e) {
         e.preventDefault();
 
+        const that = this;
         const image = localStorage.getItem("PhotoOfMe");
 		const featureVector = localStorage.getItem("fv");
 
@@ -60,29 +69,51 @@ class SignUpForm extends React.Component {
             }
 
             this.state.position = position;
-            const dataToSend = this.state;
+            const dataToSend = {
+                email: this.state.email,
+                name: this.state.name,
+                password: this.state.password,
+                position: position,
+            };
             dataToSend.request = "signup";
 
             dataToSend.image = new Buffer(image).toString('base64');
             dataToSend.featureVector = featureVector;
-			
-            signup(dataToSend, this);
 
+            /* Socket code, work in progress ...
 
-            // await axios.post(url, obj).then(
-            //     function (json) {
-            //         if (json.data.success) {
-            //             const options = {
-            //                 path: '/',
-            //                 expires: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)   // expires in 24 hours
-            //             };
-            //             cookies.set('token', json.data.token, options);
-            //             cookies.set('name', json.data.name, options);
-            //             that.setState({redirect: true});
-            //         }
-            //         else alert(json.data.message);
-            //     }
-            // );
+            this.context.emit('signup', dataToSend);
+            this.context.on('signupres', (data) => {
+                if (data.success) {
+                    alert("success");
+                    const options = {
+                        path: '/',
+                        expires: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)   // expires in 24 hours
+                    };
+                    cookies.set('token', data.token, options);
+                    cookies.set('name', data.name, options);
+                    this.setState({redirect: true});
+                }
+                else alert(data.message);
+            });
+
+            */
+            const obj = JSON.stringify(dataToSend);
+            await axios.post(url, obj).then(
+                function (json) {
+                    console.log(json.data);
+                    if (json.data.success) {
+                        const options = {
+                            path: '/',
+                            expires: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)   // expires in 24 hours
+                        };
+                        cookies.set('token', json.data.token, options);
+                        cookies.set('name', json.data.name, options);
+                        that.setState({redirect: true});
+                    }
+                    else alert(json.data.message);
+                }
+            );
         }
     }
 
@@ -181,4 +212,6 @@ class SignUpForm extends React.Component {
         );
     }
 }
+// SignUpForm.contextType = SocketContext;
+
 export default SignUpForm;
