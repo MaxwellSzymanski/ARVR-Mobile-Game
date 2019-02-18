@@ -84,21 +84,22 @@ class PlayerLayer extends React.Component {
   }
 
   // get players from server with time inverval
-  receivePlayers(){
-    // hard coded data players
-    // var data = {
-    //   "data1": {
-    //     "idPlayer": "idPlayer1",
-    //     "latitude": 4.676,
-    //     "longitude": 50.8632811,
-    //     "sendSignal": "specialSignal"
-    //   },
-    //   "data2": {
-    //     "idPlayer": "idPlayer2",
-    //     "latitude": 4.6762872+this.state.counter,
-    //     "longitude": 50.8632811,
-    //     "enemyPlayerId": "idPlayer1"
-    //   }
+  receivePlayers() {
+      // hard coded data players
+      // var data = {
+      //   "data1": {
+      //     "idPlayer": "idPlayer1",
+      //     "latitude": 4.676,
+      //     "longitude": 50.8632811,
+      //     "sendSignal": "specialSignal"
+      //   },
+      //   "data2": {
+      //     "idPlayer": "idPlayer2",
+      //     "latitude": 4.6762872+this.state.counter,
+      //     "longitude": 50.8632811,
+      //     "enemyPlayerId": "idPlayer1"
+      //   }
+      // };
         let data = {};
         const obj = JSON.stringify({
             request: "radar",
@@ -114,7 +115,7 @@ class PlayerLayer extends React.Component {
               that.setState({dataPlayers: json.data});
             }
         );
-  };
+
 
     // this.setState({ counter: this.state.counter + 1});
     // this.setState({ dataPlayers: data});
