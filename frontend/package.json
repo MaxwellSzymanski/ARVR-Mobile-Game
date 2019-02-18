@@ -15,6 +15,7 @@
     "react-html5-camera-photo": "^1.2.9",
     "react-leaflet": "^2.2.0",
     "react-loading-screen": "0.0.17",
+    "react-poppop": "^1.5.0",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^2.1.5",
     "socket.io-client": "^2.2.0",
