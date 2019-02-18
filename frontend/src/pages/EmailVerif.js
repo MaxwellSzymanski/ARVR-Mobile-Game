@@ -93,7 +93,7 @@ class EmailVerif extends React.Component {
     };
 
     renderRedirect = () => {
-        if (this.state.redirect) {return <Redirect to="/map" />}
+        if (this.state.redirect) {return <Redirect to="/trial" />}
     };
 
     goToMap()   {

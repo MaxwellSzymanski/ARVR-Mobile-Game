@@ -100,33 +100,32 @@ class PlayerLayer extends React.Component {
       //     "enemyPlayerId": "idPlayer1"
       //   }
       // };
-        let data = {};
-        const obj = JSON.stringify({
-            request: "radar",
-            token: cookies.get('token'),
-            longitude: this.state.location.lng,
-            latitude: this.state.location.lat,
-            sendSignal: this.state.sendSignal
-        });
-        const that = this;
-        axios.post(url, obj).then(
-            function (json) {
+      let data = {};
+      const obj = JSON.stringify({
+          request: "radar",
+          token: cookies.get('token'),
+          longitude: this.state.location.lng,
+          latitude: this.state.location.lat,
+          sendSignal: this.state.sendSignal
+      });
+      const that = this;
+      axios.post(url, obj).then(
+          function (json) {
               that.setState({counter: that.state.counter + 1});
               that.setState({dataPlayers: json.data});
-            }
-        );
+          }
+      );
 
+      // this.setState({ counter: this.state.counter + 1});
+      // this.setState({ dataPlayers: data});
 
-    // this.setState({ counter: this.state.counter + 1});
-    // this.setState({ dataPlayers: data});
+      let dataArray = this.state.historyDataPlayers;
+      dataArray.push(data);
+      this.setState({historyDataPlayers: dataArray});
 
-    var dataArray = this.state.historyDataPlayers;
-    dataArray.push(data);
-    this.setState({historyDataPlayers: dataArray});
-
-    if( this.state.historyDataPlayers.length === 10 ){
-      dataArray.splice(0,1);
-    }
+      if( this.state.historyDataPlayers.length === 10 ){
+          dataArray.splice(0,1);
+      }
   }
 
   // Send signal to server
