@@ -30,7 +30,7 @@ const https_options = {
     cert: fs.readFileSync('./ssl/team12.pem')
 };
 
-const port = 8080;
+const port = 80;
 
 const respond = function(res, data) {
     res.setHeader("Content-Type", "application/json");
