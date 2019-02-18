@@ -62,9 +62,8 @@ class PlayerLayer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        id: props.state.id,
-        location: props.state.location,
-
+        id: props.id,
+        location: props.location
     };
   }
 
@@ -75,7 +74,7 @@ class PlayerLayer extends React.Component {
     id: null,
     playerMarkers: null,
     historyDataPlayers:[],
-    showAlertBox: false
+    showAlertBox: false,
     historyDataPlayers: []
   };
 
