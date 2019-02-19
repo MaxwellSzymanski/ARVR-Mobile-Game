@@ -311,7 +311,7 @@ class PlayerLayer extends React.Component {
 
         var playerData = oldData[x][y];
 
-        var pos = [playerData.longitude,playerData.latitude];
+        var pos = [playerData.latitude,playerData.longitude];
 
         rows.push(
           <Marker position={pos} icon={pathMark} onClick={() => this.showAlertBox(playerData.updated_at)}/>
