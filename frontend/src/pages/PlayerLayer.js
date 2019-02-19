@@ -141,8 +141,6 @@ class PlayerLayer extends React.Component {
               }
           );
 
-          this.createLayer();
-
         });
   }
 
@@ -250,21 +248,21 @@ class PlayerLayer extends React.Component {
             // );
 
             // special signal received from other player
-            if(playerData.sendSignal === "specialSignal"){
-              playerLayer.showAlertBox("Special Signal received!");
-            }
-
-            // Handshake signal received. Response on the handshake signal is send
-            if(playerData.sendSignal === "handShakeSignal" && playerData.dataSignal.acknowledged === "falseACK"){
-              playerLayer.showAlertBox("HandShake Signal received! Send appropriate response.");
-              playerLayer.acknowledgeHandshake(id,key.dataSignal.playerId);
-            }
-
-            // Handshake signal is confirmed => fight with player
-            if(playerData.sendSignal === "handShakeSignal" && playerData.dataSignal.acknowledged === "trueACK"){
-              playerLayer.showAlertBox("You are now in fight");
-              playerLayer.fight(id,key.dataSignal.playerId);
-            }
+            // if(playerData.sendSignal === "specialSignal"){
+            //   playerLayer.showAlertBox("Special Signal received!");
+            // }
+            //
+            // // Handshake signal received. Response on the handshake signal is send
+            // if(playerData.sendSignal === "handShakeSignal" && playerData.dataSignal.acknowledged === "falseACK"){
+            //   playerLayer.showAlertBox("HandShake Signal received! Send appropriate response.");
+            //   playerLayer.acknowledgeHandshake(id,key.dataSignal.playerId);
+            // }
+            //
+            // // Handshake signal is confirmed => fight with player
+            // if(playerData.sendSignal === "handShakeSignal" && playerData.dataSignal.acknowledged === "trueACK"){
+            //   playerLayer.showAlertBox("You are now in fight");
+            //   playerLayer.fight(id,key.dataSignal.playerId);
+            // }
 
           // Check if player is enemy
           } else if ( playerData.hasOwnProperty("enemyPlayerId") &&playerData.enemyPlayerId !== null && playerData.enemyPlayerId === id ) {
