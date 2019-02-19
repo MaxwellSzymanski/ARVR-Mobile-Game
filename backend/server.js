@@ -371,8 +371,8 @@ async function radar(obj, res) {
 }
 
 async function getPlayerPositionRadar(jsonData,res) {
-    let fp = await getFirstActivePlayer();
-    fp = { firstPlayer : fp };
+    // let fp = await getFirstActivePlayer();
+    // fp = { firstPlayer : fp };
 
     var playerId = jsonData.playerId;
     var playerLongitude = jsonData.longitude;
@@ -408,7 +408,7 @@ async function getPlayerPositionRadar(jsonData,res) {
                 delete elem.location;
             });
 
-            result.push(fp);
+            // result.push(fp);
 
             res.write(JSON.stringify(result)); //write a response to the client
             res.end(); //end the response
