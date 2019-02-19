@@ -139,6 +139,7 @@ class PlayerLayer extends React.Component {
               }
           );
 
+          this.createLayer();
 
         });
   }
