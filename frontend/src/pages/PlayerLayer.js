@@ -231,7 +231,7 @@ class PlayerLayer extends React.Component {
 
         var idEnemy = playerData.playerId;
 
-        var pos = [playerData.longitude,playerData.latitude];
+        var pos = [playerData.latitude,playerData.longitude];
 
         // check for enemy!
         if(idEnemy === id){
