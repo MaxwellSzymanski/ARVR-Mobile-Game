@@ -127,13 +127,13 @@ class PlayerLayer extends React.Component {
 
              this.setState({ dataPlayers: json});
 
-             var dataArray = this.state.historyDataPlayers;
+             var dataArray = playerLayer.state.historyDataPlayers;
              dataArray.push(data);
-             this.setState( {historyDataPlayers: dataArray});
+             playerLayer.setState( {historyDataPlayers: dataArray});
              if( this.state.historyDataPlayers.length === 10 ){
                  dataArray.splice(0,1);
              }
-             this.setState({historyDataPlayers: dataArray});
+             playerLayer.setState({historyDataPlayers: dataArray});
 
 
 
