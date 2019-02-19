@@ -65,25 +65,25 @@ class Trial extends React.Component {
 
   //hier krijgen we de locatie van de mainuser door, en wordt de 'myIcon' op die locatie gezet
   componentDidMount() {
-    navigator.geolocation.getCurrentPosition((position) =>
-    { this.setState({
-      location: {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      },
-      haveUsersLocation: true,
-      zoom: 18,
-      id: this.state.id,
-      accuracy: position.coords.accuracy
-      })
-    });
+    // navigator.geolocation.getCurrentPosition((position) =>
+    // { this.setState({
+    //   location: {
+    //     lat: position.coords.latitude,
+    //     lng: position.coords.longitude
+    //   },
+    //   haveUsersLocation: true,
+    //   zoom: 18,
+    //   id: this.state.id,
+    //   accuracy: position.coords.accuracy
+    //   })
+    // });
 
     // this.interval = setInterval(() => {
     //     this.receivePlayers();
     // }, 1000);
 
   }
-    
+
 
   render() {
       const position = [this.state.location.lat, this.state.location.lng]
@@ -97,16 +97,7 @@ class Trial extends React.Component {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url='https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
           />
-          <PlayerLayer id={this.state.id} state={this.state}/>
-          {this.state.haveUsersLocation ?
-            <Marker position={position} icon={myIcon}>
-              <Popup>
-                <div>
-                  Accuracy: {this.state.accuracy} meter
-                </div>
-              </Popup>
-            </Marker> : ''
-          }
+          <PlayerLayer id={this.state.id}/>
         </Map>
       )
     }

@@ -61,11 +61,11 @@ class PlayerLayer extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-        id: props.id,
-        location: props.state.location
-    };
-    // this.state.id = props.id;
+    // this.state = {
+    //     id: props.id,
+    //     location: props.state.location
+    // };
+     this.state.id = props.id;
 
   }
 
@@ -94,6 +94,15 @@ class PlayerLayer extends React.Component {
 
   // get players from server with time inverval
   receivePlayers() {
+
+    navigator.geolocation.getCurrentPosition((position) =>
+        { this.setState({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            accuracy: position.coords.accuracy})
+        });
+
+
       // hard coded data players
       // var data = {
       //   "data1": {
@@ -115,8 +124,8 @@ class PlayerLayer extends React.Component {
       const obj = JSON.stringify({
           request: "radar",
           token: cookies.get('token'),
-          longitude: this.state.location.lng,
-          latitude: this.state.location.lat,
+          longitude: this.state.longitude,
+          latitude: this.state.latitude,
           // sendSignal: this.state.sendSignal
       });
       const playerLayer = this;
@@ -236,6 +245,17 @@ class PlayerLayer extends React.Component {
         // check for enemy!
         if(idEnemy === id){
 
+            // Add marker for own player
+            pos = [this.state.longitude, this.state.latitude];
+
+            rows.push(
+                <Marker position={pos} icon={myIcon}>
+                     <Popup>
+                       <div>{this.state.accuracy}</div>
+                     </Popup>
+               </Marker>
+            );
+
             // special signal received from other player
             if(playerData.sendSignal === "specialSignal"){
               playerLayer.showAlertBox("Special Signal received!");
@@ -253,29 +273,29 @@ class PlayerLayer extends React.Component {
               playerLayer.fight(id,key.dataSignal.playerId);
             }
 
-            // Check if player is enemy
-            } else if ( playerData.hasOwnProperty("enemyPlayerId") &&playerData.enemyPlayerId !== null && playerData.enemyPlayerId === id ) {
+          // Check if player is enemy
+          } else if ( playerData.hasOwnProperty("enemyPlayerId") &&playerData.enemyPlayerId !== null && playerData.enemyPlayerId === id ) {
 
-              rows.push(
-                  <Marker position={pos} icon={enemyOnline}>
-                       <Popup>
-                         <button onClick={() => playerLayer.sendSpecialSignal(id,idEnemy)}>Send signal</button>
-                         <button onClick={() => playerLayer.acknowledgeHandshake(id,idEnemy)}>Send special signal</button>
-                       </Popup>
-                 </Marker>
+            rows.push(
+                <Marker position={pos} icon={enemyOnline}>
+                     <Popup>
+                       <button onClick={() => playerLayer.sendSpecialSignal(id,idEnemy)}>Send signal</button>
+                       <button onClick={() => playerLayer.acknowledgeHandshake(id,idEnemy)}>Send special signal</button>
+                     </Popup>
+               </Marker>
+            );
+
+           } else {
+             // NEW IMAGE NEEDED FOR NEUTRAL PLAYER
+             rows.push(
+                 <Marker position={pos} icon={enemyOffline}>
+                      <Popup>
+                        <button onclick={() => playerLayer.sendSpecialSignal(id,idEnemy)}>Send signal</button>
+                        <button onclick={() => playerLayer.acknowledgeHandshake(id,idEnemy)}>Send special signal</button>
+                      </Popup>
+                </Marker>
               );
-
-             } else {
-               // NEW IMAGE NEEDED FOR NEUTRAL PLAYER
-               rows.push(
-                   <Marker position={pos} icon={enemyOffline}>
-                        <Popup>
-                          <button onclick={() => playerLayer.sendSpecialSignal(id,idEnemy)}>Send signal</button>
-                          <button onclick={() => playerLayer.acknowledgeHandshake(id,idEnemy)}>Send special signal</button>
-                        </Popup>
-                  </Marker>
-                );
-             }
+           }
      });
 
      this.setState({playerMarkers: rows});
