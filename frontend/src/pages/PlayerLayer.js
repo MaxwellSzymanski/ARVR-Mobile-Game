@@ -124,6 +124,8 @@ class PlayerLayer extends React.Component {
           function (json) {
 
              alert("Data" + json.data);
+             alert(JSON.stringify(json.data));
+              alert(json.data[0]);
 
              // playerLayer.setState({ dataPlayers: json.data});
              //
