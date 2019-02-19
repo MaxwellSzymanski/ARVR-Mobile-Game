@@ -84,7 +84,7 @@ class PlayerLayer extends React.Component {
     this.receivePlayers();
     this.interval = setInterval(() => {
         this.receivePlayers();
-        // this.createLayer();
+        //this.createLayer();
     }, 2000);
   }
 
@@ -140,6 +140,9 @@ class PlayerLayer extends React.Component {
                   playerLayer.createLayer();
               }
           );
+
+          this.createLayer();
+
         });
   }
 
@@ -236,15 +239,15 @@ class PlayerLayer extends React.Component {
         if(idEnemy === id){
 
             // Add marker for own player
-            pos = [playerLayer.state.longitude, playerLayer.state.latitude];
-
-            rows.push(
-                <Marker position={pos} icon={myIcon}>
-                     <Popup>
-                       <div>{playerLayer.state.accuracy}</div>
-                     </Popup>
-               </Marker>
-            );
+            // pos = [playerLayer.state.longitude, playerLayer.state.latitude];
+            //
+            // rows.push(
+            //     <Marker position={pos} icon={myIcon}>
+            //          <Popup>
+            //            <div>{playerLayer.state.accuracy}</div>
+            //          </Popup>
+            //    </Marker>
+            // );
 
             // special signal received from other player
             if(playerData.sendSignal === "specialSignal"){
@@ -332,7 +335,7 @@ class PlayerLayer extends React.Component {
     // );
 
     var markers = this.state.playerMarkers;
-    if(markers != null){
+    if(markers !== null){
       // markers.push(
       //         <PopPop open={this.state.showAlertBox} closeBtn={true} closeOnEsc={true} onClose={()=>this.alertBoxIsClosed()} closeOnOverlay={true}>
       //           <div>{this.state.contentAlertBox}</div>
