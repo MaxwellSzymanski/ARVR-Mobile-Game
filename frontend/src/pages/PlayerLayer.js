@@ -122,21 +122,21 @@ class PlayerLayer extends React.Component {
       const playerLayer = this;
       axios.post(url, obj).then(
           function (json) {
+              if (json.data !== null) {
+                  // alert("Data" + json.data);
+                  // alert(JSON.stringify(json.data));
+                  // alert(json.data[0]);
 
-             alert("Data" + json.data);
-             alert(JSON.stringify(json.data));
-              alert(json.data[0]);
+                  playerLayer.setState({dataPlayers: json.data});
 
-             // playerLayer.setState({ dataPlayers: json.data});
-             //
-             // var dataArray = playerLayer.state.historyDataPlayers;
-             // dataArray.push(json.data);
-             // playerLayer.setState( {historyDataPlayers: dataArray});
-             // if( this.state.historyDataPlayers.length === 10 ){
-             //     dataArray.splice(0,1);
-             // }
-             // playerLayer.setState({historyDataPlayers: dataArray});
-
+                  var dataArray = playerLayer.state.historyDataPlayers;
+                  dataArray.push(json.data);
+                  playerLayer.setState({historyDataPlayers: dataArray});
+                  if (this.state.historyDataPlayers.length === 10) {
+                      dataArray.splice(0, 1);
+                  }
+                  playerLayer.setState({historyDataPlayers: dataArray});
+              }
           }
       );
   }
