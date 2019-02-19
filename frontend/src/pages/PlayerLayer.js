@@ -17,7 +17,7 @@ var myIcon = L.icon({
 
     iconSize:     [90, 90], // size of the icon
     shadowSize:   [50, 64], // size of the shadow
-    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+    iconAnchor:   [45, 45], // point of the icon which will correspond to marker's location
     shadowAnchor: [4, 62],  // the same for the shadow
     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 });
@@ -29,7 +29,7 @@ var enemyOnline = L.icon({
 
     iconSize:     [90, 90], // size of the icon
     shadowSize:   [50, 64], // size of the shadow
-    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+    iconAnchor:   [45, 45], // point of the icon which will correspond to marker's location
     shadowAnchor: [4, 62],  // the same for the shadow
     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 });
@@ -41,7 +41,7 @@ var enemyOffline = L.icon({
 
     iconSize:     [90, 90], // size of the icon
     shadowSize:   [50, 64], // size of the shadow
-    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+    iconAnchor:   [45, 45], // point of the icon which will correspond to marker's location
     shadowAnchor: [4, 62],  // the same for the shadow
     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 });
@@ -52,7 +52,7 @@ var pathMark = L.icon({
 
     iconSize:     [20, 20], // size of the icon
     shadowSize:   [50, 64], // size of the shadow
-    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+    iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
     shadowAnchor: [4, 62],  // the same for the shadow
     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 });
@@ -311,11 +311,14 @@ class PlayerLayer extends React.Component {
 
         var playerData = oldData[x][y];
 
-        var pos = [playerData.latitude,playerData.longitude];
+        if(playerData.playerId !== this.state.id){
 
-        rows.push(
-          <Marker position={pos} icon={pathMark} onClick={() => this.showAlertBox(playerData.updated_at)}/>
-         );
+          var pos = [playerData.latitude,playerData.longitude];
+
+          rows.push(
+            <Marker position={pos} icon={pathMark} onClick={() => this.showAlertBox(playerData.updated_at)}/>
+           );
+       }
       }
     }
     this.setState({playerMarkers: rows});
