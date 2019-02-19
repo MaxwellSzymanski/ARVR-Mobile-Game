@@ -131,8 +131,11 @@ class PlayerLayer extends React.Component {
                       }
                       playerLayer.setState({historyDataPlayers: dataArray});
                   }
-                  
-                 this.createLayer();
+                  playerLayer.setState({historyDataPlayers: dataArray});
+                  if (playerLayer.state.historyDataPlayers.length === 10) {
+                      dataArray.splice(0, 1);
+                  }
+                  playerLayer.setState({historyDataPlayers: dataArray});
               }
           );
 
@@ -216,6 +219,7 @@ class PlayerLayer extends React.Component {
     var id = this.state.id;
 
     //var jsonObject = JSON.parse(data);
+
     var jsonObject = this.state.dataPlayers;
 
     Object.keys(jsonObject).forEach(function(key) {

@@ -73,7 +73,7 @@ const Schema = new mongoose.Schema({
     }
 }, {timestamps: true});
 
-Schema.plugin(uniqueValidator, {message: 'already taken'});
+Schema.plugin(uniqueValidator, {message: 'The {PATH} you gave ({VALUE}) is already in use.'});
 
 Schema.pre('save', async function(){
     const hash = await bcrypt.hash(this.password, saltRounds);
