@@ -61,11 +61,11 @@ class PlayerLayer extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-        id: props.id,
-        location: props.state.location
-    };
-    // this.state.id = props.id;
+    // this.state = {
+    //     id: props.id,
+    //     location: props.state.location
+    // };
+     this.state.id = props.id;
 
   }
 
