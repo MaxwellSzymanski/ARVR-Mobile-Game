@@ -84,7 +84,7 @@ class PlayerLayer extends React.Component {
     this.receivePlayers();
     this.interval = setInterval(() => {
         this.receivePlayers();
-        //this.createLayer();
+        this.createLayer();
     }, 2000);
   }
 
