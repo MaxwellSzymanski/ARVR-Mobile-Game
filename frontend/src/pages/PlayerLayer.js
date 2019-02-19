@@ -135,50 +135,66 @@ class PlayerLayer extends React.Component {
              }
              playerLayer.setState({historyDataPlayers: dataArray});
 
-
-
-              // that.setState({counter: that.state.counter + 1});
-              // that.setState({dataPlayers: json.data});
-              // var dataArray = that.state.historyDataPlayers;
-              // dataArray.push(json.data);
-              // that.setState( {historyDataPlayers: dataArray});
-              // if( that.state.historyDataPlayers.length === 10 ){
-              //     dataArray.splice(0,1);
-              // }
           }
       );
-
-      // this.setState({ counter: this.state.counter + 1});
-      // this.setState({ dataPlayers: data});
-      //
-      // var dataArray = this.state.historyDataPlayers;
-      // dataArray.push(data);
-      // this.setState( {historyDataPlayers: dataArray});
-      // if( this.state.historyDataPlayers.length === 10 ){
-      //     dataArray.splice(0,1);
-      // }
-      // this.setState({historyDataPlayers: dataArray});
   }
 
   // Send signal to server
   sendSpecialSignal(id,idEnemy){
+
       console.log(id + "send special signal to "+ idEnemy);
-      this.setState({count: this.state.count + 1})
+
+      const data = JSON.stringify({
+        playerId: id
+      });
+      const obj = JSON.stringify({
+          request: "sendSignal",
+          playerId: idEnemy,
+          dataSignal: data,
+          token: cookies.get('token')
+      });
+      const playerLayer = this;
+      axios.post(url, obj);
   }
 
   // Send special signal to server
   sendHandShakeSignal(id,idEnemy){
       console.log(id+"send handshake signal to: "+ idEnemy);
+
+      let data = {};
+      const obj = JSON.stringify({
+          request: "radar",
+          token: cookies.get('token')
+      });
+      axios.post(url, obj);
+
   }
 
   // Send acknowledgement to server
   acknowledgeHandshake(id,idEnemy){
     console.log(id+"send Handshake signal to: "+ idEnemy);
+
+    let data = {};
+    const obj = JSON.stringify({
+        request: "radar",
+        token: cookies.get('token')
+    });
+    axios.post(url, obj);
+
   }
 
   // Send fight signal to server (fight: id vs idEnemy)
   fight(id,idEnemy){
+
     console.log(id+"send fight signal to: "+ idEnemy);
+
+    const obj = JSON.stringify({
+        request: "fight",
+        token: cookies.get('token'),
+        playerId: id,
+        enemyPlayerId: idEnemy
+    });
+    axios.post(url, obj);
   }
 
   showAlertBox(content){
