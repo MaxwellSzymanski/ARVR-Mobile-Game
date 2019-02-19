@@ -246,7 +246,7 @@ class PlayerLayer extends React.Component {
         if(idEnemy === id){
 
             // Add marker for own player
-            var pos = [this.state.longitude, this.state.latitude];
+            pos = [this.state.longitude, this.state.latitude];
 
             rows.push(
                 <Marker position={pos} icon={enemyOnline}>
