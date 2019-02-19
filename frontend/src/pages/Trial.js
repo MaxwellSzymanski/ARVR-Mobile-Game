@@ -83,7 +83,7 @@ class Trial extends React.Component {
     // }, 1000);
 
   }
-
+    
 
   render() {
       const position = [this.state.location.lat, this.state.location.lng]
