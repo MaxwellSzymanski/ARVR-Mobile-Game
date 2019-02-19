@@ -237,15 +237,15 @@ class PlayerLayer extends React.Component {
         if(idEnemy === id){
 
             // Add marker for own player
-            // pos = [playerLayer.state.longitude, playerLayer.state.latitude];
-            //
-            // rows.push(
-            //     <Marker position={pos} icon={myIcon}>
-            //          <Popup>
-            //            <div>{playerLayer.state.accuracy}</div>
-            //          </Popup>
-            //    </Marker>
-            // );
+            pos = [playerLayer.state.longitude, playerLayer.state.latitude];
+
+            rows.push(
+                <Marker position={pos} icon={myIcon}>
+                     <Popup>
+                       <div>{playerLayer.state.accuracy}</div>
+                     </Popup>
+               </Marker>
+            );
 
             // special signal received from other player
             // if(playerData.sendSignal === "specialSignal"){
