@@ -236,12 +236,12 @@ class PlayerLayer extends React.Component {
         if(idEnemy === id){
 
             // Add marker for own player
-            pos = [this.state.longitude, this.state.latitude];
+            pos = [playerLayer.state.longitude, playerLayer.state.latitude];
 
             rows.push(
                 <Marker position={pos} icon={myIcon}>
                      <Popup>
-                       <div>{this.state.accuracy}</div>
+                       <div>{playerLayer.state.accuracy}</div>
                      </Popup>
                </Marker>
             );
