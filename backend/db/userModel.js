@@ -121,13 +121,8 @@ Schema.methods.sendVerifMail = function() {
         from: 'Game Of Wolves',
         to: this.email,
         subject: 'Verify your e-mail',
-        html: '
-        <head><script type="text/javscript">
-          var name = this.name;
-          var code = this.verifCode.toString();
-        </script></head>
-
-          <body style="margin: 0; padding: 0;" bgcolor="#910f0f">
+        html: `
+        <body style="margin: 0; padding: 0;" bgcolor="#910f0f">
          <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
            <tr>
             <td align="center" bgcolor="#910f0f" style="padding: 40px 0 30px 0;">
@@ -140,16 +135,17 @@ Schema.methods.sendVerifMail = function() {
           </tr>
           <tr>
            <td align="center" bgcolor="white"><font color="black" style="font-family:times new roman;">
-             <h3>Dear <script type="text/javascript">document.write(name)</script>,</h3>
+             <h3>Dear `+ this.name +`,</h3>
              <h4>We are happy to welcome you to the world of <font color="#910f0f">Game of Wolves</font>!</br>To start your adventure, you first have to verificate this e-mail.</h4>
              <h4>This is your verification code: </h4>
-             <div style="display:inline-block"><h1 style="border:3px; border-style:solid; border-color:#910f0f"><script type="text/javascript">document.write(code)</script></h1></div>
+             <div style="display:inline-block"><h1 style="border:3px; border-style:solid; border-color:#910f0f"> `+ this.verifCode.toString()` </h1></div>
              <h4>Enjoy your playing time, </br>The Game Of Wolves Team</h4>
            </font></td>
           </tr>
          </table>
         </body>
-'
+`
+
     };
 
     transporter.sendMail(options, function(error, res){
