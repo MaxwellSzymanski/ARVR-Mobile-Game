@@ -61,11 +61,11 @@ class PlayerLayer extends React.Component {
 
   constructor(props) {
     super(props);
-    // this.state = {
-    //     id: props.id,
-    //     location: props.location
-    // };
-    this.state.id = props.id;
+    this.state = {
+        id: props.id,
+        location: props.state.location
+    };
+    // this.state.id = props.id;
 
   }
 
@@ -84,7 +84,7 @@ class PlayerLayer extends React.Component {
     this.receivePlayers();
     this.interval = setInterval(() => {
         this.receivePlayers();
-        this.createLayer();
+        //this.createLayer();
     }, 1000);
   }
 
@@ -95,53 +95,57 @@ class PlayerLayer extends React.Component {
   // get players from server with time inverval
   receivePlayers() {
       // hard coded data players
-      var data = {
-        "data1": {
-          "idPlayer": "idPlayer1",
-          "latitude": 4.676,
-          "longitude": 50.8632811,
-          "sendSignal": "specialSignal"
-        },
-        "data2": {
-          "idPlayer": "idPlayer2",
-          "latitude": 4.6762872+this.state.counter,
-          "longitude": 50.8632811,
-          "enemyPlayerId": "idPlayer1",
-             "timeStamp": "timeStampPlayer22"
-        }
-      };
-      // let data = {};
-      // const obj = JSON.stringify({
-      //     request: "radar",
-      //     token: cookies.get('token'),
-      //     longitude: this.state.location.lng,
-      //     latitude: this.state.location.lat,
-      //     // sendSignal: this.state.sendSignal
-      // });
-      // const that = this;
-      // axios.post(url, obj).then(
-      //     function (json) {
-      //         that.setState({counter: that.state.counter + 1});
-      //         that.setState({dataPlayers: json.data});
-      //         var dataArray = that.state.historyDataPlayers;
-      //         dataArray.push(json.data);
-      //         that.setState( {historyDataPlayers: dataArray});
-      //         if( that.state.historyDataPlayers.length === 10 ){
-      //             dataArray.splice(0,1);
-      //         }
-      //     }
-      // );
+      // var data = {
+      //   "data1": {
+      //     "idPlayer": "idPlayer1",
+      //     "latitude": 4.676,
+      //     "longitude": 50.8632811,
+      //     "sendSignal": "specialSignal"
+      //   },
+      //   "data2": {
+      //     "idPlayer": "idPlayer2",
+      //     "latitude": 4.6762872+this.state.counter,
+      //     "longitude": 50.8632811,
+      //     "enemyPlayerId": "idPlayer1",
+      //        "timeStamp": "timeStampPlayer22"
+      //   }
+      // };
+      //
+      let data = {};
+      const obj = JSON.stringify({
+          request: "radar",
+          token: cookies.get('token'),
+          longitude: this.state.location.lng,
+          latitude: this.state.location.lat,
+          // sendSignal: this.state.sendSignal
+      });
+      const that = this;
+      axios.post(url, obj).then(
+          function (json) {
 
-      this.setState({ counter: this.state.counter + 1});
-      this.setState({ dataPlayers: data});
+             console.log("Data" + json);
 
-      var dataArray = this.state.historyDataPlayers;
-      dataArray.push(data);
-      this.setState( {historyDataPlayers: dataArray});
-      if( this.state.historyDataPlayers.length === 10 ){
-          dataArray.splice(0,1);
-      }
-      this.setState({historyDataPlayers: dataArray});
+              // that.setState({counter: that.state.counter + 1});
+              // that.setState({dataPlayers: json.data});
+              // var dataArray = that.state.historyDataPlayers;
+              // dataArray.push(json.data);
+              // that.setState( {historyDataPlayers: dataArray});
+              // if( that.state.historyDataPlayers.length === 10 ){
+              //     dataArray.splice(0,1);
+              // }
+          }
+      );
+
+      // this.setState({ counter: this.state.counter + 1});
+      // this.setState({ dataPlayers: data});
+      //
+      // var dataArray = this.state.historyDataPlayers;
+      // dataArray.push(data);
+      // this.setState( {historyDataPlayers: dataArray});
+      // if( this.state.historyDataPlayers.length === 10 ){
+      //     dataArray.splice(0,1);
+      // }
+      // this.setState({historyDataPlayers: dataArray});
   }
 
   // Send signal to server
