@@ -249,7 +249,7 @@ class PlayerLayer extends React.Component {
             pos = [this.state.longitude, this.state.latitude];
 
             rows.push(
-                <Marker position={pos} icon={enemyOnline}>
+                <Marker position={pos} icon={myIcon}>
                      <Popup>
                        <div>{this.state.accuracy}</div>
                      </Popup>
