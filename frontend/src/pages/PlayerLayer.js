@@ -84,7 +84,7 @@ class PlayerLayer extends React.Component {
     this.receivePlayers();
     this.interval = setInterval(() => {
         this.receivePlayers();
-        this.createLayer();
+        // this.createLayer();
     }, 2000);
   }
 
@@ -99,59 +99,45 @@ class PlayerLayer extends React.Component {
         { this.setState({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
-            accuracy: position.coords.accuracy})
-        });
+            accuracy: position.coords.accuracy}
+          );
+          let data = {};
+          const obj = JSON.stringify({
+              request: "radar",
+              token: cookies.get('token'),
+              longitude: this.state.longitude,
+              latitude: this.state.latitude,
+              // sendSignal: this.state.sendSignal
+          });
+          const playerLayer = this;
+          axios.post(url, obj).then(
+              function (json) {
+                  if (json.data !== null) {
+                      // alert("Data" + json.data);
+                      // alert(JSON.stringify(json.data));
+                      // alert(json.data[0]);
 
+                      playerLayer.setState({dataPlayers: json.data});
 
-      // hard coded data players
-      // var data = {
-      //   "data1": {
-      //     "idPlayer": "idPlayer1",
-      //     "latitude": 4.676,
-      //     "longitude": 50.8632811,
-      //     "sendSignal": "specialSignal"
-      //   },
-      //   "data2": {
-      //     "idPlayer": "idPlayer2",
-      //     "latitude": 4.6762872+this.state.counter,
-      //     "longitude": 50.8632811,
-      //     "enemyPlayerId": "idPlayer1",
-      //        "timeStamp": "timeStampPlayer22"
-      //   }
-      // };
-      //
-      let data = {};
-      const obj = JSON.stringify({
-          request: "radar",
-          token: cookies.get('token'),
-          longitude: this.state.longitude,
-          latitude: this.state.latitude,
-          // sendSignal: this.state.sendSignal
-      });
-      const playerLayer = this;
-      axios.post(url, obj).then(
-          function (json) {
-              if (json.data !== null) {
-                  // alert("Data" + json.data);
-                  // alert(JSON.stringify(json.data));
-                  // alert(json.data[0]);
-
-                  playerLayer.setState({dataPlayers: json.data});
-
-                  var dataArray = playerLayer.state.historyDataPlayers;
-                  if (dataArray === null) {
-                      dataArray = json.data
-                  } else {
-                      dataArray.push(json.data);
+                      var dataArray = playerLayer.state.historyDataPlayers;
+                      if (dataArray === null) {
+                          dataArray = json.data
+                      } else {
+                          dataArray.push(json.data);
+                      }
+                      playerLayer.setState({historyDataPlayers: dataArray});
+                      if (this.state.historyDataPlayers.length === 10) {
+                          dataArray.splice(0, 1);
+                      }
+                      playerLayer.setState({historyDataPlayers: dataArray});
                   }
-                  playerLayer.setState({historyDataPlayers: dataArray});
-                  if (this.state.historyDataPlayers.length === 10) {
-                      dataArray.splice(0, 1);
-                  }
-                  playerLayer.setState({historyDataPlayers: dataArray});
+                  
+                 this.createLayer();
               }
-          }
-      );
+          );
+
+
+        });
   }
 
   // Send signal to server
