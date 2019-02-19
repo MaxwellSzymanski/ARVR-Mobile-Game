@@ -98,15 +98,6 @@ class Trial extends React.Component {
             url='https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
           />
           <PlayerLayer id={this.state.id}/>
-          // {this.state.haveUsersLocation ?
-          //   <Marker position={position} icon={myIcon}>
-          //     <Popup>
-          //       <div>
-          //         Accuracy: {this.state.accuracy} meter
-          //       </div>
-          //     </Popup>
-          //   </Marker> : ''
-          // }
         </Map>
       )
     }
