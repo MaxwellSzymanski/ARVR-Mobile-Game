@@ -62,9 +62,11 @@ class PlayerLayer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        id: props.state.id,
+        id: props.id,
         location: props.state.location
     };
+    // this.state.id = props.id;
+
   }
 
   state = {
@@ -82,7 +84,7 @@ class PlayerLayer extends React.Component {
     this.receivePlayers();
     this.interval = setInterval(() => {
         this.receivePlayers();
-        this.createLayer();
+        //this.createLayer();
     }, 1000);
   }
 
@@ -105,10 +107,11 @@ class PlayerLayer extends React.Component {
       //     "latitude": 4.6762872+this.state.counter,
       //     "longitude": 50.8632811,
       //     "enemyPlayerId": "idPlayer1",
-             // "timeStamp": "timeStampPlayer22"
+      //        "timeStamp": "timeStampPlayer22"
       //   }
       // };
-      // let data = {};
+      //
+      let data = {};
       const obj = JSON.stringify({
           request: "radar",
           token: cookies.get('token'),
@@ -119,20 +122,30 @@ class PlayerLayer extends React.Component {
       const that = this;
       axios.post(url, obj).then(
           function (json) {
-              that.setState({counter: that.state.counter + 1});
-              that.setState({dataPlayers: json.data});
-              var dataArray = that.state.historyDataPlayers;
-              dataArray.push(json.data);
-              that.setState( {historyDataPlayers: dataArray});
-              if( that.state.historyDataPlayers.length === 10 ){
-                  dataArray.splice(0,1);
-              }
+
+             console.log("Data" + json);
+
+              // that.setState({counter: that.state.counter + 1});
+              // that.setState({dataPlayers: json.data});
+              // var dataArray = that.state.historyDataPlayers;
+              // dataArray.push(json.data);
+              // that.setState( {historyDataPlayers: dataArray});
+              // if( that.state.historyDataPlayers.length === 10 ){
+              //     dataArray.splice(0,1);
+              // }
           }
       );
 
       // this.setState({ counter: this.state.counter + 1});
       // this.setState({ dataPlayers: data});
-
+      //
+      // var dataArray = this.state.historyDataPlayers;
+      // dataArray.push(data);
+      // this.setState( {historyDataPlayers: dataArray});
+      // if( this.state.historyDataPlayers.length === 10 ){
+      //     dataArray.splice(0,1);
+      // }
+      // this.setState({historyDataPlayers: dataArray});
   }
 
   // Send signal to server
@@ -264,12 +277,27 @@ class PlayerLayer extends React.Component {
   }
 
   render() {
+    // var markers = this.state.playerMarkers;
+    // return(
+    //
+    //
+    //   <PopPop open={this.state.showAlertBox} closeBtn={true} closeOnEsc={true} onClose={()=>this.alertBoxIsClosed()} closeOnOverlay={true}>
+    //     <div>{this.state.contentAlertBox}</div>
+    //   </PopPop>
+    //
+    // );
+
     var markers = this.state.playerMarkers;
-    markers.push(
-            <PopPop open={this.state.showAlertBox} closeBtn={true} closeOnEsc={true} onClose={()=>this.alertBoxIsClosed()} closeOnOverlay={true}>
-              <div>{this.state.contentAlertBox}</div>
-            </PopPop>);
-    return (markers)
+    if(markers != null){
+      // markers.push(
+      //         <PopPop open={this.state.showAlertBox} closeBtn={true} closeOnEsc={true} onClose={()=>this.alertBoxIsClosed()} closeOnOverlay={true}>
+      //           <div>{this.state.contentAlertBox}</div>
+      //         </PopPop>);
+      return (markers)
+    } else {
+      return (null)
+   }
+
   }
 
 }

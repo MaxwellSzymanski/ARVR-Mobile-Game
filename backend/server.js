@@ -388,7 +388,7 @@ async function getPlayerPositionRadar(jsonData,res) {
         }
     });
 
-    ActivePlayer.find({}, '-created_at -_id -__v', {lean: true}, async function(error, result) {
+    ActivePlayer.find({}, '-created_at -_id -updated_at -__v', {lean: true}, async function(error, result) {
         if (error) {
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.setHeader("Content-Type", "ERROR");
