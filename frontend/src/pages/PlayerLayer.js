@@ -136,11 +136,10 @@ class PlayerLayer extends React.Component {
                       dataArray.splice(0, 1);
                   }
                   playerLayer.setState({historyDataPlayers: dataArray});
+
+                  playerLayer.createLayer();
               }
           );
-
-          this.createLayer();
-
         });
   }
 
