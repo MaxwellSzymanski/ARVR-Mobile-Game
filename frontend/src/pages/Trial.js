@@ -72,7 +72,7 @@ class Trial extends React.Component {
         lng: position.coords.longitude
       },
       haveUsersLocation: true,
-      zoom: 1,
+      zoom: 18,
       id: this.state.id,
       accuracy: position.coords.accuracy
       })
