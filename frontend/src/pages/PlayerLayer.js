@@ -128,22 +128,22 @@ class PlayerLayer extends React.Component {
           var idEnemy = playerData.playerId;
           var pos = [playerData.latitude, playerData.longitude];
 
-          const timeDiff = (new Date() - jsonObject[key].updatedAt)/1000;
+          const timeDiff = Math.abs(new Date().getTime() - jsonObject[key].updatedAt.getTime())/1000;
           if (timeDiff <= 5) {
               rows.push(
                   <Marker position={pos} icon={enemyOnline}>
                       <Popup>
-                          {key}
+                          {playerData.id}
                           <button onClick={() => playerLayer.sendSpecialSignal(id,idEnemy)}>Send signal</button>
                           <button onClick={() => playerLayer.acknowledgeHandshake(id,idEnemy)}>Send special signal</button>
                       </Popup>
                   </Marker>
               );
-          } else {
+          } else if (timeDiff <= 30) {
               rows.push(
                   <Marker position={pos} icon={enemyOffline}>
                       <Popup>
-                          {key}
+                          {playerData.id}
                           <button onClick={() => playerLayer.sendSpecialSignal(id,idEnemy)}>Send signal</button>
                           <button onClick={() => playerLayer.acknowledgeHandshake(id,idEnemy)}>Send special signal</button>
                       </Popup>
