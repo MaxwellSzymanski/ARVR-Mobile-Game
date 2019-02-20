@@ -120,7 +120,7 @@ var io = require('socket.io')(server);
 // server.listen(port);
 
 io.sockets.on('connection', function (socket) {
-    console.log("new connection:  " + socket);
+    console.log("new connection:  " + JSON.stringify(socket));
 
     socket.on('signup', (data) => {signup(data, socket)});
 
@@ -309,7 +309,6 @@ function removePlayer(socket) {
         }
     })
 }
-
 
 
 // ============================================================================
