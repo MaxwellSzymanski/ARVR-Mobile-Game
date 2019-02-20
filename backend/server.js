@@ -134,9 +134,10 @@ io.sockets.on('connection', function (socket) {
 
     socket.on("stats", (data) => {stats(data, socket)});
 
-    socket.on("location", (data) => {location(data, socket)});
+    socket.on("location", (data) => {updateLocation(data, socket)});
 
     socket.on("disconnect", () => {removePlayer(socket)});
+    
 });
 
 
@@ -215,7 +216,7 @@ function signin(data, socket) {
                         const newActivePlayer = new ActivePlayer({playerid: result.name, location: data.position});
                         newActivePlayer.save();
                     } else {
-                        act.location = data.position;
+                        act.updateLocation = data.position;
                         act.updated_at = Date.now();
                         act.save();
                     }
@@ -273,7 +274,7 @@ function stats(data, socket) {
 }
 
 let game = {};
-function location(data, socket) {
+function updateLocation(data, socket) {
     if (data.token) {
         jwt.verify(data.token, secret, async function(err, token) {
             if (err) {
@@ -288,9 +289,10 @@ function location(data, socket) {
                                 latitude: data.latitude,
                                 updatedAt: new Date()
                             };
-                            Object.keys(game).forEach( function(player) {
-                                console.log(player + ":\n" + game[player] + "\n\n");
-                            })
+                            // Object.keys(game).forEach( function(player) {
+                            //     console.log(player);
+                            // })
+                            socket.emit("playerdata", game)
                         }
                     }
                 )
@@ -299,6 +301,7 @@ function location(data, socket) {
     }
 }
 
+
 function removePlayer(socket) {
     Object.keys(game).forEach( function (username) {
         if (game[username].socket === socket) {
@@ -306,6 +309,8 @@ function removePlayer(socket) {
         }
     })
 }
+
+
 
 // ============================================================================
 

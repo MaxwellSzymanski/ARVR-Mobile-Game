@@ -82,7 +82,7 @@ class PlayerLayer extends React.Component {
   componentDidMount() {
     this.receivePlayers();
     this.interval = setInterval(() => {
-        this.receivePlayers();
+        // this.receivePlayers();
         //this.createLayer();
         this.sendLocation();
     }, 2000);
@@ -107,6 +107,47 @@ class PlayerLayer extends React.Component {
           })
       })
   }
+
+  setPlayers(data) {
+      this.setState({dataPlayers: data});
+      this.addPlayerLayer();
+  }
+
+  addPlayerLayer() {
+      var playerLayer = this;
+      var rows = [];
+      var id = this.state.id;
+      var jsonObject = this.state.dataPlayers;
+      Object.keys(jsonObject).forEach(function(key) {
+          var playerData = jsonObject[key];
+          var idEnemy = playerData.playerId;
+          var pos = [playerData.latitude, playerData.longitude];
+
+          const timeDiff = (new Date() - jsonObject[key].updatedAt)/1000;
+          if (timeDiff <= 5) {
+              rows.push(
+                  <Marker position={pos} icon={enemyOnline}>
+                      <Popup>
+                          {key}
+                          <button onClick={() => playerLayer.sendSpecialSignal(id,idEnemy)}>Send signal</button>
+                          <button onClick={() => playerLayer.acknowledgeHandshake(id,idEnemy)}>Send special signal</button>
+                      </Popup>
+                  </Marker>
+              );
+          } else {
+              rows.push(
+                  <Marker position={pos} icon={enemyOffline}>
+                      <Popup>
+                          {key}
+                          <button onClick={() => playerLayer.sendSpecialSignal(id,idEnemy)}>Send signal</button>
+                          <button onClick={() => playerLayer.acknowledgeHandshake(id,idEnemy)}>Send special signal</button>
+                      </Popup>
+                  </Marker>
+              );
+          }
+      })
+  }
+
 
   // get players from server with time inverval
   receivePlayers() {
@@ -235,8 +276,6 @@ class PlayerLayer extends React.Component {
 
     var id = this.state.id;
 
-    //var jsonObject = JSON.parse(data);
-
     var jsonObject = this.state.dataPlayers;
 
     Object.keys(jsonObject).forEach(function(key) {
@@ -246,7 +285,6 @@ class PlayerLayer extends React.Component {
         //rows.push(<AlertBox content={playerData.longitude} ></AlertBox>);
 
         var idEnemy = playerData.playerId;
-
         var pos = [playerData.latitude,playerData.longitude];
 
         // check for enemy!
@@ -281,7 +319,7 @@ class PlayerLayer extends React.Component {
             // }
 
           // Check if player is enemy
-          } else if ( playerData.hasOwnProperty("enemyPlayerId") &&playerData.enemyPlayerId !== null && playerData.enemyPlayerId === id ) {
+          } else if ( playerData.hasOwnProperty("enemyPlayerId") && playerData.enemyPlayerId !== null && playerData.enemyPlayerId === id ) {
 
             rows.push(
                 <Marker position={pos} icon={enemyOnline}>

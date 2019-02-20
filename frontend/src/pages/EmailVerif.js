@@ -80,8 +80,6 @@ class EmailVerif extends React.Component {
             token: cookies.get('token')
         };
 
-        let obj = JSON.stringify(dataToSend);
-
         this.context.emit("verify", dataToSend);
     }
 
