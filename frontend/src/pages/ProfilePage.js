@@ -36,7 +36,7 @@ class ProfilePage extends React.Component {
                 level: data.level,
                 visibility: 0,
                 experience: data.experience,
-                encodedPic: "data:image/jpeg;base64," + data.image
+                encodedPic: "data:image/png;base64," + data.image
             });
         })
     }

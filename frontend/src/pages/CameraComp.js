@@ -56,6 +56,7 @@ class CameraComp extends React.Component {
             <Camera
                 onTakePhoto = { (dataUri) => { this.onTakePhoto(dataUri); } }
                 isImageMirror = {true}
+                imageType = {'IMAGE_TYPES.PNG'}
             />
         </div>
       </div>
