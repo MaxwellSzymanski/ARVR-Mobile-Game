@@ -30,8 +30,10 @@ class ProfilePage extends React.Component {
     }
 
     componentDidMount() {
-        this.context.on("stats", function(data) {
-            this.setState(data);
+        this.context.on("stats", (data) => {
+            this.setState({
+                attack: data.attack
+            });
             alert(JSON.stringify(this.state));
 
             let image = new Image();
