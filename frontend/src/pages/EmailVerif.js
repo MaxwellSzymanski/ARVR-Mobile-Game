@@ -70,6 +70,7 @@ class EmailVerif extends React.Component {
         e.preventDefault();
 
         this.setState({loading: true});
+
         let a = this.state;
         let code = parseInt(a.code_1 + a.code_2 + a.code_3 + a.code_4 + a.code_5 + a.code_6);
 
@@ -92,10 +93,6 @@ class EmailVerif extends React.Component {
 
     renderRedirect = () => {
         if (this.state.redirect) {return <Redirect to="/trial" />}
-    };
-
-    goToMap()   {
-        this.setRedirect();
     };
 
     setPage() {
