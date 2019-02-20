@@ -132,34 +132,40 @@ class PlayerLayer extends React.Component {
               </Popup>
           </Marker>
       );
-      Object.keys(jsonObject).forEach(function(key) {
-          var playerData = jsonObject[key];
-          var idEnemy = playerData.playerId;
-          var pos = [playerData.latitude, playerData.longitude];
+      if (jsonObject !== null) {
+          Object.keys(jsonObject).forEach(function (key) {
+              var playerData = jsonObject[key];
+              var idEnemy = playerData.playerId;
+              var pos = [playerData.latitude, playerData.longitude];
 
-          const timeDiff = Math.abs(new Date() - new Date(jsonObject[key].updatedAt))/1000;
-          if (timeDiff <= 5) {
-              rows.push(
-                  <Marker position={pos} icon={enemyOnline}>
-                      <Popup>
-                          {playerData.id}
-                          <button onClick={() => playerLayer.sendSpecialSignal(id,idEnemy)}>Send signal</button>
-                          <button onClick={() => playerLayer.acknowledgeHandshake(id,idEnemy)}>Send special signal</button>
-                      </Popup>
-                  </Marker>
-              );
-          } else if (timeDiff <= 30) {
-              rows.push(
-                  <Marker position={pos} icon={enemyOffline}>
-                      <Popup>
-                          {playerData.id}
-                          <button onClick={() => playerLayer.sendSpecialSignal(id,idEnemy)}>Send signal</button>
-                          <button onClick={() => playerLayer.acknowledgeHandshake(id,idEnemy)}>Send special signal</button>
-                      </Popup>
-                  </Marker>
-              );
-          }
-      });
+              const timeDiff = Math.abs(new Date() - new Date(jsonObject[key].updatedAt)) / 1000;
+              if (timeDiff <= 5) {
+                  rows.push(
+                      <Marker position={pos} icon={enemyOnline}>
+                          <Popup>
+                              {playerData.id}
+                              <button onClick={() => playerLayer.sendSpecialSignal(id, idEnemy)}>Send signal</button>
+                              <button onClick={() => playerLayer.acknowledgeHandshake(id, idEnemy)}>Send special
+                                  signal
+                              </button>
+                          </Popup>
+                      </Marker>
+                  );
+              } else if (timeDiff <= 30) {
+                  rows.push(
+                      <Marker position={pos} icon={enemyOffline}>
+                          <Popup>
+                              {playerData.id}
+                              <button onClick={() => playerLayer.sendSpecialSignal(id, idEnemy)}>Send signal</button>
+                              <button onClick={() => playerLayer.acknowledgeHandshake(id, idEnemy)}>Send special
+                                  signal
+                              </button>
+                          </Popup>
+                      </Marker>
+                  );
+              }
+          });
+      }
       this.setState({playerMarkers: rows});
   }
 
