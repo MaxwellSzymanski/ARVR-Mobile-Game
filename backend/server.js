@@ -288,8 +288,8 @@ function location(data, socket) {
                                 latitude: data.latitude,
                                 updatedAt: new Date()
                             };
-                            game.forEach( function(player) {
-                                console.log(player + "\n");
+                            Object.keys(game).forEach( function(player) {
+                                console.log(player + ":\n" + game[player] + "\n\n");
                             })
                         }
                     }
