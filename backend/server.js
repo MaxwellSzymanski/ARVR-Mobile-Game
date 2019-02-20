@@ -39,7 +39,7 @@ const respond = function(res, data) {
 };
 
 //create a server object:
-https.createServer(https_options, async function (req, res) {
+const server = https.createServer(https_options, async function (req, res) {
 
     // Set CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -114,7 +114,6 @@ https.createServer(https_options, async function (req, res) {
 }).listen(port);
 console.log("\n\n    Server listening on localhost:" + port + "\n\n");
 
-/* socket code, work in progress
 
 // var server = https.createServer(https_options);
 var io = require('socket.io')(server);
@@ -148,7 +147,7 @@ io.sockets.on('connection', function (socket) {
 
 // io.listen(port);
 
-*/
+
 
 
 // REQUEST HANDLING

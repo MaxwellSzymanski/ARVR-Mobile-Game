@@ -16,14 +16,13 @@ import EmailVerif from "./pages/EmailVerif.js";
 import ProfilePage from "./pages/ProfilePage";
 import FactionChooser from "./pages/factionChooser.js";
 
-// const url = require('./serveradress.js');
+const url = require('./serveradress.js');
 
 class App extends Component {
-  /* socket code, work in progress
   constructor() {
     super();
 
-    this.state = { socket: io("https://localhost:8080") };
+    this.state = { socket: io(url) };
   }
 
   async componentWillMount() {
@@ -33,11 +32,10 @@ class App extends Component {
     })
   }
 
-  */
 
   render() {
     return (
-      // <SocketContext.Provider value={this.state.socket}>
+      <SocketContext.Provider value={this.state.socket}>
         <Router basename="/">
           <div className="App">
             <Switch>
@@ -55,7 +53,7 @@ class App extends Component {
             </Switch>
           </div>
         </Router>
-      // </SocketContext.Provider>
+      </SocketContext.Provider>
     );
   }
 }
