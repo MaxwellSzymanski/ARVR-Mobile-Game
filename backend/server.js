@@ -290,7 +290,7 @@ function updateLocation(data, socket) {
                                 updatedAt: new Date()
                             };
                             Object.keys(game).forEach( function(player) {
-                                console.log(player + ":\n   " + JSON.stringify(game[player]));
+                                console.log(player + ":\n   (" + game[player].latitude +", " + game[player].longitude +")");
                             });
                             socket.emit("playerdata", game)
                         }
