@@ -126,7 +126,7 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('verify', (data) => {verifyEmail(data, socket)});
 
-    socket.on("newmail", (data) => {newMail(data)};
+    socket.on("newmail", (data) => {newMail(data)});
 
     socket.on("signin", (data) => {signin(data, socket)});
 });
