@@ -109,7 +109,9 @@ class PlayerLayer extends React.Component {
   }
 
   setPlayers(data) {
-      this.setState({dataPlayers: data});
+      let list = this.state.dataPlayers;
+      list[data.id] = data;
+      this.setState({dataPlayers: list});
       this.addPlayerLayer();
   }
 
