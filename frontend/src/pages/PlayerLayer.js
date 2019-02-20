@@ -18,7 +18,7 @@ var myIcon = L.icon({
     shadowSize:   [50, 64], // size of the shadow
     iconAnchor:   [45, 45], // point of the icon which will correspond to marker's location
     shadowAnchor: [4, 62],  // the same for the shadow
-    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+    popupAnchor:  [0, -30] // point from which the popup should open relative to the iconAnchor
 });
 
 //zwarte wolf voor de enemies die online zijn
@@ -30,7 +30,7 @@ var enemyOnline = L.icon({
     shadowSize:   [50, 64], // size of the shadow
     iconAnchor:   [45, 45], // point of the icon which will correspond to marker's location
     shadowAnchor: [4, 62],  // the same for the shadow
-    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+    popupAnchor:  [0, -30] // point from which the popup should open relative to the iconAnchor
 });
 
 //grijze wolf voor de enemies die offline zijn
@@ -42,7 +42,7 @@ var enemyOffline = L.icon({
     shadowSize:   [50, 64], // size of the shadow
     iconAnchor:   [45, 45], // point of the icon which will correspond to marker's location
     shadowAnchor: [4, 62],  // the same for the shadow
-    popupAnchor:  [-3,80] // point from which the popup should open relative to the iconAnchor
+    popupAnchor:  [0, -30] // point from which the popup should open relative to the iconAnchor
 });
 
 var pathMark = L.icon({
@@ -53,7 +53,7 @@ var pathMark = L.icon({
     shadowSize:   [50, 64], // size of the shadow
     iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
     shadowAnchor: [4, 62],  // the same for the shadow
-    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+    popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
 });
 
 class PlayerLayer extends React.Component {
@@ -73,12 +73,9 @@ class PlayerLayer extends React.Component {
     longitude: 4.6762872,
     players: null,
     dataPlayers: null,
-    counter: 1,
     id: null,
     playerMarkers: null,
     historyDataPlayers:[],
-    showAlertBox: false,
-    historyDataPlayers: []
   };
 
   componentDidMount() {
@@ -209,12 +206,6 @@ class PlayerLayer extends React.Component {
                       }
                       playerLayer.setState({historyDataPlayers: dataArray});
                   }
-                  playerLayer.setState({historyDataPlayers: dataArray});
-                  if (playerLayer.state.historyDataPlayers.length === 10) {
-                      dataArray.splice(0, 1);
-                  }
-                  playerLayer.setState({historyDataPlayers: dataArray});
-
                   playerLayer.createLayer();
               }
           );
@@ -281,12 +272,7 @@ class PlayerLayer extends React.Component {
   }
 
   showAlertBox(content){
-    this.setState({contentAlertBox: content});
-    this.setState({showAlertBox: true })
-  }
-
-  alertBoxIsClosed(){
-    this.setState({showAlertBox: false })
+    this.props.showAlertBox(content);
   }
 
   // Create layer of players for map component + check for received signals from other players
@@ -297,15 +283,17 @@ class PlayerLayer extends React.Component {
 
     var id = this.state.id;
 
+    //var jsonObject = JSON.parse(data);
+
     var jsonObject = this.state.dataPlayers;
+    if(jsonObject !== null){
 
     Object.keys(jsonObject).forEach(function(key) {
 
         var playerData = jsonObject[key];
 
-        //rows.push(<AlertBox content={playerData.longitude} ></AlertBox>);
-
         var idEnemy = playerData.playerId;
+
         var pos = [playerData.latitude,playerData.longitude];
 
         // check for enemy!
@@ -317,36 +305,36 @@ class PlayerLayer extends React.Component {
             rows.push(
                 <Marker position={pos} icon={myIcon}>
                      <Popup>
-                       <div>{playerLayer.state.accuracy}</div>
+                       <div>Accuracy: {playerLayer.state.accuracy} meter</div>
                      </Popup>
                </Marker>
             );
 
-            // special signal received from other player
-            // if(playerData.sendSignal === "specialSignal"){
-            //   playerLayer.showAlertBox("Special Signal received!");
-            // }
-            //
+            //special signal received from other player
+            if(playerData.sendSignal === "specialSignal"){
+              playerLayer.showAlertBox("Special Signal received!");
+            }
+
             // // Handshake signal received. Response on the handshake signal is send
-            // if(playerData.sendSignal === "handShakeSignal" && playerData.dataSignal.acknowledged === "falseACK"){
-            //   playerLayer.showAlertBox("HandShake Signal received! Send appropriate response.");
-            //   playerLayer.acknowledgeHandshake(id,key.dataSignal.playerId);
-            // }
-            //
-            // // Handshake signal is confirmed => fight with player
-            // if(playerData.sendSignal === "handShakeSignal" && playerData.dataSignal.acknowledged === "trueACK"){
-            //   playerLayer.showAlertBox("You are now in fight");
-            //   playerLayer.fight(id,key.dataSignal.playerId);
-            // }
+            if(playerData.sendSignal === "handShakeSignal" && playerData.dataSignal.acknowledged === "falseACK"){
+              playerLayer.showAlertBox("HandShake Signal received! Send appropriate response.");
+              playerLayer.acknowledgeHandshake(id,key.dataSignal.playerId);
+            }
+
+            // Handshake signal is confirmed => fight with player
+            if(playerData.sendSignal === "handShakeSignal" && playerData.dataSignal.acknowledged === "trueACK"){
+              playerLayer.showAlertBox("You are now in fight");
+              playerLayer.fight(id,key.dataSignal.playerId);
+            }
 
           // Check if player is enemy
-          } else if ( playerData.hasOwnProperty("enemyPlayerId") && playerData.enemyPlayerId !== null && playerData.enemyPlayerId === id ) {
+          } else if ( playerData.hasOwnProperty("enemyPlayerId") &&playerData.enemyPlayerId !== null && playerData.enemyPlayerId === id ) {
 
             rows.push(
                 <Marker position={pos} icon={enemyOnline}>
                      <Popup>
-                       <button onClick={() => playerLayer.sendSpecialSignal(id,idEnemy)}>Send signal</button>
-                       <button onClick={() => playerLayer.acknowledgeHandshake(id,idEnemy)}>Send special signal</button>
+                       <button onClick={()=> playerLayer.sendSignal(id,idEnemy)}>Send signal</button>
+                       <button onClick={()=> playerLayer.acknowledgeHandshake(id,idEnemy)}>Send special signal</button>
                      </Popup>
                </Marker>
             );
@@ -356,7 +344,7 @@ class PlayerLayer extends React.Component {
              rows.push(
                  <Marker position={pos} icon={enemyOffline}>
                       <Popup>
-                        <button onclick={() => playerLayer.sendSpecialSignal(id,idEnemy)}>Send signal</button>
+                        <button onclick={() =>playerLayer.sendSignal(id,idEnemy)}>Send signal</button>
                         <button onclick={() => playerLayer.acknowledgeHandshake(id,idEnemy)}>Send special signal</button>
                       </Popup>
                 </Marker>
@@ -368,7 +356,7 @@ class PlayerLayer extends React.Component {
 
      // Add path markers to layer
      this.createPath();
-
+     }
   }
 
 
@@ -377,45 +365,35 @@ class PlayerLayer extends React.Component {
 
   var rows = this.state.playerMarkers;
 
+  var oldData = this.state.historyDataPlayers;
 
-    var oldData = this.state.historyDataPlayers;
+  // Last element is current position
+  oldData = oldData.splice(-1,1);
 
-    for( var x in oldData){
+  for( var x in oldData){
 
-      for(var y in oldData[x] ){
+    for(var y in oldData[x] ){
 
-        var playerData = oldData[x][y];
+      var playerData = oldData[x][y];
 
-        if(playerData.playerId !== this.state.id){
+      if(playerData.playerId !== this.state.id){
 
-          var pos = [playerData.latitude,playerData.longitude];
+        var pos = [playerData.latitude,playerData.longitude];
 
-          rows.push(
-            <Marker position={pos} icon={pathMark} onClick={() => this.showAlertBox(playerData.updated_at)}/>
-           );
-       }
-      }
+        rows.push(
+          <Marker position={pos} icon={pathMark} onClick={() => this.showAlertBox(playerData.updated_at)}/>
+         );
+     }
     }
-    this.setState({playerMarkers: rows});
+  }
+  this.setState({playerMarkers: rows});
   }
 
   render() {
-    // var markers = this.state.playerMarkers;
-    // return(
-    //
-    //
-    //   <PopPop open={this.state.showAlertBox} closeBtn={true} closeOnEsc={true} onClose={()=>this.alertBoxIsClosed()} closeOnOverlay={true}>
-    //     <div>{this.state.contentAlertBox}</div>
-    //   </PopPop>
-    //
-    // );
 
     var markers = this.state.playerMarkers;
+
     if(markers !== null){
-      // markers.push(
-      //         <PopPop open={this.state.showAlertBox} closeBtn={true} closeOnEsc={true} onClose={()=>this.alertBoxIsClosed()} closeOnOverlay={true}>
-      //           <div>{this.state.contentAlertBox}</div>
-      //         </PopPop>);
       return (markers)
     } else {
       return (null)
