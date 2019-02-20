@@ -261,11 +261,9 @@ function stats(data, socket) {
                 function (user) {
                     if (user === null) {
                         console.log("(stats)         No user found");
-                        res.setHeader('Access-Control-Allow-Origin', '*');
-                        res.setHeader("Content-Type", "ERROR");
-                        res.end();
                     } else {
                         socket.emit("stats", user.getUserData());
+                        socket.emit("photo", {image: user.image} )
                     }
             });
         }

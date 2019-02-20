@@ -107,7 +107,6 @@ Schema.methods.getUserData = function() {
         health: this.health,
         level: this.level,
         experience: this.experience,
-        image: this.image
     };
 };
 
@@ -139,7 +138,7 @@ Schema.methods.sendVerifMail = function() {
              <h3>Dear ${this.name},</h3>
              <h4>We are happy to welcome you to the world of <font color="#910f0f">Game of Wolves</font>!</br>To start your adventure, you first have to verificate this e-mail.</h4>
              <h4>This is your verification code: </h4>
-             <div style="display:inline-block"><h1 style="border:3px; border-style:solid; border-color:#910f0f"> ${this.verifCode.toString()} </h1></div>
+             <div style="display:inline-block"><h1 style="border:3px; border-style:solid; border-color:#910f0f">  ${this.verifCode.toString()}  </h1></div>
              <h4>Enjoy your playing time, </br>The Game Of Wolves Team</h4>
            </font></td>
           </tr>
