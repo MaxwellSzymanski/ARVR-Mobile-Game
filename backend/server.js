@@ -122,13 +122,13 @@ var io = require('socket.io')(server);
 io.sockets.on('connection', function (socket) {
     console.log("new connection:  " + socket);
 
-    socket.on('signup', signup(data, socket));
+    socket.on('signup', (data) => {signup(data, socket)});
 
-    socket.on('verify', verifyEmail(data, socket));
+    socket.on('verify', (data) => {verifyEmail(data, socket)});
 
-    socket.on("newmail", newMail(data));
+    socket.on("newmail", (data) => {newMail(data)};
 
-    socket.on("signin", signin(data, socket));
+    socket.on("signin", (data) => {signin(data, socket)});
 });
 
 
