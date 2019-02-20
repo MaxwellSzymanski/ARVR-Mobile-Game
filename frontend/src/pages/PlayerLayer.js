@@ -123,6 +123,13 @@ class PlayerLayer extends React.Component {
       var rows = [];
       var id = this.state.id;
       var jsonObject = this.state.dataPlayers;
+      rows.push(
+          <Marker position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
+              <Popup>
+                  <div>{playerLayer.state.accuracy}</div>
+              </Popup>
+          </Marker>
+      );
       Object.keys(jsonObject).forEach(function(key) {
           var playerData = jsonObject[key];
           var idEnemy = playerData.playerId;
