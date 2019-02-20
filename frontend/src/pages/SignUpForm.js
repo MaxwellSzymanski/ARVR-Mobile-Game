@@ -38,7 +38,7 @@ class SignUpForm extends React.Component {
     }
 
     componentDidMount() {
-        this.context.on('signupres', (data) => {
+        this.context.on('signup', (data) => {
             if (data.success) {
                 alert("success");
                 const options = {

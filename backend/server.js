@@ -122,7 +122,7 @@ var io = require('socket.io')(server);
 io.sockets.on('connection', function (socket) {
     console.log("new connection:  " + socket);
 
-    socket.on('signup', signup (data, socket));
+    socket.on('signup', signup(data, socket));
 
     socket.on('verify', verifyEmail(data, socket));
 
@@ -139,12 +139,12 @@ function signup(data, socket) {
     const newUser = new User(data);
     newUser.save( function(error) {
         if (error) {
-            socket.emit('signupres', {
+            socket.emit('signup', {
                 success: false,
                 message: error.message
             });
         } else {
-            socket.emit('signupres', {
+            socket.emit('signup', {
                 success: true,
                 name: newUser.name,
                 token: newUser.createToken()
@@ -189,17 +189,16 @@ function signin(data, socket) {
     User.findOne({ email : data.email }, async function(error, result) {
         if (error) throw error;
         if (result === null) {
-            socket.emit()
-            respond(res, {"email": false});
+            socket.emit("signin", {"email": false});
         } else {
             const value = await result.checkPassword(data.password);
             console.log("checkPassword:   " + await value);
             if (!(await value))
-                respond(res, {"email": true, "password": value});
+                socket.emit("signin", {"email": true, "password": value});
             else {
-                respond(res, {
-                    "email": true,
-                    "password": value,
+                socket.emit("signin", {
+                    email: true,
+                    password: value,
                     token: result.createToken(),
                     name: result.name
                 });
