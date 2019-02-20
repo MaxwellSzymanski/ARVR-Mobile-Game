@@ -96,7 +96,6 @@ body {
 }
 
 .profilePhoto {
-    background-image: url(../assets/temporary/profileImage.png);
     position : relative;
     top : -100px;
     height : 140px;
