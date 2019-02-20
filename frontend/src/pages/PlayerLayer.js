@@ -87,6 +87,7 @@ class PlayerLayer extends React.Component {
         // this.receivePlayers();
         //this.createLayer();
         this.sendLocation();
+        this.addPlayerLayer();
     }, 2000);
     this.context.on("playerdata", (data) => {this.setPlayers(data)})
   }
@@ -117,7 +118,6 @@ class PlayerLayer extends React.Component {
       }
       list[data.id] = data;
       this.setState({dataPlayers: list});
-      this.addPlayerLayer();
   }
 
   addPlayerLayer() {
