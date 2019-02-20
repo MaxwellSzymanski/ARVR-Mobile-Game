@@ -1,15 +1,9 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import axios from 'axios';
-// import { signup } from './socket.js'
-import io from 'socket.io-client';
 
 import Cookies from 'universal-cookie';
 import SocketContext from "../socketContext";
 const cookies = new Cookies();
-const url = require('./serveradress.js');
-// const url = "https://localhost:8080";
-
 
 class SignUpForm extends React.Component {
     constructor() {
@@ -97,23 +91,6 @@ class SignUpForm extends React.Component {
             dataToSend.featureVector = featureVector;
 
             this.context.emit('signup', dataToSend);
-
-            // const obj = JSON.stringify(dataToSend);
-            // await axios.post(url, obj).then(
-            //     function (json) {
-            //         console.log(json.data);
-            //         if (json.data.success) {
-            //             const options = {
-            //                 path: '/',
-            //                 expires: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)   // expires in 24 hours
-            //             };
-            //             cookies.set('token', json.data.token, options);
-            //             cookies.set('name', json.data.name, options);
-            //             that.setState({redirect: true});
-            //         }
-            //         else alert(json.data.message);
-            //     }
-            // );
         }
     }
 

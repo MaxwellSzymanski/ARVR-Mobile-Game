@@ -120,79 +120,65 @@ var io = require('socket.io')(server);
 // server.listen(port);
 
 io.sockets.on('connection', function (socket) {
-    socket.emit("test", {test: "test"});
     console.log("new connection:  " + socket);
-    socket.on('signup', function (data) {
-        console.log("signup:    " + data.email);
-        const newUser = new User(data);
-        newUser.save( function(error) {
-            if (error) {
-                socket.emit('signupres', {
-                    success: false,
-                    message: error.message
-                });
-            } else {
-                socket.emit('signupres', {
-                    success: true,
-                    name: newUser.name,
-                    token: newUser.createToken(),
-                });
-                newUser.sendVerifMail();
-            }
-        });
-        const newActivePlayer = new ActivePlayer({playerid: data.name, location: data.position});
-        newActivePlayer.save();
-    });
+
+    socket.on('signup', signup (data, socket));
+
+    socket.on('verify', verifyEmail(data, socket));
+
+    socket.on("newmail")
 });
 
-// io.listen(port);
 
+// SOCKET HANDLING
 
-
-
-// REQUEST HANDLING
-
-function signup(obj, res) {
-    const newUser = new User(obj);
+function signup(data, socket) {
+    console.log("signup:    " + data.email);
+    const newUser = new User(data);
     newUser.save( function(error) {
         if (error) {
-            console.log(error);
-            // res.setHeader('Access-Control-Allow-Origin', '*');
-            res.setHeader("Content-Type", "ERROR");
-            res.write(JSON.stringify({
+            socket.emit('signupres', {
                 success: false,
                 message: error.message
-            }));
+            });
         } else {
-            respond(res, {
+            socket.emit('signupres', {
                 success: true,
                 name: newUser.name,
                 token: newUser.createToken()
             });
             newUser.sendVerifMail();
         }
-        res.end();
     });
-    const newActivePlayer = new ActivePlayer({playerid: obj.name, location: obj.position});
+    const newActivePlayer = new ActivePlayer({playerid: data.name, location: data.position});
     newActivePlayer.save();
-}
+});
 
-function verifyEmail(obj, res) {
-    jwt.verify(obj.token, secret, async function(err, token) {
+function verifyEmail(data, socket) {
+    jwt.verify(data.token, secret, async function(err, token) {
         if (err) {
             console.log("invalid token");
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.setHeader("Content-Type", "ERROR");
-            res.end();
             throw err;
         } else {
             User.findById(token.id).then(
                 async function(user) {
-                    const result = await user.verify(obj.code);
-                    respond(res, {
-                        success: result
-                    });
-                })
+                    const result = await user.verify(data.code);
+                    socket.emit("verify", {success: result});
+                });
+        }
+    })
+}
+
+function newMail(data) {
+    jwt.verify(data.token, secret, async function(err, token) {
+        if (err) {
+            console.log("invalid token");
+            throw err;
+        } else {
+            User.findById(token.id).then(
+                async function(user) {
+                    user.sendVerifMail();
+            });
         }
     })
 }
