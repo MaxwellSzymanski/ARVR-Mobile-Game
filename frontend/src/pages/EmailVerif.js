@@ -20,13 +20,14 @@ class EmailVerif extends React.Component {
     componentDidMount() {
         this.refs["code_1"].focus();
 
+        const that = this;
         this.context.on("verify", function (response) {
             if (response.success) {
                 alert("Your e-mail has been verified.");
-                this.setState({redirect: true});
+                that.setState({redirect: true});
             } else {
                 alert("That code seems to be wrong. Please try again or let us send you another code.");
-                this.setState({firstTry: false, loading: false})
+                that.setState({firstTry: false, loading: false})
             }
         });
     }

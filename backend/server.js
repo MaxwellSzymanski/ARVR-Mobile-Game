@@ -134,7 +134,9 @@ io.sockets.on('connection', function (socket) {
 
     socket.on("stats", (data) => {stats(data, socket)});
 
+    socket.on("location", (data) => {location(data, socket)});
 
+    socket.on("disconnect", () => {removePlayer(socket)});
 });
 
 
@@ -269,6 +271,47 @@ function stats(data, socket) {
         }
     })
 }
+
+let game = {};
+function location(data, socket) {
+    if (data.token) {
+        jwt.verify(data.token, secret, async function(err, token) {
+            if (err) {
+                console.log("(location)      invalid token");
+            } else {
+                User.findById(token.id).then(
+                    function (user) {
+                        if (user !== null) {
+                            game[user.name] = {
+                                socket: socket,
+                                longitude: data.longitude,
+                                latitude: data.latitude,
+                                updatedAt: new Date()
+                            };
+                            console.log(game + "\n");
+                            console.log(JSON.stringify(game) +"\n");
+                        }
+                    }
+                )
+            }
+        })
+    }
+}
+
+function removePlayer(socket) {
+    Object.keys(game).forEach( function (username) {
+        if (game[username].socket === socket) {
+            delete game[username];
+        }
+    })
+}
+
+// ============================================================================
+
+// OLD REQUEST HANDLING
+
+// ============================================================================
+
 
 function verifyJWT(obj, res) {
     jwt.verify(obj.token, secret, async function(err, token) {
