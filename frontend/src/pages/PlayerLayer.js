@@ -135,7 +135,8 @@ class PlayerLayer extends React.Component {
           var idEnemy = playerData.playerId;
           var pos = [playerData.latitude, playerData.longitude];
 
-          const timeDiff = Math.abs(new Date().getTime() - jsonObject[key].updatedAt.getTime())/1000;
+          const timeDiff = Math.abs(new Date() - jsonObject[key].updatedAt)/1000;
+          alert(timeDiff);
           if (timeDiff <= 5) {
               rows.push(
                   <Marker position={pos} icon={enemyOnline}>
