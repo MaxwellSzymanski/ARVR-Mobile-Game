@@ -19,6 +19,30 @@ class SignInForm extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+    componentDidMount() {
+        //      received object:
+        // { email: false }                                 if e-mail not registered
+        // { email: true, password: false }                 if e-mail registered and password incorrect
+        // { email: true, password: true, token: jwt }      if e-mail registered and password correct, the jwt token
+        //                                                      is further on stored in a cookie in the browser
+        this.context.on("signin", function (data) {
+            if (!data.email)
+                alert("Invalid e-mail");
+            else if (!data.password)
+                alert(JSON.stringify(data));
+                // alert("Invalid password");
+            else {
+                const options = {
+                    path: '/',
+                    expires: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)   // expires in 24 hours
+                };
+                cookies.set('token', data.token, options);
+                cookies.set('name', data.name, options);
+                this.setState({redirect: true});
+            }
+        })
+    }
+
     handleChange(e) {
         let target = e.target;
         let value = target.type === 'checkbox' ? target.checked : target.value;
@@ -31,8 +55,6 @@ class SignInForm extends React.Component {
 
     async handleSubmit(e) {
         e.preventDefault();
-
-        let that = this;
 
         if (!this.state.email || !this.state.password) {
             alert("Please fill in all fields.")
@@ -52,35 +74,8 @@ class SignInForm extends React.Component {
 
             this.state.position = position;
             const dataToSend = this.state;
-            dataToSend.request = "signin";
 
-            console.log('The form was submitted to ' + url + ' with the following data:');
-            console.log(this.state);
-
-            let obj = JSON.stringify(dataToSend);
-            // send HTTP request with login data and receive value about correctness of data.
-            //      received object:
-            // { email: false }                                 if e-mail not registered
-            // { email: true, password: false }                 if e-mail registered and password incorrect
-            // { email: true, password: true, token: jwt }      if e-mail registered and password correct, the jwt token
-            //                                                      is further on stored in a cookie in the browser
-            await axios.post(url, obj).then(
-                function (json) {
-                    if (!json.data.email)
-                        alert("invalid e-mail");
-                    else if (!json.data.password)
-                        alert("invalid password");
-                    else {
-                        const options = {
-                            path: '/',
-                            expires: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)   // expires in 24 hours
-                        };
-                        cookies.set('token', json.data.token, options);
-                        cookies.set('name', json.data.name, options);
-                        that.setState({redirect: true});
-                    }
-                }
-            );
+            this.context.emit("signin", dataToSend);
         }
     }
 

@@ -56,11 +56,12 @@ class SignUpForm extends React.Component {
     async handleSubmit(e) {
         e.preventDefault();
 
-        const that = this;
         const image = localStorage.getItem("PhotoOfMe");
 		const featureVector = localStorage.getItem("fv");
 
-        if (!this.state.name || !this.state.email || !this.state.password || !image) {
+		if (!image) {
+		    alert("Please take a picture first.")
+        } else if (!this.state.name || !this.state.email || !this.state.password) {
             alert("Please fill in all fields.");
         } else if (!this.state.hasAgreed) {
             alert("You need to agree to the terms and conditions in order to continue.")
@@ -78,14 +79,12 @@ class SignUpForm extends React.Component {
                 position.latitude = pos.coords.latitude;
             }
 
-            this.state.position = position;
             const dataToSend = {
                 email: this.state.email,
                 name: this.state.name,
                 password: this.state.password,
                 position: position,
             };
-            dataToSend.request = "signup";
 
             dataToSend.image = new Buffer(image).toString('base64');
             dataToSend.featureVector = featureVector;

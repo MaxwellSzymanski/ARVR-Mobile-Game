@@ -126,11 +126,13 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('verify', verifyEmail(data, socket));
 
-    socket.on("newmail")
+    socket.on("newmail", newMail(data));
+
+    socket.on("signin", signin(data, socket));
 });
 
 
-// SOCKET HANDLING
+// SOCKET EVENT HANDLING
 
 function signup(data, socket) {
     console.log("signup:    " + data.email);
@@ -152,7 +154,7 @@ function signup(data, socket) {
     });
     const newActivePlayer = new ActivePlayer({playerid: data.name, location: data.position});
     newActivePlayer.save();
-});
+};
 
 function verifyEmail(data, socket) {
     jwt.verify(data.token, secret, async function(err, token) {
@@ -183,13 +185,14 @@ function newMail(data) {
     })
 }
 
-function signin(obj, res) {
-    User.findOne({ email : obj.email }, async function(error, result) {
+function signin(data, socket) {
+    User.findOne({ email : data.email }, async function(error, result) {
         if (error) throw error;
         if (result === null) {
+            socket.emit()
             respond(res, {"email": false});
         } else {
-            const value = await result.checkPassword(obj.password);
+            const value = await result.checkPassword(data.password);
             console.log("checkPassword:   " + await value);
             if (!(await value))
                 respond(res, {"email": true, "password": value});
@@ -202,10 +205,10 @@ function signin(obj, res) {
                 });
                 ActivePlayer.findOne({playerid: result.name}, function(error, act) {
                     if (act === null) {
-                        const newActivePlayer = new ActivePlayer({playerid: result.name, location: obj.position});
+                        const newActivePlayer = new ActivePlayer({playerid: result.name, location: data.position});
                         newActivePlayer.save();
                     } else {
-                        act.location = obj.position;
+                        act.location = data.position;
                         act.updated_at = Date.now();
                         act.save();
                     }
