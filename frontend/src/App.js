@@ -16,7 +16,7 @@ import EmailVerif from "./pages/EmailVerif.js";
 import ProfilePage from "./pages/ProfilePage";
 import FactionChooser from "./pages/factionChooser.js";
 
-const url = require('./serveradress.js');
+const url = require('./pages/serveradress.js');
 
 class App extends Component {
   constructor() {
