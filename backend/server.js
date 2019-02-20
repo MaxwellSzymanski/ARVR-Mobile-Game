@@ -120,7 +120,7 @@ var io = require('socket.io')(server);
 // server.listen(port);
 
 io.sockets.on('connection', function (socket) {
-    console.log("new connection:  " + JSON.stringify(socket));
+    console.log("new connection");
 
     socket.on('signup', (data) => {signup(data, socket)});
 
