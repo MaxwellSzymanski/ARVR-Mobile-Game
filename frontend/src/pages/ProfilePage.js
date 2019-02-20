@@ -1,10 +1,38 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import "./profilePage.css"
+import Cookies from 'universal-cookie';
+import axios from "axios";
+
+const cookies = new Cookies();
+
+const url = require('./serveradress.js');
 
 class ProfilePage extends React.Component {
     constructor() {
         super();
+
+        this.state = {
+            name: cookies.get('name'),
+            health: '',
+            attack: '',
+            defence: '',
+            visibility: '',
+            experience: ''
+        };
+    }
+
+    componentWillMount() {
+        const that = this;
+        axios.post(url, JSON.stringify({request: "stats", token: cookies.get('token')})).then(
+            function (json) {
+                json.data.
+
+
+
+                that.setState({redirect: true});
+            }
+        )
     }
 
 
