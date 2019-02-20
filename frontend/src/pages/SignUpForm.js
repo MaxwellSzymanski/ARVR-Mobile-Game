@@ -40,7 +40,6 @@ class SignUpForm extends React.Component {
     componentDidMount() {
         this.context.on('signup', (data) => {
             if (data.success) {
-                alert("success");
                 const options = {
                     path: '/',
                     expires: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)   // expires in 24 hours
@@ -136,13 +135,12 @@ class SignUpForm extends React.Component {
             <div id="text">
             <label id="text">Take a picture</label></div>
 
-
           <div id="centerButton">
           <Link to="/takePicture">
             {button}</Link></div>
               <div className="FormField">
                 <label className="FormField__Label" htmlFor="name">User name</label>
-                <input type="text" id="name" className="FormField__Input" placeholder="Enter your user name" name="name" value={this.state.name} onChange={this.handleChange} />
+                <input type="text" id="name" className="FormField__Input" placeholder="Enter your user name (max. 16 characters)" name="name" value={this.state.name} onChange={this.handleChange} maxlength="16"/>
               </div>
               <div className="FormField">
                     <label className="FormField__Label" htmlFor="email">E-Mail Address</label>

@@ -2,6 +2,8 @@ import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import axios from "axios";
 import Cookies from 'universal-cookie';
+import SocketContext from "../socketContext";
+import SignUpForm from "./SignUpForm";
 const cookies = new Cookies();
 
 const url = require('./serveradress.js');
@@ -120,5 +122,6 @@ class SignInForm extends React.Component {
         );
     }
 }
+SignInForm.contextType = SocketContext;
 
 export default SignInForm;

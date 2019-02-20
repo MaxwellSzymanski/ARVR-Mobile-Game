@@ -26,7 +26,7 @@ class EmailVerif extends React.Component {
                 this.setState({redirect: true});
             } else {
                 alert("That code seems to be wrong. Please try again or let us send you another code.");
-                this.setState({firstTry: false, loading: false});
+                setTimeout( () => { this.setState({firstTry: false, loading: false}); }, 500);
             }
         });
     }
