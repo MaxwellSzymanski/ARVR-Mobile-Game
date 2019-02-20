@@ -70,7 +70,6 @@ class EmailVerif extends React.Component {
         e.preventDefault();
 
         this.setState({loading: true});
-        let that = this;
         let a = this.state;
         let code = parseInt(a.code_1 + a.code_2 + a.code_3 + a.code_4 + a.code_5 + a.code_6);
 
@@ -82,7 +81,6 @@ class EmailVerif extends React.Component {
         let obj = JSON.stringify(dataToSend);
 
         this.context.emit("verify", dataToSend);
-        this.setState({loading:true});
     }
 
     state = {

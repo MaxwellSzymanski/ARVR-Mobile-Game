@@ -106,7 +106,8 @@ Schema.methods.getUserData = function() {
         defence: this.defence,
         health: this.health,
         level: this.level,
-        experience: this.experience
+        experience: this.experience,
+        image: this.image
     };
 };
 

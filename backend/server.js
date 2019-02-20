@@ -7,11 +7,11 @@ const secret = require('./db/config.js');
 // var url = "mongodb://localhost:27017/userdb";
 // var url = 'mongodb://team12:mongoDBteam12@35.241.198.186:27017/?authMechanism=SCRAM-SHA-1&authSource=userdb';
 
-var frequency = 3000;
+var frequency = 1000;
 
 const mongoose = require('mongoose');
 // mongoose.connect("mongodb://localhost:27017/userdb", { useNewUrlParser: true });
-mongoose.connect('mongodb://team12:mongoDBteam12@35.241.198.186:27017/userdb?authMechanism=SCRAM-SHA-1&authSource=userdb',  { useNewUrlParser: true });
+mongoose.connect('mongodb://team12:mongoDBteam12@localhost:27017/userdb?authMechanism=SCRAM-SHA-1&authSource=userdb',  { useNewUrlParser: true });
 
 const User = require('./db/userModel.js');
 const ActivePlayer = require('./db/gameModel');
@@ -129,6 +129,12 @@ io.sockets.on('connection', function (socket) {
     socket.on("newmail", (data) => {newMail(data)});
 
     socket.on("signin", (data) => {signin(data, socket)});
+
+    socket.on("signout", (data) => {signout(data, socket)});
+
+    socket.on("stats", (data) => {stats(data, socket)});
+
+
 });
 
 
@@ -159,7 +165,7 @@ function signup(data, socket) {
 function verifyEmail(data, socket) {
     jwt.verify(data.token, secret, async function(err, token) {
         if (err) {
-            console.log("invalid token");
+            console.log("(verifyEmail)   invalid token");
             throw err;
         } else {
             User.findById(token.id).then(
@@ -174,7 +180,7 @@ function verifyEmail(data, socket) {
 function newMail(data) {
     jwt.verify(data.token, secret, async function(err, token) {
         if (err) {
-            console.log("invalid token");
+            console.log("(newMail)       invalid token");
             throw err;
         } else {
             User.findById(token.id).then(
@@ -217,36 +223,27 @@ function signin(data, socket) {
     });
 }
 
-function signout(obj, res) {
-    jwt.verify(obj.token, secret, async function(err, token) {
+function signout(data, socket) {
+    jwt.verify(data.token, secret, async function(err, token) {
         if (err) {
-            console.log("invalid token");
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.setHeader("Content-Type", "ERROR");
-            res.end();
+            console.log("(signout)       invalid token");
+            socket.emit("signout", {result:false});
             throw err;
         } else {
             User.findById(token.id).then(
                 async function (user) {
                     if (user !== null)
                         if (!(await user.checkToken(token))) {
-                            console.log("invalid token");
-                            res.setHeader('Access-Control-Allow-Origin', '*');
-                            res.setHeader("Content-Type", "ERROR");
-                            res.end();
+                            console.log("(signout)       invalid token");
+                            socket.emit("signout", {result:false});
                         } else {
                             ActivePlayer.findOne({playerid: user.name}, (err, result) => {
                                 if (result !== null) {
                                     result.delete();
-                                    res.setHeader('Access-Control-Allow-Origin', '*');
-                                    res.setHeader("Content-Type", "application/json");
-                                    res.write(JSON.stringify({result: true}));
-                                    res.end();
+                                    socket.emit("signout", {result:true});
                                 } else {
                                     console.log("user not logged in");
-                                    res.setHeader('Access-Control-Allow-Origin', '*');
-                                    res.setHeader("Content-Type", "ERROR");
-                                    res.end();
+                                    socket.emit("signout", {result:true});
                                 }
                             });
                         }
@@ -255,23 +252,20 @@ function signout(obj, res) {
     });
 }
 
-function stats(obj, res) {
-    jwt.verify(obj.token, secret, async function(err, token) {
+function stats(data, socket) {
+    jwt.verify(data.token, secret, async function(err, token) {
         if (err) {
-            console.log("invalid token");
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.setHeader("Content-Type", "ERROR");
-            res.end();
+            console.log("(stats)         invalid token");
         } else {
             User.findById(token.id).then(
                 function (user) {
                     if (user === null) {
-                        console.log("No user found");
+                        console.log("(stats)         No user found");
                         res.setHeader('Access-Control-Allow-Origin', '*');
                         res.setHeader("Content-Type", "ERROR");
                         res.end();
                     } else {
-                        respond(res, user.getUserData());
+                        socket.emit("stats", user.getUserData());
                     }
             });
         }

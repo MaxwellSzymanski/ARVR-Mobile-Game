@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import "./profilePage.css"
 import Cookies from 'universal-cookie';
 import axios from "axios";
+import SocketContext from "../socketContext";
+import EmailVerif from "./EmailVerif";
 
 const cookies = new Cookies();
 
@@ -14,27 +16,29 @@ class ProfilePage extends React.Component {
 
         this.state = {
             name: cookies.get('name'),
-            health: '',
-            attack: '',
-            defence: '',
-            visibility: '',
-            experience: ''
+            health: 100,
+            attack: 100,
+            defence: 100,
+            level: 1,
+            visibility: 0,
+            experience: 0
         };
     }
 
     componentWillMount() {
-        const that = this;
-        axios.post(url, JSON.stringify({request: "stats", token: cookies.get('token')})).then(
-            function (json) {
-                json.data.
-
-
-
-                that.setState({redirect: true});
-            }
-        )
+        this.context.emit("stats", {token: cookies.get('token')});
     }
 
+    componentDidMount() {
+        this.context.on("stats", function(data) {
+            this.setState(data);
+            alert(JSON.stringify(this.state));
+
+            let image = new Image();
+            image.src = 'data:image/png;base64,' + data.image;
+            document.body.appendChild(image);
+        })
+    }
 
     render() {
         return (
@@ -45,12 +49,12 @@ class ProfilePage extends React.Component {
                 <button className="smallButton back topLeft"/>;
                 <div className="profileCard">
                     <div className="profilePhoto"></div>
-                    <h1 className="name">Marie Nathalie</h1>
-                    <h3 className="smallText">Level 13</h3>
+                    <h1 className="name">{this.state.name}</h1>
+                    <h3 className="smallText">Level {this.state.level}</h3>
                     <div className="xpBar">
                         <div className="xpGained"></div>
                     </div>
-                    <h3 className="smallText">200<b>/350 xp</b></h3>
+                    <h3 className="smallText">{this.state.experience}<b>/350 xp</b></h3>
                 </div>
 
                 <button className="smallButton settings topRight"/>
@@ -81,7 +85,7 @@ class ProfilePage extends React.Component {
                         <h3 className="attributeTitle">Health</h3>
 
                         <div className="attributeValueContainer">
-                            <p className="attributeNumber">8</p>
+                            <p className="attributeNumber">{this.state.health}</p>
                             <div className="attributeValueActive"> </div>
                             <div className="attributeValueActive"> </div>
                             <div className="attributeValue"> </div>
@@ -91,7 +95,7 @@ class ProfilePage extends React.Component {
                     <div className="attributeContainer">
                         <h3 className="attributeTitle">Attack</h3>
                         <div className="attributeValueContainer">
-                            <p className="attributeNumber">4</p>
+                            <p className="attributeNumber">{this.state.attack}</p>
                             <div className="attributeValueActive"> </div>
                             <div className="attributeValue"> </div>
                             <div className="attributeValue"> </div>
@@ -101,7 +105,7 @@ class ProfilePage extends React.Component {
                     <div className="attributeContainer">
                         <h3 className="attributeTitle">Defence</h3>
                         <div className="attributeValueContainer">
-                            <p className="attributeNumber">8</p>
+                            <p className="attributeNumber">{this.state.defence}</p>
                             <div className="attributeValueActive"> </div>
                             <div className="attributeValueActive"> </div>
                             <div className="attributeValue"> </div>
@@ -111,7 +115,7 @@ class ProfilePage extends React.Component {
                     <div className="attributeContainer">
                         <h3 className="attributeTitle">Visibility</h3>
                         <div className="attributeValueContainer">
-                            <p className="attributeNumber">12</p>
+                            <p className="attributeNumber">{this.state.visibility}</p>
                             <div className="attributeValueActive"> </div>
                             <div className="attributeValueActive"> </div>
                             <div className="attributeValueActive"> </div>
@@ -123,4 +127,6 @@ class ProfilePage extends React.Component {
         );
     }
 }
+ProfilePage.contextType = SocketContext;
+
 export default ProfilePage;
