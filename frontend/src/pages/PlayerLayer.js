@@ -150,7 +150,8 @@ class PlayerLayer extends React.Component {
                   </Marker>
               );
           }
-      })
+      });
+      this.setState({playerMarkers: rows});
   }
 
 
