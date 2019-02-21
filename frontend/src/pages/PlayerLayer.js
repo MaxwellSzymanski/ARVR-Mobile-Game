@@ -136,7 +136,7 @@ class PlayerLayer extends React.Component {
           history[this.state.id].push(data);
       }
       if (history[this.state.id].length === 10) {
-          history[this.state.id].splice(0, 1);
+          history[this.state.id].pop();
       }
       this.setState({historyDataPlayers: JSON.stringify(history)});
 
