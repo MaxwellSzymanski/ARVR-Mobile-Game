@@ -125,7 +125,7 @@ class PlayerLayer extends React.Component {
   }
 
   addPlayerLayer() {
-      let rows = [];
+      let rows = {};
       this.addPathLayer(rows);
 
       const playerLayer = this;
@@ -176,6 +176,7 @@ class PlayerLayer extends React.Component {
   }
 
   addPathLayer(rows) {
+      if (rows === null) rows = {};
       let oldData = this.state.historyDataPlayers;
       // Last element is current position, remove it
       oldData = oldData.splice(-1,1);
