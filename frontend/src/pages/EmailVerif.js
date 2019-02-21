@@ -63,7 +63,7 @@ class EmailVerif extends React.Component {
     }
 
     newCode() {
-        this.context.emit("newcode", {token: cookies.get('token')});
+        this.context.emit("newmail", {token: cookies.get('token')});
         this.setState({firstTry: true});
     }
 

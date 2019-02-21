@@ -86,7 +86,7 @@ class PlayerLayer extends React.Component {
         this.sendLocation();
         this.addPlayerLayer();
     }, 2000);
-    this.context.on("playerdata", (data) => {this.setPlayers(data)})
+    this.context.on("playerdata", (data) => {this.setPlayer(data)})
   }
 
   componentWillUnmount() {
@@ -109,23 +109,12 @@ class PlayerLayer extends React.Component {
       });
   }
 
-  setPlayers(data) {
+  setPlayer(data) {
       let list = JSON.parse(this.state.dataPlayers);
       if (list === null)
           list = {};
       list[data.id] = data;
       this.setState({dataPlayers: JSON.stringify(list)});
-      // let history = this.state.historyDataPlayers;
-      // if (history === null)
-      //     history = [];
-      // if (history[data.id] === null)
-      //     history[data.id][0] = data;
-      // else
-      //     history[data.id].push(data);
-      // if (this.state.historyDataPlayers[data.id].length === 10) {
-      //     history[data.id].splice(0, 1);
-      // }
-      // this.setState({historyDataPlayers: history});
 
       let history = JSON.parse(this.state.historyDataPlayers);
       if (history[data.id] === undefined) {
@@ -150,6 +139,7 @@ class PlayerLayer extends React.Component {
       const id = this.state.id;
       alert(this.state.dataPlayers);
       const playerData = JSON.parse(this.state.dataPlayers);
+      alert(JSON.stringify(playerData));
       rows.push(
           <Marker title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
               <Popup>
@@ -162,11 +152,11 @@ class PlayerLayer extends React.Component {
               const player = playerData[key];
               const idEnemy = player.id;
               const pos = [player.latitude, player.longitude];
-              alert(key + "\n" + JSON.stringify(pos) +"\n");
               const timeDiff = Math.abs(new Date() - new Date(player.updatedAt)) / 1000;
+              alert(idEnemy + "\n" + JSON.stringify(pos) +"\n" + timeDiff);
               if (timeDiff <= 5) {
                   rows.push(
-                      <Marker title={key} position={pos} icon={enemyOnline}>
+                      <Marker title={idEnemy} position={pos} icon={enemyOnline}>
                           <Popup>
                               {key}
                               <button onClick={() => playerLayer.sendSpecialSignal(id, idEnemy)}>Send signal</button>
@@ -178,7 +168,7 @@ class PlayerLayer extends React.Component {
                   );
               } else if (timeDiff <= 30) {
                   rows.push(
-                      <Marker title={key} position={pos} icon={enemyOffline}>
+                      <Marker title={idEnemy} position={pos} icon={enemyOffline}>
                           <Popup>
                               {key}
                               {/*<button onClick={() => playerLayer.sendSpecialSignal(id, idEnemy)}>Send signal</button>*/}
@@ -208,7 +198,7 @@ class PlayerLayer extends React.Component {
                   const opacity = (i+2)/(oldUser.length+2);
                   const timeDiff =  Math.round(Math.abs(new Date() - new Date(playerData.updatedAt)/1000));
                   rows.push(
-                      <Marker position={pos} icon={pathMark} opacity={opacity} onClick={() => this.showAlertBox(playerData.id + " at " + new Date(playerData.updated_at).getTime())}/>
+                      <Marker position={pos} icon={pathMark} opacity={opacity} onClick={() => this.showAlertBox(playerData.id + ", " + timeDiff + "s ago.")}/>
                   );
               }
           }
