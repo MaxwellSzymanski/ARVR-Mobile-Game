@@ -110,11 +110,11 @@ class PlayerLayer extends React.Component {
   }
 
   setPlayer(data) {
-      let list = JSON.parse(this.state.dataPlayers);
+      let list = this.state.dataPlayers;
       if (list === null)
           list = {};
       list[data.id] = data;
-      this.setState({dataPlayers: JSON.stringify(list)});
+      this.setState({dataPlayers: list});
 
       let history = JSON.parse(this.state.historyDataPlayers);
       if (history[data.id] === undefined) {
@@ -125,7 +125,7 @@ class PlayerLayer extends React.Component {
           history[data.id].push(data);
       }
       if (history[data.id].length >= 10) {
-          history[data.id].pop();
+          history[data.id].shift();
       }
       this.setState({historyDataPlayers: JSON.stringify(history)});
 
@@ -138,7 +138,7 @@ class PlayerLayer extends React.Component {
       const playerLayer = this;
       const id = this.state.id;
       alert(this.state.dataPlayers);
-      const playerData = JSON.parse(this.state.dataPlayers);
+      const playerData = this.state.dataPlayers;
       alert(JSON.stringify(playerData));
       rows.push(
           <Marker title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>

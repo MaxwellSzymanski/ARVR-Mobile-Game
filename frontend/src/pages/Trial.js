@@ -30,7 +30,16 @@ class Trial extends React.Component {
   }
 
   componentDidMount() {
-
+      navigator.geolocation.getCurrentPosition((position) => {
+          this.setState({
+              location: {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude
+              },
+              haveUsersLocation: true,
+              zoom: 18,
+          })
+      });
   }
 
   setCenter(pos){
