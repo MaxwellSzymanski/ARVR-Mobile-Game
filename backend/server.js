@@ -310,11 +310,11 @@ function signal(data) {
                             Object.keys(game).forEach(function (receiver) {
                                 if (receiver === data.receiver) {
                                     if (data.type === "special")
-                                        receiver.socket.emit("specialsignal", {sender: sender.name});
+                                        game[receiver].socket.emit("specialsignal", {sender: sender.name});
                                     else if (data.type === "handshake")
-                                        receiver.socket.emit("handshake", {sender: sender.name});
+                                        game[receiver].socket.emit("handshake", {sender: sender.name});
                                     else if (data.type === "ACKhandshake")
-                                        receiver.socket.emit("ACKhandshake", {sender: sender.name});
+                                        game[receiver].socket.emit("ACKhandshake", {sender: sender.name});
                                     return;
                                 }
                             })
