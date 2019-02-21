@@ -64,7 +64,7 @@ class PlayerLayer extends React.Component {
     //     id: props.id,
     //     location: props.state.location
     // };
-     this.state.id = props.id;
+     this.state.id = "string";
 
   }
 
@@ -72,10 +72,10 @@ class PlayerLayer extends React.Component {
     latitude: 50.8632811,
     longitude: 4.6762872,
     players: null,
-    dataPlayers: null,
-    id: null,
+    dataPlayers: [],
+    // id: props.id,
     playerMarkers: null,
-    historyDataPlayers:[],
+    historyDataPlayers:JSON.stringify({}),
   };
 
   componentDidMount() {
@@ -100,12 +100,13 @@ class PlayerLayer extends React.Component {
               longitude: position.coords.longitude,
               accuracy: position.coords.accuracy
           });
+
           this.context.emit("location", {
               token: cookies.get('token'),
               longitude: this.state.longitude,
               latitude: this.state.latitude,
           })
-      })
+      });
   }
 
   setPlayers(data) {
@@ -114,14 +115,31 @@ class PlayerLayer extends React.Component {
           list = {};
       list[data.id] = data;
       this.setState({dataPlayers: list});
-      let history = this.state.historyDataPlayers;
-      if (history === null)
-          history = {};
-      history[data.id].push(data);
-      if (this.state.historyDataPlayers[data.id].length === 10) {
-          history[data.id].splice(0, 1);
+      // let history = this.state.historyDataPlayers;
+      // if (history === null)
+      //     history = [];
+      // if (history[data.id] === null)
+      //     history[data.id][0] = data;
+      // else
+      //     history[data.id].push(data);
+      // if (this.state.historyDataPlayers[data.id].length === 10) {
+      //     history[data.id].splice(0, 1);
+      // }
+      // this.setState({historyDataPlayers: history});
+
+      let history = JSON.parse(this.state.historyDataPlayers);
+      if (history[this.state.id] === undefined) {
+          let arr = [];
+          arr.push(data);
+          history[this.state.id] = arr;
+      } else {
+          history[this.state.id].push(data);
       }
-      this.setState({historyDataPlayers: history});
+      if (history[this.state.id].length === 10) {
+          history[this.state.id].splice(0, 1);
+      }
+      this.setState({historyDataPlayers: JSON.stringify(history)});
+
   }
 
   addPlayerLayer() {
@@ -177,16 +195,16 @@ class PlayerLayer extends React.Component {
 
   addPathLayer(rows) {
       if (rows === null) rows = [];
-      let oldData = this.state.historyDataPlayers;
-      // Last element is current position, remove it
-      oldData = oldData.splice(-1,1);
+      let oldData = JSON.parse(this.state.historyDataPlayers);
 
       Object.keys(oldData).forEach( (user) => {
-          for(let i in oldData[user] ){
-              const playerData = oldData[user][i];
+          let oldUser = oldData[user];
+          oldUser.pop();
+          for(let i = oldUser.length; i > 0; i-- ){
+              const playerData = oldUser[i-1];
               if(user !== this.state.id){
                   const pos = [playerData.latitude,playerData.longitude];
-                  const opacity = i/10;
+                  const opacity = (i+2)/(oldUser.length+2);
                   rows.push(
                       <Marker position={pos} icon={pathMark} opacity={opacity} onClick={() => this.showAlertBox(user + " at " + new Date(playerData.updated_at).getTime())}/>
                   );

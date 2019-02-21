@@ -65,20 +65,8 @@ const server = https.createServer(https_options, async function (req, res) {
 
         console.log("\n\n\nRequest:    " + request + "    ===============    current time:    " + new Date().toLocaleTimeString());
         switch (request) {
-            case "signup":
-                signup(obj, res);
-                break;
-            case "verify":
-                verifyEmail(obj, res);
-                break;
-            case "signin":
-                signin(obj, res);
-                break;
             case "signout":
                 signout(obj, res);
-                break;
-            case "stats":
-                stats(obj, res);
                 break;
             case "jwt":
                 verifyJWT(obj, res);
