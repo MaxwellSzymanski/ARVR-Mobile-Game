@@ -146,50 +146,50 @@ class PlayerLayer extends React.Component {
       let rows = [];
       rows = this.addPathLayer(rows);
 
-      const playerLayer = this;
-      const id = this.state.id;
-      const playerData = this.state.dataPlayers;
-      rows.push(
-          <Marker title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
-              <Popup>
-                  <div>Accuracy: {playerLayer.state.accuracy} m</div>
-              </Popup>
-          </Marker>
-      );
-      if (playerData !== null) {
-          Object.keys(playerData).forEach(function (key) {
-              const playerData = playerData[key];
-              const idEnemy = playerData.playerId;
-              const pos = [playerData.latitude, playerData.longitude];
-
-              const timeDiff = Math.abs(new Date() - new Date(playerData[key].updatedAt)) / 1000;
-              if (timeDiff <= 5) {
-                  rows.push(
-                      <Marker title={key} position={pos} icon={enemyOnline}>
-                          <Popup>
-                              {key} <br></br>
-                              <button onClick={() => playerLayer.sendSpecialSignal(id, idEnemy)}>Send signal</button>
-                              <button onClick={() => playerLayer.acknowledgeHandshake(id, idEnemy)}>Send special
-                                  signal
-                              </button>
-                          </Popup>
-                      </Marker>
-                  );
-              } else if (timeDiff <= 30) {
-                  rows.push(
-                      <Marker title={key} position={pos} icon={enemyOffline}>
-                          <Popup>
-                              {key}
-                              {/*<button onClick={() => playerLayer.sendSpecialSignal(id, idEnemy)}>Send signal</button>*/}
-                              {/*<button onClick={() => playerLayer.acknowledgeHandshake(id, idEnemy)}>Send special*/}
-                                  {/*signal*/}
-                              {/*</button>*/}
-                          </Popup>
-                      </Marker>
-                  );
-              }
-          });
-      }
+      // const playerLayer = this;
+      // const id = this.state.id;
+      // const playerData = this.state.dataPlayers;
+      // rows.push(
+      //     <Marker title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
+      //         <Popup>
+      //             <div>Accuracy: {playerLayer.state.accuracy} m</div>
+      //         </Popup>
+      //     </Marker>
+      // );
+      // if (playerData !== null) {
+      //     Object.keys(playerData).forEach(function (key) {
+      //         const playerData = playerData[key];
+      //         const idEnemy = playerData.playerId;
+      //         const pos = [playerData.latitude, playerData.longitude];
+      //
+      //         const timeDiff = Math.abs(new Date() - new Date(playerData[key].updatedAt)) / 1000;
+      //         if (timeDiff <= 5) {
+      //             rows.push(
+      //                 <Marker title={key} position={pos} icon={enemyOnline}>
+      //                     <Popup>
+      //                         {key}
+      //                         <button onClick={() => playerLayer.sendSpecialSignal(id, idEnemy)}>Send signal</button>
+      //                         <button onClick={() => playerLayer.acknowledgeHandshake(id, idEnemy)}>Send special
+      //                             signal
+      //                         </button>
+      //                     </Popup>
+      //                 </Marker>
+      //             );
+      //         } else if (timeDiff <= 30) {
+      //             rows.push(
+      //                 <Marker title={key} position={pos} icon={enemyOffline}>
+      //                     <Popup>
+      //                         {key}
+      //                         {/*<button onClick={() => playerLayer.sendSpecialSignal(id, idEnemy)}>Send signal</button>*/}
+      //                         {/*<button onClick={() => playerLayer.acknowledgeHandshake(id, idEnemy)}>Send special*/}
+      //                             {/*signal*/}
+      //                         {/*</button>*/}
+      //                     </Popup>
+      //                 </Marker>
+      //             );
+      //         }
+      //     });
+      // }
       this.setState({playerMarkers: rows});
   }
 
