@@ -72,7 +72,7 @@ class PlayerLayer extends React.Component {
     latitude: 50.8632811,
     longitude: 4.6762872,
     players: null,
-    dataPlayers: JSON.stringify([]),
+    dataPlayers: null,
     // id: props.id,
     playerMarkers: null,
     historyDataPlayers:JSON.stringify({}),
@@ -147,7 +147,7 @@ class PlayerLayer extends React.Component {
               </Popup>
           </Marker>
       );
-      if (playerData !== null) {
+      if (playerData !== []) {
           Object.keys(playerData).forEach(function (key) {
               const player = playerData[key];
               const idEnemy = player.id;
