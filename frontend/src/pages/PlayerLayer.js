@@ -137,9 +137,7 @@ class PlayerLayer extends React.Component {
 
       const playerLayer = this;
       const id = this.state.id;
-      alert(this.state.dataPlayers);
       const playerData = this.state.dataPlayers;
-      alert(JSON.stringify(playerData));
       rows.push(
           <Marker title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
               <Popup>
@@ -147,13 +145,12 @@ class PlayerLayer extends React.Component {
               </Popup>
           </Marker>
       );
-      if (playerData !== []) {
+      if (playerData !== null) {
           Object.keys(playerData).forEach(function (key) {
               const player = playerData[key];
               const idEnemy = player.id;
               const pos = [player.latitude, player.longitude];
               const timeDiff = Math.abs(new Date() - new Date(player.updatedAt)) / 1000;
-              alert(idEnemy + "\n" + JSON.stringify(pos) +"\n" + timeDiff);
               if (timeDiff <= 5) {
                   rows.push(
                       <Marker title={idEnemy} position={pos} icon={enemyOnline}>
