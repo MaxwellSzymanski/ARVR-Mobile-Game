@@ -6,14 +6,12 @@ import PlayerLayer from './PlayerLayer'
 import Cookies from 'universal-cookie';
 import PopPop from 'react-poppop'
 
-
 const cookies = new Cookies();
-
 
 class Trial extends React.Component {
 
   constructor(props){
-    super(props)
+    super(props);
     this.setCenter = this.setCenter.bind(this);
     this.showAlertBox = this.showAlertBox.bind(this);
   }

@@ -148,6 +148,7 @@ class PlayerLayer extends React.Component {
 
       const playerLayer = this;
       const id = this.state.id;
+      alert(this.state.dataPlayers);
       const playerData = JSON.parse(this.state.dataPlayers);
       rows.push(
           <Marker title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
@@ -158,11 +159,11 @@ class PlayerLayer extends React.Component {
       );
       if (playerData !== null) {
           Object.keys(playerData).forEach(function (key) {
-              const playerData = playerData[key];
-              const idEnemy = playerData.playerId;
-              const pos = [playerData.latitude, playerData.longitude];
-
-              const timeDiff = Math.abs(new Date() - new Date(playerData[key].updatedAt)) / 1000;
+              const player = playerData[key];
+              const idEnemy = player.id;
+              const pos = [player.latitude, player.longitude];
+              alert(key + "\n" + JSON.stringify(pos) +"\n");
+              const timeDiff = Math.abs(new Date() - new Date(player.updatedAt)) / 1000;
               if (timeDiff <= 5) {
                   rows.push(
                       <Marker title={key} position={pos} icon={enemyOnline}>
@@ -205,8 +206,9 @@ class PlayerLayer extends React.Component {
               if(user !== this.state.id){
                   const pos = [playerData.latitude,playerData.longitude];
                   const opacity = (i+2)/(oldUser.length+2);
+                  const timeDiff =  Math.round(Math.abs(new Date() - new Date(playerData.updatedAt)/1000));
                   rows.push(
-                      <Marker position={pos} icon={pathMark} opacity={opacity} onClick={() => this.showAlertBox(user + " at " + new Date(playerData.updated_at).getTime())}/>
+                      <Marker position={pos} icon={pathMark} opacity={opacity} onClick={() => this.showAlertBox(playerData.id + " at " + new Date(playerData.updated_at).getTime())}/>
                   );
               }
           }
