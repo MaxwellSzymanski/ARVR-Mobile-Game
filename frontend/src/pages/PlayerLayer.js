@@ -2,8 +2,8 @@ import React from 'react';
 import { Marker, Popup } from 'react-leaflet';
 import '../App.css';
 import L from 'leaflet';
-import axios from 'axios';
 import Cookies from 'universal-cookie';
+import axios from 'axios';
 import PopPop from 'react-poppop'
 import SocketContext from "../socketContext";
 
@@ -110,37 +110,46 @@ class PlayerLayer extends React.Component {
 
   setPlayers(data) {
       let list = this.state.dataPlayers;
-      if (list === null) {
+      if (list === null)
           list = {};
-      }
       list[data.id] = data;
       this.setState({dataPlayers: list});
+      let history = this.state.historyDataPlayers;
+      if (history === null)
+          history = {};
+      history[data.id].push(data);
+      if (this.state.historyDataPlayers[data.id].length === 10) {
+          history[data.id].splice(0, 1);
+      }
+      this.setState({historyDataPlayers: history});
   }
 
   addPlayerLayer() {
-      var playerLayer = this;
-      var rows = [];
-      var id = this.state.id;
-      var jsonObject = this.state.dataPlayers;
+      let rows = [];
+      this.addPathLayer(rows);
+
+      const playerLayer = this;
+      const id = this.state.id;
+      const playerData = this.state.dataPlayers;
       rows.push(
-          <Marker position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
+          <Marker title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
               <Popup>
-                  <div>{playerLayer.state.accuracy}</div>
+                  <div>Accuracy: {playerLayer.state.accuracy} m</div>
               </Popup>
           </Marker>
       );
-      if (jsonObject !== null) {
-          Object.keys(jsonObject).forEach(function (key) {
-              var playerData = jsonObject[key];
-              var idEnemy = playerData.playerId;
-              var pos = [playerData.latitude, playerData.longitude];
+      if (playerData !== null) {
+          Object.keys(playerData).forEach(function (key) {
+              const playerData = playerData[key];
+              const idEnemy = playerData.playerId;
+              const pos = [playerData.latitude, playerData.longitude];
 
-              const timeDiff = Math.abs(new Date() - new Date(jsonObject[key].updatedAt)) / 1000;
+              const timeDiff = Math.abs(new Date() - new Date(playerData[key].updatedAt)) / 1000;
               if (timeDiff <= 5) {
                   rows.push(
-                      <Marker position={pos} icon={enemyOnline}>
+                      <Marker title={key} position={pos} icon={enemyOnline}>
                           <Popup>
-                              {playerData.id}
+                              {key} <br></br>
                               <button onClick={() => playerLayer.sendSpecialSignal(id, idEnemy)}>Send signal</button>
                               <button onClick={() => playerLayer.acknowledgeHandshake(id, idEnemy)}>Send special
                                   signal
@@ -150,13 +159,13 @@ class PlayerLayer extends React.Component {
                   );
               } else if (timeDiff <= 30) {
                   rows.push(
-                      <Marker position={pos} icon={enemyOffline}>
+                      <Marker title={key} position={pos} icon={enemyOffline}>
                           <Popup>
-                              {playerData.id}
-                              <button onClick={() => playerLayer.sendSpecialSignal(id, idEnemy)}>Send signal</button>
-                              <button onClick={() => playerLayer.acknowledgeHandshake(id, idEnemy)}>Send special
-                                  signal
-                              </button>
+                              {key}
+                              {/*<button onClick={() => playerLayer.sendSpecialSignal(id, idEnemy)}>Send signal</button>*/}
+                              {/*<button onClick={() => playerLayer.acknowledgeHandshake(id, idEnemy)}>Send special*/}
+                                  {/*signal*/}
+                              {/*</button>*/}
                           </Popup>
                       </Marker>
                   );
@@ -166,6 +175,25 @@ class PlayerLayer extends React.Component {
       this.setState({playerMarkers: rows});
   }
 
+  addPathLayer(rows) {
+      let oldData = this.state.historyDataPlayers;
+      // Last element is current position, remove it
+      oldData = oldData.splice(-1,1);
+
+      Object.keys(oldData).forEach( (user) => {
+          for(let i in oldData[user] ){
+              const playerData = oldData[user][i];
+              if(user !== this.state.id){
+                  const pos = [playerData.latitude,playerData.longitude];
+                  const opacity = i/10;
+                  rows.push(
+                      <Marker position={pos} icon={pathMark} opacity={opacity} onClick={() => this.showAlertBox(user + " at " + new Date(playerData.updated_at).getTime())}/>
+                  );
+              }
+          }
+      });
+      // this.setState({playerMarkers: rows});
+  }
 
   // get players from server with time inverval
   receivePlayers() {
@@ -188,9 +216,6 @@ class PlayerLayer extends React.Component {
           axios.post(url, obj).then(
               function (json) {
                   if (json.data !== null) {
-                      // alert("Data" + json.data);
-                      // alert(JSON.stringify(json.data));
-                      // alert(json.data[0]);
 
                       playerLayer.setState({dataPlayers: json.data});
 
