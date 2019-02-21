@@ -281,7 +281,7 @@ function updateLocation(data, socket) {
                             //     console.log(player + ":\n   (" + game[player].latitude +", " + game[player].longitude +")");
                             // });
                             socket.broadcast.emit("playerdata", {
-                                id: user,
+                                id: user.name,
                                 latitude: data.latitude,
                                 longitude: data.longitude,
                                 updatedAt: new Date()

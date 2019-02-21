@@ -196,9 +196,9 @@ class PlayerLayer extends React.Component {
               if(user !== this.state.id){
                   const pos = [playerData.latitude,playerData.longitude];
                   const opacity = (i+2)/(oldUser.length+2);
-                  const timeDiff =  Math.round(Math.abs(new Date() - new Date(playerData.updatedAt)/1000));
+                  const timeDiff =  Math.round(Math.abs(new Date() - new Date(playerData.updatedAt))/1000);
                   rows.push(
-                      <Marker position={pos} icon={pathMark} opacity={opacity} onClick={() => this.showAlertBox(playerData.id + ", " + timeDiff + "s ago.")}/>
+                      <Marker position={pos} icon={pathMark} opacity={opacity} onClick={() => this.showAlertBox(JSON.stringify(playerData.id) + ", " + timeDiff + "s ago.")}/>
                   );
               }
           }
