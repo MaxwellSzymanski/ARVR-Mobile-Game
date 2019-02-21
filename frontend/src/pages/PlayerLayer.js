@@ -125,8 +125,8 @@ class PlayerLayer extends React.Component {
   }
 
   addPlayerLayer() {
-      let rows = {};
-      this.addPathLayer(rows);
+      let rows = [];
+      rows = this.addPathLayer(rows);
 
       const playerLayer = this;
       const id = this.state.id;
@@ -176,7 +176,7 @@ class PlayerLayer extends React.Component {
   }
 
   addPathLayer(rows) {
-      if (rows === null) rows = {};
+      if (rows === null) rows = [];
       let oldData = this.state.historyDataPlayers;
       // Last element is current position, remove it
       oldData = oldData.splice(-1,1);
@@ -193,7 +193,7 @@ class PlayerLayer extends React.Component {
               }
           }
       });
-      // this.setState({playerMarkers: rows});
+      return rows;
   }
 
   // get players from server with time inverval
