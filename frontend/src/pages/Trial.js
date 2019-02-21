@@ -26,7 +26,7 @@ class Trial extends React.Component {
     id: cookies.get('name'),
     accuracy: 0,
     centerMap: [50.8632811,4.6762872],
-    showAlertBox: true
+    showAlertBox: false
   }
 
   componentDidMount() {

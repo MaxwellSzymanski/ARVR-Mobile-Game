@@ -124,6 +124,10 @@ io.sockets.on('connection', function (socket) {
 
     socket.on("location", (data) => {updateLocation(data, socket)});
 
+    socket.on("signal", (data) => {signal(data)});
+
+    socket.on("handshake", (data) => {})
+
     socket.on("disconnect", () => {removePlayer(socket)});
     
 });
@@ -294,6 +298,32 @@ function updateLocation(data, socket) {
     }
 }
 
+function signal(data) {
+    if (data.token) {
+        jwt.verify(data.token, secret, async function(err, token) {
+            if (err) {
+                console.log("(signal)        invalid token");
+            } else {
+                User.findById(token.id).then(
+                    function (sender) {
+                        if (sender !== null) {
+                            Object.keys(game).forEach(function (receiver) {
+                                if (receiver === data.receiver) {
+                                    if (data.type === "special")
+                                        receiver.socket.emit("specialsignal", {sender: sender.name});
+                                    else if (data.type === "handshake")
+                                        receiver.socket.emit("handshake", {sender: sender.name});
+                                    else if (data.type === "ACKhandshake")
+                                        receiver.socket.emit("ACKhandshake", {sender: sender.name});
+                                    return;
+                                }
+                            })
+                        }
+                    })
+            }
+        });
+    }
+}
 
 function removePlayer(socket) {
     Object.keys(game).forEach( function (username) {

@@ -3,7 +3,6 @@ import { Marker, Popup } from 'react-leaflet';
 import '../App.css';
 import L from 'leaflet';
 import Cookies from 'universal-cookie';
-import axios from 'axios';
 import PopPop from 'react-poppop'
 import SocketContext from "../socketContext";
 
@@ -79,14 +78,15 @@ class PlayerLayer extends React.Component {
   };
 
   componentDidMount() {
-    // this.receivePlayers();
     this.interval = setInterval(() => {
-        // this.receivePlayers();
-        //this.createLayer();
         this.sendLocation();
         this.addPlayerLayer();
-    }, 2000);
-    this.context.on("playerdata", (data) => {this.setPlayer(data)})
+    }, 1500);
+
+    this.context.on("playerdata", (data) => {this.receivePlayer(data)});
+    this.context.on("specialsignal", (data) => {this.receiveSpecialSignal(data)});
+    this.context.on("handshake", (data) => {this.acknowledgeHandshake(data)});
+    this.context.on("ACKhandshake", (data) => {this.handshakeAcknowledged(data)});
   }
 
   componentWillUnmount() {
@@ -109,7 +109,7 @@ class PlayerLayer extends React.Component {
       });
   }
 
-  setPlayer(data) {
+  receivePlayer(data) {
       let list = this.state.dataPlayers;
       if (list === null)
           list = {};
@@ -153,23 +153,21 @@ class PlayerLayer extends React.Component {
               const timeDiff = Math.abs(new Date() - new Date(player.updatedAt)) / 1000;
               if (timeDiff <= 5) {
                   rows.push(
-                      <Marker title={idEnemy} position={pos} icon={enemyOnline}>
+                      <Marker title={key} position={pos} icon={enemyOnline}>
                           <Popup>
-                              {key}
-                              <button onClick={() => playerLayer.sendSpecialSignal(id, idEnemy)}>Send signal</button>
-                              <button onClick={() => playerLayer.acknowledgeHandshake(id, idEnemy)}>Send special
-                                  signal
-                              </button>
+                              <p> {key} </p>
+                              <p><button onClick={() => playerLayer.sendSpecialSignal(idEnemy)}> Send signal </button></p>
+                              <p><button onClick={() => playerLayer.sendHandShakeSignal(id, idEnemy)}> Send special signal </button></p>
                           </Popup>
                       </Marker>
                   );
               } else if (timeDiff <= 30) {
                   rows.push(
-                      <Marker title={idEnemy} position={pos} icon={enemyOffline}>
+                      <Marker title={key} position={pos} icon={enemyOffline}>
                           <Popup>
-                              {key}
-                              {/*<button onClick={() => playerLayer.sendSpecialSignal(id, idEnemy)}>Send signal</button>*/}
-                              {/*<button onClick={() => playerLayer.acknowledgeHandshake(id, idEnemy)}>Send special*/}
+                              <p> {key} </p>
+                              {/*<button onClick={() => playerLayer.sendSpecialSignal(idEnemy)}>Send signal</button>*/}
+                              {/*<button onClick={() => playerLayer.sendHandShakeSignal(id, idEnemy)}>Send special*/}
                                   {/*signal*/}
                               {/*</button>*/}
                           </Popup>
@@ -194,100 +192,57 @@ class PlayerLayer extends React.Component {
                   const pos = [playerData.latitude,playerData.longitude];
                   const opacity = (i+2)/(oldUser.length+2);
                   const timeDiff =  Math.round(Math.abs(new Date() - new Date(playerData.updatedAt))/1000);
-                  rows.push(
-                      <Marker position={pos} icon={pathMark} opacity={opacity} onClick={() => this.showAlertBox(JSON.stringify(playerData.id) + ", " + timeDiff + "s ago.")}/>
-                  );
+                  if (timeDiff <= 15)
+                      rows.push(
+                          <Marker position={pos} icon={pathMark} opacity={opacity} onClick={() => this.showAlertBox(playerData.id + ", " + timeDiff + "s ago.")}/>
+                      );
               }
           }
       });
       return rows;
   }
 
-  // get players from server with time inverval
-  receivePlayers() {
+  // Send signal to server
+  sendSpecialSignal(idEnemy){
+      console.log(this.state.id + "send special signal to "+ idEnemy);
 
-    navigator.geolocation.getCurrentPosition((position) =>
-        { this.setState({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            accuracy: position.coords.accuracy}
-          );
-          let data = {};
-          const obj = JSON.stringify({
-              request: "radar",
-              token: cookies.get('token'),
-              longitude: this.state.longitude,
-              latitude: this.state.latitude,
-              // sendSignal: this.state.sendSignal
-          });
-          const playerLayer = this;
-          axios.post(url, obj).then(
-              function (json) {
-                  if (json.data !== null) {
-
-                      playerLayer.setState({dataPlayers: json.data});
-
-                      var dataArray = playerLayer.state.historyDataPlayers;
-                      if (dataArray === null) {
-                          dataArray = json.data
-                      } else {
-                          dataArray.push(json.data);
-                      }
-                      playerLayer.setState({historyDataPlayers: dataArray});
-                      if (playerLayer.state.historyDataPlayers.length === 10) {
-                          dataArray.splice(0, 1);
-                      }
-                      playerLayer.setState({historyDataPlayers: dataArray});
-                  }
-                  playerLayer.createLayer();
-              }
-          );
-
-        });
+      // const data = JSON.stringify({
+      //   playerId: id
+      // });
+      // const obj = JSON.stringify({
+      //     request: "sendSignal",
+      //     playerId: idEnemy,
+      //     dataSignal: data,
+      //     token: cookies.get('token')
+      // });
+      this.context.emit("signal", {token: cookies.get('token'), receiver: idEnemy, type: "special"})
   }
 
-  // Send signal to server
-  sendSpecialSignal(id,idEnemy){
-
-      console.log(id + "send special signal to "+ idEnemy);
-
-      const data = JSON.stringify({
-        playerId: id
-      });
-      const obj = JSON.stringify({
-          request: "sendSignal",
-          playerId: idEnemy,
-          dataSignal: data,
-          token: cookies.get('token')
-      });
-      const playerLayer = this;
-      axios.post(url, obj);
+  receiveSpecialSignal(data) {
+      this.showAlertBox("Special signal received from " + data.sender);
   }
 
   // Send special signal to server
   sendHandShakeSignal(id,idEnemy){
-      console.log(id+"send handshake signal to: "+ idEnemy);
+      console.log(id+" send handshake signal to: "+ idEnemy);
 
       let data = {};
       const obj = JSON.stringify({
           request: "radar",
           token: cookies.get('token')
       });
-      axios.post(url, obj);
-
+      this.context.emit("signal", {token: cookies.get('token'), receiver: idEnemy, type: "handshake"})
   }
 
   // Send acknowledgement to server
-  acknowledgeHandshake(id,idEnemy){
-    console.log(id+"send Handshake signal to: "+ idEnemy);
+  acknowledgeHandshake(data){
+    this.showAlertBox(data.sender +" sent you a handshake signal.");
 
-    let data = {};
-    const obj = JSON.stringify({
-        request: "radar",
-        token: cookies.get('token')
-    });
-    axios.post(url, obj);
+    this.context.emit("signal", {token: cookies.get('token'), receiver: data.sender, type: "ACKhandshake"})
+  }
 
+  handshakeAcknowledged(data) {
+      this.showAlertBox(data.sender +" acknowledged your handshake!");
   }
 
   // Send fight signal to server (fight: id vs idEnemy)
@@ -301,129 +256,13 @@ class PlayerLayer extends React.Component {
         playerId: id,
         enemyPlayerId: idEnemy
     });
-    axios.post(url, obj);
   }
 
   showAlertBox(content){
     this.props.showAlertBox(content);
   }
 
-  // Create layer of players for map component + check for received signals from other players
-  createLayer(){
-
-    var playerLayer = this;
-    var rows = [];
-
-    var id = this.state.id;
-
-    //var jsonObject = JSON.parse(data);
-
-    var jsonObject = this.state.dataPlayers;
-    if(jsonObject !== null){
-
-    Object.keys(jsonObject).forEach(function(key) {
-
-        var playerData = jsonObject[key];
-
-        var idEnemy = playerData.playerId;
-
-        var pos = [playerData.latitude,playerData.longitude];
-
-        // check for enemy!
-        if(idEnemy === id){
-
-            // Add marker for own player
-            pos = [playerLayer.state.latitude,playerLayer.state.longitude];
-
-            rows.push(
-                <Marker position={pos} icon={myIcon}>
-                     <Popup>
-                       <div>Accuracy: {playerLayer.state.accuracy} meter</div>
-                     </Popup>
-               </Marker>
-            );
-
-            //special signal received from other player
-            if(playerData.sendSignal === "specialSignal"){
-              playerLayer.showAlertBox("Special Signal received!");
-            }
-
-            // // Handshake signal received. Response on the handshake signal is send
-            if(playerData.sendSignal === "handShakeSignal" && playerData.dataSignal.acknowledged === "falseACK"){
-              playerLayer.showAlertBox("HandShake Signal received! Send appropriate response.");
-              playerLayer.acknowledgeHandshake(id,key.dataSignal.playerId);
-            }
-
-            // Handshake signal is confirmed => fight with player
-            if(playerData.sendSignal === "handShakeSignal" && playerData.dataSignal.acknowledged === "trueACK"){
-              playerLayer.showAlertBox("You are now in fight");
-              playerLayer.fight(id,key.dataSignal.playerId);
-            }
-
-          // Check if player is enemy
-          } else if ( playerData.hasOwnProperty("enemyPlayerId") &&playerData.enemyPlayerId !== null && playerData.enemyPlayerId === id ) {
-
-            rows.push(
-                <Marker position={pos} icon={enemyOnline}>
-                     <Popup>
-                       <button onClick={()=> playerLayer.sendSignal(id,idEnemy)}>Send signal</button>
-                       <button onClick={()=> playerLayer.acknowledgeHandshake(id,idEnemy)}>Send special signal</button>
-                     </Popup>
-               </Marker>
-            );
-
-           } else {
-             // NEW IMAGE NEEDED FOR NEUTRAL PLAYER
-             rows.push(
-                 <Marker position={pos} icon={enemyOffline}>
-                      <Popup>
-                        <button onclick={() =>playerLayer.sendSignal(id,idEnemy)}>Send signal</button>
-                        <button onclick={() => playerLayer.acknowledgeHandshake(id,idEnemy)}>Send special signal</button>
-                      </Popup>
-                </Marker>
-              );
-           }
-     });
-
-     this.setState({playerMarkers: rows});
-
-     // Add path markers to layer
-     this.createPath();
-     }
-  }
-
-
-  // Create path markers based on old data
-  createPath(){
-
-  var rows = this.state.playerMarkers;
-
-  var oldData = this.state.historyDataPlayers;
-
-  // Last element is current position
-  oldData = oldData.splice(-1,1);
-
-  for( var x in oldData){
-
-    for(var y in oldData[x] ){
-
-      var playerData = oldData[x][y];
-
-      if(playerData.playerId !== this.state.id){
-
-        var pos = [playerData.latitude,playerData.longitude];
-
-        rows.push(
-          <Marker position={pos} icon={pathMark} onClick={() => this.showAlertBox(playerData.updated_at)}/>
-         );
-     }
-    }
-  }
-  this.setState({playerMarkers: rows});
-  }
-
   render() {
-
     var markers = this.state.playerMarkers;
 
     if(markers !== null){
@@ -431,7 +270,6 @@ class PlayerLayer extends React.Component {
     } else {
       return (null)
    }
-
   }
 
 }
