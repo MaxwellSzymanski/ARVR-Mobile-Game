@@ -64,7 +64,7 @@ class PlayerLayer extends React.Component {
     //     id: props.id,
     //     location: props.state.location
     // };
-     this.state.id = "string";
+     this.state.id = props.id;
 
   }
 
@@ -128,15 +128,15 @@ class PlayerLayer extends React.Component {
       // this.setState({historyDataPlayers: history});
 
       let history = JSON.parse(this.state.historyDataPlayers);
-      if (history[this.state.id] === undefined) {
+      if (history[data.id] === undefined) {
           let arr = [];
           arr.push(data);
-          history[this.state.id] = arr;
+          history[data.id] = arr;
       } else {
-          history[this.state.id].push(data);
+          history[data.id].push(data);
       }
-      if (history[this.state.id].length === 10) {
-          history[this.state.id].pop();
+      if (history[data.id].length === 10) {
+          history[data.id].pop();
       }
       this.setState({historyDataPlayers: JSON.stringify(history)});
 
