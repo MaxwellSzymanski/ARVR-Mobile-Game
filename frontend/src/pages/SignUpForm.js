@@ -96,7 +96,8 @@ class SignUpForm extends React.Component {
         swal("Terms and services", "By clicking accept, you agree that your " +
             "picture, username and password will be stored securely on our server. " +
             "You also agree that other player may take pictures of you while interacting " +
-            "with the game, and your username will be displayed publicly.", {button: "Accept"});
+            "with the game, and your username will be displayed publicly.", {
+            button: "Okay"})
     }
 
     state = {
@@ -150,7 +151,7 @@ class SignUpForm extends React.Component {
 
               <div className="FormField">
                 <label className="FormField__CheckboxLabel">
-                    <input className="FormField__Checkbox" type="checkbox" name="hasAgreed" value={this.state.hasAgreed} onChange={this.handleChange} /> I agree to all statements in the <a className="FormField__TermsLink" onClick={this.showTerms}>terms of service</a>
+                    <input className="FormField__Checkbox" type="checkbox" ref="agreeCheckbox" name="hasAgreed" value={this.state.hasAgreed} onChange={this.handleChange} /> I agree to all statements in the <a className="FormField__TermsLink" onClick={this.showTerms}>terms of service</a>
                 </label>
               </div>
               <div className="FormField">
