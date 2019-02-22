@@ -14,7 +14,7 @@ import Trial from './pages/Trial.js'
 import ImageConfirm from "./pages/ImageConfirm";
 import EmailVerif from "./pages/EmailVerif.js";
 import ProfilePage from "./pages/ProfilePage";
-import FactionChooser from "./pages/factionChooser.js";
+import FactionChooser from "./pages/FactionChooser.js";
 
 const url = require('./pages/serveradress.js');
 
@@ -39,17 +39,17 @@ class App extends Component {
         <Router basename="/">
           <div className="App">
             <Switch>
-              <Route exact path="/" component={FirstPage}></Route>
-              <Route exact path="/sign-in" component={FirstPage}></Route>
-              <Route exact path="/takePicture" component={CameraComp}></Route>
-              <Route exact path="/map" component={Maps}></Route>
-              <Route exact path="/view" component={View}></Route>
-              <Route exact path="/imageConfirm" component={ImageConfirm}></Route>
-              <Route exact path="/landingPage" component={LandingPage}></Route>
-              <Route exact path="/verify" component={EmailVerif}></Route>
-              <Route exact path="/trial" component={Trial}></Route>
-              <Route exact path="/profilePage" component={ProfilePage}></Route>
-              <Route exact path="/factionChooser" component={FactionChooser}></Route>
+              <Route exact path="/" component={FirstPage}> </Route>
+              <Route exact path="/sign-in" component={FirstPage}> </Route>
+              <Route exact path="/takePicture" component={CameraComp}> </Route>
+              <Route exact path="/map" component={Maps}> </Route>
+              <Route exact path="/view" component={View}> </Route>
+              <Route exact path="/imageConfirm" component={ImageConfirm}> </Route>
+              <Route exact path="/landingPage" component={LandingPage}> </Route>
+              <Route exact path="/verify" component={EmailVerif}> </Route>
+              <Route exact path="/trial" component={Trial}> </Route>
+              <Route exact path="/profilePage" component={ProfilePage}> </Route>
+              <Route exact path="/factionChooser" component={FactionChooser}> </Route>
             </Switch>
           </div>
         </Router>
