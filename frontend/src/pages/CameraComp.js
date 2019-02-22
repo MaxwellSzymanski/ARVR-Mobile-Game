@@ -17,8 +17,9 @@ class CameraComp extends React.Component {
   renderRedirect = () => {
     if (this.state.redirect) {return <Redirect to="/imageConfirm" />}
   }
+
   async onTakePhoto (dataUri) {
-      // TODO: Check face
+      // TODO: Disable Camera
       var photoSrc = dataUri;
       var photo = new Image;
       photo.src = photoSrc;
@@ -56,12 +57,10 @@ class CameraComp extends React.Component {
             <Camera
                 onTakePhoto = { (dataUri) => { this.onTakePhoto(dataUri); } }
                 isImageMirror = {true}
+                idealFacingMode = {FACING_MODES.ENVIRONMENT}
             />
         </div>
       </div>
-
-
-
     );
   }
 }

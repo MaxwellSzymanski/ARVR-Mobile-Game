@@ -52,6 +52,7 @@ class App extends Component {
               <Route exact path="/trial" component={Trial}></Route>
               <Route exact path="/profilePage" component={ProfilePage}></Route>
               <Route exact path="/factionChooser" component={FactionChooser}></Route>
+              <Route exact path="/capturePlayer" component={CapturePlayer}></Route>
             </Switch>
           </div>
         </Router>
