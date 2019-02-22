@@ -74,7 +74,7 @@ class ProfilePage extends React.Component {
 
                 {/* Buttons and profile */}
 
-                <button className="smallButton back topLeft"/>;
+                <Link to="/map"><button className="smallButton back topLeft"/></Link>;
                 <div className="profileCard">
                     <div className="profilePhoto"><img src={this.state.encodedPic}/></div>
                     <h1 className="name">{this.state.name}</h1>
@@ -85,7 +85,7 @@ class ProfilePage extends React.Component {
                     <h3 className="smallText">{this.state.experience}<b>/350 xp</b></h3>
                 </div>
 
-                <button className="smallButton settings topRight"/>
+                <Link to="/settings"><button className="smallButton settings topRight"/></Link>
 
                 {/* Stat card */}
 

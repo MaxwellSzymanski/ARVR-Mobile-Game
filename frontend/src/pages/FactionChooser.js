@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import "./factionChooser.css"
 import Flickity from 'react-flickity-component'
 
-class factionChooser extends React.Component {
+class FactionChooser extends React.Component {
     constructor() {
         super();
     }
@@ -37,4 +37,4 @@ class factionChooser extends React.Component {
     )
     }
 }
-export default factionChooser;
+export default FactionChooser;

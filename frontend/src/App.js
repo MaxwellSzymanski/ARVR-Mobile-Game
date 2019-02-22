@@ -15,6 +15,7 @@ import ImageConfirm from "./pages/ImageConfirm";
 import EmailVerif from "./pages/EmailVerif.js";
 import ProfilePage from "./pages/ProfilePage";
 import FactionChooser from "./pages/FactionChooser.js";
+import Settings from "./pages/Settings.js";
 
 const url = require('./pages/serveradress.js');
 
@@ -50,6 +51,7 @@ class App extends Component {
               <Route exact path="/trial" component={Trial}> </Route>
               <Route exact path="/profilePage" component={ProfilePage}> </Route>
               <Route exact path="/factionChooser" component={FactionChooser}> </Route>
+              <Route exact path="/settings" component={Settings}> </Route>
               {/*<Route exact path="/capturePlayer" component={CapturePlayer}> </Route>*/}
             </Switch>
           </div>
