@@ -77,13 +77,11 @@ body {
     width: 100%;
     background-color: transparent;
     color: #4d0c04;
-
     font-size: 100%;
     text-align: center;
     font-weight: 300;
     padding-bottom: 10px;
     display: block;
-    /*margin: none;*/
     border: none;
 }
 
@@ -104,13 +102,13 @@ body {
     height: 100%;
 }
 
-.titleGOF{
+.titleGOW{
     padding-top: 0px;
     margin-top: 0px;
     margin-bottom: 10px;
-    font-size: 60pt;
+    font-size: 45pt;
     color: white;
-    font-family: Impact, Charcoal, sans-serif;
+    font-family: Futura, Charcoal, sans-serif;
 }
 
 .wolfIcon {
@@ -135,35 +133,35 @@ body {
 }
 
 h1 {
-  color: #421f1c;
-  font-size:10vw;
-  font-family: 'Orkney';
+    color: #421f1c;
+    font-size:10vw;
+    font-family: Futura;
     font-weight: bold;
 }
 
 h2 {
     color: #fff9f8;
     font-size: 30px;
-    font-family: 'Karla', sans-serif;
+    font-family: Futura, sans-serif;
 }
 
 h3 {
     color: #421f1c;
     font-size: 20px;
-    font-family: 'Karla', sans-serif;
+    font-family: Futura, sans-serif;
 }
 
 p {
     color: black;
-    font-family: 'Orkney';
+    font-family: Futura;
 }
 
 .App__Form {
-  width: 100%;
-  background-color: #910F0F;
-  padding: 25px 40px;
-  overflow: auto;
-  height: 100%;
+    width: 100%;
+    background-color: #910F0F;
+    padding: 25px 40px;
+    overflow: auto;
+    height: 100%;
 }
 
 .PageSwitcher {
@@ -191,8 +189,8 @@ p {
 }
 
 .PageSwitcher__Item--Active {
-  background-color: white;
-  color: #910f0f;
+    background-color: white;
+    color: #910f0f;
 }
 
 
@@ -203,16 +201,16 @@ p {
 
 
 .PageSwitcher__Item:first-child {
-  border-top-left-radius: 25px;
-  border-bottom-left-radius: 25px;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
 }
 .PageSwitcher__Item:last-child {
-  border-top-right-radius: 25px;
-  border-bottom-right-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
 }
 
 .FormCenter {
-  margin-bottom: 100px;
+    margin-bottom: 100px;
 }
 
 .FormTitle {
@@ -249,26 +247,27 @@ p {
 
 .FormField__Label {
     display: block;
-    text-transform: uppercase;
-    font-size: .9em;
+    text-transform: capitalize;
+    font-size: 1em;
     color: white;
-    font-family: Orkney;
+    font-family: Futura;
     font-weight: bold;
 }
 
 .FormField__Input {
     width: 85%;
     background-color: transparent;
-    color: #4d0c04;
+    color: white;
     outline: none;
     border: none;
     border-bottom: 1px solid #fcb0a6;
-    font-family: Orkney;
-    font-size: 1em;
+    font-family: Futura, Orkney;
+    font-size: .9em;
     font-weight: 300;
     padding-bottom: 10px;
     display: block;
     margin: auto;
+    max-width: 900px;
 }
 
 .FormField__Input:hover {
@@ -280,7 +279,7 @@ p {
 }
 
 .FormField__Input::placeholder {
-    color: #d8dbd0;
+    color: #b8bbb0;
 }
 
 .FormField__Button {
@@ -295,21 +294,21 @@ p {
 }
 
 .FormField__Button:hover {
-    background-color: lightgrey;
+    background-color: #e7e7e7;
 }
 
 .FormField__Link {
     color: white;
     text-decoration: none;
     display: inline-block;
-    border-bottom: 1.5px solid lightcoral;
+    border-bottom: 1px solid lightcoral;
     padding-bottom: 5px;
 }
 
 
 .FormField__Link:hover {
     color: #ffafa5;
-    border-bottom: 1.5px solid white;
+    border-bottom: 1px solid white;
 }
 
 .FormField__CheckboxLabel {
@@ -382,86 +381,6 @@ p {
     display:inline-block;
 }
 
-/* The Modal (background) */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    -webkit-animation-name: fadeIn; /* Fade in the background */
-    -webkit-animation-duration: 0.4s;
-    animation-name: fadeIn;
-    animation-duration: 0.4s
-}
-
-/* Modal Content */
-.modal-content {
-    position: fixed;
-    bottom: 0;
-    background-color: #fefefe;
-    width: 100%;
-    -webkit-animation-name: slideIn;
-    -webkit-animation-duration: 0.4s;
-    animation-name: slideIn;
-    animation-duration: 0.4s
-}
-
-/* The Close Button */
-.close {
-    color: white;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.modal-header {
-    padding: 2px 16px;
-    background-color: #cc1f10;
-    color: white;
-}
-
-.modal-body {padding: 2px 16px;}
-
-
-/* Add Animation */
-@-webkit-keyframes slideIn {
-    from {bottom: -300px; opacity: 0}
-    to {bottom: 0; opacity: 1}
-}
-
-@keyframes slideIn {
-    from {bottom: -300px; opacity: 0}
-    to {bottom: 0; opacity: 1}
-}
-
-@-webkit-keyframes fadeIn {
-    from {opacity: 0}
-    to {opacity: 1}
-}
-
-@keyframes fadeIn {
-    from {opacity: 0}
-    to {opacity: 1}
-}
-
-.loader {
-  height: 200px;
-  width: 200px;
-
-}
 /* UI Buttons */
 .smallButton {
     background-color: white;

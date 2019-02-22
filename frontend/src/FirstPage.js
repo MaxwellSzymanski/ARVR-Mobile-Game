@@ -16,7 +16,7 @@ class FirstPage extends React.Component {
           {this.setPage()}
       <div className="Title">
           <div className="wolfIcon"/>
-          <h1 className="titleGOF">Game Of Wolves</h1>
+          <h1 className="titleGOW">Game Of Wolves</h1>
       </div>
       <div className="App__Form">
         <div className="PageSwitcher">
