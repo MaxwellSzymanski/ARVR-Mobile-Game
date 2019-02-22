@@ -1,5 +1,7 @@
 import React from 'react';
-import {loadMtcnnModel, loadFaceLandmarkModel, loadFaceDetectionModel, loadFaceRecognitionModel, toNetInput, mtcnn, extractFaces} from '/face-api';
+import {loadMtcnnModel, loadFaceLandmarkModel, loadFaceDetectionModel, loadFaceRecognitionModel, toNetInput, mtcnn, extractFaces, euclideanDistance} from '/face-api';
+import openSocket from 'socket.io-client';
+const  socket = openSocket('http://localhost:8000');
 
 class HelpFunctions extends React.Component {
 let minConfidence = 0.6
@@ -110,6 +112,7 @@ async function locateAndAlignFacesWithMtcnn(inputImg) {
   return alignedFaceImages[0]
 }
 
+
 function sleep(milliseconds) {
   var start = new Date().getTime();
   for (var i = 0; i < 1e7; i++) {
@@ -118,6 +121,22 @@ function sleep(milliseconds) {
     }
   }
 }
+
+
+//Connect with server
+const port = 8000;
+io.listen(port);
+console.log('listening on port ', port);
+
+
+async function getFVDistance(fv1, fv2) {
+  return euclideanDistance(fv1, fv2);
 }
+
+async function {
+
+}
+}
+
 
 export default HelpFunctions;

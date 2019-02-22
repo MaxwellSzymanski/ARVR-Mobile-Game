@@ -42,4 +42,8 @@ import {loadMtcnnModel, loadFaceLandmarkModel, loadFaceDetectionModel, loadFaceR
     return fv
   }
 
+  async function getDistanceBetweenFV(fv1, fv2) {
+
+  }
+
   export {getFeatureVector}
