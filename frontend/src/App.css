@@ -398,6 +398,8 @@ p {
 
 .smallButton:hover {
     background-color: #eee8e8;
+    margin:1px;
+    transition: margin .2s;
 }
 
 .smallButton:active {
@@ -434,6 +436,10 @@ p {
 
 .bigButton:hover {
     background-color: #eee8e8;
+    margin:18.5px;
+    width: 143px;
+    height:143px;
+
 }
 
 .bigButton:active {

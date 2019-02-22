@@ -138,7 +138,7 @@ class SignUpForm extends React.Component {
             {button}</Link></div>
               <div className="FormField">
                 <label className="FormField__Label" htmlFor="name">User name</label>
-                <input type="text" id="name" className="FormField__Input" placeholder="Enter your user name (max. 16 characters)" name="name" value={this.state.name} onChange={this.handleChange} maxlength="16"/>
+                <input type="text" id="name" className="FormField__Input" placeholder="Enter your user name (max. 16 characters)" name="name" value={this.state.name} onChange={this.handleChange} maxLength="16"/>
               </div>
               <div className="FormField">
                     <label className="FormField__Label" htmlFor="email">E-Mail Address</label>
