@@ -450,3 +450,31 @@ p {
     background-image: url(assets/buttons/settings.png);
 }
 
+.camera {
+    background-image: url(assets/buttons/camera.png);
+}
+
+/* UI Buttons */
+.bigButton {
+    background-color: white;
+    background-size: 65% 65%;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: white;
+    border: none;
+    outline: none;
+    border-radius: 60px;
+    width: 140px;
+    height:140px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+    margin: 20px;
+}
+
+.bigButton:hover {
+    background-color: #eee8e8;
+}
+
+.bigButton:active {
+    background-color: #dfd7d7;
+}
+
