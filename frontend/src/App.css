@@ -99,22 +99,30 @@ body {
 
 .Title {
     width: 100%;
-    background-color:#cc1f10;
-    padding: 5px 10px;
+    background-color:#910F0F;
     overflow: auto;
     height: 100%;
 }
 
-.titelGOF{
-  font-size: 60pt;
-  color: #750c04;
-  font-family: Impact, Charcoal, sans-serif;
+.titleGOF{
+    padding-top: 0px;
+    margin-top: 0px;
+    margin-bottom: 10px;
+    font-size: 60pt;
+    color: white;
+    font-family: Impact, Charcoal, sans-serif;
 }
 
-.denWolf {
-  height: 30vh;
+.wolfIcon {
+    margin: 0 auto;
+    margin-top: 30px;
+    height: 20vh;
+    width: 20vh;
+    background-image: url('assets/icons/mainWolf.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
 }
-
 
 .background {
     width: 100%;
@@ -152,36 +160,47 @@ p {
 
 .App__Form {
   width: 100%;
-  background-color: #cc1f10;
+  background-color: #910F0F;
   padding: 25px 40px;
   overflow: auto;
   height: 100%;
 }
 
 .PageSwitcher {
-  display: block;
-  justify-content: flex-start;
-  margin-bottom: 4%;
-  text-align: center;
+    display: block;
+    justify-content: flex-start;
+    margin-bottom: 4%;
+    text-align: center;
 }
 
 .PageSwitcher__Item {
-  background-color: #750c04;
-  color: #f2e4e3;
-  padding: 10px 25px;
-  cursor: pointer;
-  font-size: .9em;
-  border: none;
-  outline: none;
-  display: inline-block;
-  text-decoration: none;
-  opacity: 0.8;
+    background-color: #5b0014;
+    color: white;
+    padding: 10px 25px;
+    cursor: pointer;
+    font-size: .9em;
+    border: none;
+    outline: none;
+    display: inline-block;
+    text-decoration: none;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+}
+
+.PageSwitcher__Item:hover {
+    background-color: #490704;
 }
 
 .PageSwitcher__Item--Active {
-  background-color: #fc3c2d;
-  color: white;
+  background-color: white;
+  color: #910f0f;
 }
+
+
+.PageSwitcher__Item--Active:hover {
+    background-color: white;
+    color: #910f0f;
+}
+
 
 .PageSwitcher__Item:first-child {
   border-top-left-radius: 25px;
@@ -197,99 +216,123 @@ p {
 }
 
 .FormTitle {
-  color: #421f1c;
-  font-weight: 300;
-  margin-bottom: 50px;
+    color: white;
+    font-weight: 300;
+    margin-bottom: 50px;
+    font-family: 'Orkney';
 }
 
 .FormTitle__Link {
-  color: #421f1c;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 1.7em;
-  margin: 0 10px;
-  padding-bottom: 5px;
+    color: #421f1c;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1.7em;
+    margin: 0 10px;
+    padding-bottom: 5px;
 }
 
 .FormTitle__Link:first-child {
-  margin-left: 0;
+    margin-left: 0;
 }
 
 .FormTitle__Link--Active {
-  color: white;
-  border-bottom: 1px solid #fc3c2d;
+    color: white;
+    border-bottom: 1px solid #fc3c2d;
 }
 
 .FormField {
-  margin-bottom: 40px;
-  margin-left: 10px;
-  margin-right: 10px;
-  text-align: center;
+    margin-bottom: 40px;
+    margin-left: 10px;
+    margin-right: 10px;
+    text-align: center;
 }
 
 .FormField__Label {
-  display: block;
-  text-transform: uppercase;
-  font-size: .9em;
-  color: white;
-    font-family: 'Karla', sans-serif;
+    display: block;
+    text-transform: uppercase;
+    font-size: .9em;
+    color: white;
+    font-family: Orkney;
+    font-weight: bold;
 }
 
 .FormField__Input {
-  width: 85%;
-  background-color: transparent;
-  color: #4d0c04;
-  outline: none;
+    width: 85%;
+    background-color: transparent;
+    color: #4d0c04;
+    outline: none;
     border: none;
-    border-bottom: 1px solid #fc3c2d;
+    border-bottom: 1px solid #fcb0a6;
+    font-family: Orkney;
+    font-size: 1em;
+    font-weight: 300;
+    padding-bottom: 10px;
+    display: block;
+    margin: auto;
+}
 
-  font-size: 1em;
-  font-weight: 300;
-  padding-bottom: 10px;
-  display: block;
-  margin: auto;
+.FormField__Input:hover {
+     border-bottom: 1px solid white;
+ }
+
+.FormField__Input:focus {
+    border-bottom: 3px solid white;
 }
 
 .FormField__Input::placeholder {
-  color: #421f1c;
+    color: #d8dbd0;
 }
 
 .FormField__Button {
-  background-color: #fc3c2d;
-  color: white;
-  border: none;
-  outline: none;
-  border-radius: 25px;
-  padding: 15px 70px;
-  font-size: .8em;
-  font-weight: 500;
+    background-color: white;
+    color: #910f0f;
+    border: none;
+    outline: none;
+    border-radius: 25px;
+    padding: 15px 70px;
+    font-size: .8em;
+    font-weight: 500;
+}
+
+.FormField__Button:hover {
+    background-color: lightgrey;
 }
 
 .FormField__Link {
-  color: #421f1c;
-  text-decoration: none;
-  display: inline-block;
-  border-bottom: 1.5px solid #fc3c2d;
-  padding-bottom: 5px;
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    border-bottom: 1.5px solid lightcoral;
+    padding-bottom: 5px;
+}
+
+
+.FormField__Link:hover {
+    color: #ffafa5;
+    border-bottom: 1.5px solid white;
 }
 
 .FormField__CheckboxLabel {
-  color:#421f1c;
-  font-size: .9em;
+    color: white;
+    font-size: .9em;
 }
 
 .FormField__Checkbox {
-  position: relative;
-  top: 1.5px;
+    position: relative;
 }
 
 .FormField__TermsLink {
-  color: white;
-  border-bottom: 1px solid #fc3c2d;
-  text-decoration: none;
-  display: inline-block;
-  padding-bottom: 2px;
-  margin-left: 5px;
+    color: white;
+    border-bottom: 1px solid lightcoral;
+    text-decoration: none;
+    display: inline-block;
+    padding-bottom: 2px;
+    margin-left: 5px;
+}
+
+.FormField__TermsLink:hover {
+    color: #ffafa5;
+    border-bottom: 1px solid white;
 }
 
 .button {
@@ -315,12 +358,12 @@ p {
 }
 
 #centerButton {
-  text-align: center;
+    text-align: center;
 }
 
 #text {
-  display: block;
-  text-align: center;
+    display: block;
+    text-align: center;
 }
 
 .polaroid {
