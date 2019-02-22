@@ -2,7 +2,7 @@ import React from 'react';
 import Camera from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
 import { Redirect } from 'react-router';
-import { getFeatureVector, getFVMatch } from '../facerecognition/FaceRecognition';
+import { getFeatureVector, getFVDistance } from '../facerecognition/FaceRecognition';
 import swal from '@sweetalert/with-react';
 import SocketContext from "../socketContext";
 
@@ -46,25 +46,27 @@ class CapturePlayer extends React.Component {
       }
   }
 
-  this.context.on('sentFVfromDB', (results) => {
-      let matchingPlayerId = getMatchingPlayerFromFV(results);
-      if (matchingPlayerId != null) {
-        localStorage.setItem("matchingPlayerId", matchingPlayerId);
-        this.setRedirect();
-      }
-      //else if (matchingPlayerId = playerId){ "You can't capture yourself!" }
-      else {
-        swal({
-            title: "Unkown Person",
-            text: "The Person in the photo is NOT a player",
-            icon: "warning",
-            button: "try again!",
-        });
+  componentDidMount() {
+    this.context.on('sentFVfromDB', (results) => {
+        let matchingPlayerId = this.getMatchingPlayerFromFV(results);
+        if (matchingPlayerId != null) {
+          localStorage.setItem("matchingPlayerId", matchingPlayerId);
+          this.setRedirect();
+        }
+        //else if (matchingPlayerId = playerId){ "You can't capture yourself!" }
+        else {
+          swal({
+              title: "Unkown Person",
+              text: "The Person in the photo is NOT a player",
+              icon: "warning",
+              button: "try again!",
+          });
 
-      }
-  });
+        }
+    });
+  }
 
-  async function getMatchingPlayerFromFV(results) {
+  async getMatchingPlayerFromFV(results) {
     console.log(results)
     console.log(results.featureVector)
     console.log(results._id)
@@ -73,7 +75,8 @@ class CapturePlayer extends React.Component {
     let minDist = 1;
     let index = null;
     const threshold = 0.52;
-    for (i = 0; i < results.length; i++) {
+    let i = 0
+    for (i ; i < results.length; i++) {
       let fv2 = Object.values(results[i].featureVector);
       let dist = getFVDistance(fv1, fv2)
       if (minDist > dist && dist <= threshold) {
@@ -85,16 +88,13 @@ class CapturePlayer extends React.Component {
       return (results[i]._id);
     }
     else return null;
-  }
+  };
 
 
-  async function showCapturedPlayer(id) {
+  async showCapturedPlayer(id) {
     this.context.emit('getCapturedPlayerStats', id);
-  }
+  };
 
-  this.context.on('sentCapturedPlayerStats', (stats) => {
-
-  });
 
 
   //Code for in the server
@@ -175,3 +175,5 @@ class CapturePlayer extends React.Component {
 }
 
 CapturePlayer.contextType = SocketContext;
+
+export default CapturePlayer;
