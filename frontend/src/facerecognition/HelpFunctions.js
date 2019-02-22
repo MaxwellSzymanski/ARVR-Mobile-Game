@@ -129,14 +129,4 @@ io.listen(port);
 console.log('listening on port ', port);
 
 
-async function getFVDistance(fv1, fv2) {
-  return euclideanDistance(fv1, fv2);
-}
-
-async function {
-
-}
-}
-
-
 export default HelpFunctions;

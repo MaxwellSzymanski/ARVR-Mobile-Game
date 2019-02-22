@@ -1,5 +1,5 @@
 import React from 'react';
-import {loadMtcnnModel, loadFaceLandmarkModel, loadFaceDetectionModel, loadFaceRecognitionModel, toNetInput, mtcnn, extractFaces, computeFaceDescriptor} from 'face-api.js';
+import {loadMtcnnModel, loadFaceLandmarkModel, loadFaceDetectionModel, loadFaceRecognitionModel, toNetInput, mtcnn, extractFaces, computeFaceDescriptor, euclideanDistance} from 'face-api.js';
 
   async function calculateFeatureVector(image) {
 
@@ -42,8 +42,8 @@ import {loadMtcnnModel, loadFaceLandmarkModel, loadFaceDetectionModel, loadFaceR
     return fv
   }
 
-  async function getDistanceBetweenFV(fv1, fv2) {
-
+  async function getFVDistance(fv1, fv2) {
+    return euclideanDistance(fv1, fv2);
   }
 
-  export {getFeatureVector}
+  export {getFeatureVector, getFVDistance}
