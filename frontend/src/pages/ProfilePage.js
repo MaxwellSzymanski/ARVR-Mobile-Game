@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import "./profilePage.css"
 import Cookies from 'universal-cookie';
 import SocketContext from "../socketContext";
+import swal from '@sweetalert/with-react';
 
 const cookies = new Cookies();
 
@@ -66,6 +67,11 @@ class ProfilePage extends React.Component {
             }
         }
         return html
+    }
+
+    logOut() {
+        swal("Logged out!", {icon:"success"});
+        //TODO
     }
 
     render() {
@@ -139,7 +145,7 @@ class ProfilePage extends React.Component {
                         </div>
                     </div>
                 </div>
-                <button className="logOut"> Log out </button>
+                <button className="logOut" onClick={this.logOut}> Log out </button>
             </div>
         );
     }
