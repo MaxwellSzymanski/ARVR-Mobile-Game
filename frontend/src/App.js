@@ -14,7 +14,7 @@ import Trial from './pages/Trial.js'
 import ImageConfirm from "./pages/ImageConfirm";
 import EmailVerif from "./pages/EmailVerif.js";
 import ProfilePage from "./pages/ProfilePage";
-import CapturePlayer from "./pages/capturePlayer.js";
+import CapturePlayer from "./pages/CapturePlayer.js";
 import FactionChooser from "./pages/FactionChooser.js";
 
 const url = require('./pages/serveradress.js');
@@ -51,7 +51,7 @@ class App extends Component {
               <Route exact path="/trial" component={Trial}> </Route>
               <Route exact path="/profilePage" component={ProfilePage}> </Route>
               <Route exact path="/factionChooser" component={FactionChooser}> </Route>
-              *<Route exact path="/capturePlayer" component={CapturePlayer}> </Route>
+              *<Route exact path="/CapturePlayer" component={CapturePlayer}> </Route>
             </Switch>
           </div>
         </Router>
