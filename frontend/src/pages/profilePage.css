@@ -96,17 +96,23 @@ body {
 }
 
 .profilePhoto {
-    background-image: url(../assets/temporary/profileImage.png);
     position : relative;
     top : -100px;
     height : 140px;
     width : 140px;
-    background-size: cover;
+    background-size: 100% 100%;
     background-repeat: no-repeat;
+    background-position: center;
     border-radius: 15px;
     margin: 0 auto;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
+
+img {
+    width: 100%;
+}
+
 
 .container > * {
     display: inline-block;
@@ -196,5 +202,10 @@ body {
 .xpGained {
     padding: 5px;
     border-radius: 20px;
-    width: 70%; background-color: #910f0f;
+    width: 70%;
+    background-color: #910f0f;
+    -webkit-transition: width 1s ease-in;
+}
+.xpGained:hover {
+    width: 90%;
 }

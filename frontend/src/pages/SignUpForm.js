@@ -1,15 +1,9 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import axios from 'axios';
-// import { signup } from './socket.js'
-import io from 'socket.io-client';
-
+import swal from '@sweetalert/with-react';
 import Cookies from 'universal-cookie';
 import SocketContext from "../socketContext";
 const cookies = new Cookies();
-// const url = require('./serveradress.js');
-const url = "https://localhost:8080";
-
 
 class SignUpForm extends React.Component {
     constructor() {
@@ -43,17 +37,33 @@ class SignUpForm extends React.Component {
 
     }
 
+    componentDidMount() {
+        this.context.on('signup', (data) => {
+            if (data.success) {
+                const options = {
+                    path: '/',
+                    expires: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)   // expires in 24 hours
+                };
+                cookies.set('token', data.token, options);
+                cookies.set('name', data.name, options);
+                this.setState({redirect: true});
+            }
+            else alert(data.message);
+        });
+    }
+
     async handleSubmit(e) {
         e.preventDefault();
 
-        const that = this;
         const image = localStorage.getItem("PhotoOfMe");
 		const featureVector = localStorage.getItem("fv");
 
-        if (!this.state.name || !this.state.email || !this.state.password || !image) {
-            alert("Please fill in all fields.");
+		if (!image) {
+		    swal("Please take a picture first.", {icon: 'warning'})
+        } else if (!this.state.name || !this.state.email || !this.state.password) {
+            swal("Please fill in all fields.", {icon: 'warning'});
         } else if (!this.state.hasAgreed) {
-            alert("You need to agree to the terms and conditions in order to continue.")
+            swal("You need to agree to the terms and conditions in order to continue.", {icon: 'warning'})
         } else {
             const position = {longitude: 0.0, latitude: 0.0};
 
@@ -68,63 +78,26 @@ class SignUpForm extends React.Component {
                 position.latitude = pos.coords.latitude;
             }
 
-            this.state.position = position;
             const dataToSend = {
                 email: this.state.email,
                 name: this.state.name,
                 password: this.state.password,
                 position: position,
             };
-            dataToSend.request = "signup";
 
-            dataToSend.image = new Buffer(image).toString('base64');
+            dataToSend.image = image.toString('base64');
             dataToSend.featureVector = featureVector;
 
-            /* Socket code, work in progress ...
-
             this.context.emit('signup', dataToSend);
-            this.context.on('signupres', (data) => {
-                if (data.success) {
-                    alert("success");
-                    const options = {
-                        path: '/',
-                        expires: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)   // expires in 24 hours
-                    };
-                    cookies.set('token', data.token, options);
-                    cookies.set('name', data.name, options);
-                    this.setState({redirect: true});
-                }
-                else alert(data.message);
-            });
-
-            */
-            const obj = JSON.stringify(dataToSend);
-            await axios.post(url, obj).then(
-                function (json) {
-                    console.log(json.data);
-                    if (json.data.success) {
-                        const options = {
-                            path: '/',
-                            expires: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)   // expires in 24 hours
-                        };
-                        cookies.set('token', json.data.token, options);
-                        cookies.set('name', json.data.name, options);
-                        that.setState({redirect: true});
-                    }
-                    else alert(json.data.message);
-                }
-            );
         }
     }
 
-    openTerms() {
-        var modal = document.getElementById('myModal');
-        modal.style.display = "block";
-    }
-
-    closeTerms() {
-        var modal = document.getElementById('myModal');
-        modal.style.display = "none";
+    showTerms() {
+        swal("Terms and services", "By clicking accept, you agree that your " +
+            "picture, username and password will be stored securely on our server. " +
+            "You also agree that other player may take pictures of you while interacting " +
+            "with the game, and your username will be displayed publicly.", {
+            button: "Okay"})
     }
 
     state = {
@@ -146,10 +119,10 @@ class SignUpForm extends React.Component {
 
         let button;
         if (localStorage.getItem("PhotoOfMe") === null) {
-            button = <img className="button" alt="" src={ require('../camera2.png') } />;
+            button = <img  className="bigButton camera" />;
         } else {
             var img = localStorage.getItem("PhotoOfMe");
-            button = <img  className="imageButton" alt="" src={img} />
+            button = <img  className="imageButton" alt="" src={img} />;
         }
 
         return (
@@ -160,13 +133,12 @@ class SignUpForm extends React.Component {
             <div id="text">
             <label id="text">Take a picture</label></div>
 
-
           <div id="centerButton">
           <Link to="/takePicture">
             {button}</Link></div>
               <div className="FormField">
                 <label className="FormField__Label" htmlFor="name">User name</label>
-                <input type="text" id="name" className="FormField__Input" placeholder="Enter your user name" name="name" value={this.state.name} onChange={this.handleChange} />
+                <input type="text" id="name" className="FormField__Input" placeholder="Enter your user name (max. 16 characters)" name="name" value={this.state.name} onChange={this.handleChange} maxLength="16"/>
               </div>
               <div className="FormField">
                     <label className="FormField__Label" htmlFor="email">E-Mail Address</label>
@@ -179,39 +151,17 @@ class SignUpForm extends React.Component {
 
               <div className="FormField">
                 <label className="FormField__CheckboxLabel">
-                    <input className="FormField__Checkbox" type="checkbox" name="hasAgreed" value={this.state.hasAgreed} onChange={this.handleChange} /> I agree all statements in <a className="FormField__TermsLink" onClick={this.openTerms}>terms of service</a>
+                    <input className="FormField__Checkbox" type="checkbox" ref="agreeCheckbox" name="hasAgreed" value={this.state.hasAgreed} onChange={this.handleChange} /> I agree to all statements in the <a className="FormField__TermsLink" onClick={this.showTerms}>terms of service</a>
                 </label>
               </div>
               <div className="FormField">
                   <button className="FormField__Button mr-20">Sign Up</button> <Link to="/sign-in" className="FormField__Link">I'm already member</Link>
               </div>
             </form>
-
-            <div id="myModal" className="modal">
-                <div className="modal-content">
-                    <div className="modal-header">
-                        <span className="close" onClick = {this.closeTerms}>&times;</span>
-                        <h2>Terms and Agreements</h2>
-                    </div>
-                    <div className="modal-body">
-                        <h3>Your Content</h3>
-                        <p>By 'your Content', any pictures and usernames you use are meant. By registering, you agree
-                        to having your content used within the website, modified, and deleted without warning.</p>
-
-
-                         <h3>No warranties</h3>
-
-                        <p>This Website is provided “as is,” with all faults, and GOW expresses no representations
-                            or warranties, of any kind related to this website or the materials contained on this website.
-                            </p>
-
-                    </div>
-                </div>
-            </div>
           </div>
         );
     }
 }
-// SignUpForm.contextType = SocketContext;
+SignUpForm.contextType = SocketContext;
 
 export default SignUpForm;

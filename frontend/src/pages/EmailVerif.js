@@ -1,15 +1,10 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import axios from 'axios';
 import Cookies from 'universal-cookie';
+import SocketContext from "../socketContext";
 const cookies = new Cookies();
 
-const url = require('./serveradress.js');
-
 class EmailVerif extends React.Component {
-    componentDidMount() {
-        this.refs["code_1"].focus();
-    }
     constructor() {
         super();
 
@@ -20,6 +15,21 @@ class EmailVerif extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentDidMount() {
+        this.refs["code_1"].focus();
+
+        const that = this;
+        this.context.on("verify", function (response) {
+            if (response.success) {
+                alert("Your e-mail has been verified.");
+                that.setState({redirect: true});
+            } else {
+                alert("That code seems to be wrong. Please try again or let us send you another code.");
+                that.setState({firstTry: false, loading: false})
+            }
+        });
     }
 
     formComplete() {
@@ -52,37 +62,25 @@ class EmailVerif extends React.Component {
         }
     }
 
+    newCode() {
+        this.context.emit("newmail", {token: cookies.get('token')});
+        this.setState({firstTry: true});
+    }
+
     async handleSubmit(e) {
         e.preventDefault();
 
         this.setState({loading: true});
-        let that = this;
+
         let a = this.state;
         let code = parseInt(a.code_1 + a.code_2 + a.code_3 + a.code_4 + a.code_5 + a.code_6);
 
         const dataToSend = {
             code: code,
-            request: "verify",
             token: cookies.get('token')
         };
 
-        let obj = JSON.stringify(dataToSend);
-
-
-        axios.post(url, obj).then(
-            function (json) {
-                if (json.data.success) {
-                    alert("Your e-mail has been verified.");
-                    that.setState({redirect: true});
-                } else {
-                    alert("That code seems to be wrong.");
-                    that.setState({firstTry: false, loading: false});
-                }
-            }
-        );
-
-        console.log('The form was submitted to ' + url + ' with the following data:');
-        console.log(dataToSend);
+        this.context.emit("verify", dataToSend);
     }
 
     state = {
@@ -93,11 +91,7 @@ class EmailVerif extends React.Component {
     };
 
     renderRedirect = () => {
-        if (this.state.redirect) {return <Redirect to="/map" />}
-    };
-
-    goToMap()   {
-        this.setRedirect();
+        if (this.state.redirect) {return <Redirect to="/trial" />}
     };
 
     setPage() {
@@ -108,6 +102,7 @@ class EmailVerif extends React.Component {
 
         return (
             <div className="background">
+                {this.renderRedirect()}
                 {this.setPage()}
                 <div>
                     <h1>Game Of Wolves</h1>
@@ -116,7 +111,7 @@ class EmailVerif extends React.Component {
                     <form onSubmit={this.handleSubmit} className="FormFields">
                     <div className="FormField">
                         <p>A six digit verification code has been sent to your e-mail account. Enter it below.</p>
-                        <p>If you can't find it in your inbox, check your spam folder.</p>
+                        <p>If you can't find it in your inbox, please check your spam folder.</p>
                         <div className="VerificationCode">
                             <div className="VerificationCodeDigit">
                                 <input type="number" ref="code_1" id="1" name="code" className="VerificationCodeDigit__Input" value={this.state.code} onChange={this.handleChange} min="0" max="9"/>
@@ -141,14 +136,20 @@ class EmailVerif extends React.Component {
                             {this.formComplete() && !this.state.loading && <button className="FormField__Button mr-20">Verify me!</button>}
                             {this.state.loading && <p>Checking your code ...</p>}
                         </div>
+                    </div>
+                    </form>
+                </div>
+                <div className="FormCenter">
+                    <form onSubmit={this.newCode} className="FormFields">
                         <div className="FormField">
                             {!this.state.firstTry && !this.state.loading && <button className="FormField__Button mr-20">Send me another code</button>}
                         </div>
-                    </div>
                     </form>
                 </div>
             </div>
         );
     }
 }
+EmailVerif.contextType = SocketContext;
+
 export default EmailVerif;

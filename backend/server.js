@@ -7,11 +7,11 @@ const secret = require('./db/config.js');
 // var url = "mongodb://localhost:27017/userdb";
 // var url = 'mongodb://team12:mongoDBteam12@35.241.198.186:27017/?authMechanism=SCRAM-SHA-1&authSource=userdb';
 
-var frequency = 3000;
+var frequency = 1000;
 
 const mongoose = require('mongoose');
 // mongoose.connect("mongodb://localhost:27017/userdb", { useNewUrlParser: true });
-mongoose.connect('mongodb://team12:mongoDBteam12@35.241.198.186:27017/userdb?authMechanism=SCRAM-SHA-1&authSource=userdb',  { useNewUrlParser: true });
+mongoose.connect('mongodb://team12:mongoDBteam12@localhost:27017/userdb?authMechanism=SCRAM-SHA-1&authSource=userdb',  { useNewUrlParser: true });
 
 const User = require('./db/userModel.js');
 const ActivePlayer = require('./db/gameModel');
@@ -39,7 +39,7 @@ const respond = function(res, data) {
 };
 
 //create a server object:
-https.createServer(https_options, async function (req, res) {
+const server = https.createServer(https_options, async function (req, res) {
 
     // Set CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -65,20 +65,8 @@ https.createServer(https_options, async function (req, res) {
 
         console.log("\n\n\nRequest:    " + request + "    ===============    current time:    " + new Date().toLocaleTimeString());
         switch (request) {
-            case "signup":
-                signup(obj, res);
-                break;
-            case "verify":
-                verifyEmail(obj, res);
-                break;
-            case "signin":
-                signin(obj, res);
-                break;
             case "signout":
                 signout(obj, res);
-                break;
-            case "stats":
-                stats(obj, res);
                 break;
             case "jwt":
                 verifyJWT(obj, res);
@@ -114,112 +102,113 @@ https.createServer(https_options, async function (req, res) {
 }).listen(port);
 console.log("\n\n    Server listening on localhost:" + port + "\n\n");
 
-/* socket code, work in progress
 
 // var server = https.createServer(https_options);
 var io = require('socket.io')(server);
 // server.listen(port);
 
 io.sockets.on('connection', function (socket) {
-    socket.emit("test", {test: "test"});
-    console.log("new connection:  " + socket);
-    socket.on('signup', function (data) {
-        console.log("signup:    " + data.email);
-        const newUser = new User(data);
-        newUser.save( function(error) {
-            if (error) {
-                socket.emit('signupres', {
-                    success: false,
-                    message: error.message
-                });
-            } else {
-                socket.emit('signupres', {
-                    success: true,
-                    name: newUser.name,
-                    token: newUser.createToken(),
-                });
-                newUser.sendVerifMail();
-            }
-        });
-        const newActivePlayer = new ActivePlayer({playerid: data.name, location: data.position});
-        newActivePlayer.save();
-    });
+    console.log("new connection");
+
+    socket.on('signup', (data) => {signup(data, socket)});
+
+    socket.on('verify', (data) => {verifyEmail(data, socket)});
+
+    socket.on("newmail", (data) => {newMail(data)});
+
+    socket.on("signin", (data) => {signin(data, socket)});
+
+    socket.on("signout", (data) => {signout(data, socket)});
+
+    socket.on("stats", (data) => {stats(data, socket)});
+
+    socket.on("location", (data) => {updateLocation(data, socket)});
+
+    socket.on("signal", (data) => {signal(data)});
+
+    socket.on("handshake", (data) => {})
+
+    socket.on("disconnect", () => {removePlayer(socket)});
+    
 });
 
-// io.listen(port);
 
-*/
+// SOCKET EVENT HANDLING
 
-
-// REQUEST HANDLING
-
-function signup(obj, res) {
-    const newUser = new User(obj);
+function signup(data, socket) {
+    console.log("signup:    " + data.email);
+    const newUser = new User(data);
     newUser.save( function(error) {
         if (error) {
-            console.log(error);
-            // res.setHeader('Access-Control-Allow-Origin', '*');
-            res.setHeader("Content-Type", "ERROR");
-            res.write(JSON.stringify({
+            socket.emit('signup', {
                 success: false,
                 message: error.message
-            }));
+            });
         } else {
-            respond(res, {
+            socket.emit('signup', {
                 success: true,
                 name: newUser.name,
                 token: newUser.createToken()
             });
             newUser.sendVerifMail();
         }
-        res.end();
     });
-    const newActivePlayer = new ActivePlayer({playerid: obj.name, location: obj.position});
+    const newActivePlayer = new ActivePlayer({playerid: data.name, location: data.position});
     newActivePlayer.save();
-}
+};
 
-function verifyEmail(obj, res) {
-    jwt.verify(obj.token, secret, async function(err, token) {
+function verifyEmail(data, socket) {
+    jwt.verify(data.token, secret, async function(err, token) {
         if (err) {
-            console.log("invalid token");
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.setHeader("Content-Type", "ERROR");
-            res.end();
+            console.log("(verifyEmail)   invalid token");
             throw err;
         } else {
             User.findById(token.id).then(
                 async function(user) {
-                    const result = await user.verify(obj.code);
-                    respond(res, {
-                        success: result
-                    });
-                })
+                    const result = await user.verify(data.code);
+                    socket.emit("verify", {success: result});
+                });
         }
     })
 }
 
-function signin(obj, res) {
-    User.findOne({ email : obj.email }, async function(error, result) {
+function newMail(data) {
+    jwt.verify(data.token, secret, async function(err, token) {
+        if (err) {
+            console.log("(newMail)       invalid token");
+            throw err;
+        } else {
+            User.findById(token.id).then(
+                async function(user) {
+                    user.sendVerifMail();
+            });
+        }
+    })
+}
+
+function signin(data, socket) {
+    User.findOne({ email : data.email }, async function(error, result) {
         if (error) throw error;
         if (result === null) {
-            respond(res, {"email": false});
+            socket.emit("signin", {"email": false});
         } else {
-            const value = await result.checkPassword(obj.password);
-            if (!value)
-                respond(res, {"email": true, "password": value});
+            const value = await result.checkPassword(data.password);
+            console.log("checkPassword:   " + await value);
+            if (!(await value))
+                socket.emit("signin", {"email": true, "password": value});
             else {
-                respond(res, {
-                    "email": true,
-                    "password": value,
+                socket.emit("signin", {
+                    email: true,
+                    password: value,
                     token: result.createToken(),
                     name: result.name
                 });
                 ActivePlayer.findOne({playerid: result.name}, function(error, act) {
                     if (act === null) {
-                        const newActivePlayer = new ActivePlayer({playerid: result.name, location: obj.position});
+                        const newActivePlayer = new ActivePlayer({playerid: result.name, location: data.position});
                         newActivePlayer.save();
                     } else {
-                        act.location = obj.position;
+                        act.updateLocation = data.position;
                         act.updated_at = Date.now();
                         act.save();
                     }
@@ -229,36 +218,27 @@ function signin(obj, res) {
     });
 }
 
-function signout(obj, res) {
-    jwt.verify(obj.token, secret, async function(err, token) {
+function signout(data, socket) {
+    jwt.verify(data.token, secret, async function(err, token) {
         if (err) {
-            console.log("invalid token");
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.setHeader("Content-Type", "ERROR");
-            res.end();
+            console.log("(signout)       invalid token");
+            socket.emit("signout", {result:false});
             throw err;
         } else {
             User.findById(token.id).then(
                 async function (user) {
                     if (user !== null)
                         if (!(await user.checkToken(token))) {
-                            console.log("invalid token");
-                            res.setHeader('Access-Control-Allow-Origin', '*');
-                            res.setHeader("Content-Type", "ERROR");
-                            res.end();
+                            console.log("(signout)       invalid token");
+                            socket.emit("signout", {result:false});
                         } else {
                             ActivePlayer.findOne({playerid: user.name}, (err, result) => {
                                 if (result !== null) {
                                     result.delete();
-                                    res.setHeader('Access-Control-Allow-Origin', '*');
-                                    res.setHeader("Content-Type", "application/json");
-                                    res.write(JSON.stringify({result: true}));
-                                    res.end();
+                                    socket.emit("signout", {result:true});
                                 } else {
                                     console.log("user not logged in");
-                                    res.setHeader('Access-Control-Allow-Origin', '*');
-                                    res.setHeader("Content-Type", "ERROR");
-                                    res.end();
+                                    socket.emit("signout", {result:true});
                                 }
                             });
                         }
@@ -267,28 +247,99 @@ function signout(obj, res) {
     });
 }
 
-function stats(obj, res) {
-    jwt.verify(obj.token, secret, async function(err, token) {
+function stats(data, socket) {
+    jwt.verify(data.token, secret, async function(err, token) {
         if (err) {
-            console.log("invalid token");
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.setHeader("Content-Type", "ERROR");
-            res.end();
+            console.log("(stats)         invalid token");
         } else {
             User.findById(token.id).then(
                 function (user) {
                     if (user === null) {
-                        console.log("No user found");
-                        res.setHeader('Access-Control-Allow-Origin', '*');
-                        res.setHeader("Content-Type", "ERROR");
-                        res.end();
+                        console.log("(stats)         No user found");
                     } else {
-                        respond(res, user.getUserData());
+                        socket.emit("stats", user.getUserData());
+                        socket.emit("photo", {image: user.image} )
                     }
             });
         }
     })
 }
+
+let game = {};
+function updateLocation(data, socket) {
+    if (data.token) {
+        jwt.verify(data.token, secret, async function(err, token) {
+            if (err) {
+                console.log("(location)      invalid token");
+            } else {
+                User.findById(token.id).then(
+                    function (user) {
+                        if (user !== null) {
+                            game[user.name] = {
+                                socket: socket,
+                                longitude: data.longitude,
+                                latitude: data.latitude,
+                                updatedAt: new Date()
+                            };
+                            // Object.keys(game).forEach( function(player) {
+                            //     console.log(player + ":\n   (" + game[player].latitude +", " + game[player].longitude +")");
+                            // });
+                            socket.broadcast.emit("playerdata", {
+                                id: user.name,
+                                latitude: data.latitude,
+                                longitude: data.longitude,
+                                updatedAt: new Date()
+                            })
+                        }
+                    }
+                )
+            }
+        })
+    }
+}
+
+function signal(data) {
+    if (data.token) {
+        jwt.verify(data.token, secret, async function(err, token) {
+            if (err) {
+                console.log("(signal)        invalid token");
+            } else {
+                User.findById(token.id).then(
+                    function (sender) {
+                        if (sender !== null) {
+                            Object.keys(game).forEach(function (receiver) {
+                                if (receiver === data.receiver) {
+                                    if (data.type === "special")
+                                        game[receiver].socket.emit("specialsignal", {sender: sender.name});
+                                    else if (data.type === "handshake")
+                                        game[receiver].socket.emit("handshake", {sender: sender.name});
+                                    else if (data.type === "ACKhandshake")
+                                        game[receiver].socket.emit("ACKhandshake", {sender: sender.name});
+                                    return;
+                                }
+                            })
+                        }
+                    })
+            }
+        });
+    }
+}
+
+function removePlayer(socket) {
+    Object.keys(game).forEach( function (username) {
+        if (game[username].socket === socket) {
+            delete game[username];
+        }
+    })
+}
+
+
+// ============================================================================
+
+// OLD REQUEST HANDLING
+
+// ============================================================================
+
 
 function verifyJWT(obj, res) {
     jwt.verify(obj.token, secret, async function(err, token) {
@@ -370,8 +421,8 @@ async function radar(obj, res) {
 }
 
 async function getPlayerPositionRadar(jsonData,res) {
-    let fp = await getFirstActivePlayer();
-    fp = { firstPlayer : fp };
+    // let fp = await getFirstActivePlayer();
+    // fp = { firstPlayer : fp };
 
     var playerId = jsonData.playerId;
     var playerLongitude = jsonData.longitude;
@@ -407,7 +458,7 @@ async function getPlayerPositionRadar(jsonData,res) {
                 delete elem.location;
             });
 
-            result.push(fp);
+            // result.push(fp);
 
             res.write(JSON.stringify(result)); //write a response to the client
             res.end(); //end the response
