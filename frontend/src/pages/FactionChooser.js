@@ -1,18 +1,46 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import "./factionChooser.css"
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Flickity from 'react-flickity-component'
+import ReactDOM from 'react-dom';
 
 class FactionChooser extends React.Component {
     constructor() {
         super();
+        this.carousel = React.createRef();
+        this.state = {
+            seconds: 0
+        };
+    }
+
+    componentDidMount() {
+        this.forceUpdate()
+    }
+
+    tick() {
+        this.setState(prevState => ({
+            seconds: prevState.seconds + 1
+        }));
+        if (this.state.seconds > 0) {
+            let car = this.refs.carousel;
+            car.style.width = '60px';
+        }
+    }
+
+    componentDidMount() {
+        this.interval = setInterval(() => this.tick(), 1000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
     }
 
     render() {
         return (
-            <div>
-                <h1 className="title">Choose your faction </h1>
-                <div className="carousel" data-flickity='{ "freeScroll": false, "wrapAround": true, "prevNextButtons": false, "pageDots": false }'>
+            <div ref={this.carousel}>
+                <h1 className="title">Seconds: {this.state.seconds}</h1>
+                <div className="carousel" data-flickity='{ "freeScroll": false, "wrapAround": true, "prevNextButtons": false, "pageDots": false , "reloadOnUpdate": true}'>
                     <div className="carousel-cell">
                         <div className="header scavenger">Scavenger</div>
                         <div className="cardImage scavenger">
@@ -36,5 +64,8 @@ class FactionChooser extends React.Component {
             </div>
     )
     }
+
+
 }
+
 export default FactionChooser;

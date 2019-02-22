@@ -43,9 +43,9 @@ body {
     background: radial-gradient(#e7e7e7, #ffffff);
 }
 .statTitle {
-    font-family: "Orkney Light";
+    font-family: Futura;
     color: #737881;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 .divider{
