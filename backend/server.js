@@ -123,6 +123,7 @@ io.sockets.on('connection', function (socket) {
 
 function signup(data, socket) {
     console.log("signup:    " + data.email);
+    console.log("password:  " + data.password);
     const newUser = new User(data);
     newUser.save( function(error) {
         if (error) {

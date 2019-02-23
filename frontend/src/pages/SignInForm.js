@@ -24,20 +24,21 @@ class SignInForm extends React.Component {
         // { email: true, password: false }                 if e-mail registered and password incorrect
         // { email: true, password: true, token: jwt }      if e-mail registered and password correct, the jwt token
         //                                                      is further on stored in a cookie in the browser
+        const that = this;
         this.context.on("signin", function (data) {
             if (!data.email)
                 swal("Invalid e-mail", {icon: "error"});
             else if (!data.password)
-                alert(JSON.stringify(data));
-                // alert("Invalid password");
+                swal("Invalid password", {icon: "error"});
             else {
+                swal("Enjoy the game!", {icon: "success"});
                 const options = {
                     path: '/',
                     expires: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)   // expires in 24 hours
                 };
                 cookies.set('token', data.token, options);
                 cookies.set('name', data.name, options);
-                this.setState({redirect: true});
+                that.setState({redirect: true});
             }
         })
     }
