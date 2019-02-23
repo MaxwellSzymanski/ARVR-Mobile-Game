@@ -174,11 +174,13 @@ function newMail(data) {
 
 async function signin(data, socket) {
     console.log(data.password);
+    console.log(data.email);
     User.findOne({ email : data.email }, async function(error, result) {
         if (error) throw error;
         if (result === null) {
             socket.emit("signin", {"email": false});
         } else {
+            console.log(result.email);
             const value = await result.checkPassword(data.password);
             setTimeout( function() {
                 console.log("checkPassword:   " + value);
