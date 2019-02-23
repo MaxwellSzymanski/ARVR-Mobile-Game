@@ -73,8 +73,7 @@ class PlayerLayer extends React.Component {
     componentDidMount() {
         this.interval = setInterval(() => {
             this.sendLocation();
-            if (this.state.locationEnabled)
-                this.addPlayerLayer();
+            this.addPlayerLayer();
         }, 500);
 
         this.context.on("playerdata", (data) => {this.receivePlayer(data)});

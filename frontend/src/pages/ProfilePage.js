@@ -28,11 +28,12 @@ class ProfilePage extends React.Component {
     }
 
     componentWillMount() {
-        this.socket.emit("stats", {token: cookies.get('token')});
+        this.state.socket.emit("stats", {token: cookies.get('token')});
     }
 
     componentDidMount() {
-        this.socket.on("stats", (data) => {
+
+        this.state.socket.on("stats", (data) => {
             this.setState({
                 attack: data.attack,
                 health: data.health,
@@ -45,12 +46,12 @@ class ProfilePage extends React.Component {
                 items: 13,
             });
         });
-        this.socket.on("photo", (data) => {
+        this.state.socket.on("photo", (data) => {
             this.setState({
                 encodedPic: data.image
             })
         });
-        this.socket.on("signout", (data) => {
+        this.state.socket.on("signout", (data) => {
             if (data.success) {
                 cookies.remove("token");
                 cookies.remove("name");
@@ -76,7 +77,7 @@ class ProfilePage extends React.Component {
 
     sendLocation() {
         navigator.geolocation.getCurrentPosition((position) => {
-            this.context.emit("location", {
+            this.state.socket.emit("location", {
                 token: cookies.get('token'),
                 longitude: position.coords.longitude,
                 latitude: position.coords.latitude,
@@ -102,7 +103,7 @@ class ProfilePage extends React.Component {
     logOut() {
         // swal("Log out button has been pressed.", {icon: "success"});
 
-        this.socket.emit("signout", {token: cookies.get("token")});
+        this.state.socket.emit("signout", {token: cookies.get("token")});
     }
 
     renderRedirect = () => {
