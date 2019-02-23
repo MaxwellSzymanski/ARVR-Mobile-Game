@@ -2,8 +2,6 @@ import React from 'react';
 
 class CameraButton extends React.Component {
 
-
-
   render() {
     let button;
     if (localStorage.getItem("SelfieTaken") === null) {
@@ -12,9 +10,8 @@ class CameraButton extends React.Component {
       button = <img  src={require('../WOLF.png')}/>
     }
 
-    return( {button});
+    return( {button} );
   }
-
 }
 
 export default CameraButton;

@@ -13,7 +13,7 @@ body {
 
 .carousel-cell {
     width: 60%;
-    height: 350px;
+    height: 300px;
     margin-right: 10px;
     background: #ffffff;
     border-radius: 20px;
@@ -22,35 +22,14 @@ body {
 
 .image {
     background-image: url(../assets/artwork/lonewolf.jpg);
-
 }
 
 .carousel-cell.is-selected {
     background: #d3cece;
     width: 60%;
-    height: 400px;
+    height: 330px;
     margin-top: -20px;
 }
-
-/* Page dots */
-.flickity-page-dots {
-    bottom: 0px;
-    width: 100px;
-}
-
-.flickity-page-dots .dot {
-    width: 12px;
-    height: 12px;
-    opacity: 1;
-    background: transparent;
-    border: 2px solid white;
-    border-radius: 10px;
-}
-
-.flickity-page-dots .dot.is-selected {
-    background: white;
-}
-
 
 /* Text */
 .title {
@@ -124,7 +103,7 @@ body {
      font-family: "Futura";
      font-weight: bold;
      font-size: 20px;
-     margin-top: 130px;
+     margin-top: 100px;
      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
  }
 

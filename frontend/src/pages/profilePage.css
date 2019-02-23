@@ -7,6 +7,7 @@ body {
     padding-top: 20px;
     margin: 40px auto;
     margin-top: 20px;
+    margin-bottom: 30px;
     resize: horizontal;
     height: 300px;
     background-color: white;
@@ -42,9 +43,9 @@ body {
     background: radial-gradient(#e7e7e7, #ffffff);
 }
 .statTitle {
-    font-family: "Orkney Light";
+    font-family: Futura;
     color: #737881;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 .divider{
@@ -86,7 +87,7 @@ body {
     margin-left: auto;
     resize: horizontal;
     max-width: 500px;
-    height: 190px;
+    height: 150px;
     background-color: white;
     border-radius: 15px;
     position: center;
@@ -100,8 +101,9 @@ body {
     top : -100px;
     height : 140px;
     width : 140px;
-    background-size: cover;
+    background-size: 100% 100%;
     background-repeat: no-repeat;
+    background-position: center;
     border-radius: 15px;
     margin: 0 auto;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
@@ -109,9 +111,9 @@ body {
 }
 
 img {
-    height: 100%;
-    width: auto;
+    width: 100%;
 }
+
 
 .container > * {
     display: inline-block;
@@ -201,5 +203,36 @@ img {
 .xpGained {
     padding: 5px;
     border-radius: 20px;
-    width: 70%; background-color: #910f0f;
+    width: 70%;
+    background-color: #910f0f;
+    -webkit-transition: width 1s ease-in;
+}
+.xpGained:hover {
+    width: 90%;
+}
+
+.logOut {
+    width: 70%;
+    max-width: 500px;
+    height: 50px;
+    background-color: #490b0b;
+    border: none;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+    font-size: 16pt;
+    font-family: Futura;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+    transition: color 500ms,
+                background-color 500ms,
+                margin 100ms;
+
+}
+.logOut:hover {
+    background-color: #290707;
+    color: lightgrey;
+}
+
+.logOut:active {
+    margin: 2px;
 }

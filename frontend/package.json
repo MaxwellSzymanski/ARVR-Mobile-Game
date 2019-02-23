@@ -9,6 +9,7 @@
     "face-api.js": "^0.16.2",
     "flickity": "^2.2.0",
     "leaflet": "^1.4.0",
+    "pure-react-carousel": "^1.18.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.0",
     "react-flickity-component": "^3.2.0",
@@ -16,8 +17,10 @@
     "react-leaflet": "^2.2.0",
     "react-loading-screen": "0.0.17",
     "react-poppop": "^1.5.0",
+    "react-responsive-carousel": "^3.1.47",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^2.1.5",
+    "slick-carousel": "^1.8.1",
     "socket.io-client": "^2.2.0",
     "sweetalert": "^2.1.2",
     "universal-cookie": "^3.0.7"
