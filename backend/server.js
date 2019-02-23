@@ -180,17 +180,19 @@ async function signin(data, socket) {
             socket.emit("signin", {"email": false});
         } else {
             const value = await result.checkPassword(data.password);
-            console.log("checkPassword:   " + value);
-            if (value) {
-                socket.emit("signin", {
-                    email: true,
-                    password: value,
-                    token: result.createToken(),
-                    name: result.name
-                });
-            } else {
-                socket.emit("signin", {"email": true, "password": value});
-            }
+            setTimeout( function() {
+                console.log("checkPassword:   " + value);
+                if (value) {
+                    socket.emit("signin", {
+                        email: true,
+                        password: value,
+                        token: result.createToken(),
+                        name: result.name
+                    });
+                } else {
+                    socket.emit("signin", {"email": true, "password": value});
+                }
+            }, 750);
         }
     });
 }
