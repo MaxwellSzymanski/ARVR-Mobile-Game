@@ -27,11 +27,8 @@ class ProfilePage extends React.Component {
         };
     }
 
-    componentWillMount() {
-        this.state.socket.emit("stats", {token: cookies.get('token')});
-    }
-
     componentDidMount() {
+        this.context.emit("stats", {token: cookies.get('token')});
 
         this.state.socket.on("stats", (data) => {
             this.setState({
