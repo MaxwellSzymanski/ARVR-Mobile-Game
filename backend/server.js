@@ -186,8 +186,10 @@ async function signin(data, socket) {
         if (result === null) {
             socket.emit("signin", {"email": false});
         } else {
-            console.log("result.email       " + result.email);
-            const value = await result.checkPassword(data.password);
+            const pass = data.password;
+            console.log("result.email     " + result.email);
+            console.log(result.password);
+            const value = await result.checkPassword(pass);
             console.log("checkPassword:   " + value);
             if (value) {
                 socket.emit("signin", {

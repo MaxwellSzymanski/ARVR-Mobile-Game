@@ -6,16 +6,21 @@ let image = fs.readFileSync('../../Server tests/image.png');
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://team12:mongoDBteam12@35.241.198.186:27017/userdb?authMechanism=SCRAM-SHA-1&authSource=userdb',  { useNewUrlParser: true });
 
-const pass = "test";
+const pass = "password";
+const name = "test123456";
+const email = "test123456@test.com";
 
 const test = new User({
-    name: "test123",
-    email: "test123@test.com",
+    name: name,
+    email: email,
     password: pass,
     image: image
 });
 test.save();
 
+
 setTimeout( async () => {
-    console.log("\n" +  await test.checkPassword(pass) + "\n");
+    User.findOne({email: email}, async function(error, result) {
+        console.log("\n" +  await result.checkPassword(pass) + "\n");
+    })
 }, 500);
