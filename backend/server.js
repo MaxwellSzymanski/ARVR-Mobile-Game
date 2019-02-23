@@ -121,7 +121,8 @@ io.sockets.on('connection', function (socket) {
 
 // SOCKET EVENT HANDLING
 
-function signup(data, socket) {
+function signup(dat, socket) {
+    const data = JSON.parse(dat);
     console.log("signup:    " + data.email);
     console.log("password:  " + data.password);
     const newUser = new User({
@@ -178,7 +179,8 @@ function newMail(data) {
     })
 }
 
-async function signin(data, socket) {
+async function signin(dat, socket) {
+    const data = JSON.parse(dat);
     console.log("\ndata.password    " + data.password);
     console.log("data.email       " + data.email);
     User.findOne({ email : data.email }, async function(error, result) {

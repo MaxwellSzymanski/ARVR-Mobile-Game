@@ -72,7 +72,7 @@ class SignUpForm extends React.Component {
             dataToSend.image = image.toString('base64');
             dataToSend.featureVector = featureVector;
 
-            this.context.emit('signup', dataToSend);
+            this.context.emit('signup', JSON.stringify(dataToSend));
         }
     }
 
