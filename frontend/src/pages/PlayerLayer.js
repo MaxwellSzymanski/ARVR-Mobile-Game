@@ -73,7 +73,7 @@ class PlayerLayer extends React.Component {
     componentDidMount() {
         this.interval = setInterval(() => {
             this.sendLocation();
-            // if (this.state.locationEnabled)
+            if (this.state.locationEnabled)
                 this.addPlayerLayer();
         }, 500);
 
@@ -92,7 +92,7 @@ class PlayerLayer extends React.Component {
             this.setState({
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
-                accuracy: position.coords.accuracy
+                accuracy: Math.round(position.coords.accuracy)
             });
 
             this.context.emit("location", {

@@ -159,6 +159,7 @@ function verifyEmail(data, socket) {
 }
 
 function newMail(data) {
+    console.log("            New mail requested.");
     jwt.verify(data.token, secret, async function(err, token) {
         if (err) {
             console.log("(newMail)       invalid token");

@@ -22,16 +22,17 @@ class ProfilePage extends React.Component {
             deaths: 3,
             items: 13,
             encodedPic: require("../assets/temporary/profileImage.png"),
-            loggedOut: false
+            loggedOut: false,
+            socket: this.context
         };
     }
 
     componentWillMount() {
-        this.context.emit("stats", {token: cookies.get('token')});
+        this.socket.emit("stats", {token: cookies.get('token')});
     }
 
     componentDidMount() {
-        this.context.on("stats", (data) => {
+        this.socket.on("stats", (data) => {
             this.setState({
                 attack: data.attack,
                 health: data.health,
@@ -44,12 +45,12 @@ class ProfilePage extends React.Component {
                 items: 13,
             });
         });
-        this.context.on("photo", (data) => {
+        this.socket.on("photo", (data) => {
             this.setState({
                 encodedPic: data.image
             })
         });
-        this.context.on("signout", (data) => {
+        this.socket.on("signout", (data) => {
             if (data.success) {
                 cookies.remove("token");
                 cookies.remove("name");
@@ -63,6 +64,24 @@ class ProfilePage extends React.Component {
         // Update XP bar
         const xp = (((10 + this.state.experience)/365)*100).toString() + '%';
         document.getElementById('xpBar').style.width = xp;
+
+        this.interval = setInterval(() => {
+            this.sendLocation();
+        }, 500);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
+    sendLocation() {
+        navigator.geolocation.getCurrentPosition((position) => {
+            this.context.emit("location", {
+                token: cookies.get('token'),
+                longitude: position.coords.longitude,
+                latitude: position.coords.latitude,
+            })
+        });
     }
 
     // Generate attribute boxes
@@ -83,7 +102,7 @@ class ProfilePage extends React.Component {
     logOut() {
         // swal("Log out button has been pressed.", {icon: "success"});
 
-        this.context.emit("signout", {token: cookies.get("token")});
+        this.socket.emit("signout", {token: cookies.get("token")});
     }
 
     renderRedirect = () => {
