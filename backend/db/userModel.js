@@ -81,7 +81,7 @@ Schema.pre('save', async function(){
 });
 
 Schema.methods.checkPassword = async function(password) {
-    return await bcrypt.compare(password, this.password);
+     return await bcrypt.compare(password, this.password);
 };
 
 Schema.methods.createToken = function() {

@@ -139,8 +139,6 @@ function signup(data, socket) {
             newUser.sendVerifMail();
         }
     });
-    const newActivePlayer = new ActivePlayer({playerid: data.name, location: data.position});
-    newActivePlayer.save();
 };
 
 function verifyEmail(data, socket) {
@@ -173,7 +171,9 @@ function newMail(data) {
     })
 }
 
-function signin(data, socket) {
+async function signin(data, socket) {
+    console.log(data);
+    console.log(JSON.stringify(data));
     User.findOne({ email : data.email }, async function(error, result) {
         if (error) throw error;
         if (result === null) {
@@ -181,25 +181,15 @@ function signin(data, socket) {
         } else {
             const value = await result.checkPassword(data.password);
             console.log("checkPassword:   " + await value);
-            if (!(await value))
-            socket.emit("signin", {"email": true, "password": value});
-        else {
+            if (await result.checkPassword(data.password)) {
                 socket.emit("signin", {
                     email: true,
                     password: value,
                     token: result.createToken(),
                     name: result.name
                 });
-                ActivePlayer.findOne({playerid: result.name}, function(error, act) {
-                    if (act === null) {
-                        const newActivePlayer = new ActivePlayer({playerid: result.name, location: data.position});
-                        newActivePlayer.save();
-                    } else {
-                        act.updateLocation = data.position;
-                        act.updated_at = Date.now();
-                        act.save();
-                    }
-                })
+            } else {
+                socket.emit("signin", {"email": true, "password": value});
             }
         }
     });
@@ -212,24 +202,8 @@ function signout(data, socket) {
             socket.emit("signout", {success:false});
             throw err;
         } else {
-            User.findById(token.id).then(
-                async function (user) {
-                if (user !== null)
-                    if (!(await user.checkToken(token))) {
-                    console.log("(signout)       invalid token");
-                    socket.emit("signout", {success:false});
-                } else {
-                    ActivePlayer.findOne({playerid: user.name}, (err, result) => {
-                        if (result !== null) {
-                        result.delete();
-                        socket.emit("signout", {success:true});
-                    } else {
-                        console.log("user not logged in");
-                        socket.emit("signout", {success:true});
-                    }
-                });
-                }
-            });
+            socket.emit("signout", {success: true});
+            delete game[token.name];
         }
     });
 }

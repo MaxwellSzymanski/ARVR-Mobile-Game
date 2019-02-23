@@ -72,7 +72,10 @@ class SignInForm extends React.Component {
             }
 
             this.state.position = position;
-            const dataToSend = this.state;
+            const dataToSend = {
+                email: this.state.email,
+                password: this.state.password,
+            };
 
             this.context.emit("signin", dataToSend);
         }
