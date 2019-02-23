@@ -123,11 +123,11 @@ io.sockets.on('connection', function (socket) {
 
 function signup(dat, socket) {
     const data = JSON.parse(dat);
-    console.log("signup:    " + data.email);
-    console.log("password:  " + data.password);
+    // console.log("signup:    " + data.email);
+    // console.log("password:  " + data.password);
     const newUser = new User({
         name: data.name,
-        password: data.password.toString(),
+        password: data.password,
         email: data.email,
         image: data.image,
         featureVector: data.featureVector
@@ -181,18 +181,17 @@ function newMail(data) {
 
 async function signin(dat, socket) {
     const data = JSON.parse(dat);
-    console.log("\ndata.password    " + data.password);
-    console.log("data.email       " + data.email);
+    // console.log("\ndata.password    " + data.password);
+    // console.log("data.email       " + data.email);
     User.findOne({ email : data.email }, async function(error, result) {
         if (error) throw error;
         if (result === null) {
             socket.emit("signin", {"email": false});
         } else {
-            const pass = data.password.toString();
+            const pass = data.password;
             console.log(pass);
             console.log("result.email     " + result.email);
-            console.log(result.password);
-            console.log(result);
+            // console.log(result.password);
             const value = await result.checkPassword(pass);
             console.log("checkPassword:   " + value);
             if (value) {
