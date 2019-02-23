@@ -44,12 +44,12 @@ class App extends Component {
               <Route exact path="/" component={FirstPage}> </Route>
               <Route exact path="/sign-in" component={FirstPage}> </Route>
               <Route exact path="/takePicture" component={CameraComp}> </Route>
-              <Route exact path="/map" component={Maps}> </Route>
+              {/*<Route exact path="/map" component={Maps}> </Route>*/}
               <Route exact path="/view" component={View}> </Route>
               <Route exact path="/imageConfirm" component={ImageConfirm}> </Route>
               <Route exact path="/landingPage" component={LandingPage}> </Route>
               <Route exact path="/verify" component={EmailVerif}> </Route>
-              <Route exact path="/trial" component={Trial}> </Route>
+              <Route exact path="/map" component={Trial}> </Route>
               <Route exact path="/profilePage" component={ProfilePage}> </Route>
               <Route exact path="/factionChooser" component={FactionChooser}> </Route>
               <Route exact path="/settings" component={Settings}> </Route>

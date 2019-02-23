@@ -90,8 +90,7 @@ Schema.methods.createToken = function() {
 
     return jwt.sign({
         id: this._id,
-        name: this.name,
-        // exp: parseInt(exp)
+        name: this.name
     }, secret, {expiresIn : exp});
 };
 

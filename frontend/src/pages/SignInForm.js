@@ -1,12 +1,9 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import axios from "axios";
 import Cookies from 'universal-cookie';
 import SocketContext from "../socketContext";
-import SignUpForm from "./SignUpForm";
+import swal from '@sweetalert/with-react';
 const cookies = new Cookies();
-
-const url = require('./serveradress.js');
 
 class SignInForm extends React.Component {
     constructor() {
@@ -29,7 +26,7 @@ class SignInForm extends React.Component {
         //                                                      is further on stored in a cookie in the browser
         this.context.on("signin", function (data) {
             if (!data.email)
-                alert("Invalid e-mail");
+                swal("Invalid e-mail", {icon: "error"});
             else if (!data.password)
                 alert(JSON.stringify(data));
                 // alert("Invalid password");

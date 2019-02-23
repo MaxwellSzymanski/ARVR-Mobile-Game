@@ -65,19 +65,6 @@ const server = https.createServer(https_options, async function (req, res) {
 
         console.log("\n\n\nRequest:    " + request + "    ===============    current time:    " + new Date().toLocaleTimeString());
         switch (request) {
-            case "signout":
-                signout(obj, res);
-                break;
-            case "jwt":
-                verifyJWT(obj, res);
-                break;
-            case "radar":
-                radar(obj, res);
-                break;
-            case "sendsignal":
-                sendSignal(obj);
-                res.end();
-                break;
             case "fight":
                 fight(obj);
                 res.end();
@@ -96,19 +83,18 @@ const server = https.createServer(https_options, async function (req, res) {
                 console.log(" ----------------------- \n\n\n");
                 res.end();
                 break;
-        }
-        // console.log("\n");
-    });
+    }
+    // console.log("\n");
+});
 }).listen(port);
 console.log("\n\n    Server listening on localhost:" + port + "\n\n");
 
-
-// var server = https.createServer(https_options);
 var io = require('socket.io')(server);
-// server.listen(port);
 
 io.sockets.on('connection', function (socket) {
     console.log("new connection");
+
+    socket.on("jwt", (data) => {verifyJWT(data, socket)});
 
     socket.on('signup', (data) => {signup(data, socket)});
 
@@ -129,7 +115,7 @@ io.sockets.on('connection', function (socket) {
     socket.on("handshake", (data) => {})
 
     socket.on("disconnect", () => {removePlayer(socket)});
-    
+
 });
 
 
@@ -165,9 +151,9 @@ function verifyEmail(data, socket) {
         } else {
             User.findById(token.id).then(
                 async function(user) {
-                    const result = await user.verify(data.code);
-                    socket.emit("verify", {success: result});
-                });
+                const result = await user.verify(data.code);
+                socket.emit("verify", {success: result});
+            });
         }
     })
 }
@@ -179,7 +165,7 @@ function newMail(data) {
             throw err;
         } else {
             User.findById(token.id).then(
-                async function(user) {
+                function(user) {
                     user.sendVerifMail();
             });
         }
@@ -195,8 +181,8 @@ function signin(data, socket) {
             const value = await result.checkPassword(data.password);
             console.log("checkPassword:   " + await value);
             if (!(await value))
-                socket.emit("signin", {"email": true, "password": value});
-            else {
+            socket.emit("signin", {"email": true, "password": value});
+        else {
                 socket.emit("signin", {
                     email: true,
                     password: value,
@@ -222,27 +208,27 @@ function signout(data, socket) {
     jwt.verify(data.token, secret, async function(err, token) {
         if (err) {
             console.log("(signout)       invalid token");
-            socket.emit("signout", {result:false});
+            socket.emit("signout", {success:false});
             throw err;
         } else {
             User.findById(token.id).then(
                 async function (user) {
-                    if (user !== null)
-                        if (!(await user.checkToken(token))) {
-                            console.log("(signout)       invalid token");
-                            socket.emit("signout", {result:false});
-                        } else {
-                            ActivePlayer.findOne({playerid: user.name}, (err, result) => {
-                                if (result !== null) {
-                                    result.delete();
-                                    socket.emit("signout", {result:true});
-                                } else {
-                                    console.log("user not logged in");
-                                    socket.emit("signout", {result:true});
-                                }
-                            });
-                        }
+                if (user !== null)
+                    if (!(await user.checkToken(token))) {
+                    console.log("(signout)       invalid token");
+                    socket.emit("signout", {success:false});
+                } else {
+                    ActivePlayer.findOne({playerid: user.name}, (err, result) => {
+                        if (result !== null) {
+                        result.delete();
+                        socket.emit("signout", {success:true});
+                    } else {
+                        console.log("user not logged in");
+                        socket.emit("signout", {success:true});
+                    }
                 });
+                }
+            });
         }
     });
 }
@@ -260,7 +246,7 @@ function stats(data, socket) {
                         socket.emit("stats", user.getUserData());
                         socket.emit("photo", {image: user.image} )
                     }
-            });
+                });
         }
     })
 }
@@ -333,6 +319,32 @@ function removePlayer(socket) {
     })
 }
 
+function verifyJWT(data, socket) {
+    if (!data.token) return;
+    jwt.verify(data.token, secret, async function(err, token) {
+        if (err) {
+            console.log("invalid token");
+            socket.emit("jwt", {loggedIn: false, verified: false});
+            throw err;
+        }
+        User.findById(token.id).then(
+            async function (user) {
+                let jwtValid = false;
+                let emailVerified = false;
+                if (user !== null) {
+                    jwtValid = await user.checkToken(token);
+                    emailVerified = user.verified;
+                }
+                console.log(jwtValid);
+                socket.emit("jwt", {
+                    loggedIn: jwtValid,
+                    verified: emailVerified
+            });
+        });
+    });
+}
+
+
 
 // ============================================================================
 
@@ -340,34 +352,6 @@ function removePlayer(socket) {
 
 // ============================================================================
 
-
-function verifyJWT(obj, res) {
-    jwt.verify(obj.token, secret, async function(err, token) {
-        if (err) {
-            console.log("invalid token");
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.setHeader("Content-Type", "ERROR");
-            res.end();
-            throw err;
-        } else {
-            User.findById(token.id).then(
-                async function (user) {
-                    let jwtValid = false;
-                    let emailVerified = false;
-                    if (user !== null) {
-                        jwtValid = await user.checkToken(token);
-                        emailVerified = user.verified;
-                    }
-                    console.log(jwtValid);
-                    res.setHeader('Access-Control-Allow-Origin', '*');
-                    res.setHeader("Content-Type", "application/json");
-                    res.write(JSON.stringify({jwt: jwtValid,
-                                              verified: emailVerified}));
-                    res.end();
-                });
-        }
-    });
-}
 
 function getFrequency(jsonData,res){
     jsonData.frequency = frequency;
@@ -382,7 +366,6 @@ function updateFrequency(jsonData,res){
     frequency = jsonData.frequency;
     jsonData.update = "true";
     res.setHeader('Access-Control-Allow-Origin', '*');
-    // res.setHeader("Content-Type", "ERROR");
     res.write(JSON.stringify(jsonData));
     res.end();
 }

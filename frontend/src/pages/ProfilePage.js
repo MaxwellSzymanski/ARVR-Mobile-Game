@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import "./profilePage.css"
 import Cookies from 'universal-cookie';
 import SocketContext from "../socketContext";
@@ -21,7 +21,8 @@ class ProfilePage extends React.Component {
             kills: 8,
             deaths: 3,
             items: 13,
-            encodedPic: require("../assets/temporary/profileImage.png")
+            encodedPic: require("../assets/temporary/profileImage.png"),
+            loggedOut: false
         };
     }
 
@@ -48,6 +49,16 @@ class ProfilePage extends React.Component {
                 encodedPic: data.image
             })
         });
+        this.context.on("signout", (data) => {
+            if (data.success) {
+                cookies.remove("token");
+                cookies.remove("name");
+                swal("Logged out!", {icon: "success"});
+                this.setState({loggedOut:true});
+            } else {
+                swal("Something went wrong. Please try again.", {icon: "error"});
+            }
+        });
 
         // Update XP bar
         const xp = (((10 + this.state.experience)/365)*100).toString() + '%';
@@ -70,13 +81,19 @@ class ProfilePage extends React.Component {
     }
 
     logOut() {
-        swal("Logged out!", {icon:"success"});
-        //TODO
+        swal("Log out button has been pressed.", {icon: "success"});
+
+        this.context.emit("signout", {token: cookies.get("token")});
     }
+
+    renderRedirect = () => {
+        if (this.state.loggedOut) {return <Redirect to="/signin" />}
+    };
 
     render() {
         return (
             <div>
+                {this.renderRedirect()}
 
                 {/* Buttons and profile */}
 
@@ -145,7 +162,7 @@ class ProfilePage extends React.Component {
                         </div>
                     </div>
                 </div>
-                <button className="logOut" onClick={this.logOut}> Log out </button>
+                <button className="logOut" onClick={this.logOut()}> Log out </button>
             </div>
         );
     }

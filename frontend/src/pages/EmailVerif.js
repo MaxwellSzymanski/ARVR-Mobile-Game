@@ -140,7 +140,7 @@ class EmailVerif extends React.Component {
                     </form>
                 </div>
                 <div className="FormCenter">
-                    <form onSubmit={this.newCode} className="FormFields">
+                    <form onSubmit={this.newCode()} className="FormFields">
                         <div className="FormField">
                             {!this.state.firstTry && !this.state.loading && <button className="FormField__Button mr-20">Send me another code</button>}
                         </div>
