@@ -23,7 +23,6 @@ class ProfilePage extends React.Component {
             items: 13,
             encodedPic: require("../assets/temporary/profileImage.png"),
             loggedOut: false,
-            socket: this.context
         };
     }
 
@@ -75,7 +74,7 @@ class ProfilePage extends React.Component {
 
     sendLocation() {
         navigator.geolocation.getCurrentPosition((position) => {
-            this.state.socket.emit("location", {
+            this.context.emit("location", {
                 token: cookies.get('token'),
                 longitude: position.coords.longitude,
                 latitude: position.coords.latitude,
@@ -101,7 +100,7 @@ class ProfilePage extends React.Component {
     logOut() {
         // swal("Log out button has been pressed.", {icon: "success"});
 
-        this.state.socket.emit("signout", {token: cookies.get("token")});
+        this.context.emit("signout", {token: cookies.get("token")});
     }
 
     renderRedirect = () => {
