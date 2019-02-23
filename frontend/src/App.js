@@ -15,7 +15,7 @@ import ImageConfirm from "./pages/ImageConfirm";
 import EmailVerif from "./pages/EmailVerif.js";
 import ProfilePage from "./pages/ProfilePage";
 import CapturePlayer from "./pages/CapturePlayer.js";
-import FactionChooser from "./pages/FactionChooser.js";
+import FactionChooser from "./pages/FactionChooser";
 import Settings from "./pages/Settings.js";
 
 const url = require('./pages/serveradress.js');
