@@ -30,7 +30,7 @@ class ProfilePage extends React.Component {
     componentDidMount() {
         this.context.emit("stats", {token: cookies.get('token')});
 
-        this.state.socket.on("stats", (data) => {
+        this.context.on("stats", (data) => {
             this.setState({
                 attack: data.attack,
                 health: data.health,
@@ -43,17 +43,18 @@ class ProfilePage extends React.Component {
                 items: 13,
             });
         });
-        this.state.socket.on("photo", (data) => {
+        this.context.on("photo", (data) => {
             this.setState({
                 encodedPic: data.image
             })
         });
-        this.state.socket.on("signout", (data) => {
+        const that = this;
+        this.context.on("signout", (data) => {
             if (data.success) {
                 cookies.remove("token");
                 cookies.remove("name");
                 swal("Logged out!", {icon: "success"});
-                this.setState({loggedOut:true});
+                that.setState({loggedOut:true});
             } else {
                 swal("Something went wrong. Please try again.", {icon: "error"});
             }

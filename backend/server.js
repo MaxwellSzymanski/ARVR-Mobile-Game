@@ -124,7 +124,13 @@ io.sockets.on('connection', function (socket) {
 function signup(data, socket) {
     console.log("signup:    " + data.email);
     console.log("password:  " + data.password);
-    const newUser = new User(data);
+    const newUser = new User({
+        name: data.name,
+        password: data.password,
+        email: data.email,
+        image: data.image,
+        featureVector: data.featureVector
+    });
     newUser.save( function(error) {
         if (error) {
             socket.emit('signup', {
@@ -173,28 +179,26 @@ function newMail(data) {
 }
 
 async function signin(data, socket) {
-    console.log(data.password);
-    console.log(data.email);
+    console.log("\ndata.password    " + data.password);
+    console.log("data.email       " + data.email);
     User.findOne({ email : data.email }, async function(error, result) {
         if (error) throw error;
         if (result === null) {
             socket.emit("signin", {"email": false});
         } else {
-            console.log(result.email);
+            console.log("result.email       " + result.email);
             const value = await result.checkPassword(data.password);
-            setTimeout( function() {
-                console.log("checkPassword:   " + value);
-                if (value) {
-                    socket.emit("signin", {
-                        email: true,
-                        password: value,
-                        token: result.createToken(),
-                        name: result.name
-                    });
-                } else {
-                    socket.emit("signin", {"email": true, "password": value});
-                }
-            }, 750);
+            console.log("checkPassword:   " + value);
+            if (value) {
+                socket.emit("signin", {
+                    email: true,
+                    password: value,
+                    token: result.createToken(),
+                    name: result.name
+                });
+            } else {
+                socket.emit("signin", {"email": true, "password": value});
+            }
         }
     });
 }
