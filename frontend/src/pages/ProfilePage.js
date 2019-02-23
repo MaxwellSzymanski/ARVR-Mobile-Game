@@ -81,7 +81,7 @@ class ProfilePage extends React.Component {
     }
 
     logOut() {
-        swal("Log out button has been pressed.", {icon: "success"});
+        // swal("Log out button has been pressed.", {icon: "success"});
 
         this.context.emit("signout", {token: cookies.get("token")});
     }
@@ -162,7 +162,7 @@ class ProfilePage extends React.Component {
                         </div>
                     </div>
                 </div>
-                <button className="logOut" onClick={this.logOut()}> Log out </button>
+                <button className="logOut" onClick={this.logOut}> Log out </button>
             </div>
         );
     }
