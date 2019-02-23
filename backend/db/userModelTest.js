@@ -7,8 +7,8 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://team12:mongoDBteam12@35.241.198.186:27017/userdb?authMechanism=SCRAM-SHA-1&authSource=userdb',  { useNewUrlParser: true });
 
 const pass = "password";
-const name = "test123456";
-const email = "test123456@test.com";
+const name = "test123456789";
+const email = "test123456789@test.com";
 
 const test = new User({
     name: name,
@@ -21,6 +21,7 @@ test.save();
 
 setTimeout( async () => {
     User.findOne({email: email}, async function(error, result) {
+        console.log(result);
         console.log("\n" +  await result.checkPassword(pass) + "\n");
     })
-}, 500);
+}, 1000);

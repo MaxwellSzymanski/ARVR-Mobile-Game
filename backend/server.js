@@ -126,7 +126,7 @@ function signup(data, socket) {
     console.log("password:  " + data.password);
     const newUser = new User({
         name: data.name,
-        password: data.password,
+        password: data.password.toString(),
         email: data.email,
         image: data.image,
         featureVector: data.featureVector
@@ -186,10 +186,11 @@ async function signin(data, socket) {
         if (result === null) {
             socket.emit("signin", {"email": false});
         } else {
-            const pass = data.password;
+            const pass = data.password.toString();
             console.log(pass);
             console.log("result.email     " + result.email);
             console.log(result.password);
+            console.log(result);
             const value = await result.checkPassword(pass);
             console.log("checkPassword:   " + value);
             if (value) {
