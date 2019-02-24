@@ -31,7 +31,12 @@ class App extends Component {
     const socket = this.state.socket;
     socket.on("connect", function() {
       console.log("Component will mount\nsocket.connected: " + socket.connected);
-    })
+    });
+
+    window.addEventListener('resize', () => {
+      let vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    });
   }
 
 
