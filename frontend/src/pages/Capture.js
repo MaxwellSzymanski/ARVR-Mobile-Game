@@ -69,25 +69,22 @@ class Capture extends React.component {
     photo.setAttribute('src', data);
   }
 
-render() {
-
-  const Camera = (props) => (<div className="camera"
-    style={ styles.box }
-  >
+  render() {
+    const Camera = (props) => (<div className="camera"
+                                    style={ styles.box }>
     <video id="video"
-      style={ styles.picSize }
-    ></video>
+      style={ styles.picSize }> </video>
     <a id="startButton"
       onClick={ props.handleStartClick }
       style={ styles.button }
     >Take photo</a>
   </div>
-);
+  );
 
-const Photo = (props) => (
-<div className="output"
+  const Photo = (props) => (
+  <div className="output"
   style={ styles.box }
->
+  >
   <img id="photo" alt="Your photo"
     style={ styles.picSize }
   />
@@ -95,8 +92,8 @@ const Photo = (props) => (
     onClick={ props.handleSaveClick }
     style={ styles.button }
   >Save Photo</a>
-</div>
-);
+  </div>
+  );
 
   return (
   <div className="capture"
@@ -108,12 +105,11 @@ const Photo = (props) => (
     <canvas id="canvas"
       style={ styles.picSize }
       hidden
-    ></canvas>
+    > </canvas>
     <Photo />
   </div>
-);
-}
-
+  );
+  }
 
 }
 

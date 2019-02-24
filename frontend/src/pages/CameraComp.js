@@ -12,27 +12,27 @@ class CameraComp extends React.Component {
     state = {
         redirect : false,
         picture: null
-    }
+    };
 
     setRedirect = () => {
         this.setState({redirect: true})
-    }
+    };
 
     renderRedirect = () => {
         if (this.state.redirect) {return <Redirect to="/imageConfirm" />}
-    }
+    };
 
     async onTakePhoto (dataUri) {
         // TODO: Disable Camera
-        var photoSrc = dataUri;
-        var photo = new Image;
+        let photoSrc = dataUri;
+        let photo = new Image;
         photo.src = photoSrc;
         console.log(photo);
 
-        var fv = await getFeatureVector(photo);
+        let fv = await getFeatureVector(photo);
 
         if (fv === null) {
-          console.log("No face detected!")
+          console.log("No face detected!");
           swal({
               title: "No face detected",
               text: "Make sure you are facing the camera with good lighting conditions.",
@@ -74,7 +74,7 @@ class CameraComp extends React.Component {
     render () {
       if (isSafari || isIOS) return (
           <div>
-              <span style={{margin:'20px'}}></span>
+              <span style={{margin:'20px'}}> </span>
               <div className="polaroid" style={{width:'500px'}}>
                   <ImageUploader
                       withIcon={true}
@@ -88,9 +88,9 @@ class CameraComp extends React.Component {
                       singleImage={true}
                   />
               </div>
-              <button className="smallButton info" style={{marginTop:'20px'}} onClick={this.showInfo}></button>
+              <button className="smallButton info" style={{marginTop:'20px'}} onClick={this.showInfo}> </button>
           </div>
-    )
+    );
 
     return (
       <div className="background">
