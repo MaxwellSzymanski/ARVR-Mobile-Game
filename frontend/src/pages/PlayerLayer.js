@@ -3,11 +3,9 @@ import { Marker, Popup } from 'react-leaflet';
 import '../App.css';
 import L from 'leaflet';
 import Cookies from 'universal-cookie';
-import PopPop from 'react-poppop'
 import SocketContext from "../socketContext";
 
 const cookies = new Cookies();
-const url = require('./serveradress.js');
 
 var myIcon = L.icon({
     iconUrl: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4Igp3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIKdmlld0JveD0iMCAwIDIyNCAyMjQiCnN0eWxlPSIgZmlsbDojMDAwMDAwOyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJub256ZXJvIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWxpbmVjYXA9ImJ1dHQiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiIHN0cm9rZS1taXRlcmxpbWl0PSIxMCIgc3Ryb2tlLWRhc2hhcnJheT0iIiBzdHJva2UtZGFzaG9mZnNldD0iMCIgZm9udC1mYW1pbHk9Im5vbmUiIGZvbnQtd2VpZ2h0PSJub25lIiBmb250LXNpemU9Im5vbmUiIHRleHQtYW5jaG9yPSJub25lIiBzdHlsZT0ibWl4LWJsZW5kLW1vZGU6IG5vcm1hbCI+PHBhdGggZD0iTTAsMjI0di0yMjRoMjI0djIyNHoiIGZpbGw9Im5vbmUiPjwvcGF0aD48ZyBmaWxsPSIjYmIxZDBjIj48cGF0aCBkPSJNMTg4LjEzMzc1LDQuNDcxMjVjLTAuODA2NCwwLjAwNTYgLTEuNjA2ODUsMC4yMzQ1IC0yLjMwMTI1LDAuNjgyNWMtMC40NDgsMC4yNjg4IC0yLjU1NjA1LDEuNTY2MjUgLTUuODcxMjUsMy44MDYyNWMwLDAgLTAuMjI1NzUsMC4xNzc0NSAtMC42NzM3NSwwLjQ0NjI1Yy02LjAwMzIsNC40OCAtNTAuMjYzNSwzOC4xMjY1NSAtNjIuODA3NSw3NS43MTM3NWwyMi40LC00LjQ4YzAsMCAtNDEuODg2NiwzNy42NzM2NSAtNTYuODA1LDEwMC45MzEyNWMwLC0wLjA0NDggLTEuOTk1LDguODMwMTUgLTIuNTU1LDE0Ljc0Mzc1YzAuNzYxNiwxLjc0NzIgMS41MjMyLDMuNTM0NjUgMi4yNCw1LjQxNjI1YzAuMDQ0OCwwLjEzNDQgMi41MDQ2LDYuNzE4OTUgMy41MzUsMTAuMTIzNzVjMC41ODI0LDEuODgxNiAyLjMzMzgsMy4xODUgNC4zMDUsMy4xODVoNDQuOGMxLjk3MTIsMCAzLjcyMjYsLTEuMzAzNCA0LjMwNSwtMy4xODVjMTYuODQ0OCwtNTQuNzkwNCA1My40MDA1NSwtNjMuNzg4OSA1NC45MjM3NSwtNjQuMTAyNWMxLjM4ODgsLTAuMzEzNiAyLjU1MDEsLTEuMjk4NSAzLjEzMjUsLTIuNjQyNWwxMy40NCwtMzEuMzZjMC42MjcyLC0xLjQzMzYgMC40NTA4LC0zLjA5NDM1IC0wLjQ5LC00LjM0ODc1bC0yMS40NjM3NSwtMzAuMDU2MjVsNC4zOTI1LC03MC4xMTM3NWMwLjA4OTYsLTEuNjU3NiAtMC43NjI2NSwtMy4yNzAwNSAtMi4xOTYyNSwtNC4xMjEyNWMtMC42OTQ0LC0wLjQyNTYgLTEuNTAzNiwtMC42NDQzNSAtMi4zMSwtMC42Mzg3NXpNMzUuMTc1LDQuNTMyNWMtMC40MzI2LDAuMDY1MSAtMC44NTY4LDAuMTkyMTUgLTEuMjYsMC4zOTM3NWMtMS42NTc2LDAuNzYxNiAtMi42NDQ2LDIuNTEzIC0yLjU1NSw0LjMwNWw0LjM5MjUsNzAuMTEzNzVsLTIxLjQ2Mzc1LDMwLjA1NjI1Yy0wLjk0MDgsMS4yNTQ0IC0xLjExNzIsMi45MTUxNSAtMC40OSw0LjM0ODc1bDEzLjQ0LDMxLjM2YzAuNTgyNCwxLjM0NCAxLjc0MzcsMi4zMjg5IDMuMTMyNSwyLjY0MjVjMC4xMzQ0LDAuMDQ0OCA1LjIwMzQ1LDEuMjA1MDUgMTIuNDE2MjUsNS40MTYyNWMwLjI2ODgsMC4xMzQ0IDYuOTM2NjUsNC4zOTYzNSAxMC4zODYyNSw3LjIxODc1bDEuNjYyNSwtMTAuMDM2MjVsMy40MDM3NSwtMjAuNDMxMjVoLTEzLjQ0YzcuNDgxNiwtMzguMzkzNiAzMy4yMzg0NSwtNjkuNjE2NCA0Mi42OTEyNSwtODAuMDFsLTQ4LjY1LC00NC4yNjYyNWMtMS4wMDgsLTAuOTA3MiAtMi4zNjg0NSwtMS4zMDY1NSAtMy42NjYyNSwtMS4xMTEyNXpNNjIuNzIsMTAzLjA0YzAsMCAzLjk4NTU5LDIyLjQgMTUuOTMzNzUsMjIuNGgxOS45MDYyNXpNMTYxLjI4LDEwMy4wNGMwLDAgLTMuOTg5NjUsMjIuNCAtMTUuOTUxMjUsMjIuNGgtMTkuODg4NzV6TTk0LjA4LDE2NS43NmgzNS44NGwtMTcuOTIsMjYuODh6Ij48L3BhdGg+PC9nPjwvZz48L3N2Zz4=",
@@ -57,220 +55,210 @@ var pathMark = L.icon({
 
 class PlayerLayer extends React.Component {
 
-  constructor(props) {
-    super(props);
-    // this.state = {
-    //     id: props.id,
-    //     location: props.state.location
-    // };
-     this.state.id = props.id;
+    constructor(props) {
+        super(props);
+        this.state.id = props.id;
+        this.state.locationEnabled = props.locationEnabled
+    }
 
-  }
+    state = {
+        latitude: 50.8632811,
+        longitude: 4.6762872,
+        players: null,
+        dataPlayers: null,
+        playerMarkers: null,
+        historyDataPlayers:JSON.stringify({}),
+    };
 
-  state = {
-    latitude: 50.8632811,
-    longitude: 4.6762872,
-    players: null,
-    dataPlayers: null,
-    // id: props.id,
-    playerMarkers: null,
-    historyDataPlayers:JSON.stringify({}),
-  };
+    componentDidMount() {
+        this.interval = setInterval(() => {
+            this.sendLocation();
+            this.addPlayerLayer();
+        }, 500);
 
-  componentDidMount() {
-    this.interval = setInterval(() => {
-        this.sendLocation();
-        this.addPlayerLayer();
-    }, 1500);
+        this.context.on("playerdata", (data) => {this.receivePlayer(data)});
+        this.context.on("specialsignal", (data) => {this.receiveSpecialSignal(data)});
+        this.context.on("handshake", (data) => {this.acknowledgeHandshake(data)});
+        this.context.on("ACKhandshake", (data) => {this.handshakeAcknowledged(data)});
+    }
 
-    this.context.on("playerdata", (data) => {this.receivePlayer(data)});
-    this.context.on("specialsignal", (data) => {this.receiveSpecialSignal(data)});
-    this.context.on("handshake", (data) => {this.acknowledgeHandshake(data)});
-    this.context.on("ACKhandshake", (data) => {this.handshakeAcknowledged(data)});
-  }
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
 
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
+    sendLocation() {
+        navigator.geolocation.getCurrentPosition((position) => {
+            this.setState({
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                accuracy: Math.round(position.coords.accuracy)
+            });
 
-  sendLocation() {
-      navigator.geolocation.getCurrentPosition((position) => {
-          this.setState({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-              accuracy: position.coords.accuracy
-          });
+            this.context.emit("location", {
+                token: cookies.get('token'),
+                longitude: this.state.longitude,
+                latitude: this.state.latitude,
+            })
+        });
+    }
 
-          this.context.emit("location", {
-              token: cookies.get('token'),
-              longitude: this.state.longitude,
-              latitude: this.state.latitude,
-          })
-      });
-  }
+    receivePlayer(data) {
+        let list = this.state.dataPlayers;
+        if (list === null)
+            list = {};
+        list[data.id] = data;
+        this.setState({dataPlayers: list});
 
-  receivePlayer(data) {
-      let list = this.state.dataPlayers;
-      if (list === null)
-          list = {};
-      list[data.id] = data;
-      this.setState({dataPlayers: list});
+        let history = JSON.parse(this.state.historyDataPlayers);
+        if (history[data.id] === undefined) {
+            let arr = [];
+            arr.push(data);
+            history[data.id] = arr;
+        } else {
+            history[data.id].push(data);
+        }
+        if (history[data.id].length >= 15) {
+            history[data.id].shift();
+        }
+        this.setState({historyDataPlayers: JSON.stringify(history)});
 
-      let history = JSON.parse(this.state.historyDataPlayers);
-      if (history[data.id] === undefined) {
-          let arr = [];
-          arr.push(data);
-          history[data.id] = arr;
-      } else {
-          history[data.id].push(data);
-      }
-      if (history[data.id].length >= 10) {
-          history[data.id].shift();
-      }
-      this.setState({historyDataPlayers: JSON.stringify(history)});
+    }
 
-  }
+    addPlayerLayer() {
+        let rows = [];
+        rows = this.addPathLayer(rows);
 
-  addPlayerLayer() {
-      let rows = [];
-      rows = this.addPathLayer(rows);
+        const playerLayer = this;
+        const id = this.state.id;
+        const playerData = this.state.dataPlayers;
+        rows.push(
+            <Marker title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
+                <Popup>
+                    <div>Accuracy: {playerLayer.state.accuracy} m</div>
+                </Popup>
+            </Marker>
+        );
+        if (playerData !== null) {
+            Object.keys(playerData).forEach(function (key) {
+                const player = playerData[key];
+                const idEnemy = player.id;
+                const pos = [player.latitude, player.longitude];
+                const timeDiff = Math.abs(new Date() - new Date(player.updatedAt)) / 1000;
+                if (timeDiff <= 5) {
+                    rows.push(
+                        <Marker title={key} position={pos} icon={enemyOnline}>
+                            <Popup>
+                                <p> {key} </p>
+                                <p><button onClick={() => playerLayer.sendSpecialSignal(idEnemy)}> Send signal </button></p>
+                                <p><button onClick={() => playerLayer.sendHandShakeSignal(id, idEnemy)}> Send special signal </button></p>
+                            </Popup>
+                        </Marker>
+                    );
+                } else if (timeDiff <= 30) {
+                    rows.push(
+                        <Marker title={key} position={pos} icon={enemyOffline}>
+                            <Popup>
+                                <p> {key} </p>
+                                {/*<button onClick={() => playerLayer.sendSpecialSignal(idEnemy)}>Send signal</button>*/}
+                                {/*<button onClick={() => playerLayer.sendHandShakeSignal(id, idEnemy)}>Send special*/}
+                                {/*signal*/}
+                                {/*</button>*/}
+                            </Popup>
+                        </Marker>
+                    );
+                }
+            });
+        }
+        this.setState({playerMarkers: rows});
+    }
 
-      const playerLayer = this;
-      const id = this.state.id;
-      const playerData = this.state.dataPlayers;
-      rows.push(
-          <Marker title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
-              <Popup>
-                  <div>Accuracy: {playerLayer.state.accuracy} m</div>
-              </Popup>
-          </Marker>
-      );
-      if (playerData !== null) {
-          Object.keys(playerData).forEach(function (key) {
-              const player = playerData[key];
-              const idEnemy = player.id;
-              const pos = [player.latitude, player.longitude];
-              const timeDiff = Math.abs(new Date() - new Date(player.updatedAt)) / 1000;
-              if (timeDiff <= 5) {
-                  rows.push(
-                      <Marker title={key} position={pos} icon={enemyOnline}>
-                          <Popup>
-                              <p> {key} </p>
-                              <p><button onClick={() => playerLayer.sendSpecialSignal(idEnemy)}> Send signal </button></p>
-                              <p><button onClick={() => playerLayer.sendHandShakeSignal(id, idEnemy)}> Send special signal </button></p>
-                          </Popup>
-                      </Marker>
-                  );
-              } else if (timeDiff <= 30) {
-                  rows.push(
-                      <Marker title={key} position={pos} icon={enemyOffline}>
-                          <Popup>
-                              <p> {key} </p>
-                              {/*<button onClick={() => playerLayer.sendSpecialSignal(idEnemy)}>Send signal</button>*/}
-                              {/*<button onClick={() => playerLayer.sendHandShakeSignal(id, idEnemy)}>Send special*/}
-                                  {/*signal*/}
-                              {/*</button>*/}
-                          </Popup>
-                      </Marker>
-                  );
-              }
-          });
-      }
-      this.setState({playerMarkers: rows});
-  }
+    addPathLayer(rows) {
+        if (rows === null) rows = [];
+        let oldData = JSON.parse(this.state.historyDataPlayers);
 
-  addPathLayer(rows) {
-      if (rows === null) rows = [];
-      let oldData = JSON.parse(this.state.historyDataPlayers);
+        Object.keys(oldData).forEach( (user) => {
+            let oldUser = oldData[user];
+            oldUser.pop();
+            for(let i = oldUser.length; i > 0; i-- ){
+                const playerData = oldUser[i-1];
+                if(user !== this.state.id){
+                    const pos = [playerData.latitude,playerData.longitude];
+                    const opacity = (i+2)/(oldUser.length+2);
+                    const timeDiff =  Math.round(Math.abs(new Date() - new Date(playerData.updatedAt))/1000);
+                    if (timeDiff <= 15)
+                        rows.push(
+                            <Marker position={pos} icon={pathMark} opacity={opacity} onClick={() => this.showAlertBox(playerData.id + ", " + timeDiff + "s ago.")}/>
+                        );
+                }
+            }
+        });
+        return rows;
+    }
 
-      Object.keys(oldData).forEach( (user) => {
-          let oldUser = oldData[user];
-          oldUser.pop();
-          for(let i = oldUser.length; i > 0; i-- ){
-              const playerData = oldUser[i-1];
-              if(user !== this.state.id){
-                  const pos = [playerData.latitude,playerData.longitude];
-                  const opacity = (i+2)/(oldUser.length+2);
-                  const timeDiff =  Math.round(Math.abs(new Date() - new Date(playerData.updatedAt))/1000);
-                  if (timeDiff <= 15)
-                      rows.push(
-                          <Marker position={pos} icon={pathMark} opacity={opacity} onClick={() => this.showAlertBox(playerData.id + ", " + timeDiff + "s ago.")}/>
-                      );
-              }
-          }
-      });
-      return rows;
-  }
+    // Send signal to server
+    sendSpecialSignal(idEnemy){
+        console.log(this.state.id + "send special signal to "+ idEnemy);
 
-  // Send signal to server
-  sendSpecialSignal(idEnemy){
-      console.log(this.state.id + "send special signal to "+ idEnemy);
+        // const data = JSON.stringify({
+        //   playerId: id
+        // });
+        // const obj = JSON.stringify({
+        //     request: "sendSignal",
+        //     playerId: idEnemy,
+        //     dataSignal: data,
+        //     token: cookies.get('token')
+        // });
+        this.context.emit("signal", {token: cookies.get('token'), receiver: idEnemy, type: "special"})
+    }
 
-      // const data = JSON.stringify({
-      //   playerId: id
-      // });
-      // const obj = JSON.stringify({
-      //     request: "sendSignal",
-      //     playerId: idEnemy,
-      //     dataSignal: data,
-      //     token: cookies.get('token')
-      // });
-      this.context.emit("signal", {token: cookies.get('token'), receiver: idEnemy, type: "special"})
-  }
+    receiveSpecialSignal(data) {
+        this.showAlertBox("Special signal received from " + data.sender);
+    }
 
-  receiveSpecialSignal(data) {
-      this.showAlertBox("Special signal received from " + data.sender);
-  }
+    // Send special signal to server
+    sendHandShakeSignal(id,idEnemy){
+        console.log(id+" send handshake signal to: "+ idEnemy);
 
-  // Send special signal to server
-  sendHandShakeSignal(id,idEnemy){
-      console.log(id+" send handshake signal to: "+ idEnemy);
+        this.context.emit("signal", {token: cookies.get('token'), receiver: idEnemy, type: "handshake"})
+    }
 
-      let data = {};
-      const obj = JSON.stringify({
-          request: "radar",
-          token: cookies.get('token')
-      });
-      this.context.emit("signal", {token: cookies.get('token'), receiver: idEnemy, type: "handshake"})
-  }
+    // Send acknowledgement to server
+    acknowledgeHandshake(data){
+        this.showAlertBox(data.sender +" sent you a handshake signal.");
 
-  // Send acknowledgement to server
-  acknowledgeHandshake(data){
-    this.showAlertBox(data.sender +" sent you a handshake signal.");
+        this.context.emit("signal", {token: cookies.get('token'), receiver: data.sender, type: "ACKhandshake"})
+    }
 
-    this.context.emit("signal", {token: cookies.get('token'), receiver: data.sender, type: "ACKhandshake"})
-  }
+    handshakeAcknowledged(data) {
+        this.showAlertBox(data.sender +" acknowledged your handshake!");
+    }
 
-  handshakeAcknowledged(data) {
-      this.showAlertBox(data.sender +" acknowledged your handshake!");
-  }
+    // Send fight signal to server (fight: id vs idEnemy)
+    fight(id,idEnemy){
 
-  // Send fight signal to server (fight: id vs idEnemy)
-  fight(id,idEnemy){
+        console.log(id+"send fight signal to: "+ idEnemy);
 
-    console.log(id+"send fight signal to: "+ idEnemy);
+        const obj = JSON.stringify({
+            request: "fight",
+            token: cookies.get('token'),
+            playerId: id,
+            enemyPlayerId: idEnemy
+        });
+    }
 
-    const obj = JSON.stringify({
-        request: "fight",
-        token: cookies.get('token'),
-        playerId: id,
-        enemyPlayerId: idEnemy
-    });
-  }
+    showAlertBox(content){
+        this.props.showAlertBox(content);
+    }
 
-  showAlertBox(content){
-    this.props.showAlertBox(content);
-  }
+    render() {
+        var markers = this.state.playerMarkers;
 
-  render() {
-    var markers = this.state.playerMarkers;
-
-    if(markers !== null){
-      return (markers)
-    } else {
-      return (null)
-   }
-  }
+        if(markers !== null){
+            return (markers)
+        } else {
+            return (null)
+        }
+    }
 
 }
 PlayerLayer.contextType = SocketContext;

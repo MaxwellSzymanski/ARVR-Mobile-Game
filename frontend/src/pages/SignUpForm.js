@@ -62,30 +62,17 @@ class SignUpForm extends React.Component {
         } else if (!this.state.hasAgreed) {
             swal("You need to agree to the terms and conditions in order to continue.", {icon: 'warning'})
         } else {
-            const position = {longitude: 0.0, latitude: 0.0};
-
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(storePosition);
-            } else {
-                alert("No geolocation available");
-            }
-
-            function storePosition(pos) {
-                position.longitude = pos.coords.longitude;
-                position.latitude = pos.coords.latitude;
-            }
 
             const dataToSend = {
                 email: this.state.email,
                 name: this.state.name,
                 password: this.state.password,
-                position: position,
             };
 
             dataToSend.image = image.toString('base64');
             dataToSend.featureVector = featureVector;
 
-            this.context.emit('signup', dataToSend);
+            this.context.emit('signup', JSON.stringify(dataToSend));
         }
     }
 

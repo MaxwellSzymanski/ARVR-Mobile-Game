@@ -2,6 +2,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import SocketContext from "../socketContext";
+import swal from '@sweetalert/with-react';
 const cookies = new Cookies();
 
 class EmailVerif extends React.Component {
@@ -23,10 +24,10 @@ class EmailVerif extends React.Component {
         const that = this;
         this.context.on("verify", function (response) {
             if (response.success) {
-                alert("Your e-mail has been verified.");
+                swal("Your e-mail has been verified.", {icon: "success"});
                 that.setState({redirect: true});
             } else {
-                alert("That code seems to be wrong. Please try again or let us send you another code.");
+                swal("That code seems to be wrong. Please try again or let us send you another code.", {icon: "error"});
                 that.setState({firstTry: false, loading: false})
             }
         });
@@ -91,7 +92,7 @@ class EmailVerif extends React.Component {
     };
 
     renderRedirect = () => {
-        if (this.state.redirect) {return <Redirect to="/trial" />}
+        if (this.state.redirect) {return <Redirect to="/map" />}
     };
 
     setPage() {
@@ -142,7 +143,7 @@ class EmailVerif extends React.Component {
                 <div className="FormCenter">
                     <form onSubmit={this.newCode} className="FormFields">
                         <div className="FormField">
-                            {!this.state.firstTry && !this.state.loading && <button className="FormField__Button mr-20">Send me another code</button>}
+                            {!this.state.firstTry && !this.state.loading && <button className="FormField__Button mr-20"> Send me another code</button>}
                         </div>
                     </form>
                 </div>

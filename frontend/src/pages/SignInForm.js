@@ -1,12 +1,9 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import axios from "axios";
 import Cookies from 'universal-cookie';
 import SocketContext from "../socketContext";
-import SignUpForm from "./SignUpForm";
+import swal from '@sweetalert/with-react';
 const cookies = new Cookies();
-
-const url = require('./serveradress.js');
 
 class SignInForm extends React.Component {
     constructor() {
@@ -27,20 +24,21 @@ class SignInForm extends React.Component {
         // { email: true, password: false }                 if e-mail registered and password incorrect
         // { email: true, password: true, token: jwt }      if e-mail registered and password correct, the jwt token
         //                                                      is further on stored in a cookie in the browser
+        const that = this;
         this.context.on("signin", function (data) {
             if (!data.email)
-                alert("Invalid e-mail");
+                swal("Invalid e-mail", {icon: "error"});
             else if (!data.password)
-                alert(JSON.stringify(data));
-                // alert("Invalid password");
+                swal("Invalid password", {icon: "error"});
             else {
+                swal("Enjoy the game!", {icon: "success"});
                 const options = {
                     path: '/',
                     expires: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)   // expires in 24 hours
                 };
                 cookies.set('token', data.token, options);
                 cookies.set('name', data.name, options);
-                this.setState({redirect: true});
+                that.setState({redirect: true});
             }
         })
     }
@@ -75,9 +73,12 @@ class SignInForm extends React.Component {
             }
 
             this.state.position = position;
-            const dataToSend = this.state;
+            const dataToSend = {
+                email: this.state.email,
+                password: this.state.password,
+            };
 
-            this.context.emit("signin", dataToSend);
+            this.context.emit("signin", JSON.stringify(dataToSend));
         }
     }
 

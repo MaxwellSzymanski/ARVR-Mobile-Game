@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import "./profilePage.css"
 import Cookies from 'universal-cookie';
 import SocketContext from "../socketContext";
@@ -21,15 +21,14 @@ class ProfilePage extends React.Component {
             kills: 8,
             deaths: 3,
             items: 13,
-            encodedPic: require("../assets/temporary/profileImage.png")
+            encodedPic: require("../assets/temporary/profileImage.png"),
+            loggedOut: false,
         };
     }
 
-    componentWillMount() {
-        this.context.emit("stats", {token: cookies.get('token')});
-    }
-
     componentDidMount() {
+        this.context.emit("stats", {token: cookies.get('token')});
+
         this.context.on("stats", (data) => {
             this.setState({
                 attack: data.attack,
@@ -48,10 +47,39 @@ class ProfilePage extends React.Component {
                 encodedPic: data.image
             })
         });
+        const that = this;
+        this.context.on("signout", (data) => {
+            if (data.success) {
+                cookies.remove("token");
+                cookies.remove("name");
+                swal("Logged out!", {icon: "success"});
+                that.setState({loggedOut:true});
+            } else {
+                swal("Something went wrong. Please try again.", {icon: "error"});
+            }
+        });
 
         // Update XP bar
         const xp = (((10 + this.state.experience)/365)*100).toString() + '%';
         document.getElementById('xpBar').style.width = xp;
+
+        this.interval = setInterval(() => {
+            this.sendLocation();
+        }, 500);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
+    sendLocation() {
+        navigator.geolocation.getCurrentPosition((position) => {
+            this.context.emit("location", {
+                token: cookies.get('token'),
+                longitude: position.coords.longitude,
+                latitude: position.coords.latitude,
+            })
+        });
     }
 
     // Generate attribute boxes
@@ -70,13 +98,19 @@ class ProfilePage extends React.Component {
     }
 
     logOut() {
-        swal("Logged out!", {icon:"success"});
-        //TODO
+        // swal("Log out button has been pressed.", {icon: "success"});
+
+        this.context.emit("signout", {token: cookies.get("token")});
     }
+
+    renderRedirect = () => {
+        if (this.state.loggedOut) {return <Redirect to="/signin" />}
+    };
 
     render() {
         return (
             <div>
+                {this.renderRedirect()}
 
                 {/* Buttons and profile */}
 

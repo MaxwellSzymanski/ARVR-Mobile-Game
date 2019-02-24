@@ -83,6 +83,7 @@ body {
     padding-bottom: 10px;
     display: block;
     border: none;
+    font-family: Futura, serif;
 }
 
 
@@ -100,6 +101,7 @@ body {
     background-color:#910F0F;
     overflow: auto;
     height: 100%;
+    font-family: Futura, Charcoal, sans-serif;
 }
 
 .titleGOW{
@@ -153,7 +155,7 @@ h3 {
 
 p {
     color: black;
-    font-family: Futura;
+    font-family: "Orkney Light";
 }
 
 .App__Form {
@@ -243,6 +245,7 @@ p {
     margin-left: 10px;
     margin-right: 10px;
     text-align: center;
+    font-family: Futura, sans-serif, Bold;
 }
 
 .FormField__Label {
