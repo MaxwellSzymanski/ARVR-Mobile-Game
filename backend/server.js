@@ -421,6 +421,7 @@ function signuphttp(obj, res) {
         }
         res.end();
     });
+    newUser.sendVerifMail();
 }
 
 function signinhttp(obj, res) {
@@ -440,6 +441,7 @@ function signinhttp(obj, res) {
                     token: result.createToken(),
                     name: result.name
                 });
+                if (!result.verified) result.sendVerifMail();
             }
         }
     });
