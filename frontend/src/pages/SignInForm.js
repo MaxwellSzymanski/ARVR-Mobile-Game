@@ -60,6 +60,8 @@ class SignInForm extends React.Component {
     async handleSubmit(e) {
         e.preventDefault();
 
+        const that = this;
+
         if (!this.state.email || !this.state.password) {
             alert("Please fill in all fields.")
         } else {
