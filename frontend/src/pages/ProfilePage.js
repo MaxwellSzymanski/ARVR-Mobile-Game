@@ -85,7 +85,7 @@ class ProfilePage extends React.Component {
     // Generate attribute boxes
     generateAttributes(number) {
         const active = Math.round(number / 100);
-        let html = []
+        let html = [];
         for (let i = 1; i <= active; i++) {
             html.push(<div key={i} className="attributeValueActive"> </div>)
         }
@@ -98,13 +98,15 @@ class ProfilePage extends React.Component {
     }
 
     logOut() {
-        // swal("Log out button has been pressed.", {icon: "success"});
+
 
         this.context.emit("signout", {token: cookies.get("token")});
     }
 
     renderRedirect = () => {
-        if (this.state.loggedOut) {return <Redirect to="/signin" />}
+        if (this.state.loggedOut) {
+            swal("Logged out successfully.", {icon: "success"});
+            return <Redirect to="/signin" />}
     };
 
     render() {
@@ -116,7 +118,7 @@ class ProfilePage extends React.Component {
 
                 <Link to="/map"><button className="smallButton back topLeft"/></Link>;
                 <div className="profileCard">
-                    <div className="profilePhoto"><img src={this.state.encodedPic}/></div>
+                    <div className="profilePhoto"><img src={this.state.encodedPic} alt={"Profile image"}/></div>
                     <h1 className="name">{this.state.name}</h1>
                     <h3 className="smallText">Level {this.state.level}</h3>
                     <div className="xpBar">

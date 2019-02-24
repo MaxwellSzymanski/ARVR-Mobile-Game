@@ -24,9 +24,9 @@ class CaptureResult extends React.Component {
           <div>
               <button className="smallButton back topLeft"/>;
               <div className="profileCard">
-                  <div className="profilePhoto"></div>
-                  <h1 className="name"></h1>
-                  <h3 className="smallText"></h3>
+                  <div className="profilePhoto"> </div>
+                  <h1 className="name"> </h1>
+                  <h3 className="smallText"> </h3>
               <button className="smallButton settings topRight"/>
           </div>
   }
