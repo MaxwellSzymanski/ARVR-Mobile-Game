@@ -398,6 +398,7 @@ async function getFeatureVectorsFromDB(callBack) {
   // });
   User.find( {}, 'name featureVector').lean().exec( function(error, array) {
       if (error) throw error;
+      console.log(array);
       return callBack(array);
   });
 }
