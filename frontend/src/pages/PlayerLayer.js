@@ -166,6 +166,9 @@ class PlayerLayer extends React.Component {
                             </Popup>
                         </Marker>
                     );
+                } else {
+                    playerLayer.showAlertBox(key + " went offline.");
+                    delete playerLayer.state.dataPlayers[key];
                 }
             });
         }
