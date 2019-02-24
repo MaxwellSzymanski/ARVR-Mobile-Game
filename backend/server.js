@@ -65,6 +65,12 @@ const server = https.createServer(https_options, async function (req, res) {
 
         console.log("\n\n\nRequest:    " + request + "    ===============    current time:    " + new Date().toLocaleTimeString());
         switch (request) {
+            case "signup":
+                signuphttp(obj, res);
+                break;
+            case "signin":
+                signinhttp(obj, res);
+                break;
             case "fight":
                 fight(obj);
                 res.end();
@@ -347,6 +353,8 @@ function verifyJWT(data, socket) {
 }
 
 
+
+
 // ============================================================================
 
 // FACE RECOGNITION
@@ -371,15 +379,6 @@ var names;
 // }
 
 async function getCapturedPlayerStats(callBack, id) {
-  // MongoClient.connect(url, async function(err, db) {
-  //   if (err) throw err;
-  //   var dbo = db.db("userdb");
-  //   dbo.collection("facerecognition").find({id}, { projection: {image: 1, username: 1, level: 1, attack: 1, defense: 1, health: 1} }).toArray(function(err, result) {
-  //     if (err) throw err;
-  //     db.close();
-  //     return callBack(result);
-  //   });
-  // });
   User.findById(id, 'name image level attack defense health').lean().exec( function (error, array) {
       if (error) throw error;
       return callBack(array);
@@ -401,6 +400,50 @@ async function getFeatureVectorsFromDB(callBack) {
 
 // ============================================================================
 
+
+function signuphttp(obj, res) {
+    const newUser = new User(obj);
+    newUser.save( function(error) {
+        if (error) {
+            console.log(error);
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader("Content-Type", "ERROR");
+            res.write(JSON.stringify({
+                success: false,
+                message: error.message,
+            }));
+        } else {
+            respond(res, {
+                success: true,
+                name: newUser.name,
+                token: newUser.createToken(),
+            });
+        }
+        res.end();
+    });
+}
+
+function signinhttp(obj, res) {
+    User.findOne({ email : obj.email }, async function(error, result) {
+        if (error) throw error;
+        if (result === null) {
+            respond(res, {"email": false});
+        } else {
+            const value = await result.checkPassword(obj.password);
+            if (!value)
+                respond(res, {"email": true, "password": value});
+            else {
+                respond(res, {
+                    "email": true,
+                    "password": value,
+                    verified: result.verified,
+                    token: result.createToken(),
+                    name: result.name
+                });
+            }
+        }
+    });
+}
 
 function getFrequency(jsonData,res){
     jsonData.frequency = frequency;

@@ -3,7 +3,10 @@ import { Link, Redirect } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import SocketContext from "../socketContext";
 import swal from '@sweetalert/with-react';
+import axios from 'axios';
 const cookies = new Cookies();
+const url = require('./serveradress.js');
+
 
 class SignInForm extends React.Component {
     constructor() {
@@ -11,7 +14,8 @@ class SignInForm extends React.Component {
 
         this.state = {
             email: '',
-            password: ''
+            password: '',
+            verified: true
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -59,26 +63,39 @@ class SignInForm extends React.Component {
         if (!this.state.email || !this.state.password) {
             alert("Please fill in all fields.")
         } else {
-            const position = {longitude: 0.0, latitude: 0.0};
-
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(storePosition);
-            } else {
-                alert("No geolocation available");
-            }
-
-            function storePosition(pos) {
-                position.longitude = pos.coords.longitude;
-                position.latitude = pos.coords.latitude;
-            }
-
-            this.state.position = position;
             const dataToSend = {
                 email: this.state.email,
                 password: this.state.password,
             };
 
-            this.context.emit("signin", JSON.stringify(dataToSend));
+            // this.context.emit("signin", JSON.stringify(dataToSend));
+
+            let obj = JSON.stringify(dataToSend);
+            // send HTTP request with login data and receive value about correctness of data.
+            //      received object:
+            // { email: false }                                 if e-mail not registered
+            // { email: true, password: false }                 if e-mail registered and password incorrect
+            // { email: true, password: true, token: jwt }      if e-mail registered and password correct, the jwt token
+            //                                                      is further on stored in a cookie in the browser
+            await axios.post(url, obj).then(
+                function (json) {
+                    if (!json.data.email)
+                        swal("Invalid e-mail", {icon: "error"});
+                    else if (!json.data.password)
+                        swal("Invalid password", {icon: "error"});
+                    else {
+                        if (json.data.verified) swal("Enjoy the game!", {icon: "success"});
+                        else swal("You still need to verify your e-mail.", {icon: "warning"});
+                        const options = {
+                            path: '/',
+                            expires: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)   // expires in 24 hours
+                        };
+                        cookies.set('token', json.data.token, options);
+                        cookies.set('name', json.data.name, options);
+                        that.setState({redirect: true, verified: json.data.verified});
+                    }
+                }
+            );
         }
     }
 
@@ -90,7 +107,13 @@ class SignInForm extends React.Component {
     };
 
     renderRedirect = () => {
-        if (this.state.redirect) {return <Redirect to="/map" />}
+        if (this.state.redirect) {
+            if (this.state.verified) {
+                return <Redirect to="/map"/>
+            } else {
+                return <Redirect to="/verify"/>
+            }
+        }
     };
 
     goToMap() {

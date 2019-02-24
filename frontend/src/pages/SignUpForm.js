@@ -3,7 +3,10 @@ import { Link, Redirect } from 'react-router-dom';
 import swal from '@sweetalert/with-react';
 import Cookies from 'universal-cookie';
 import SocketContext from "../socketContext";
+import axios from 'axios';
 const cookies = new Cookies();
+const url = require('./serveradress.js');
+
 
 class SignUpForm extends React.Component {
     constructor() {
@@ -37,6 +40,7 @@ class SignUpForm extends React.Component {
     componentDidMount() {
         this.context.on('signup', (data) => {
             if (data.success) {
+                swal("Account created! Now please verify your e-mail in the next step.", {icon: "success"});
                 const options = {
                     path: '/',
                     expires: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)   // expires in 24 hours
@@ -45,12 +49,14 @@ class SignUpForm extends React.Component {
                 cookies.set('name', data.name, options);
                 this.setState({redirect: true});
             }
-            else alert(data.message);
+            else swal(data.message, {icon: "warning"});
         });
     }
 
     async handleSubmit(e) {
         e.preventDefault();
+
+        const that = this;
 
         const image = localStorage.getItem("PhotoOfMe");
 		const featureVector = localStorage.getItem("fv");
@@ -72,7 +78,26 @@ class SignUpForm extends React.Component {
             dataToSend.image = image.toString('base64');
             dataToSend.featureVector = featureVector;
 
-            this.context.emit('signup', JSON.stringify(dataToSend));
+            // this.context.emit('signup', JSON.stringify(dataToSend));
+
+            const obj = JSON.stringify(dataToSend);
+
+            await axios.post(url, obj).then(
+                function (json) {
+                    if (json.data.success) {
+                        swal("Account created! Now please verify your e-mail in the next step.", {icon: "success"});
+                        const options = {
+                            path: '/',
+                            expires: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)   // expires in 24 hours
+                        };
+                        cookies.set('token', json.data.token, options);
+                        cookies.set('name', json.data.name, options);
+                        that.setState({redirect: true});
+                    }
+                    else swal(json.data.message, {icon: "warning"});
+                }
+            );
+
         }
     }
 
