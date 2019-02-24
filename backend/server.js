@@ -380,29 +380,19 @@ async function getCapturedPlayerStats(callBack, id) {
   //     return callBack(result);
   //   });
   // });
-  User.find( {}, 'name image level attack defense health').lean().exec( function (error, array) {
+  User.findById(id, 'name image level attack defense health').lean().exec( function (error, array) {
       if (error) throw error;
       return callBack(array);
   });
 }
 
 async function getFeatureVectorsFromDB(callBack) {
-  // MongoClient.connect(url, async function(err, db) {
-  //   if (err) throw err;
-  //   var dbo = db.db("userdb");
-  //   dbo.collection("facerecognition").find({}, { projection: { _id: 1, username: 1, featureVector: 1 } }).toArray(function(err, result) {
-  //     if (err) throw err;
-  //     db.close();
-  //     return callBack(result);
-  //   });
-  // });
   User.find( {}, 'name featureVector').lean().exec( function(error, array) {
       if (error) throw error;
       console.log(array);
       return callBack(array);
   });
 }
-
 
 
 // ============================================================================
