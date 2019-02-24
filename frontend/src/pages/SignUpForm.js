@@ -70,6 +70,7 @@ class SignUpForm extends React.Component {
         } else {
 
             const dataToSend = {
+                request: "signup",
                 email: this.state.email,
                 name: this.state.name,
                 password: this.state.password,

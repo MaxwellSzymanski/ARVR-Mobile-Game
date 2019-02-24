@@ -66,6 +66,7 @@ class SignInForm extends React.Component {
             alert("Please fill in all fields.")
         } else {
             const dataToSend = {
+                request: "signin",
                 email: this.state.email,
                 password: this.state.password,
             };
