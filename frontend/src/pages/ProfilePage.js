@@ -98,13 +98,15 @@ class ProfilePage extends React.Component {
     }
 
     logOut() {
-        // swal("Log out button has been pressed.", {icon: "success"});
+
 
         this.context.emit("signout", {token: cookies.get("token")});
     }
 
     renderRedirect = () => {
-        if (this.state.loggedOut) {return <Redirect to="/signin" />}
+        if (this.state.loggedOut) {
+            swal("Logged out successfully.", {icon: "success"});
+            return <Redirect to="/signin" />}
     };
 
     render() {

@@ -74,7 +74,8 @@ class CameraComp extends React.Component {
     render () {
       if (isSafari || isIOS) return (
           <div>
-              <span style={{margin:'20px'}}> </span>
+              <p className="subTitle">Upload an image</p>
+              <span style={{margin:'10px'}}> </span>
               <div className="polaroid" style={{width:'500px'}}>
                   <ImageUploader
                       withIcon={true}
@@ -95,6 +96,7 @@ class CameraComp extends React.Component {
     return (
       <div className="background">
         {this.renderRedirect()}
+        <p className="subTitle">Take your profile picture</p>
         <div className="polaroid">
             <Camera
                 onTakePhoto = { (dataUri) => { this.onTakePhoto(dataUri); } }

@@ -104,6 +104,15 @@ body {
     font-family: Futura, Charcoal, sans-serif;
 }
 
+/* Text */
+.subTitle {
+    font-family: Futura, sans-serif;
+    font-weight: bold;
+    color: white;
+    font-size: 30px;
+    margin-top: 30px;
+}
+
 .titleGOW{
     padding-top: 0px;
     margin-top: 0px;
