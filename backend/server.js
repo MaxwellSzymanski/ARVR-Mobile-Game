@@ -116,6 +116,20 @@ io.sockets.on('connection', function (socket) {
 
     socket.on("disconnect", () => {removePlayer(socket)});
 
+    // socket.on('getPlayerEntry', (name, fv) => {
+    //     console.log('received player entry from: ' + name);
+    //     addPlayerEntry(name, fv);
+    // });
+
+    socket.on('getFVfromDB', () => {
+        getFeatureVectorsFromDB(function(result) {
+            socket.emit('sentFVfromDB', result);
+        })
+    });
+
+    socket.on('addToJSON', (json, callback) => {
+        fs.writeFile('testFeatureVectors.json', json, 'utf8', callback);
+    });
 });
 
 
@@ -330,6 +344,62 @@ function verifyJWT(data, socket) {
             });
         });
     });
+}
+
+
+// ============================================================================
+
+// FACE RECOGNITION
+
+// ============================================================================
+
+
+
+//MongoDB code
+var names;
+
+// function addPlayerEntry(name, fv) {
+//   MongoClient.connect(url, function(err, db) {
+//     if (err) throw err;
+//     var dbo = db.db("userdb");
+//     var myobj = { username: name , featureVector: fv };
+//     dbo.collection("facerecognition").insertOne(myobj, function(err, res) {
+//       if (err) throw err;
+//       db.close();
+//     });
+//   });
+// }
+
+async function getCapturedPlayerStats(callBack, id) {
+  // MongoClient.connect(url, async function(err, db) {
+  //   if (err) throw err;
+  //   var dbo = db.db("userdb");
+  //   dbo.collection("facerecognition").find({id}, { projection: {image: 1, username: 1, level: 1, attack: 1, defense: 1, health: 1} }).toArray(function(err, result) {
+  //     if (err) throw err;
+  //     db.close();
+  //     return callBack(result);
+  //   });
+  // });
+  User.find( {}, 'name image level attack defense health').lean().exec( function (error, array) {
+      if (error) throw error;
+      return callBack(array);
+  });
+}
+
+async function getFeatureVectorsFromDB(callBack) {
+  // MongoClient.connect(url, async function(err, db) {
+  //   if (err) throw err;
+  //   var dbo = db.db("userdb");
+  //   dbo.collection("facerecognition").find({}, { projection: { _id: 1, username: 1, featureVector: 1 } }).toArray(function(err, result) {
+  //     if (err) throw err;
+  //     db.close();
+  //     return callBack(result);
+  //   });
+  // });
+  User.find( {}, 'name featureVector').lean().exec( function(error, array) {
+      if (error) throw error;
+      return callBack(array);
+  });
 }
 
 

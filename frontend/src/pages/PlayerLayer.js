@@ -150,7 +150,7 @@ class PlayerLayer extends React.Component {
                             <Popup>
                                 <p> {key} </p>
                                 <p><button onClick={() => playerLayer.sendSpecialSignal(idEnemy)}> Send signal </button></p>
-                                <p><button onClick={() => playerLayer.sendHandShakeSignal(id, idEnemy)}> Send special signal </button></p>
+                                <p><button onClick={() => playerLayer.sendHandShakeSignal(id, idEnemy)}> Send handshake signal </button></p>
                             </Popup>
                         </Marker>
                     );
@@ -186,11 +186,15 @@ class PlayerLayer extends React.Component {
                 const playerData = oldUser[i-1];
                 if(user !== this.state.id){
                     const pos = [playerData.latitude,playerData.longitude];
-                    const opacity = (i+2)/(oldUser.length+2);
+                    const opacity = (i+2)/(oldUser.length+4);
                     const timeDiff =  Math.round(Math.abs(new Date() - new Date(playerData.updatedAt))/1000);
                     if (timeDiff <= 15)
                         rows.push(
-                            <Marker position={pos} icon={pathMark} opacity={opacity} onClick={() => this.showAlertBox(playerData.id + ", " + timeDiff + "s ago.")}/>
+                            <Marker position={pos} icon={pathMark} opacity={opacity}>
+                                <Popup>
+                                    {playerData.id} + ", " + {timeDiff} + " s ago."
+                                </Popup>
+                            </Marker>
                         );
                 }
             }
@@ -202,15 +206,6 @@ class PlayerLayer extends React.Component {
     sendSpecialSignal(idEnemy){
         console.log(this.state.id + "send special signal to "+ idEnemy);
 
-        // const data = JSON.stringify({
-        //   playerId: id
-        // });
-        // const obj = JSON.stringify({
-        //     request: "sendSignal",
-        //     playerId: idEnemy,
-        //     dataSignal: data,
-        //     token: cookies.get('token')
-        // });
         this.context.emit("signal", {token: cookies.get('token'), receiver: idEnemy, type: "special"})
     }
 
@@ -233,7 +228,7 @@ class PlayerLayer extends React.Component {
     }
 
     handshakeAcknowledged(data) {
-        this.showAlertBox(data.sender +" acknowledged your handshake!");
+        this.showAlertBox(data.sender +" is online and acknowledged your handshake! Go find him and challenge him to battle!");
     }
 
     // Send fight signal to server (fight: id vs idEnemy)

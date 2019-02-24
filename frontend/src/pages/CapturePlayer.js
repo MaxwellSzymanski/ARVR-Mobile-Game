@@ -96,69 +96,6 @@ class CapturePlayer extends React.Component {
   };
 
 
-
-  //Code for in the server
-  /*    socket.on('getPlayerEntry', function(name, fv) {
-          console.log('received player entry from: ' + name);
-          addPlayerEntry(name, fv);
-      });
-
-      socket.on('getFVfromDB', function() {
-          getFeatureVectorsFromDB(function(result) {
-            socket.emit('sentFVfromDB', result);
-          })
-      });
-
-      socket.on('addToJSON', function(json, callback) {
-          fs.writeFile('testFeatureVectors.json', json, 'utf8', callback);
-      });
-  }); */
-
-  //MongoDB code
-  /* var MongoClient = require('mongodb').MongoClient;
-  var url = "mongodb://team12:mongoDBteam12@35.241.198.186:27017/?authMechanism=SCRAM-SHA-1&authSource=userdb";
-
-  var names;
-
-  function addPlayerEntry(name, fv) {
-    MongoClient.connect(url, function(err, db) {
-      if (err) throw err;
-      var dbo = db.db("userdb");
-      var myobj = { username: name , featureVector: fv };
-      dbo.collection("facerecognition").insertOne(myobj, function(err, res) {
-        if (err) throw err;
-        db.close();
-      });
-    });
-  }
-
-  async function getCapturedPlayerStats(callBack, id) {
-    MongoClient.connect(url, async function(err, db) {
-      if (err) throw err;
-      var dbo = db.db("userdb");
-      dbo.collection("facerecognition").find({id}, { projection: {image: 1, username: 1, level: 1, attack: 1, defense: 1, health: 1} }).toArray(function(err, result) {
-        if (err) throw err;
-        db.close();
-        return callBack(result);
-      });
-    });
-  }
-
-  async function getFeatureVectorsFromDB(callBack) {
-
-    MongoClient.connect(url, async function(err, db) {
-      if (err) throw err;
-      var dbo = db.db("userdb");
-      dbo.collection("facerecognition").find({}, { projection: { _id: 1, username: 1, featureVector: 1 } }).toArray(function(err, result) {
-        if (err) throw err;
-        db.close();
-        return callBack(result);
-      });
-    });
-  } */
-
-
-
   render () {
     return (
       <div className="background">

@@ -42,7 +42,8 @@ body {
 
 
 .mapss {
-  height: 100%;
+    margin: 2vh;
+    height: 96%;
 }
 
 /* E-mail verification page (EmailVerif) */

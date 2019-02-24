@@ -25,7 +25,18 @@ class Trial extends React.Component {
         id: cookies.get('name'),
         accuracy: 0,
         centerMap: [50.8632811,4.6762872],
-        showAlertBox: false
+        centerMap: [50.8632811, 4.6762872],
+        showAlertBox: true,
+        content: "Please allow access to your location.",
+        alertBoxStyle: {
+            transition: 'all 0.2s',
+            backgroundColor: '#910F0F',
+            borderRadius: '5px',
+            boxShadow: '0 0 12px rgba(0,0,0,.14),0 12px 24px rgba(0,0,0,.28)',
+            overflow: 'scroll',
+            maxWidth: '70vw',
+            padding: '10px 20px'
+        }
     }
 
     componentWillMount() {
@@ -37,12 +48,9 @@ class Trial extends React.Component {
                 },
                 haveUsersLocation: true,
                 zoom: 18,
+                showAlertBox: false,
             })
         });
-
-        // while(!this.state.haveUsersLocation) {
-        //     this.showAlertBox("Allow access to your location in order to play.")
-        // }
     }
 
     setCenter(pos){
@@ -64,7 +72,6 @@ class Trial extends React.Component {
 
 
     render() {
-
         return (
             <Map className="mapss" center={this.state.centerMap} zoom={this.state.zoom}>
                 <TileLayer
@@ -74,13 +81,12 @@ class Trial extends React.Component {
                     url='https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
                 />
                 <PlayerLayer showAlertBox={this.showAlertBox} centerPlayerLayer={this.setCenter} id={this.state.id} locationEnabled={this.state.haveUsersLocation}/>
-                <PopPop open={this.state.showAlertBox} closeBtn={true} closeOnEsc={true} onClose={()=>this.alertBoxIsClosed()} closeOnOverlay={true}>
+                <PopPop open={this.state.showAlertBox} closeBtn={true} closeOnEsc={true} onClose={()=>this.alertBoxIsClosed()} closeOnOverlay={true} position={"centerCenter"} contentStyle={this.state.alertBoxStyle}>
                     <div>{this.state.content}</div>
                 </PopPop>
             </Map>
         )
     }
-
 }
 
 export default Trial;
