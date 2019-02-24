@@ -421,6 +421,10 @@ p {
     background-image: url(assets/buttons/camera.png);
 }
 
+.info {
+    background-image: url(assets/buttons/info.png);
+}
+
 /* UI Buttons */
 .bigButton {
     background-color: white;
