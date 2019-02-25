@@ -387,18 +387,18 @@ p {
     background-color: white;
     margin-right: auto;
     margin-left: auto;
-    max-height: 690px;
+    max-height: 950px;
     max-width: 830px;
 }
 
 .cameraLoader {
     display: inline-block ;
-    border: 16px solid #79675c;
-    border-top: 16px solid #4d0c04;
+    border: 7.5vw solid #79675c;
+    border-top: 7.5vw solid #4d0c04;
     border-radius: 50%;
     width: 40vw;
     height: 40vw;
-    animation: spin 2s ease infinite;
+    animation: spin 2s ease-out infinite;
 }
 
 @keyframes spin {

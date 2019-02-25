@@ -105,6 +105,7 @@ class CameraComp extends React.Component {
                 isImageMirror = {true}
                 imageType = {'IMAGE_TYPES.PNG'}
                 imageCompression = {0.97}
+                idealResolution = {{width: 750, height: 750}}
             />
             </div>}
           {this.state.calculating && <div className="polaroid">
