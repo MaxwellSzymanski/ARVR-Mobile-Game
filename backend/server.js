@@ -3,15 +3,11 @@ const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const secret = require('./db/config.js');
 
-// var MongoClient = require('mongodb').MongoClient;
-// var url = "mongodb://localhost:27017/userdb";
-// var url = 'mongodb://team12:mongoDBteam12@35.241.198.186:27017/?authMechanism=SCRAM-SHA-1&authSource=userdb';
-
 var frequency = 1000;
 
 const mongoose = require('mongoose');
 // mongoose.connect("mongodb://localhost:27017/userdb", { useNewUrlParser: true });
-mongoose.connect('mongodb://team12:mongoDBteam12@localhost:27017/userdb?authMechanism=SCRAM-SHA-1&authSource=userdb',  { useNewUrlParser: true });
+mongoose.connect('mongodb://team12:mongoDBteam12@35.241.198.186:27017/userdb?authMechanism=SCRAM-SHA-1&authSource=userdb',  { useNewUrlParser: true });
 
 const User = require('./db/userModel.js');
 const ActivePlayer = require('./db/gameModel');
@@ -343,7 +339,7 @@ function verifyJWT(data, socket) {
                     jwtValid = await user.checkToken(token);
                     emailVerified = user.verified;
                 }
-                console.log(jwtValid);
+                console.log("jwt valid:" + jwtValid);
                 socket.emit("jwt", {
                     loggedIn: jwtValid,
                     verified: emailVerified
