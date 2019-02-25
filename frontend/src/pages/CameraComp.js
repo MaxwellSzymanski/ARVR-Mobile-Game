@@ -105,12 +105,11 @@ class CameraComp extends React.Component {
                 isImageMirror = {true}
                 imageType = {'IMAGE_TYPES.PNG'}
                 imageCompression = {0.97}
-                idealResolution = {{width: 750, height: 750}}
             />
             </div>}
           {this.state.calculating && <div className="polaroid">
               <div className="cameraLoader"></div>
-              <p>Detecting face. This can take up to 15 seconds.</p>
+              <p>Detecting face. This can take up to 30 seconds.</p>
           </div>}
       </div>
     );
