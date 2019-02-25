@@ -11,7 +11,8 @@ class CameraComp extends React.Component {
 
     state = {
         redirect : false,
-        picture: null
+        picture: null,
+        calculating: false
     };
 
     setRedirect = () => {
@@ -23,7 +24,7 @@ class CameraComp extends React.Component {
     };
 
     async onTakePhoto (dataUri) {
-        // TODO: Disable Camera
+        this.setState({ calculating: true});
         let photoSrc = dataUri;
         let photo = new Image;
         photo.src = photoSrc;
@@ -39,6 +40,7 @@ class CameraComp extends React.Component {
               icon: "warning",
               button: "I'll try!",
           });
+          this.setState({ calculating: false});
         }
         else {
           localStorage.setItem("PhotoOfMe", dataUri);
@@ -97,14 +99,18 @@ class CameraComp extends React.Component {
       <div className="background">
         {this.renderRedirect()}
         <p className="subTitle">Take your profile picture</p>
-        <div className="polaroid">
+          {!this.state.calculating && <div className="polaroid">
             <Camera
                 onTakePhoto = { (dataUri) => { this.onTakePhoto(dataUri); } }
                 isImageMirror = {true}
                 imageType = {'IMAGE_TYPES.PNG'}
                 imageCompression = {0.97}
             />
-        </div>
+            </div>}
+          {this.state.calculating && <div className="polaroid">
+              <div className="cameraLoader"></div>
+              <p>Detecting face. This can take up to 15 seconds.</p>
+          </div>}
       </div>
     );
     }
