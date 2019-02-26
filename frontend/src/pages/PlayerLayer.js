@@ -146,15 +146,16 @@ class PlayerLayer extends React.Component {
         const playerLayer = this;
         const id = this.state.id;
         const playerData = this.state.dataPlayers;
-        rows.push(
-            <Marker ref={playerLayer.popup} title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
-                <Popup>
-                    <div>Accuracy: {playerLayer.state.accuracy} m</div>
-                    <button onClick={playerLayer.showFindEnemyAlertBox.bind(playerLayer)}>find Enemies</button>
-                </Popup>
-            </Marker>
-        );
-
+        if( playerData !== null){
+          rows.push(
+              <Marker ref={playerLayer.popup} title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
+                  <Popup>
+                      <div>Accuracy: {playerLayer.state.accuracy} m</div>
+                      <button onClick={playerLayer.showFindEnemyAlertBox.bind(playerLayer)}>find Enemies</button>
+                  </Popup>
+              </Marker>
+          );
+        }
 
 
         if (playerData !== null) {
@@ -287,17 +288,17 @@ class PlayerLayer extends React.Component {
 
           var content = "";
 
+          // rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,this.state.id,[this.state.latitude,this.state.longitude])}>Follow myself</button> );
+
           Object.keys(jsonObject).forEach(function(key) {
 
               var playerData = jsonObject[key];
 
-              var idEnemy = playerData.playerId;
+              var idEnemy = playerData.id;
 
               // check for enemy!
               if(idEnemy !== playerLayer.state.id){
                 rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,idEnemy,[playerData.latitude,playerData.longitude])}>{idEnemy}</button>);
-              } else {
-                rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,idEnemy,[playerData.latitude,playerData.longitude])}>Follow myself</button> );
               }
           });
       }
