@@ -4,6 +4,8 @@ import '../App.css';
 import PlayerLayer from './PlayerLayer'
 import Cookies from 'universal-cookie';
 import PopPop from 'react-poppop';
+import { Link } from 'react-router-link'
+
 
 
 const cookies = new Cookies();
@@ -25,7 +27,7 @@ class Trial extends React.Component {
         },
         zoom: 14,
         id: cookies.get('name'),
-        idTarget: null,
+        idTarget: cookies.get('name'),
         accuracy: 0,
         centerMap: [50.8632811,4.6762872],
         centerMap: [50.8632811, 4.6762872],
@@ -80,7 +82,16 @@ class Trial extends React.Component {
     }
 
     mapChanged(feature, layer){
+
+      if(this.state.idTarget === null){
+        var rows = [];
+        rows.push(<Link to="/profilePage">Profile Page</Link>);
+        rows.push(<Link to="/CaputurePlayer">Capture Player</Link>);
+        this.showAlertBox(rows);
+      }
+
       this.setState({idTarget:null});
+
     }
 
 

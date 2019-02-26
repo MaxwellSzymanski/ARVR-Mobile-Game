@@ -1,7 +1,7 @@
 import React from 'react';
 import Camera from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
-import { Redirect } from 'react-router';
+import { Redirect, Link } from 'react-router';
 import { getFeatureVector } from '../facerecognition/FaceRecognition';
 import swal from '@sweetalert/with-react';
 import {isIOS, isSafari} from 'react-device-detect';
@@ -14,7 +14,8 @@ class CameraComp extends React.Component {
     state = {
         redirect : false,
         picture: null,
-        calculating: false
+        calculating: false,
+        pictures: []
     };
 
     setRedirect = () => {
@@ -63,11 +64,16 @@ class CameraComp extends React.Component {
         if (picture.toString() !== "") {
             // Picture uploaded.
             this.onTakePhoto(null, picture)
+<<<<<<< HEAD
+=======
+            this.state.picture = picture;
+
+>>>>>>> b93f11be2c19c8f3a40435db8feee3274b811807
             // TODO: Make sure to redirect.
         }
         else {
             // Error, either too big or
-            swal("Make sure the picture is jpg or png and smaller than 5MB.")
+            swal("Make sure the picture is jpg or png and smaller than 5MB.");
         }
     }
 
@@ -80,9 +86,9 @@ class CameraComp extends React.Component {
     render () {
       if (isSafari || isIOS) return (
           <div>
-              <p className="subTitle">Upload an image</p>
+              <p className="subTitle fadeIn1">Upload an image</p>
               <span style={{margin:'10px'}}> </span>
-              <div className="polaroid" style={{width:'500px'}}>
+              <div className="polaroid fadeIn2" style={{width:'500px'}}>
                   <ImageUploader
                       withIcon={true}
                       buttonText='Choose profile image'
@@ -95,7 +101,7 @@ class CameraComp extends React.Component {
                       singleImage={true}
                   />
               </div>
-              <button className="smallButton info" style={{marginTop:'20px'}} onClick={this.showInfo}> </button>
+              <button className="smallButton info fadeIn3" style={{marginTop:'20px'}} onClick={this.showInfo}> </button>
           </div>
     );
 

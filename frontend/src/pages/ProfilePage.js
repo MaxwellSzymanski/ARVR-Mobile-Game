@@ -11,6 +11,7 @@ class ProfilePage extends React.Component {
     constructor() {
         super();
         this.state = {
+            //name: 'Test name',
             name: cookies.get('name'),
             health: 300,
             attack: 100,
@@ -117,7 +118,7 @@ class ProfilePage extends React.Component {
                 {/* Buttons and profile */}
 
                 <Link to="/map"><button className="smallButton back topLeft"/></Link>;
-                <div className="profileCard">
+                <div className="profileCard fadeIn0">
                     <div className="profilePhoto"><img src={this.state.encodedPic} alt={"Profile image"}/></div>
                     <h1 className="name">{this.state.name}</h1>
                     <h3 className="smallText">Level {this.state.level}</h3>
@@ -131,7 +132,7 @@ class ProfilePage extends React.Component {
 
                 {/* Stat card */}
 
-                <div className="statCard">
+                <div className="statCard fadeIn1">
                     <div className="statContainer">
                         <h3 className="statTitle">Kills</h3>
                         <h3 className="statNumber">{this.state.kills}</h3>
@@ -150,7 +151,7 @@ class ProfilePage extends React.Component {
 
                 {/* Info card */}
 
-                <div className="contentCard">
+                <div className="contentCard fadeIn2">
                     <div className="attributeContainer">
                         <h3 className="attributeTitle">Health</h3>
 
@@ -181,7 +182,7 @@ class ProfilePage extends React.Component {
                         </div>
                     </div>
                 </div>
-                <button className="logOut" onClick={this.logOut}> Log out </button>
+                <button className="logOut fadeIn3" onClick={this.logOut}> Log out </button>
             </div>
         );
     }
