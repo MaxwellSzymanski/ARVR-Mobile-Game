@@ -294,12 +294,12 @@ class PlayerLayer extends React.Component {
 
               var playerData = jsonObject[key];
 
-              var idEnemy = playerData.id;
+              // var idEnemy = playerData.id;
 
               // check for enemy!
-              if(idEnemy !== playerLayer.state.id){
-                rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,idEnemy,[playerData.latitude,playerData.longitude])}>{idEnemy}</button>);
-              }
+              // if(idEnemy !== playerLayer.state.id){
+              //   rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,idEnemy,[playerData.latitude,playerData.longitude])}>{idEnemy}</button>);
+              // }
           });
       }
       this.showAlertBox(rows);
