@@ -68,9 +68,7 @@ class CapturePlayer extends React.Component {
 
   async getMatchingPlayerFromFV(results) {
     console.log(results)
-    console.log(results.featureVector)
-    console.log(results._id)
-    console.log(results[0]._id)
+    console.log(JSON.parse(results[0].featureVector))
     let fv1 = localStorage.getItem("fv");
     let minDist = 1;
     let index = null;

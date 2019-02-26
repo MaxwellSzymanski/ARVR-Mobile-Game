@@ -146,15 +146,16 @@ class PlayerLayer extends React.Component {
         const playerLayer = this;
         const id = this.state.id;
         const playerData = this.state.dataPlayers;
-        rows.push(
-            <Marker ref={playerLayer.popup} title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
-                <Popup>
-                    <div>Accuracy: {playerLayer.state.accuracy} m</div>
-                    <button onClick={() => playerLayer.showFindEnemyAlertBox()}>find Enemies</button>
-                </Popup>
-            </Marker>
-        );
-
+        if( playerData !== null){
+          rows.push(
+              <Marker ref={playerLayer.popup} title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
+                  <Popup>
+                      <div>Accuracy: {playerLayer.state.accuracy} m</div>
+                      <button onClick={playerLayer.showFindEnemyAlertBox.bind(playerLayer)}>find Enemies</button>
+                  </Popup>
+              </Marker>
+          );
+        }
 
 
         if (playerData !== null) {

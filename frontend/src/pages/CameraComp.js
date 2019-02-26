@@ -6,6 +6,8 @@ import { getFeatureVector } from '../facerecognition/FaceRecognition';
 import swal from '@sweetalert/with-react';
 import {isIOS, isSafari} from 'react-device-detect';
 import ImageUploader from 'react-images-upload';
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
 
 class CameraComp extends React.Component {
 
@@ -44,7 +46,7 @@ class CameraComp extends React.Component {
         }
         else {
           localStorage.setItem("PhotoOfMe", dataUri);
-          localStorage.setItem("fv", fv);
+          localStorage.setItem("fv", JSON.stringify(fv));
           this.setRedirect();
         }
 
