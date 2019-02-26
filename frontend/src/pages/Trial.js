@@ -3,7 +3,8 @@ import { Map, TileLayer} from 'react-leaflet';
 import '../App.css';
 import PlayerLayer from './PlayerLayer'
 import Cookies from 'universal-cookie';
-import PopPop from 'react-poppop'
+import PopPop from 'react-poppop';
+
 
 const cookies = new Cookies();
 
@@ -73,7 +74,6 @@ class Trial extends React.Component {
     }
 
     setTarget(id,pos){
-      console.log(id+" id <= => pos "+ pos);
       this.setState({showAlertBox: false})
       this.setState({centerMap: [pos[0],pos[1]]});
       this.setState({idTarget: id});
@@ -81,7 +81,6 @@ class Trial extends React.Component {
 
     mapChanged(feature, layer){
       this.setState({idTarget:null});
-      console.log(" mapChanged");
     }
 
 

@@ -276,36 +276,34 @@ class PlayerLayer extends React.Component {
     }
 
     showFindEnemyAlertBox(){
+      if( this.popup.current.leafletElement !== null){
+        this.popup.current.leafletElement.options.leaflet.map.closePopup();
 
-      this.popup.current.leafletElement.options.leaflet.map.closePopup();
+        var rows = [];
 
-      var rows = [];
+        var playerLayer = this;
 
-      var playerLayer = this;
+        var jsonObject = this.state.dataPlayers;
+        if(jsonObject !== null){
 
-      var jsonObject = this.state.dataPlayers;
-      if(jsonObject !== null){
+            var content = "";
 
-          var content = "";
+            Object.keys(jsonObject).forEach(function(key) {
 
-          Object.keys(jsonObject).forEach(function(key) {
+                var playerData = jsonObject[key];
 
-              var playerData = jsonObject[key];
+                var idEnemy = playerData.playerId;
 
-              var idEnemy = playerData.playerId;
-
-              console.log(idEnemy + " idEnemy");
-
-
-              // check for enemy!
-              if(idEnemy !== playerLayer.state.id){
-                rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,idEnemy,[playerData.latitude,playerData.longitude])}>{idEnemy}</button>);
-              } else {
-                rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,idEnemy,[playerData.latitude,playerData.longitude])}>Follow myself</button> );
-              }
-          });
-      }
-      this.showAlertBox(rows);
+                // check for enemy!
+                if(idEnemy !== playerLayer.state.id){
+                  rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,idEnemy,[playerData.latitude,playerData.longitude])}>{idEnemy}</button>);
+                } else {
+                  rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,idEnemy,[playerData.latitude,playerData.longitude])}>Follow myself</button> );
+                }
+            });
+        }
+        this.showAlertBox(rows);
+    }
     }
 
 
