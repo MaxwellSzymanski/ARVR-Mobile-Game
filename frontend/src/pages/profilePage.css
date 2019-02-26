@@ -87,7 +87,7 @@ body {
     margin-left: auto;
     resize: horizontal;
     max-width: 500px;
-    height: 150px;
+    height: 200px;
     background-color: white;
     border-radius: 15px;
     position: center;
@@ -113,7 +113,6 @@ body {
 img {
     width: 100%;
 }
-
 
 .container > * {
     display: inline-block;
@@ -216,6 +215,7 @@ img {
     max-width: 500px;
     height: 50px;
     background-color: #490b0b;
+    margin-bottom: 20px;
     border: none;
     border-radius: 20px;
     color: white;
@@ -315,4 +315,6 @@ img {
         left: 30px;
         top: 40px;
     }
+
+
 }

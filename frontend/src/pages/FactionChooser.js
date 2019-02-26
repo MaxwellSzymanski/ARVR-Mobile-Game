@@ -15,7 +15,6 @@ class FactionChooser extends React.Component {
     }
 
     componentDidMount() {
-        this.forceUpdate()
     }
 
     tick() {
@@ -39,7 +38,7 @@ class FactionChooser extends React.Component {
     render() {
         return (
             <div ref={this.carousel}>
-                <h1 className="title">Seconds: {this.state.seconds}</h1>
+                <h1 className="title">Choose faction</h1>
                 <div className="carousel" data-flickity='{ "freeScroll": false, "wrapAround": true, "prevNextButtons": false, "pageDots": false , "reloadOnUpdate": true}'>
                     <div className="carousel-cell">
                         <div className="header scavenger">Scavenger</div>
