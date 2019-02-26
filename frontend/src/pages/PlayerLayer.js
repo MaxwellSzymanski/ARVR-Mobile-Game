@@ -150,7 +150,7 @@ class PlayerLayer extends React.Component {
             <Marker ref={playerLayer.popup} title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
                 <Popup>
                     <div>Accuracy: {playerLayer.state.accuracy} m</div>
-                    <button onClick={() => playerLayer.showFindEnemyAlertBox()}>find Enemies</button>
+                    <button onClick={playerLayer.showFindEnemyAlertBox.bind(playerLayer)}>find Enemies</button>
                 </Popup>
             </Marker>
         );
