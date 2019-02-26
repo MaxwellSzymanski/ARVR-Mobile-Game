@@ -147,7 +147,7 @@ class PlayerLayer extends React.Component {
         const id = this.state.id;
         const playerData = this.state.dataPlayers;
         rows.push(
-            <Marker title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
+            <Marker ref={playerLayer.popup} title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
                 <Popup>
                     <div>Accuracy: {playerLayer.state.accuracy} m</div>
                     <button onClick={() => playerLayer.showFindEnemyAlertBox()}>find Enemies</button>
@@ -276,7 +276,6 @@ class PlayerLayer extends React.Component {
     }
 
     showFindEnemyAlertBox(){
-
       this.popup.current.leafletElement.options.leaflet.map.closePopup();
 
       var rows = [];
@@ -294,9 +293,6 @@ class PlayerLayer extends React.Component {
 
               var idEnemy = playerData.playerId;
 
-              console.log(idEnemy + " idEnemy");
-
-
               // check for enemy!
               if(idEnemy !== playerLayer.state.id){
                 rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,idEnemy,[playerData.latitude,playerData.longitude])}>{idEnemy}</button>);
@@ -306,6 +302,7 @@ class PlayerLayer extends React.Component {
           });
       }
       this.showAlertBox(rows);
+
     }
 
 
