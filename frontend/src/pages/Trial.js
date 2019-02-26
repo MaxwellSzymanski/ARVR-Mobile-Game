@@ -4,6 +4,8 @@ import '../App.css';
 import PlayerLayer from './PlayerLayer'
 import Cookies from 'universal-cookie';
 import PopPop from 'react-poppop';
+import { Link } from 'react-router-link'
+
 
 
 const cookies = new Cookies();
@@ -87,7 +89,7 @@ class Trial extends React.Component {
         rows.push(<Link to="/CaputurePlayer">Capture Player</Link>);
         this.showAlertBox(rows);
       }
-      
+
       this.setState({idTarget:null});
 
     }
