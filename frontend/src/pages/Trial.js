@@ -80,7 +80,16 @@ class Trial extends React.Component {
     }
 
     mapChanged(feature, layer){
+
+      if(this.state.idTarget === null){
+        var rows = [];
+        rows.push(<Link to="/profilePage">Profile Page</Link>);
+        rows.push(<Link to="/CaputurePlayer">Capture Player</Link>);
+        this.showAlertBox(rows);
+      }
+      
       this.setState({idTarget:null});
+
     }
 
 
