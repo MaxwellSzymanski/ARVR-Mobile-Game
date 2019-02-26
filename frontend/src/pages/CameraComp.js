@@ -1,7 +1,7 @@
 import React from 'react';
 import Camera from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
-import { Redirect } from 'react-router';
+import { Redirect, Link } from 'react-router';
 import { getFeatureVector } from '../facerecognition/FaceRecognition';
 import swal from '@sweetalert/with-react';
 import {isIOS, isSafari} from 'react-device-detect';
@@ -63,7 +63,7 @@ class CameraComp extends React.Component {
         //TODO: Handle image upload.
         if (picture.toString() !== "") {
             // Picture uploaded.
-            this.onTakePhoto(dataUri, null)
+            this.onTakePhoto(null, picture)
             this.state.picture = picture;
 
             // TODO: Make sure to redirect.
