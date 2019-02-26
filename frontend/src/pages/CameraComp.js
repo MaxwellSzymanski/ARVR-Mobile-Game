@@ -6,6 +6,8 @@ import { getFeatureVector } from '../facerecognition/FaceRecognition';
 import swal from '@sweetalert/with-react';
 import {isIOS, isSafari} from 'react-device-detect';
 import ImageUploader from 'react-images-upload';
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
 
 class CameraComp extends React.Component {
 
@@ -24,13 +26,15 @@ class CameraComp extends React.Component {
         if (this.state.redirect) {return <Redirect to="/imageConfirm" />}
     };
 
-    async onTakePhoto (dataUri) {
+    async onTakePhoto (dataUri, iosPhoto) {
         this.setState({ calculating: true});
-        let photoSrc = dataUri;
         let photo = new Image;
-        photo.src = photoSrc;
+        if (iosPhoto == null) {
+          let photoSrc = dataUri;
+          photo.src = photoSrc;
+        }
+        else { photo = iosPhoto }
         console.log(photo);
-
         let fv = await getFeatureVector(photo);
 
         if (fv === null) {
@@ -45,7 +49,7 @@ class CameraComp extends React.Component {
         }
         else {
           localStorage.setItem("PhotoOfMe", dataUri);
-          localStorage.setItem("fv", fv);
+          localStorage.setItem("fv", JSON.stringify(fv));
           this.setRedirect();
         }
 
@@ -58,8 +62,10 @@ class CameraComp extends React.Component {
     handleUpload(picture) {
         //TODO: Handle image upload.
         if (picture.toString() !== "") {
-            swal("Okay");
-            swal(picture.toString());
+            // Picture uploaded.
+            this.onTakePhoto(dataUri, null)
+            this.state.picture = picture;
+
             // TODO: Make sure to redirect.
         }
         else {
@@ -102,7 +108,7 @@ class CameraComp extends React.Component {
         <p className="subTitle">Take your profile picture</p>
           {!this.state.calculating && <div className="polaroid">
             <Camera
-                onTakePhoto = { (dataUri) => { this.onTakePhoto(dataUri); } }
+                onTakePhoto = { (dataUri) => { this.onTakePhoto(dataUri, null); } }
                 isImageMirror = {true}
                 imageType = {'IMAGE_TYPES.PNG'}
                 imageCompression = {0.97}

@@ -7,6 +7,19 @@ import SocketContext from "../socketContext";
 
 const cookies = new Cookies();
 
+var target = L.icon({
+    iconUrl:"https://image.flaticon.com/icons/png/512/41/41947.png"
+    ,
+
+    //shadowUrl: 'leaf-shadow.png',
+
+    iconSize:     [180, 180], // size of the icon
+    shadowSize:   [50, 64], // size of the shadow
+    iconAnchor:   [90, 90], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [0, -30] // point from which the popup should open relative to the iconAnchor
+});
+
 var myIcon = L.icon({
     iconUrl: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4Igp3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIKdmlld0JveD0iMCAwIDIyNCAyMjQiCnN0eWxlPSIgZmlsbDojMDAwMDAwOyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJub256ZXJvIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWxpbmVjYXA9ImJ1dHQiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiIHN0cm9rZS1taXRlcmxpbWl0PSIxMCIgc3Ryb2tlLWRhc2hhcnJheT0iIiBzdHJva2UtZGFzaG9mZnNldD0iMCIgZm9udC1mYW1pbHk9Im5vbmUiIGZvbnQtd2VpZ2h0PSJub25lIiBmb250LXNpemU9Im5vbmUiIHRleHQtYW5jaG9yPSJub25lIiBzdHlsZT0ibWl4LWJsZW5kLW1vZGU6IG5vcm1hbCI+PHBhdGggZD0iTTAsMjI0di0yMjRoMjI0djIyNHoiIGZpbGw9Im5vbmUiPjwvcGF0aD48ZyBmaWxsPSIjYmIxZDBjIj48cGF0aCBkPSJNMTg4LjEzMzc1LDQuNDcxMjVjLTAuODA2NCwwLjAwNTYgLTEuNjA2ODUsMC4yMzQ1IC0yLjMwMTI1LDAuNjgyNWMtMC40NDgsMC4yNjg4IC0yLjU1NjA1LDEuNTY2MjUgLTUuODcxMjUsMy44MDYyNWMwLDAgLTAuMjI1NzUsMC4xNzc0NSAtMC42NzM3NSwwLjQ0NjI1Yy02LjAwMzIsNC40OCAtNTAuMjYzNSwzOC4xMjY1NSAtNjIuODA3NSw3NS43MTM3NWwyMi40LC00LjQ4YzAsMCAtNDEuODg2NiwzNy42NzM2NSAtNTYuODA1LDEwMC45MzEyNWMwLC0wLjA0NDggLTEuOTk1LDguODMwMTUgLTIuNTU1LDE0Ljc0Mzc1YzAuNzYxNiwxLjc0NzIgMS41MjMyLDMuNTM0NjUgMi4yNCw1LjQxNjI1YzAuMDQ0OCwwLjEzNDQgMi41MDQ2LDYuNzE4OTUgMy41MzUsMTAuMTIzNzVjMC41ODI0LDEuODgxNiAyLjMzMzgsMy4xODUgNC4zMDUsMy4xODVoNDQuOGMxLjk3MTIsMCAzLjcyMjYsLTEuMzAzNCA0LjMwNSwtMy4xODVjMTYuODQ0OCwtNTQuNzkwNCA1My40MDA1NSwtNjMuNzg4OSA1NC45MjM3NSwtNjQuMTAyNWMxLjM4ODgsLTAuMzEzNiAyLjU1MDEsLTEuMjk4NSAzLjEzMjUsLTIuNjQyNWwxMy40NCwtMzEuMzZjMC42MjcyLC0xLjQzMzYgMC40NTA4LC0zLjA5NDM1IC0wLjQ5LC00LjM0ODc1bC0yMS40NjM3NSwtMzAuMDU2MjVsNC4zOTI1LC03MC4xMTM3NWMwLjA4OTYsLTEuNjU3NiAtMC43NjI2NSwtMy4yNzAwNSAtMi4xOTYyNSwtNC4xMjEyNWMtMC42OTQ0LC0wLjQyNTYgLTEuNTAzNiwtMC42NDQzNSAtMi4zMSwtMC42Mzg3NXpNMzUuMTc1LDQuNTMyNWMtMC40MzI2LDAuMDY1MSAtMC44NTY4LDAuMTkyMTUgLTEuMjYsMC4zOTM3NWMtMS42NTc2LDAuNzYxNiAtMi42NDQ2LDIuNTEzIC0yLjU1NSw0LjMwNWw0LjM5MjUsNzAuMTEzNzVsLTIxLjQ2Mzc1LDMwLjA1NjI1Yy0wLjk0MDgsMS4yNTQ0IC0xLjExNzIsMi45MTUxNSAtMC40OSw0LjM0ODc1bDEzLjQ0LDMxLjM2YzAuNTgyNCwxLjM0NCAxLjc0MzcsMi4zMjg5IDMuMTMyNSwyLjY0MjVjMC4xMzQ0LDAuMDQ0OCA1LjIwMzQ1LDEuMjA1MDUgMTIuNDE2MjUsNS40MTYyNWMwLjI2ODgsMC4xMzQ0IDYuOTM2NjUsNC4zOTYzNSAxMC4zODYyNSw3LjIxODc1bDEuNjYyNSwtMTAuMDM2MjVsMy40MDM3NSwtMjAuNDMxMjVoLTEzLjQ0YzcuNDgxNiwtMzguMzkzNiAzMy4yMzg0NSwtNjkuNjE2NCA0Mi42OTEyNSwtODAuMDFsLTQ4LjY1LC00NC4yNjYyNWMtMS4wMDgsLTAuOTA3MiAtMi4zNjg0NSwtMS4zMDY1NSAtMy42NjYyNSwtMS4xMTEyNXpNNjIuNzIsMTAzLjA0YzAsMCAzLjk4NTU5LDIyLjQgMTUuOTMzNzUsMjIuNGgxOS45MDYyNXpNMTYxLjI4LDEwMy4wNGMwLDAgLTMuOTg5NjUsMjIuNCAtMTUuOTUxMjUsMjIuNGgtMTkuODg4NzV6TTk0LjA4LDE2NS43NmgzNS44NGwtMTcuOTIsMjYuODh6Ij48L3BhdGg+PC9nPjwvZz48L3N2Zz4=",
     //shadowUrl: 'leaf-shadow.png',
@@ -58,7 +71,8 @@ class PlayerLayer extends React.Component {
     constructor(props) {
         super(props);
         this.state.id = props.id;
-        this.state.locationEnabled = props.locationEnabled
+        this.state.locationEnabled = props.locationEnabled;
+        this.popup = React.createRef();
     }
 
     state = {
@@ -68,6 +82,7 @@ class PlayerLayer extends React.Component {
         dataPlayers: null,
         playerMarkers: null,
         historyDataPlayers:JSON.stringify({}),
+        targetPos:null
     };
 
     componentDidMount() {
@@ -131,19 +146,32 @@ class PlayerLayer extends React.Component {
         const playerLayer = this;
         const id = this.state.id;
         const playerData = this.state.dataPlayers;
-        rows.push(
-            <Marker title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
-                <Popup>
-                    <div>Accuracy: {playerLayer.state.accuracy} m</div>
-                </Popup>
-            </Marker>
-        );
+        if( playerData !== null){
+          rows.push(
+              <Marker ref={playerLayer.popup} title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
+                  <Popup>
+                      <div>Accuracy: {playerLayer.state.accuracy} m</div>
+                      <button onClick={playerLayer.showFindEnemyAlertBox.bind(playerLayer)}>find Enemies</button>
+                  </Popup>
+              </Marker>
+          );
+        }
+
+
         if (playerData !== null) {
             Object.keys(playerData).forEach(function (key) {
                 const player = playerData[key];
                 const idEnemy = player.id;
                 const pos = [player.latitude, player.longitude];
                 const timeDiff = Math.abs(new Date() - new Date(player.updatedAt)) / 1000;
+
+                if( playerLayer.props.idTarget !== null && playerLayer.props.idTarget === idEnemy ){
+                  playerLayer.props.setTarget(idEnemy, pos);
+                  if( idEnemy !== id ){
+                    rows.push(<Marker position={pos} icon={target}/>);
+                  }
+                }
+
                 if (timeDiff <= 5) {
                     rows.push(
                         <Marker title={key} position={pos} icon={enemyOnline}>
@@ -247,6 +275,37 @@ class PlayerLayer extends React.Component {
     showAlertBox(content){
         this.props.showAlertBox(content);
     }
+
+    showFindEnemyAlertBox(){
+      this.popup.current.leafletElement.options.leaflet.map.closePopup();
+
+      var rows = [];
+
+      var playerLayer = this;
+
+      var jsonObject = this.state.dataPlayers;
+      if(jsonObject !== null){
+
+          var content = "";
+
+          rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,this.state.id,[this.state.latitude,this.state.longitude])}>Follow myself</button> );
+
+          Object.keys(jsonObject).forEach(function(key) {
+
+              var playerData = jsonObject[key];
+
+              var idEnemy = playerData.id;
+
+              // check for enemy!
+              if(idEnemy !== playerLayer.state.id){
+                rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,idEnemy,[playerData.latitude,playerData.longitude])}>{idEnemy}</button>);
+              }
+          });
+      }
+      this.showAlertBox(rows);
+
+    }
+
 
     render() {
         var markers = this.state.playerMarkers;
