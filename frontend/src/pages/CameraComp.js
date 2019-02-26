@@ -25,13 +25,15 @@ class CameraComp extends React.Component {
         if (this.state.redirect) {return <Redirect to="/imageConfirm" />}
     };
 
-    async onTakePhoto (dataUri) {
+    async onTakePhoto (dataUri, iosPhoto) {
         this.setState({ calculating: true});
-        let photoSrc = dataUri;
         let photo = new Image;
-        photo.src = photoSrc;
+        if (iosPhoto == null) {
+          let photoSrc = dataUri;
+          photo.src = photoSrc;
+        }
+        else { photo = iosPhoto }
         console.log(photo);
-
         let fv = await getFeatureVector(photo);
 
         if (fv === null) {
@@ -60,6 +62,7 @@ class CameraComp extends React.Component {
         //TODO: Handle image upload.
         if (picture.toString() !== "") {
             // Picture uploaded.
+            this.onTakePhoto(dataUri, null)
             this.state.picture = picture;
             // TODO: Make sure to redirect.
         }
@@ -103,7 +106,7 @@ class CameraComp extends React.Component {
         <p className="subTitle">Take your profile picture</p>
           {!this.state.calculating && <div className="polaroid">
             <Camera
-                onTakePhoto = { (dataUri) => { this.onTakePhoto(dataUri); } }
+                onTakePhoto = { (dataUri) => { this.onTakePhoto(dataUri, null); } }
                 isImageMirror = {true}
                 imageType = {'IMAGE_TYPES.PNG'}
                 imageCompression = {0.97}

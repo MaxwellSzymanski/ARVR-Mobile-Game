@@ -100,6 +100,7 @@ class CapturePlayer extends React.Component {
     return (
       <div className="background">
         {this.renderRedirect()}
+        <Link to="/map"><button className="smallButton back topLeft"/></Link>;
         <div className="polaroid">
             <Camera
                 onTakePhoto = { (dataUri) => { this.onTakePhoto(dataUri); } }
