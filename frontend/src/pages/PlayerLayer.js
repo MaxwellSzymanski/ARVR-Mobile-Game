@@ -288,17 +288,17 @@ class PlayerLayer extends React.Component {
 
           var content = "";
 
+          rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,this.state.id,[this.state.latitude,this.state.longitude])}>Follow myself</button> );
+
           Object.keys(jsonObject).forEach(function(key) {
 
               var playerData = jsonObject[key];
 
-              var idEnemy = playerData.playerId;
+              var idEnemy = playerData.id;
 
               // check for enemy!
               if(idEnemy !== playerLayer.state.id){
                 rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,idEnemy,[playerData.latitude,playerData.longitude])}>{idEnemy}</button>);
-              } else {
-                rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,idEnemy,[playerData.latitude,playerData.longitude])}>Follow myself</button> );
               }
           });
       }
