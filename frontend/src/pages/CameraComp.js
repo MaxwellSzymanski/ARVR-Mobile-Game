@@ -62,8 +62,7 @@ class CameraComp extends React.Component {
         //TODO: Handle image upload.
         if (picture.toString() !== "") {
             // Picture uploaded.
-            this.onTakePhoto(dataUri, null)
-            this.state.picture = picture;
+            this.onTakePhoto(null, picture)
             // TODO: Make sure to redirect.
         }
         else {

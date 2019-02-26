@@ -1,7 +1,7 @@
 import React from 'react';
 import Camera from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
-import { Redirect } from 'react-router';
+import { Link, Redirect } from 'react-router';
 import { getFeatureVector, getFVDistance } from '../facerecognition/FaceRecognition';
 import swal from '@sweetalert/with-react';
 import SocketContext from "../socketContext";
@@ -48,11 +48,11 @@ class CapturePlayer extends React.Component {
 
   componentDidMount() {
      this.context.on('sentFVfromDB', async (results) => {
-        let matchingPlayerId = await this.getMatchingPlayerFromFV(results);
-        if (matchingPlayerId != null) {
-          console.log(matchingPlayerId)
-          localStorage.setItem("matchingPlayerId", matchingPlayerId);
-          //this.setRedirect();
+        let capturedPlayerId = await this.getMatchingPlayerFromFV(results);
+        if (capturedPlayerId != null) {
+          console.log(capturedPlayerId)
+          localStorage.setItem("capturedPlayerId", capturedPlayerId);
+          this.setRedirect();
         }
         //else if (matchingPlayerId = playerId){ "You can't capture yourself!" }
         else {
@@ -73,8 +73,9 @@ class CapturePlayer extends React.Component {
     let minDist = 1;
     let index = null;
     const threshold = 0.52;
+
     let i = 0
-    for (i ; i < 1; i++) {
+    for (i ; i < results.length; i++) {
       let fv2 = Object.values(JSON.parse(results[i].featureVector));
       let dist = await getFVDistance(fv1, fv2)
       if (minDist > dist && dist <= threshold) {
@@ -100,7 +101,6 @@ class CapturePlayer extends React.Component {
     return (
       <div className="background">
         {this.renderRedirect()}
-        <Link to="/map"><button className="smallButton back topLeft"/></Link>;
         <div className="polaroid">
             <Camera
                 onTakePhoto = { (dataUri) => { this.onTakePhoto(dataUri); } }

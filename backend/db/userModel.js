@@ -49,7 +49,7 @@ const Schema = new mongoose.Schema({
     },
     featureVector: {
         type: Object,
-        // required: true
+        required: true
     },
     attack: {
         type: Number,
@@ -106,6 +106,12 @@ Schema.methods.getUserData = function() {
         health: this.health,
         level: this.level,
         experience: this.experience,
+    };
+};
+
+Schema.methods.getUserFV = function() {
+    return {
+        featureVector: this.featureVector
     };
 };
 
