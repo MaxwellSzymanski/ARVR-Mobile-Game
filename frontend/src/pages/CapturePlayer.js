@@ -1,11 +1,7 @@
 import React from 'react';
 import Camera from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
-<<<<<<< HEAD
-import { Link, Redirect } from 'react-router';
-=======
 import { Link, Redirect } from 'react-router-dom';
->>>>>>> b93f11be2c19c8f3a40435db8feee3274b811807
 import { getFeatureVector, getFVDistance } from '../facerecognition/FaceRecognition';
 import swal from '@sweetalert/with-react';
 import SocketContext from "../socketContext";
@@ -29,7 +25,6 @@ class CapturePlayer extends React.Component {
       var photoSrc = dataUri;
       var photo = new Image;
       photo.src = photoSrc;
-      console.log(photo);
 
       var fv = await getFeatureVector(photo);
 
@@ -77,7 +72,7 @@ class CapturePlayer extends React.Component {
     let minDist = 1;
     let index = null;
     const threshold = 0.52;
-
+    console.log(results)
     let i = 0
     for (i ; i < results.length; i++) {
       let fv2 = Object.values(JSON.parse(results[i].featureVector));
