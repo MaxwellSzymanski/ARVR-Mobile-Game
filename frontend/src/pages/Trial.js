@@ -25,7 +25,7 @@ class Trial extends React.Component {
         },
         zoom: 14,
         id: cookies.get('name'),
-        idTarget: null,
+        idTarget: cookies.get('name'),
         accuracy: 0,
         centerMap: [50.8632811,4.6762872],
         centerMap: [50.8632811, 4.6762872],
