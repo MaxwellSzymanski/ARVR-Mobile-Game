@@ -41,17 +41,18 @@ class CapturePlayer extends React.Component {
 
       else {
           localStorage.setItem("PhotoOfPlayer", dataUri);
-          localStorage.setItem("fv", fv);
+          localStorage.setItem("fv", JSON.stringify(fv));
           this.context.emit('getFVfromDB');
       }
   }
 
   componentDidMount() {
-    this.context.on('sentFVfromDB', (results) => {
-        let matchingPlayerId = this.getMatchingPlayerFromFV(results);
+     this.context.on('sentFVfromDB', async (results) => {
+        let matchingPlayerId = await this.getMatchingPlayerFromFV(results);
         if (matchingPlayerId != null) {
+          console.log(matchingPlayerId)
           localStorage.setItem("matchingPlayerId", matchingPlayerId);
-          this.setRedirect();
+          //this.setRedirect();
         }
         //else if (matchingPlayerId = playerId){ "You can't capture yourself!" }
         else {
@@ -67,23 +68,24 @@ class CapturePlayer extends React.Component {
   }
 
   async getMatchingPlayerFromFV(results) {
-    console.log(results)
-    console.log(JSON.parse(results[0].featureVector))
-    let fv1 = localStorage.getItem("fv");
+
+    let fv1 = Object.values(JSON.parse(localStorage.getItem("fv")));
     let minDist = 1;
     let index = null;
     const threshold = 0.52;
     let i = 0
-    for (i ; i < results.length; i++) {
-      let fv2 = Object.values(results[i].featureVector);
-      let dist = getFVDistance(fv1, fv2)
+    for (i ; i < 1; i++) {
+      let fv2 = Object.values(JSON.parse(results[i].featureVector));
+      let dist = await getFVDistance(fv1, fv2)
       if (minDist > dist && dist <= threshold) {
+        console.log(dist)
         minDist = dist;
         index = i;
       }
     }
     if (index != null) {
-      return (results[i]._id);
+      console.log(results[index].name)
+      return (results[index]._id);
     }
     else return null;
   };
