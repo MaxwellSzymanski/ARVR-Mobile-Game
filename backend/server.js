@@ -324,6 +324,7 @@ function removePlayer(socket) {
 }
 
 function verifyJWT(data, socket) {
+    console.log("checking token");
     if (!data.token) return;
     jwt.verify(data.token, secret, async function(err, token) {
         if (err) {

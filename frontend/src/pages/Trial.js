@@ -85,8 +85,8 @@ class Trial extends React.Component {
 
       if(this.state.idTarget === null){
         var rows = [];
-        rows.push(<Link to="/profilePage">Profile Page</Link>);
-        rows.push(<Link to="/CaputurePlayer">Capture Player</Link>);
+        rows.push(<Link to="/profilepage"><button>Profile Page</button></Link>);
+          rows.push(<Link to="/captureplayer"><button>Capture Player</button>button></Link>);
         this.showAlertBox(rows);
       }
 
