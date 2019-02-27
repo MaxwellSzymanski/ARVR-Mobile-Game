@@ -13,10 +13,10 @@ class CaptureResult extends React.Component {
   }
 
   stats = {
-    image : null;
-    name: null;
-    level null;
-    health: null;
+    image : null,
+    name: null,
+    level: null,
+    health: null
   }
 
   render() {

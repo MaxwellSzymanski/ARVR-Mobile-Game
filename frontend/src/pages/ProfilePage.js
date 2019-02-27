@@ -11,8 +11,8 @@ class ProfilePage extends React.Component {
     constructor() {
         super();
         this.state = {
-            //name: 'Test name',
-            name: cookies.get('name'),
+            name: 'Test name',
+            //name: cookies.get('name'),
             health: 300,
             attack: 100,
             defence: 200,
@@ -99,8 +99,6 @@ class ProfilePage extends React.Component {
     }
 
     logOut() {
-
-
         this.context.emit("signout", {token: cookies.get("token")});
     }
 

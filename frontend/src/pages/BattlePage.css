@@ -1,0 +1,114 @@
+.bName {
+    font-family: Futura;
+    font-size: 30px;
+    color: #454F63;
+    top: -65px;
+    left: -30px;
+    position: relative;
+}
+
+.bSmallText {
+    position: relative;
+    font-family: Futura;
+    font-size: 15px;
+    color: #a5a89d;
+    top: -75px;
+    left: -85px;
+
+}
+
+.shorterLine {
+    width: 80%;
+    background-color: gray;
+}
+
+.bProfileCard {
+    margin-top: 120px;
+    margin-right: auto;
+    margin-left: auto;
+    resize: horizontal;
+    max-width: 500px;
+    height: 500px;
+    background-color: white;
+    border-radius: 15px;
+    position: center;
+    align-content: center;
+    width: 70%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+}
+
+.bProfilePhoto {
+    position : relative;
+    top : 30px;
+    left: -20vh;
+    height : 80px;
+    width : 80px;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 15px;
+    margin: 0 auto;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.healthBar {
+    background-color: #aaa5a5;
+    position: relative;
+    top: -50px;
+    height: 30px;
+    border-radius: 20px;
+    width: 80%;
+    margin: auto;
+}
+
+.healthCurrent {
+    padding: 5px;
+    height: 30px;
+    border-radius: 20px;
+    width: 70%;
+    background-color: #910f0f;
+    -webkit-transition: width 1s ease-in;
+}
+
+.attributeValueActive {
+    width: 14px;
+    height: 14px;
+    border-radius: 5px;
+    margin: 3px;
+    margin-top: 0px;
+    background-color: #910f0f;
+    display: inline-block;
+}
+
+.attributeValue {
+    width: 14px;
+    height: 14px;
+    border-radius: 5px;
+    margin: 3px;
+    background-color: #e9cfcf;
+    display: inline-block;
+}
+
+.attributeTitle {
+    font-family: "Futura";
+    color: #454f63;
+    font-size: 16px;
+    padding-left: 20px;
+    float:left;
+    display: inline-block;
+    top:-10px;
+    position: relative;
+}
+
+.attributeNumber {
+    font-family: "Futura";
+    color: #454f63;
+    font-size: 16px;
+    padding-right: 10px;
+    float:left;
+    display: inline-block;
+    top:-20px;
+    position: relative;
+}
+

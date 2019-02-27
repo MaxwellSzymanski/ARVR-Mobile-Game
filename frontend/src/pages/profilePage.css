@@ -206,9 +206,6 @@ img {
     background-color: #910f0f;
     -webkit-transition: width 1s ease-in;
 }
-.xpGained:hover {
-    width: 90%;
-}
 
 .logOut {
     width: 70%;

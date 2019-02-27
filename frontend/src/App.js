@@ -16,6 +16,7 @@ import CapturePlayer from "./pages/CapturePlayer.js";
 import FactionChooser from "./pages/FactionChooser";
 import Settings from "./pages/Settings.js";
 import Cookies from 'universal-cookie';
+import BattlePage from "./pages/BattlePage";
 const cookies = new Cookies();
 const url = require('./pages/serveradress.js');
 
@@ -94,6 +95,7 @@ class App extends Component {
               <Route exact path="/factionChooser" component={FactionChooser}> </Route>
               <Route exact path="/settings" component={Settings}> </Route>
               <Route exact path="/CapturePlayer" component={CapturePlayer}> </Route>
+                <Route exact path="/battlePage" component={BattlePage}> </Route>
             </Switch>
           </div>
         </Router>
