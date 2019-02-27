@@ -32,6 +32,7 @@ class EmailVerif extends React.Component {
         const that = this;
         this.context.on("jwt", (data) => {
             that.setState({
+                loading: true,
                 loggedIn: data.loggedIn,
                 verified: data.verified,
             })
@@ -109,8 +110,14 @@ class EmailVerif extends React.Component {
         redirect : false };
 
     renderRedirect = () => {
-        if (!this.state.loggedIn) {return <Redirect to="/sign-in" />}
-        else if (this.state.verified) {return <Redirect to="/map" />}
+        if (this.state.loading) {
+            if (!this.state.loggedIn) {
+                return <Redirect to="/sign-in"/>
+            }
+            else if (this.state.verified) {
+                return <Redirect to="/map"/>
+            }
+        }
     };
 
     setPage() {
