@@ -15,6 +15,7 @@ import EmailVerif from "./pages/EmailVerif.js";
 import ProfilePage from "./pages/ProfilePage";
 import CapturePlayer from "./pages/CapturePlayer.js";
 import FactionChooser from "./pages/FactionChooser";
+import BattlePage from "./pages/BattlePage";
 import Settings from "./pages/Settings.js";
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
@@ -73,8 +74,9 @@ class App extends Component {
                             <UnauthRoute exact path="/landingPage" component={LandingPage} redirectTo="/map" authenticated={this.state.verified}/>
                             <UnauthRoute exact path="/verify" component={EmailVerif} redirectTo="/map" authenticated={this.state.verified}/>
                             <AuthRoute  exact path="/map" component={Trial} redirectTo="/sign-in" authenticated={this.state.verified}/>
-                            <AuthRoute  exact path="/profilePage" component={ProfilePage} redirectTo="/sign-in" authenticated={this.state.verified}/>
+                            <Route  exact path="/profilePage" component={ProfilePage} redirectTo="/sign-in" authenticated={this.state.verified}/>
                             <Route exact path="/factionChooser" component={FactionChooser}> </Route>
+                            <Route exact path="/battlePage" component={BattlePage}> </Route>
                             <AuthRoute  exact path="/settings" component={Settings} redirectTo="/sign-in" authenticated={this.state.verified} />
                             <AuthRoute   exact path="/capturePlayer" component={CapturePlayer} redirectTo="/sign-in" authenticated={this.state.verified}/>
                         </Switch>
