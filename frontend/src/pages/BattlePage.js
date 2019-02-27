@@ -28,34 +28,44 @@ class BattlePage extends React.Component {
 
     // Generate attribute boxes
     generateAttributes(number) {
-        const active = Math.round(number / 100);
+        let value = 0;
+        if (number < 0.25) {value = 1}
+        else if (number < 0.50) {value = 2}
+        else if (number < 0.75) {value = 3}
+        else {value = 4}
+
         let html = [];
-        for (let i = 1; i <= active; i++) {
+        for (let i = 1; i <= value; i++) {
             html.push(<div key={i} className="bAttributeValueActive"> </div>)
         }
-        if (active !== 4) {
-            for (let j = 1; j <= 4-active; j++) {
+        if (value !== 4) {
+            for (let j = 1; j <= 4-value; j++) {
                 html.push(<div key={5+j} className="bAttributeValue"> </div>)
             }
         }
         return html
     }
 
-    generateText(number) {
-        switch (Math.round(number / 100)) {
-            case 0:
-                return "Very Low";
-            case 1:
-                return "Low";
-            case 2:
-                return "Moderate";
-            case 3:
-                return "High";
-            case 4:
-                return "Very high";
+    generateValue(type) {
+        switch (type) {
+            case "stamina":
+                return (this.state.health / 100);
+            case "motivation":
+                return (this.state.selfKills / (this.state.selfKills + this.state.selfDeaths));
+            case "fatigue":
+                return ((this.state.deaths / (this.state.selfKills + this.state.selfDeaths) + (1 - (this.state.health / 100)))/2);
             default:
-                return "None";
+                return -1;
         }
+    }
+
+    generateText(type) {
+        const value = this.generateValue(type);
+        if (value == 0) {return "Very Low";}
+        else if (value < 0.25) {return "Low"}
+        else if (value < 0.50) {return "Moderate"}
+        else if (value < 0.75) {return "High"}
+        else {return "Very High"}
     }
 
     attack() {
@@ -110,22 +120,22 @@ class BattlePage extends React.Component {
                         <div className="bAttributeContainer">
                             <h3 className="bAttributeTitle">Fatigue</h3>
                             <div className="bAttributeValueContainer">
-                                <p className="bAttributeNumber">{this.generateText(200)}</p>
-                                {this.generateAttributes(200)}
+                                <p className="bAttributeNumber">{this.generateText("fatigue")}</p>
+                                {this.generateAttributes(this.generateValue("fatigue"))}
                             </div>
                         </div><hr className="shorterLine"/>
                         <div className="bAttributeContainer">
                             <h3 className="bAttributeTitle">Stamina</h3>
                             <div className="bAttributeValueContainer">
-                                <p className="bAttributeNumber">{this.generateText(400)}</p>
-                                {this.generateAttributes(200)}
+                                <p className="bAttributeNumber">{this.generateText("stamina")}</p>
+                                {this.generateAttributes(this.generateValue("stamina"))}
                             </div>
                         </div><hr className="shorterLine"/>
                         <div className="bAttributeContainer">
                             <h3 className="bAttributeTitle">Motivation</h3>
                             <div className="bAttributeValueContainer">
-                                <p className="bAttributeNumber">{this.generateText(200)}</p>
-                                {this.generateAttributes(200)}
+                                <p className="bAttributeNumber">{this.generateText("motivation")}</p>
+                                {this.generateAttributes(this.generateValue("motivation"))}
                             </div>
                         </div>
                     </div>
