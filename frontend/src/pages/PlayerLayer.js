@@ -146,17 +146,15 @@ class PlayerLayer extends React.Component {
         const playerLayer = this;
         const id = this.state.id;
         const playerData = this.state.dataPlayers;
-        if( playerData !== null){
-          rows.push(
-              <Marker ref={playerLayer.popup} title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
-                  <Popup>
-                      <div>Accuracy: {playerLayer.state.accuracy} m</div>
-                      <button onClick={playerLayer.showFindEnemyAlertBox.bind(playerLayer)}>find Enemies</button>
-                  </Popup>
-              </Marker>
-          );
-        }
 
+        rows.push(
+            <Marker ref={playerLayer.popup} title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
+                <Popup>
+                    <div>Accuracy: {playerLayer.state.accuracy} m</div>
+                    <button onClick={playerLayer.showFindEnemyAlertBox.bind(playerLayer)}>find Enemies</button>
+                </Popup>
+            </Marker>
+        );
 
         if (playerData !== null) {
             Object.keys(playerData).forEach(function (key) {
@@ -188,7 +186,7 @@ class PlayerLayer extends React.Component {
                             <Popup>
                                 <p> {key} </p>
                                 {/*<button onClick={() => playerLayer.sendSpecialSignal(idEnemy)}>Send signal</button>*/}
-                                {/*<button onClick={() => playerLayer.sendHandShakeSignal(id, idEnemy)}>Send special*/}
+                                {/*<button onClick={() => playerLayer.sendHandShakeSignal(id, idEnemy)}>Send handshake*/}
                                 {/*signal*/}
                                 {/*</button>*/}
                             </Popup>

@@ -6,17 +6,38 @@ import swal from '@sweetalert/with-react';
 const cookies = new Cookies();
 
 class EmailVerif extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+
+        this.state.redirect = props.verified;
 
         this.state = {
             firstTry: true,
-            loading: false
+            loading: false,
+            loggedIn: true,
+            verified: false,
         };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
+
+    componentWillMount() {
+
+        const loginToken = cookies.get('token');
+        if (loginToken) {
+            console.log("token found");
+            this.context.emit("jwt", {token: loginToken});
+        }
+        const that = this;
+        this.context.on("jwt", (data) => {
+            that.setState({
+                loggedIn: data.loggedIn,
+                verified: data.verified,
+            })
+        });
+    }
+
 
     componentDidMount() {
         this.refs["code_1"].focus();
@@ -25,7 +46,7 @@ class EmailVerif extends React.Component {
         this.context.on("verify", function (response) {
             if (response.success) {
                 swal("Your e-mail has been verified.", {icon: "success"});
-                that.setState({redirect: true});
+                that.setState({verified: true});
             } else {
                 swal("That code seems to be wrong. Please try again or let us send you another code.", {icon: "error"});
                 that.setState({firstTry: false, loading: false})
@@ -87,16 +108,13 @@ class EmailVerif extends React.Component {
     state = {
         redirect : false };
 
-    setRedirect = () => {
-        this.setState({redirect: true})
-    };
-
     renderRedirect = () => {
-        if (this.state.redirect) {return <Redirect to="/map" />}
+        if (!this.state.loggedIn) {return <Redirect to="/sign-in" />}
+        else if (this.state.verified) {return <Redirect to="/map" />}
     };
 
     setPage() {
-        document.body.style = 'background: #cc1f10'
+        document.body.style = 'background: #910F0F'
     };
 
     render() {

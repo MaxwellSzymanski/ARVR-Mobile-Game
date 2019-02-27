@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 // eslint-disable-next-line
 import {HashRouter as Router, Route, Switch, NavLink, Redirect} from 'react-router-dom';
+import { AuthRoute, UnauthRoute } from 'react-router-auth'
 import io from 'socket.io-client';
 import './App.css';
 import SocketContext from './socketContext';
@@ -16,92 +17,72 @@ import CapturePlayer from "./pages/CapturePlayer.js";
 import FactionChooser from "./pages/FactionChooser";
 import Settings from "./pages/Settings.js";
 import Cookies from 'universal-cookie';
-import BattlePage from "./pages/BattlePage";
 const cookies = new Cookies();
 const url = require('./pages/serveradress.js');
 
-
 class App extends Component {
-  constructor() {
-    super();
+    constructor() {
+        super();
 
-    this.state = {
-      socket: io(url),
-      loaded: false,
-      loggedIn: false,
-      verified: false,
-    };
-  }
+        this.state = {
+            socket: io(url),
+            loggedIn: false,
+            verified: false,
+        };
+    }
 
-  async componentWillMount() {
-    const socket = this.state.socket;
-    socket.on("connect", function() {
-      console.log("Component will mount\nsocket.connected: " + socket.connected);
-    });
+    async componentWillMount() {
+        const socket = this.state.socket;
+        socket.on("connect", function() {
+            console.log("Component will mount\nsocket.connected: " + socket.connected);
+        });
 
-    let vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-
-    window.addEventListener('resize', () => {
         let vh = window.innerHeight * 0.01;
         document.documentElement.style.setProperty('--vh', `${vh}px`);
-    });
 
-    const loginToken = cookies.get('loginCookie');
-    if (loginToken) {
-        console.log("token found");
-        socket.emit("jwt", {token: loginToken});
-    } else {
-        this.setState({loaded: true});
-    }
-    const that = this;
-    socket.on("jwt", (data) => {
-        that.setState({
-            loaded: true,
-            loggedIn: data.loggedIn,
-            verified: data.verified,
-        })
-    });
-  }
+        window.addEventListener('resize', () => {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        });
 
-    renderRedirect = () => {
-        if (!this.state.loaded) {
-          return <Redirect to="/landingPage"/>
-        } else if (this.state.verified) {
-          return <Redirect to="/map"/>
-        } else if (this.state.loggedIn) {
-          return <Redirect to="/verify"/>
-        } else {
-          return <Redirect to="/"/>
+        const loginToken = cookies.get('token');
+        if (loginToken) {
+            console.log("token found");
+            socket.emit("jwt", {token: loginToken});
         }
-    };
+        const that = this;
+        socket.on("jwt", (data) => {
+            that.setState({
+                loggedIn: data.loggedIn,
+                verified: data.verified,
+            })
+        });
+    }
 
-  render() {
-    return (
-      <SocketContext.Provider value={this.state.socket}>
-        <Router basename="/">
-          <div className="App">
-              {this.renderRedirect()}
-            <Switch>
-              <Route exact path="/" component={FirstPage}> </Route>
-              <Route exact path="/sign-in" component={FirstPage}> </Route>
-              <Route exact path="/takePicture" component={CameraComp}> </Route>
-              <Route exact path="/view" component={View}> </Route>
-              <Route exact path="/imageConfirm" component={ImageConfirm}> </Route>
-              <Route exact path="/landingPage" component={LandingPage}> </Route>
-              <Route exact path="/verify" component={EmailVerif}> </Route>
-              <Route exact path="/map" component={Trial}> </Route>
-              <Route exact path="/profilePage" component={ProfilePage}> </Route>
-              <Route exact path="/factionChooser" component={FactionChooser}> </Route>
-              <Route exact path="/settings" component={Settings}> </Route>
-              <Route exact path="/CapturePlayer" component={CapturePlayer}> </Route>
-                <Route exact path="/battlePage" component={BattlePage}> </Route>
-            </Switch>
-          </div>
-        </Router>
-      </SocketContext.Provider>
-    );
-  }
+    render() {
+        return (
+            <SocketContext.Provider value={this.state.socket}>
+                <Router basename="/">
+                    <div className="App">
+                        <Switch>
+                            <UnauthRoute exact path="/" component={FirstPage} redirectTo="/verify" authenticated={this.state.loggedIn}/>
+                            <UnauthRoute exact path="/sign-in" component={FirstPage} redirectTo="/verify" authenticated={this.state.loggedIn}/>
+                            <UnauthRoute exact path="/takePicture" component={CameraComp} redirectTo="/verify" authenticated={this.state.loggedIn}/>
+                            <Route exact path="/view" component={View}> </Route>
+                            <UnauthRoute exact path="/imageConfirm" component={ImageConfirm} redirectTo="/verify" authenticated={this.state.loggedIn}/>
+                            <UnauthRoute exact path="/landingPage" component={LandingPage} redirectTo="/verify" authenticated={this.state.loggedIn}/>
+                            <AuthRoute exact path="/verify" component={EmailVerif} redirectTo="/sign-in" authenticated={this.state.loggedIn}/>
+                            <AuthRoute  exact path="/map" component={Trial} redirectTo="/sign-in" authenticated={this.state.loggedIn}/>
+                            <AuthRoute  exact path="/profilePage" component={ProfilePage} redirectTo="/sign-in" authenticated={this.state.loggedIn}/>
+                            <Route exact path="/factionChooser" component={FactionChooser}> </Route>
+                            <AuthRoute  exact path="/settings" component={Settings} redirectTo="/sign-in" authenticated={this.state.loggedIn} />
+                            <AuthRoute   exact path="/CapturePlayer" component={CapturePlayer} redirectTo="/sign-in" authenticated={this.state.loggedIn}/>
+                        </Switch>
+                    </div>
+                </Router>
+            </SocketContext.Provider>
+        );
+    }
 }
 
 export default App;

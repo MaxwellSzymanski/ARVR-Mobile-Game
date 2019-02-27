@@ -4,7 +4,7 @@ import '../App.css';
 import PlayerLayer from './PlayerLayer'
 import Cookies from 'universal-cookie';
 import PopPop from 'react-poppop';
-import { Link } from 'react-router-link';
+import { Link } from 'react-router-dom';
 
 
 
