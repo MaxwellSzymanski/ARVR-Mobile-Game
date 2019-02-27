@@ -151,7 +151,7 @@ class PlayerLayer extends React.Component {
             <Marker ref={playerLayer.popup} title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
                 <Popup>
                     <div>Accuracy: {playerLayer.state.accuracy} m</div>
-                    <button onClick={playerLayer.showFindEnemyAlertBox.bind(playerLayer)}>find Enemies</button>
+                    <button onClick={playerLayer.showFindEnemyAlertBox.bind(playerLayer)}> Find other players </button>
                 </Popup>
             </Marker>
         );
@@ -218,7 +218,7 @@ class PlayerLayer extends React.Component {
                         rows.push(
                             <Marker position={pos} icon={pathMark} opacity={opacity}>
                                 <Popup>
-                                    {playerData.id} + ", " + {timeDiff} + " s ago."
+                                    {playerData.id}, {timeDiff} s ago.
                                 </Popup>
                             </Marker>
                         );
@@ -286,7 +286,7 @@ class PlayerLayer extends React.Component {
 
           var content = "";
 
-          rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,this.state.id,[this.state.latitude,this.state.longitude])}>Follow myself</button> );
+          rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,this.state.id,[this.state.latitude,this.state.longitude])}>Follow yourself</button> );
 
           Object.keys(jsonObject).forEach(function(key) {
 
@@ -296,7 +296,7 @@ class PlayerLayer extends React.Component {
 
               // check for enemy!
               if(idEnemy !== playerLayer.state.id){
-                rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,idEnemy,[playerData.latitude,playerData.longitude])}>{idEnemy}</button>);
+                rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,idEnemy,[playerData.latitude,playerData.longitude])}>Follow {idEnemy}</button>);
               }
           });
       }

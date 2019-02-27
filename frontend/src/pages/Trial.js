@@ -32,7 +32,7 @@ class Trial extends React.Component {
         centerMap: [50.8632811,4.6762872],
         centerMap: [50.8632811, 4.6762872],
         showAlertBox: true,
-        content: "Please allow access to your location.",
+        content: ["Please allow access to your location.",],
         alertBoxStyle: {
             transition: 'all 0.2s',
             backgroundColor: '#910F0F',
@@ -54,6 +54,7 @@ class Trial extends React.Component {
                 haveUsersLocation: true,
                 zoom: 18,
                 showAlertBox: false,
+                content: [],
             })
         });
     }
@@ -65,14 +66,22 @@ class Trial extends React.Component {
     }
 
     showAlertBox(content){
+        let newContent = this.state.content;
+        newContent.push(content);
         this.setState({
-            content: content,
+            content: newContent,
             showAlertBox: true
         })
     }
 
     alertBoxIsClosed(){
-        this.setState({ showAlertBox: false});
+        let newContent = this.state.content;
+        newContent.shift();
+        this.setState({
+            content: newContent,
+        });
+        if (this.state.content.length === 0)
+            this.setState({ showAlertBox: false});
     }
 
     setTarget(id,pos){
@@ -85,8 +94,8 @@ class Trial extends React.Component {
 
       if(this.state.idTarget === null){
         var rows = [];
-        rows.push(<Link to="/profilepage"><button>Profile Page</button></Link>);
-          rows.push(<Link to="/captureplayer"><button>Capture Player</button>button></Link>);
+        rows.push(<Link to="/profilepage"><button> Profile Page </button></Link>);
+          rows.push(<Link to="/captureplayer"><button> Capture Player </button></Link>);
         this.showAlertBox(rows);
       }
 
@@ -105,7 +114,7 @@ class Trial extends React.Component {
                     url='https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
                 />
                 <PopPop open={this.state.showAlertBox} closeBtn={true} closeOnEsc={true} onClose={()=>this.alertBoxIsClosed()} closeOnOverlay={true} position={"centerCenter"} contentStyle={this.state.alertBoxStyle}>
-                    <div>{this.state.content}</div>
+                    <div>{this.state.content[0]}</div>
                 </PopPop>
                 <PlayerLayer idTarget={this.state.idTarget} setTarget={this.setTarget} showAlertBox={this.showAlertBox} id={this.state.id} locationEnabled={this.state.haveUsersLocation}/>
             </Map>
