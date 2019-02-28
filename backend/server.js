@@ -530,8 +530,13 @@ function fight(data, socket){
             } else {
                 User.findById(token.id).then(
                     function (error, attacker) {
-                        User.findOne({ name: data.enemy}).then(
+                        User.findById(data.enemy).then(
                             function (error, defender) {
+                                if (attacker === null || defender === null || attacker === undefined || defender === undefined) {
+                                    console.log("(attack)           Player of enemy not found.");
+                                    return;
+                                }
+
                                 // TODO: pas data aan, check eventueel ./db/userModel.js voor namen andere attributen
                                 attacker.health = attacker.health;
                                 defender.health = defender.health;

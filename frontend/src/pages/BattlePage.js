@@ -220,13 +220,13 @@ class BattlePage extends React.Component {
                 </div>
 
                 <div>
-                    <Link to="/maps">
+                    <Link to="/map">
                     <button className="buttonAttack fadeIn2" onClick={this.attack}>Attack</button>
                     </Link>
                 </div>
 
                 <div>
-                    <Link to="/maps">
+                    <Link to="/map">
                     <button className="buttonFlee fadeIn3" onClick={this.flee}>Flee</button>
                     </Link>
                 </div>
