@@ -22,7 +22,7 @@ class ProfilePage extends React.Component {
             kills: 8,
             deaths: 3,
             items: 13,
-            encodedPic: require("../assets/temporary/profileImage.png"),
+            encodedPic: require("../assets/icons/user.png"),
             loggedOut: false,
         };
     }

@@ -69,12 +69,12 @@ class App extends Component {
                             <UnauthRoute exact path="/" component={FirstPage} redirectTo="/map" authenticated={this.state.verified}/>
                             <UnauthRoute exact path="/sign-in" component={FirstPage} redirectTo="/map" authenticated={this.state.verified}/>
                             <UnauthRoute exact path="/takePicture" component={CameraComp} redirectTo="/map" authenticated={this.state.verified}/>
-                            <Route exact path="/view" component={View}> </Route>
+                            <AuthRoute exact path="/view" component={View}> </AuthRoute>
                             <UnauthRoute exact path="/imageConfirm" component={ImageConfirm} redirectTo="/map" authenticated={this.state.verified}/>
                             <UnauthRoute exact path="/landingPage" component={LandingPage} redirectTo="/map" authenticated={this.state.verified}/>
                             <UnauthRoute exact path="/verify" component={EmailVerif} redirectTo="/map" authenticated={this.state.verified}/>
                             <AuthRoute  exact path="/map" component={Trial} redirectTo="/sign-in" authenticated={this.state.verified}/>
-                            <Route  exact path="/profilePage" component={ProfilePage} redirectTo="/sign-in" authenticated={this.state.verified}/>
+                            <AuthRoute  exact path="/profilePage" component={ProfilePage} redirectTo="/sign-in" authenticated={this.state.verified}/>
                             <Route exact path="/factionChooser" component={FactionChooser}> </Route>
                             <Route exact path="/battlePage" component={BattlePage}> </Route>
                             <AuthRoute  exact path="/settings" component={Settings} redirectTo="/sign-in" authenticated={this.state.verified} />

@@ -2,64 +2,80 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import "./factionChooser.css"
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import Flickity from 'react-flickity-component'
 import ReactDOM from 'react-dom';
+import swal from '@sweetalert/with-react';
 
 class FactionChooser extends React.Component {
     constructor() {
         super();
-        this.carousel = React.createRef();
+
         this.state = {
-            seconds: 0
+            faction: "none",
+            render: false
         };
     }
 
     componentDidMount() {
+        setTimeout(() => this.showInfo(), 1000);
     }
 
-    tick() {
-        this.setState(prevState => ({
-            seconds: prevState.seconds + 1
-        }));
-        if (this.state.seconds > 0) {
-            let car = this.refs.carousel;
-            car.style.width = '60px';
+    showInfo(){
+        swal( {icon: 'info', title: "Factions", text: "Tap and hold on a faction to join it."});
+    }
+
+    selectFaction(number) {
+        switch (number) {
+            case 1:
+                this.setState({
+                    faction: "scavenger"
+                });
+                break;
+            case 2:
+                this.setState({
+                    faction: "loneWolf"
+                });
+                break;
+            case 3:
+                this.setState({
+                    faction: "adventurer"
+                });
+                break;
         }
     }
 
-    componentDidMount() {
-        this.interval = setInterval(() => this.tick(), 1000);
+    renderText() {
+        if (this.state.faction == "none") {return "Select first"}
+        else if (this.state.faction == "loneWolf") {return "Confirm lone wolf"}
+        else {return "Confirm " + this.state.faction}
     }
 
-    componentWillUnmount() {
-        clearInterval(this.interval);
+    confirm() {
+        // TODO: redirect
     }
 
     render() {
         return (
-            <div ref={this.carousel}>
-                <h1 className="title">Choose faction</h1>
-                <div className="carousel" data-flickity='{ "freeScroll": false, "wrapAround": true, "prevNextButtons": false, "pageDots": false , "reloadOnUpdate": true}'>
-                    <div className="carousel-cell">
-                        <div className="header scavenger">Scavenger</div>
-                        <div className="cardImage scavenger">
-                            <h1 className="white"> Come across more items, and have longer duration. </h1>
-                        </div>
-                    </div>
-                    <div className="carousel-cell">
-                        <div className="header loneWolf">Lone Wolf</div>
-                        <div className="cardImage loneWolf">
-                            <h1 className="white"> Reduces visibility and increases chances of attack. </h1>
-                        </div>
-                    </div>
-                    <div className="carousel-cell">
-                        <div className="header adventurer">Adventurer</div>
-                        <div className="cardImage adventurer">
-                            <h1 className="white"> Gain attack and defence after battles. </h1>
-                        </div>
+            <div>
+                <h1 className="subTitle fadeIn0">Choose your faction</h1>
+               <div className="cell fadeIn1" onClick={() => this.selectFaction(1)}>
+                    <div className="header scavenger">Scavenger</div>
+                    <div className="cardImage scavenger">
+                        <h1 className="white"> Stamina reduces slower. </h1>
                     </div>
                 </div>
-                <button className="selectButton">Select</button>
+                <div className="cell fadeIn2" onClick={() => this.selectFaction(2)}>
+                    <div className="header loneWolf">Lone Wolf</div>
+                    <div className="cardImage loneWolf">
+                        <h1 className="white"> Increases overall chances of successful attacks. </h1>
+                    </div>
+                </div>
+                <div className="cell fadeIn3" onClick={() => this.selectFaction(3)}>
+                    <div className="header adventurer">Adventurer</div>
+                    <div className="cardImage adventurer">
+                        <h1 className="white"> Gain attack and defence after battles. </h1>
+                    </div>
+                </div>
+                <button className="selectButton fadeIn4" onClick={this.confirm}>{this.renderText()}</button>
             </div>
     )
     }

@@ -69,13 +69,15 @@ class BattlePage extends React.Component {
     }
 
     attack() {
-        const that = this;
-        const prob = that.calculateProbability()/100;
-        if (Math.random() <= prob) {
-            swal("You attacked the opponent!");
+        const prob = this.calculateProbability(3);
+        // TODO: Fix error
+        if (Math.random() < prob) {
+            swal({title: 'You attacked successfully!', icon: 'success'})
+            // TODO: implement attack
         }
         else {
-            swal("Missed the opponent!");
+            swal({title: 'You missed the opponent', text: 'You took some damage.',icon: 'error'})
+            // TODO: take damage
         }
     }
 
@@ -83,7 +85,7 @@ class BattlePage extends React.Component {
         swal({title: 'You fled successfully', icon: 'success'})
     }
 
-    calculateProbability() {
+    calculateProbability(num) {
         const prob = this.state.selfHealth + this.state.selfKills - this.state.selfKills;
         if (prob <= 30) return 30;
         if (prob >= 95) return 95;
@@ -142,7 +144,9 @@ class BattlePage extends React.Component {
                 </div>
 
                 <div>
+                    <Link to="/maps">
                     <button className="buttonAttack fadeIn2" onClick={this.attack}>Attack</button>
+                    </Link>
                 </div>
 
                 <div>
