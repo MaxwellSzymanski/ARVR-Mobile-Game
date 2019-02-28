@@ -31,6 +31,9 @@ class ProfilePage extends React.Component {
         this.context.emit("stats", {token: cookies.get('token')});
 
         this.context.on("stats", (data) => {
+            let items = 0;
+            if (data.items !== null)
+                items = data.items.length;
             this.setState({
                 attack: data.attack,
                 health: data.health,
@@ -38,10 +41,13 @@ class ProfilePage extends React.Component {
                 level: data.level,
                 visibility: 50,
                 experience: data.experience,
-                kills: 8,
-                deaths: 3,
-                items: 13,
+                kills: data.kills,
+                deaths: data.deaths,
+                items: items,
             });
+            // Update XP bar
+            const xp = (((10 + data.experience)/365)*100).toString() + '%';
+            document.getElementById('xpBar').style.width = xp;
         });
         this.context.on("photo", (data) => {
             this.setState({
@@ -60,13 +66,9 @@ class ProfilePage extends React.Component {
             }
         });
 
-        // Update XP bar
-        const xp = (((10 + this.state.experience)/365)*100).toString() + '%';
-        document.getElementById('xpBar').style.width = xp;
-
         this.interval = setInterval(() => {
             this.sendLocation();
-        }, 500);
+        }, 750);
     }
 
     componentWillUnmount() {
@@ -180,7 +182,9 @@ class ProfilePage extends React.Component {
                         </div>
                     </div>
                 </div>
-                <button className="logOut fadeIn3" onClick={this.logOut}> Log out </button>
+                <form onSubmit={this.logOut}>
+                    <button className="logOut fadeIn3"> Log out </button>
+                </form>
             </div>
         );
     }
