@@ -79,12 +79,14 @@ class CapturePlayer extends React.Component {
     console.log(results)
     let i = 0
     for (i ; i < results.length; i++) {
+      if (results[i].featureVector != null) {
       let fv2 = Object.values(JSON.parse(results[i].featureVector));
       let dist = await getFVDistance(fv1, fv2)
       if (minDist > dist && dist <= threshold) {
         console.log(dist);
         minDist = dist;
         index = i;
+        }
       }
     }
     if (index != null) {

@@ -5,6 +5,7 @@ import swal from '@sweetalert/with-react';
 import Cookies from 'universal-cookie';
 import SocketContext from "../socketContext";
 
+
 const cookies = new Cookies();
 
 class BattlePage extends React.Component {
@@ -27,10 +28,11 @@ class BattlePage extends React.Component {
     }
 
     componentDidMount() {
-        let id = localStorage.getItem("capturedPlayerId")
+        let id = localStorage.getItem("capturedPlayerId");
         this.context.emit("getStatsById", id);
 
         this.context.on("sentStatsById", (data) => {
+            console.log("hello");
             this.setState({
                 oppName: data.name,
                 oppHealth: data.attack,
@@ -128,7 +130,7 @@ class BattlePage extends React.Component {
     render() {
         return (
             <div>
-                <h1 className="subTitle fadeIn0">Attack opponent</h1>
+                <h1 className="subTitle fadeIn0">Player Match!</h1>
                 <div className="bProfileCard fadeIn1">
                     <div className="headerTop">
                         <div className="bProfilePhoto"><img src={this.state.opponentPic} alt={"Profile image"}/></div>
@@ -191,4 +193,6 @@ class BattlePage extends React.Component {
         )
     }
 }
+
+BattlePage.contextType = SocketContext;
 export default BattlePage;
