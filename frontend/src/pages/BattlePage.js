@@ -33,7 +33,7 @@ class BattlePage extends React.Component {
     componentDidMount() {
         let id = localStorage.getItem("capturedPlayerId");
 
-        this.context.emit("stats", {token: cookies.get("token"), enemy: id);
+        this.context.emit("stats", {token: cookies.get("token"), enemy: id});
 
         this.context.emit("getStatsById", id);
 
