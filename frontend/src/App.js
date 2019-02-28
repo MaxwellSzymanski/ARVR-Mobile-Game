@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // eslint-disable-next-line
 import {HashRouter as Router, Route, Switch, NavLink, Redirect} from 'react-router-dom';
-import { AuthRoute, UnauthRoute } from 'react-router-auth'
+import { AuthRoute, UnauthRoute } from 'react-router-auth';
 import io from 'socket.io-client';
 import './App.css';
 import SocketContext from './socketContext';

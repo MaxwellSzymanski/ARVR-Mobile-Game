@@ -18,7 +18,7 @@ class CapturePlayer extends React.Component {
     }
 
   renderRedirect = () => {
-    if (this.state.redirect) {return <Redirect to="/captureResult" />}
+    if (this.state.redirect) {return <Redirect to="/battlePage" />}
   }
 
 
