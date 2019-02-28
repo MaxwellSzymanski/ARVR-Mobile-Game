@@ -128,6 +128,12 @@ io.sockets.on('connection', function (socket) {
             socket.emit('sentFVfromDB', result);
         })
     });
+	
+	socket.on('getStatsById', () => {
+        getStatsById(function(result) {
+            socket.emit('sentStatsbyId', result);
+        })
+    });
 
     socket.on('addToJSON', (json, callback) => {
         fs.writeFile('testFeatureVectors.json', json, 'utf8', callback);
@@ -375,9 +381,10 @@ var names;
 //   });
 // }
 
-async function getCapturedPlayerStats(callBack, id) {
-  User.findById(id, 'name image level attack defense health').lean().exec( function (error, array) {
+async function getStatsById(callBack, id) {
+  User.find( {id}, 'name image level health defense attack').lean().exec( function(error, array) {
       if (error) throw error;
+      console.log(array);
       return callBack(array);
   });
 }
