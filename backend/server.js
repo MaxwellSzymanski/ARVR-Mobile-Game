@@ -309,6 +309,7 @@ function updateLocation(data, socket) {
 }
 
 function broadcastLocation(data) {
+    console.log(game);
     Object.keys(game).forEach( function (key) {
         if (key !== data.id) {
             game[key].socket.emit("playerdata", data)

@@ -164,10 +164,10 @@ class PlayerLayer extends React.Component {
                 const timeDiff = Math.abs(new Date() - new Date(player.updatedAt)) / 1000;
 
                 if( playerLayer.props.idTarget !== null && playerLayer.props.idTarget === idEnemy ){
-                  playerLayer.props.setTarget(idEnemy, pos);
-                  if( idEnemy !== id ){
-                    rows.push(<Marker position={pos} icon={target}/>);
-                  }
+                    playerLayer.props.setTarget(idEnemy, pos);
+                    if( idEnemy !== id ){
+                        rows.push(<Marker position={pos} icon={target}/>);
+                    }
                 }
 
                 if (timeDiff <= 5) {
@@ -275,32 +275,32 @@ class PlayerLayer extends React.Component {
     }
 
     showFindEnemyAlertBox(){
-      this.popup.current.leafletElement.options.leaflet.map.closePopup();
+        this.popup.current.leafletElement.options.leaflet.map.closePopup();
 
-      var rows = [];
+        var rows = [];
 
-      var playerLayer = this;
+        var playerLayer = this;
 
-      var jsonObject = this.state.dataPlayers;
-      if(jsonObject !== null){
+        rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,this.state.id,[this.state.latitude,this.state.longitude])}>Follow yourself</button> );
 
-          var content = "";
+        var jsonObject = this.state.dataPlayers;
+        if(jsonObject !== null){
 
-          rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,this.state.id,[this.state.latitude,this.state.longitude])}>Follow yourself</button> );
+            var content = "";
 
-          Object.keys(jsonObject).forEach(function(key) {
+            Object.keys(jsonObject).forEach(function(key) {
 
-              var playerData = jsonObject[key];
+                var playerData = jsonObject[key];
 
-              var idEnemy = playerData.id;
+                var idEnemy = playerData.id;
 
-              // check for enemy!
-              if(idEnemy !== playerLayer.state.id){
-                rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,idEnemy,[playerData.latitude,playerData.longitude])}>Follow {idEnemy}</button>);
-              }
-          });
-      }
-      this.showAlertBox(rows);
+                // check for enemy!
+                if(idEnemy !== playerLayer.state.id){
+                    rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,idEnemy,[playerData.latitude,playerData.longitude])}>Follow {idEnemy}</button>);
+                }
+            });
+        }
+        this.showAlertBox(rows);
 
     }
 
