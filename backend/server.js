@@ -129,7 +129,7 @@ io.sockets.on('connection', function (socket) {
 	
 	socket.on('getStatsById', (id) => {
         getStatsById(function(result, id) {
-            socket.emit('sentStatsbyId', result);
+            socket.emit('sentStatsById', result);
         })
     });
 
