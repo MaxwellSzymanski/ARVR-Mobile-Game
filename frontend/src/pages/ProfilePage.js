@@ -11,14 +11,14 @@ class ProfilePage extends React.Component {
     constructor() {
         super();
         this.state = {
-            name: 'Test name',
-            //name: cookies.get('name'),
+            // name: 'Test name',
+            name: cookies.get('name'),
             health: 300,
             attack: 100,
             defence: 200,
             level: 1,
             visibility: 50,
-            experience: 150,
+            experience: 0,
             kills: 8,
             deaths: 3,
             items: 13,

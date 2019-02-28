@@ -128,10 +128,12 @@ io.sockets.on('connection', function (socket) {
     });
 	
 	socket.on('getStatsById', (id) => {
-        getStatsById(function(result, id) {
-            socket.emit('sentStatsById', result);
-        })
-    });
+        getStatsById(id, socket) });
+        // function(result, id) {
+        //         socket.emit('sentStatsById', result);
+        //     }
+        // })
+    // });
 
     socket.on('addToJSON', (json, callback) => {
         fs.writeFile('testFeatureVectors.json', json, 'utf8', callback);
@@ -377,7 +379,6 @@ function verifyJWT(data, socket) {
 
 
 
-
 // ============================================================================
 
 // FACE RECOGNITION
@@ -401,17 +402,15 @@ var names;
 // }
 
 async function getStatsById(callBack, id) {
-  User.find( {id}, 'name image level health defence attack').lean().exec( function(error, array) {
+  User.findOne( {name: id}).exec( function(error, result) {
       if (error) throw error;
-      console.log(array);
-      return callBack(array);
+      socket.emit('sentStatsById', result.getEnemyData());
   });
 }
 
 async function getFeatureVectorsFromDB(callBack) {
   User.find( {}, 'name featureVector').lean().exec( function(error, array) {
       if (error) throw error;
-      console.log(array);
       return callBack(array);
   });
 }
