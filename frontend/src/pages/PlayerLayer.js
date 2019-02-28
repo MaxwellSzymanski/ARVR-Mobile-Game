@@ -113,6 +113,7 @@ class PlayerLayer extends React.Component {
                 token: cookies.get('token'),
                 longitude: this.state.longitude,
                 latitude: this.state.latitude,
+                accuracy: this.state.accuracy,
             })
         });
     }
@@ -174,7 +175,7 @@ class PlayerLayer extends React.Component {
                         rows.push(
                             <Marker title={key} position={pos} icon={enemyOnline}>
                                 <Popup>
-                                    <p> {key} </p>
+                                    <p> {key}, accuracy: {player.accuracy} m</p>
                                     <p>
                                         <button onClick={() => playerLayer.sendSpecialSignal(idEnemy)}> Send signal
                                         </button>

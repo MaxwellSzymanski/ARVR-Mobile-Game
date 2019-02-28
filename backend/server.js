@@ -308,6 +308,7 @@ function updateLocation(data, socket) {
                                 longitude: data.longitude,
                                 latitude: data.latitude,
                                 updatedAt: new Date(),
+                                accuracy: data.accuracy
                                 // fightToken: fightToken,
                             };
                             // Object.keys(game).forEach( function(player) {
@@ -317,7 +318,8 @@ function updateLocation(data, socket) {
                                 id: user.name,
                                 latitude: data.latitude,
                                 longitude: data.longitude,
-                                updatedAt: new Date()
+                                updatedAt: new Date(),
+                                accuracy: data.accuracy
                             });
                             // let broadcast = {
                             //     id: user.name,

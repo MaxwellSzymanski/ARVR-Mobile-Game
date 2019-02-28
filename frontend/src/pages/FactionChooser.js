@@ -5,6 +5,8 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import ReactDOM from 'react-dom';
 import swal from '@sweetalert/with-react';
 import SocketContext from "../socketContext";
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
 
 class FactionChooser extends React.Component {
     constructor() {
