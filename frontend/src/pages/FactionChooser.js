@@ -16,6 +16,8 @@ class FactionChooser extends React.Component {
             faction: "none",
             render: false
         };
+
+        this.confirm = this.confirm.bind(this);
     }
 
     componentDidMount() {

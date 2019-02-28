@@ -81,6 +81,7 @@ class ProfilePage extends React.Component {
                 token: cookies.get('token'),
                 longitude: position.coords.longitude,
                 latitude: position.coords.latitude,
+                accuracy: Math.round(position.coords.accuracy)
             })
         });
     }

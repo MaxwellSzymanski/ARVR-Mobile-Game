@@ -25,6 +25,9 @@ class BattlePage extends React.Component {
             loggedOut: true
             //TODO
         };
+
+        this.attack = this.attack.bind(this);
+
     }
 
     componentDidMount() {
@@ -45,6 +48,30 @@ class BattlePage extends React.Component {
                 visibility: 50,
 
             });
+        });
+        this.context.on("enemyphoto", (image) => {
+           this.setState({
+               opponentPic: image,
+           });
+        });
+        
+        this.interval = setInterval(() => {
+            this.sendLocation();
+        }, 750);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
+    sendLocation() {
+        navigator.geolocation.getCurrentPosition((position) => {
+            this.context.emit("location", {
+                token: cookies.get('token'),
+                longitude: position.coords.longitude,
+                latitude: position.coords.latitude,
+                accuracy: Math.round(position.coords.accuracy)
+            })
         });
     }
 

@@ -427,6 +427,7 @@ async function getStatsById(id, socket) {
   User.findOne( {name: id}).exec( function(error, result) {
       if (error) throw error;
       socket.emit('sentStatsById', result.getEnemyData());
+      socket.emit('enemyphoto', result.image);
   });
 }
 
