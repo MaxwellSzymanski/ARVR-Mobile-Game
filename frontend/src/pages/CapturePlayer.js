@@ -114,7 +114,7 @@ class CapturePlayer extends React.Component {
           </div>}
           {this.state.calculating && <div className="polaroid">
               <div className="cameraLoader"></div>
-              <p>Detecting face. This can take up to 30 seconds.</p>
+              <p>Please wait while we look for this player.</p>
           </div>}
 
       </div>
