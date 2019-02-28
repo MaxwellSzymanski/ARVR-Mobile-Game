@@ -311,7 +311,7 @@ function updateLocation(data, socket) {
 function broadcastLocation(data) {
     Object.keys(game).forEach( function (key) {
         if (key !== data.id) {
-            socket.emit("playerdata", data)
+            game[key].socket.emit("playerdata", data)
         }
     })
 }
