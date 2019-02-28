@@ -17,7 +17,7 @@ class BattlePage extends React.Component {
             oppHealth: 40,
             oppDefence: 200,
             oppLevel: 1,
-            opponentPic: require("../assets/temporary/profileImage.png"),
+            opponentPic: require("../assets/icons/userInverted.png"),
             selfKills: 3,
             selfDeaths: 4,
             selfHealth: 30,

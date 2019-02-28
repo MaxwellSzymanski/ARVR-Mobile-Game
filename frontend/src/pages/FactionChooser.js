@@ -66,7 +66,7 @@ class FactionChooser extends React.Component {
                 <div className="cell fadeIn2" onClick={() => this.selectFaction(2)}>
                     <div className="header loneWolf">Lone Wolf</div>
                     <div className="cardImage loneWolf">
-                        <h1 className="white"> Increases overall chances of successful attacks. </h1>
+                        <h1 className="white"> Increases chances of successful attacks. </h1>
                     </div>
                 </div>
                 <div className="cell fadeIn3" onClick={() => this.selectFaction(3)}>

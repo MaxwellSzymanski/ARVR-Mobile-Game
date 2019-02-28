@@ -82,7 +82,7 @@ class CameraComp extends React.Component {
           <div>
               <p className="subTitle">Upload an image</p>
               <span style={{margin:'10px'}}> </span>
-              <div className="polaroid" style={{width:'500px'}}>
+              <div className="polaroid" style={{width:'300px'}}>
                   <ImageUploader
                       withIcon={true}
                       buttonText='Choose profile image'

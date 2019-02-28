@@ -115,7 +115,7 @@ class ProfilePage extends React.Component {
 
                 {/* Buttons and profile */}
 
-                <Link to="/map"><button className="smallButton back topLeft"/></Link>;
+                <Link to="/map"><button className="smallButton back topLeftIcon fadeIn0"/></Link>;
                 <div className="profileCard fadeIn0">
                     <div className="profilePhoto"><img src={this.state.encodedPic} alt={"Profile image"}/></div>
                     <h1 className="name">{this.state.name}</h1>
@@ -126,7 +126,7 @@ class ProfilePage extends React.Component {
                     <h3 className="smallText">{this.state.experience}<b>/350 xp</b></h3>
                 </div>
 
-                <Link to="/settings"><button className="smallButton settings topRight"/></Link>
+                <Link to="/settings"><button className="smallButton settings topRightIcon fadeIn0"/></Link>
 
                 {/* Stat card */}
 

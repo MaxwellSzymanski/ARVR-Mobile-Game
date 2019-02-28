@@ -36,8 +36,8 @@ class Settings extends React.Component {
         return (
             <div>
                 <div>
-                    <Link to="/profilePage"> <button className="smallButton back topLeft"/></Link>
-                    <h1 className="subTitle ">Settings</h1>
+                    <Link to="/profilePage"> <button className="smallButton back topLeft fadeIn0"/></Link>
+                    <h1 className="subTitle fadeIn0">Settings</h1>
                 </div>
                 <div> <button className="normalButton fadeIn0" onClick={this.takeNewPhoto}>Take new photo</button></div>
                 <div> <button className="normalButton fadeIn1" onClick={this.giveFeedback}>Give feedback</button></div>

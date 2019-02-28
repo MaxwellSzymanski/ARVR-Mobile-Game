@@ -520,4 +520,23 @@ p {
     }
 }
 
+.fadeIn0 {
+    animation: fadeInLeft 500ms;
+}
+
+.fadeIn1 {
+    animation: hideComp 100ms, fadeInLeft 500ms 100ms;
+}
+
+.fadeIn2 {
+    animation: hideComp 200ms, fadeInLeft 500ms 200ms;
+}
+
+.fadeIn3 {
+    animation: hideComp 300ms, fadeInLeft 500ms 300ms;
+}
+
+.fadeIn4 {
+    animation: hideComp 400ms, fadeInLeft 500ms 400ms;
+}
 

@@ -74,10 +74,10 @@ class App extends Component {
                             <UnauthRoute exact path="/landingPage" component={LandingPage} redirectTo="/map" authenticated={this.state.verified}/>
                             <UnauthRoute exact path="/verify" component={EmailVerif} redirectTo="/map" authenticated={this.state.verified}/>
                             <AuthRoute  exact path="/map" component={Trial} redirectTo="/sign-in" authenticated={this.state.verified}/>
-                            <AuthRoute  exact path="/profilePage" component={ProfilePage} redirectTo="/sign-in" authenticated={this.state.verified}/>
+                            <Route  exact path="/profilePage" component={ProfilePage} redirectTo="/sign-in" authenticated={this.state.verified}/>
                             <Route exact path="/factionChooser" component={FactionChooser}> </Route>
                             <Route exact path="/battlePage" component={BattlePage}> </Route>
-                            <AuthRoute  exact path="/settings" component={Settings} redirectTo="/sign-in" authenticated={this.state.verified} />
+                            <Route  exact path="/settings" component={Settings} redirectTo="/sign-in" authenticated={this.state.verified} />
                             <AuthRoute   exact path="/capturePlayer" component={CapturePlayer} redirectTo="/sign-in" authenticated={this.state.verified}/>
                         </Switch>
                     </div>
