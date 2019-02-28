@@ -66,19 +66,20 @@ class App extends Component {
                 <Router basename="/">
                     <div className="App">
                         <Switch>
+                            <UnauthRoute exact path="/landingPage" component={LandingPage} redirectTo="/map" authenticated={this.state.verified}/>
                             <UnauthRoute exact path="/" component={FirstPage} redirectTo="/map" authenticated={this.state.verified}/>
                             <UnauthRoute exact path="/sign-in" component={FirstPage} redirectTo="/map" authenticated={this.state.verified}/>
                             <UnauthRoute exact path="/takePicture" component={CameraComp} redirectTo="/map" authenticated={this.state.verified}/>
-                            <AuthRoute exact path="/view" component={View}> </AuthRoute>
                             <UnauthRoute exact path="/imageConfirm" component={ImageConfirm} redirectTo="/map" authenticated={this.state.verified}/>
-                            <UnauthRoute exact path="/landingPage" component={LandingPage} redirectTo="/map" authenticated={this.state.verified}/>
                             <UnauthRoute exact path="/verify" component={EmailVerif} redirectTo="/map" authenticated={this.state.verified}/>
+                            <UnauthRoute exact path="/factionChooser" component={FactionChooser} redirectTo="/map" authenticated={this.state.verified}/>
+
                             <AuthRoute  exact path="/map" component={Trial} redirectTo="/sign-in" authenticated={this.state.verified}/>
-                            <Route  exact path="/profilePage" component={ProfilePage} redirectTo="/sign-in" authenticated={this.state.verified}/>
-                            <Route exact path="/factionChooser" component={FactionChooser}> </Route>
-                            <Route exact path="/battlePage" component={BattlePage}> </Route>
-                            <Route  exact path="/settings" component={Settings} redirectTo="/sign-in" authenticated={this.state.verified} />
+                            <AuthRoute  exact path="/profilePage" component={ProfilePage} redirectTo="/sign-in" authenticated={this.state.verified}/>
+                            <AuthRoute  exact path="/settings" component={Settings} redirectTo="/sign-in" authenticated={this.state.verified} />
                             <AuthRoute   exact path="/capturePlayer" component={CapturePlayer} redirectTo="/sign-in" authenticated={this.state.verified}/>
+                            <AuthRoute exact path="/view" component={View} redirectTo="/sign-in" authenticated={this.state.verified} />
+                            <AuthRoute exact path="/battlePage" component={BattlePage} redirectTo="/sign-in" authenticated={this.state.verified} />
                         </Switch>
                     </div>
                 </Router>

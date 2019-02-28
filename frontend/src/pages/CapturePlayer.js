@@ -9,7 +9,9 @@ import SocketContext from "../socketContext";
 class CapturePlayer extends React.Component {
 
   state = {
-    redirect : false }
+    redirect : false,
+    calculating: false
+  }
 
   setRedirect = () => {
       this.setState({redirect: true})
@@ -21,7 +23,7 @@ class CapturePlayer extends React.Component {
 
 
   async onTakePhoto (dataUri) {
-
+      this.setState({calculating:true});
       var photoSrc = dataUri;
       var photo = new Image;
       photo.src = photoSrc;
@@ -29,6 +31,7 @@ class CapturePlayer extends React.Component {
       var fv = await getFeatureVector(photo);
 
       if (fv === null) {
+          this.setState({calculating:false});
           console.log("No face detected!")
           swal({
               title: "No face detected",
@@ -48,14 +51,15 @@ class CapturePlayer extends React.Component {
   componentDidMount() {
      this.context.on('sentFVfromDB', async (results) => {
         let capturedPlayerId = await this.getMatchingPlayerFromFV(results);
-        if (capturedPlayerId != null) {
+        if (capturedPlayerId !== null) {
           console.log(capturedPlayerId)
           localStorage.setItem("capturedPlayerId", capturedPlayerId);
           this.setRedirect();
         }
         //else if (matchingPlayerId = playerId){ "You can't capture yourself!" }
         else {
-          swal({
+            this.setState({calculating:false});
+            swal({
               title: "Unkown Person",
               text: "The Person in the photo is NOT a player",
               icon: "warning",
@@ -100,12 +104,17 @@ class CapturePlayer extends React.Component {
     return (
       <div className="background">
         {this.renderRedirect()}
-        <div className="polaroid">
-            <Camera
-                onTakePhoto = { (dataUri) => { this.onTakePhoto(dataUri); } }
-                isImageMirror = {true}
-            />
-        </div>
+          {!this.state.calculating && <div className="polaroid">
+              <Camera
+                  onTakePhoto = { (dataUri) => { this.onTakePhoto(dataUri); } }
+                  isImageMirror = {true}
+              />
+          </div>}
+          {this.state.calculating && <div className="polaroid">
+              <div className="cameraLoader"></div>
+              <p>Detecting face. This can take up to 30 seconds.</p>
+          </div>}
+
       </div>
     );
   }

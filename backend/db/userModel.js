@@ -70,6 +70,18 @@ const Schema = new mongoose.Schema({
     experience: {
         type: Number,
         default: 0
+    },
+    kills: {
+        type: Number,
+        default: 0
+    },
+    deaths: {
+        type: Number,
+        default: 0
+    },
+    items: {
+        type: Object,
+        default: null
     }
 }, {timestamps: true});
 
@@ -94,6 +106,15 @@ Schema.methods.createToken = function() {
     }, secret, {expiresIn : exp});
 };
 
+Schema.methods.createFightToken = function() {
+    let exp = 2;            // Number of hours before expiry
+    exp *= 60 * 60;         // hours * 60 sec * 60 min
+
+    return jwt.sign({
+        name: this.name
+    }, secret, {expiresIn : exp});
+};
+
 Schema.methods.checkToken = function(token) {
     return this.name === token.name;
 };
@@ -106,6 +127,19 @@ Schema.methods.getUserData = function() {
         health: this.health,
         level: this.level,
         experience: this.experience,
+        kills: this.kills,
+        deaths: this.deaths,
+        items: this.items,
+    };
+};
+
+Schema.methods.getEnemyData = function() {
+    return {
+        name: this.name,
+        attack: this.attack,
+        defence: this.defence,
+        health: this.health,
+        level: this.level,
     };
 };
 

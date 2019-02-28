@@ -69,6 +69,17 @@ class BattlePage extends React.Component {
     }
 
     attack() {
+
+        // TODO: comment invullen
+        this.context.emit("fight", {token: cookies.get('token'), /* enemy: ENEMY_NAME */ });
+
+
+        // TODO: ik denk dat ge dan best het grootste deel van deze code op de server zet,
+        //              binnenkort zorg ik ook dat er voor de enemy een token gegenereerd
+        //              wordt in plaats van hier gewoon de username mee te geven, dat is
+        //              ook veiliger. Anders kan er zo maar met de stats gefoefeld worden
+        //              als er iemand gewoon maar weet welke signalen hij moet sturen.
+
         const prob = this.calculateProbability(3);
         // TODO: Fix error
         if (Math.random() < prob) {
