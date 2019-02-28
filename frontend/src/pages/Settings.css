@@ -1,0 +1,63 @@
+.normalButton {
+    animation-duration: 500ms;
+    width: 70%;
+    max-width: 500px;
+    height: 50px;
+    background-color: white;
+    border: none;
+    border-radius: 20px;
+    color: #910f0f;
+    font-weight: bold;
+    font-size: 16pt;
+    font-family: Futura;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+    transition: color 500ms,
+    background-color 500ms,
+    margin 100ms;
+    margin: 20px;
+}
+
+.normalButton:hover {
+    background-color: #d7dacf;
+    color: #910f0f;
+}
+
+.normalButton:active {
+    margin: 23px;
+}
+
+.delete {
+    background-color: #490b0b;
+    color: white
+}
+
+.delete:hover {
+    background-color: #290707;
+    color: lightgrey;
+}
+
+.topLeft {
+    position: absolute;
+    left: 50px;
+    top: 30px;
+}
+
+.fadeIn0 {
+    animation: fadeInLeft 500ms;
+}
+
+.fadeIn1 {
+    animation: hideComp 100ms, fadeInLeft 500ms 100ms;
+}
+
+.fadeIn2 {
+    animation: hideComp 200ms, fadeInLeft 500ms 200ms;
+}
+
+.fadeIn3 {
+    animation: hideComp 300ms, fadeInLeft 500ms 300ms;
+}
+
+.fadeIn4 {
+    animation: hideComp 400ms, fadeInLeft 500ms 400ms;
+}

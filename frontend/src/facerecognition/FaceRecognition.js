@@ -1,12 +1,18 @@
 import React from 'react';
-import {loadMtcnnModel, loadFaceLandmarkModel, loadFaceDetectionModel, loadFaceRecognitionModel, toNetInput, mtcnn, extractFaces, computeFaceDescriptor, euclideanDistance} from 'face-api.js';
+import {loadMtcnnModel, loadFaceLandmarkModel, loadFaceDetectionModel, loadFaceRecognitionModel, toNetInput, mtcnn, extractFaces, computeFaceDescriptor, euclideanDistance, loadTinyYolov2Model, tinyYolov2} from 'face-api.js';
 
   async function calculateFeatureVector(image) {
 
+    await loadTinyYolov2Model('/weights')
     await loadFaceDetectionModel('/weights')
     await loadFaceRecognitionModel('/weights')
     await loadFaceLandmarkModel('/weights')
     await loadMtcnnModel('/weights')
+
+    //tinyYolov2 implemnatation
+    //let scoreThreshold = 0.5
+    //let sizeType = 'lg'
+    //const detections = await tinyYolov2(inputImgEl, forwardParams)
 
     const allignedface = await locateAndAlignFacesWithMtcnn(image)
     if (allignedface != null) {

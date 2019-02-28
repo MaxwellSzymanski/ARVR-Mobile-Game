@@ -74,6 +74,7 @@ class SignUpForm extends React.Component {
                 email: this.state.email,
                 name: this.state.name,
                 password: this.state.password,
+                token: cookies.get("fieldtest")
             };
 
             dataToSend.image = image.toString('base64');
@@ -146,15 +147,15 @@ class SignUpForm extends React.Component {
           <div id="centerButton">
           <Link to="/takePicture">
             {button}</Link></div>
-              <div className="FormField">
+              <div className="FormField fadeIn1">
                 <label className="FormField__Label" htmlFor="name">User name</label>
                 <input type="text" id="name" className="FormField__Input" placeholder="Enter your user name (max. 16 characters)" name="name" value={this.state.name} onChange={this.handleChange} maxLength="16"/>
               </div>
-              <div className="FormField">
+              <div className="FormField fadeIn2">
                     <label className="FormField__Label" htmlFor="email">E-Mail Address</label>
                     <input type="email" id="email" className="FormField__Input" placeholder="Enter your email" name="email" value={this.state.email} onChange={this.handleChange} />
               </div>
-              <div className="FormField">
+              <div className="FormField fadeIn3">
                 <label className="FormField__Label" htmlFor="password">Password</label>
                 <input type="password" id="password" className="FormField__Input" placeholder="Enter your password" name="password" value={this.state.password} onChange={this.handleChange} />
               </div>

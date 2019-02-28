@@ -11,17 +11,18 @@ class ProfilePage extends React.Component {
     constructor() {
         super();
         this.state = {
+            // name: 'Test name',
             name: cookies.get('name'),
             health: 300,
             attack: 100,
             defence: 200,
             level: 1,
             visibility: 50,
-            experience: 150,
+            experience: 0,
             kills: 8,
             deaths: 3,
             items: 13,
-            encodedPic: require("../assets/temporary/profileImage.png"),
+            encodedPic: require("../assets/icons/user.png"),
             loggedOut: false,
         };
     }
@@ -30,6 +31,9 @@ class ProfilePage extends React.Component {
         this.context.emit("stats", {token: cookies.get('token')});
 
         this.context.on("stats", (data) => {
+            let items = 0;
+            if (data.items !== null)
+                items = data.items.length;
             this.setState({
                 attack: data.attack,
                 health: data.health,
@@ -37,10 +41,13 @@ class ProfilePage extends React.Component {
                 level: data.level,
                 visibility: 50,
                 experience: data.experience,
-                kills: 8,
-                deaths: 3,
-                items: 13,
+                kills: data.kills,
+                deaths: data.deaths,
+                items: items,
             });
+            // Update XP bar
+            const xp = (((10 + data.experience)/365)*100).toString() + '%';
+            document.getElementById('xpBar').style.width = xp;
         });
         this.context.on("photo", (data) => {
             this.setState({
@@ -59,13 +66,9 @@ class ProfilePage extends React.Component {
             }
         });
 
-        // Update XP bar
-        const xp = (((10 + this.state.experience)/365)*100).toString() + '%';
-        document.getElementById('xpBar').style.width = xp;
-
         this.interval = setInterval(() => {
             this.sendLocation();
-        }, 500);
+        }, 750);
     }
 
     componentWillUnmount() {
@@ -78,6 +81,7 @@ class ProfilePage extends React.Component {
                 token: cookies.get('token'),
                 longitude: position.coords.longitude,
                 latitude: position.coords.latitude,
+                accuracy: Math.round(position.coords.accuracy)
             })
         });
     }
@@ -98,9 +102,10 @@ class ProfilePage extends React.Component {
     }
 
     logOut() {
-
-
-        this.context.emit("signout", {token: cookies.get("token")});
+        cookies.remove("token");
+        cookies.remove("name");
+        window.location.reload();
+        // this.context.emit("signout", {token: cookies.get("token")});
     }
 
     renderRedirect = () => {
@@ -116,8 +121,8 @@ class ProfilePage extends React.Component {
 
                 {/* Buttons and profile */}
 
-                <Link to="/map"><button className="smallButton back topLeft"/></Link>;
-                <div className="profileCard">
+                <Link to="/map"><button className="smallButton back topLeftIcon fadeIn0"/></Link>;
+                <div className="profileCard fadeIn0">
                     <div className="profilePhoto"><img src={this.state.encodedPic} alt={"Profile image"}/></div>
                     <h1 className="name">{this.state.name}</h1>
                     <h3 className="smallText">Level {this.state.level}</h3>
@@ -127,11 +132,11 @@ class ProfilePage extends React.Component {
                     <h3 className="smallText">{this.state.experience}<b>/350 xp</b></h3>
                 </div>
 
-                <Link to="/settings"><button className="smallButton settings topRight"/></Link>
+                <Link to="/settings"><button className="smallButton settings topRightIcon fadeIn0"/></Link>
 
                 {/* Stat card */}
 
-                <div className="statCard">
+                <div className="statCard fadeIn1">
                     <div className="statContainer">
                         <h3 className="statTitle">Kills</h3>
                         <h3 className="statNumber">{this.state.kills}</h3>
@@ -150,7 +155,7 @@ class ProfilePage extends React.Component {
 
                 {/* Info card */}
 
-                <div className="contentCard">
+                <div className="contentCard fadeIn2">
                     <div className="attributeContainer">
                         <h3 className="attributeTitle">Health</h3>
 
@@ -181,7 +186,9 @@ class ProfilePage extends React.Component {
                         </div>
                     </div>
                 </div>
-                <button className="logOut" onClick={this.logOut}> Log out </button>
+                <form onSubmit={this.logOut}>
+                    <button className="logOut fadeIn3"> Log out </button>
+                </form>
             </div>
         );
     }

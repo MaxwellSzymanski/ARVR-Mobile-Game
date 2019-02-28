@@ -11,7 +11,8 @@ class EmailVerif extends React.Component {
 
         this.state = {
             firstTry: true,
-            loading: false
+            loading: false,
+            redirect: false
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -87,12 +88,9 @@ class EmailVerif extends React.Component {
     state = {
         redirect : false };
 
-    setRedirect = () => {
-        this.setState({redirect: true})
-    };
 
     renderRedirect = () => {
-        if (this.state.redirect) {return <Redirect to="/map" />}
+        if (this.state.redirect) {return <Redirect to="/factionChooser" />}
     };
 
     setPage() {

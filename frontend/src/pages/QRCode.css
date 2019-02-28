@@ -1,0 +1,40 @@
+.normalButton {
+    animation-duration: 500ms;
+    width: 70%;
+    max-width: 500px;
+    height: 50px;
+    background-color: white;
+    border: none;
+    border-radius: 20px;
+    color: #910f0f;
+    font-weight: bold;
+    font-size: 16pt;
+    font-family: Futura;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+    transition: color 500ms,
+    background-color 500ms,
+    margin 100ms;
+    margin: 20px;
+}
+
+.normalButton:hover {
+    background-color: #d7dacf;
+    color: #910f0f;
+}
+
+.normalButton:active {
+    margin: 23px;
+}
+
+.qrCode {
+    background-image: url(../assets/temporary/qrCode.png);
+    width:80vw;
+    height: 80vw;
+    max-width: 500px;
+    max-height: 500px;
+    background-color: white;
+    background-size: cover;
+    border-radius: 20px;
+    display: inline-block;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+}

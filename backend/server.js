@@ -104,6 +104,8 @@ io.sockets.on('connection', function (socket) {
 
     socket.on("newmail", (data) => {newMail(data)});
 
+    socket.on("faction", (data) => {faction(data, socket)});
+
     socket.on("signin", (data) => {signin(data, socket)});
 
     socket.on("signout", (data) => {signout(data, socket)});
@@ -113,8 +115,6 @@ io.sockets.on('connection', function (socket) {
     socket.on("location", (data) => {updateLocation(data, socket)});
 
     socket.on("signal", (data) => {signal(data)});
-
-    socket.on("handshake", (data) => {})
 
     socket.on("disconnect", () => {removePlayer(socket)});
 
@@ -129,9 +129,21 @@ io.sockets.on('connection', function (socket) {
         })
     });
 
+	socket.on('getStatsById', (id) => {
+        getStatsById(id, socket) });
+        // function(result, id) {
+        //         socket.emit('sentStatsById', result);
+        //     }
+        // })
+    // });
+
     socket.on('addToJSON', (json, callback) => {
         fs.writeFile('testFeatureVectors.json', json, 'utf8', callback);
     });
+
+    socket.on("fight", (data) => {fight(data, socket)});
+
+
 });
 
 
@@ -195,6 +207,27 @@ function newMail(data) {
     })
 }
 
+function faction(data, socket) {
+    jwt.verify(data.token, secret, async function (err, token) {
+        if (err) {
+            console.log("(faction)       invalid token");
+            socket.emit("faction", {success: false})
+        } else {
+            User.findById(token.id).then(
+                function (user) {
+                    if (user === null ||
+                        (data.faction !== "loneWolf" && data.faction !== "adventurer" && data.faction !== "scavenger")) {
+                        socket.emit("faction", {success: false});
+                    } else {
+                        user.faction = data.faction;
+                        user.save();
+                        socket.emit("faction", {success: true});
+                    }
+                });
+        }
+    });
+}
+
 async function signin(dat, socket) {
     const data = JSON.parse(dat);
     // console.log("\ndata.password    " + data.password);
@@ -251,6 +284,18 @@ function stats(data, socket) {
                         socket.emit("photo", {image: user.image} )
                     }
                 });
+            if (data.enemy) {
+                User.findById(data.enemy).then(
+                    function(enemy) {
+                        if (enemy === null) {
+                            console.log("(stats)         No enemy found");
+                        } else {
+                            socket.emit("enemystats", enemy.getEnemyData());
+                            socket.emit("enemyphoto", enemy.image);
+                        }
+                    }
+                )
+            }
         }
     })
 }
@@ -265,11 +310,18 @@ function updateLocation(data, socket) {
                 User.findById(token.id).then(
                     function (user) {
                         if (user !== null) {
+                            // let fightToken;
+                            // if (game[user.name] === undefined || game[user.name] === null)
+                            //     fightToken = user.createFightToken();
+                            // else
+                            //     fightToken = game[user.name].fightToken;
                             game[user.name] = {
                                 socket: socket,
                                 longitude: data.longitude,
                                 latitude: data.latitude,
-                                updatedAt: new Date()
+                                updatedAt: new Date(),
+                                accuracy: data.accuracy
+                                // fightToken: fightToken,
                             };
                             // Object.keys(game).forEach( function(player) {
                             //     console.log(player + ":\n   (" + game[player].latitude +", " + game[player].longitude +")");
@@ -278,8 +330,18 @@ function updateLocation(data, socket) {
                                 id: user.name,
                                 latitude: data.latitude,
                                 longitude: data.longitude,
-                                updatedAt: new Date()
-                            })
+                                updatedAt: new Date(),
+                                accuracy: data.accuracy
+                            });
+                            // let broadcast = {
+                            //     id: user.name,
+                            //     latitude: data.latitude,
+                            //     longitude: data.longitude,
+                            //     updatedAt: new Date()
+                            // };
+                            // Object.keys(game).forEach( function (key) {
+                            //     game[key].socket.emit("playerdata", broadcast)
+                            // })
                         }
                     }
                 )
@@ -324,6 +386,7 @@ function removePlayer(socket) {
 }
 
 function verifyJWT(data, socket) {
+    console.log("checking token");
     if (!data.token) return;
     jwt.verify(data.token, secret, async function(err, token) {
         if (err) {
@@ -350,13 +413,11 @@ function verifyJWT(data, socket) {
 
 
 
-
 // ============================================================================
 
 // FACE RECOGNITION
 
 // ============================================================================
-
 
 
 //MongoDB code
@@ -374,17 +435,19 @@ var names;
 //   });
 // }
 
-async function getCapturedPlayerStats(callBack, id) {
-  User.findById(id, 'name image level attack defense health').lean().exec( function (error, array) {
+async function getStatsById(id, socket) {
+  User.findById(id).exec( function(error, result) {
       if (error) throw error;
-      return callBack(array);
+      if (result !== null) {
+          socket.emit('sentStatsById', result.getEnemyData());
+          socket.emit('enemyphoto', result.image);
+      }
   });
 }
 
 async function getFeatureVectorsFromDB(callBack) {
   User.find( {}, 'name featureVector').lean().exec( function(error, array) {
       if (error) throw error;
-      console.log(array);
       return callBack(array);
   });
 }
@@ -396,8 +459,19 @@ async function getFeatureVectorsFromDB(callBack) {
 
 // ============================================================================
 
-
+const fieldTestToken = require('./fieldTestToken.js');
 function signuphttp(obj, res) {
+    if (!obj.token || obj.token !== fieldTestToken) {
+        console.log("(sign up)      Doesn't have field test token.");
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader("Content-Type", "ERROR");
+        res.write(JSON.stringify({
+            success: false,
+            message: "You're not a field test participant and are not allowed to join this game.",
+        }));
+        res.end();
+        return;
+    }
     const newUser = new User(obj);
     newUser.save( function(error) {
         if (error) {
@@ -443,127 +517,72 @@ function signinhttp(obj, res) {
     });
 }
 
-function getFrequency(jsonData,res){
-    jsonData.frequency = frequency;
-    jsonData.update = "true";
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    // res.setHeader("Content-Type", "ERROR");
-    res.write(JSON.stringify(jsonData));
-    res.end();
-}
 
-function updateFrequency(jsonData,res){
-    frequency = jsonData.frequency;
-    jsonData.update = "true";
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.write(JSON.stringify(jsonData));
-    res.end();
-}
+// ============================================================================
 
-async function radar(obj, res) {
-    if (obj.token) {
-        jwt.verify(obj.token, secret, async function(err, token) {
-            if (err) {
-                console.log("invalid token");
-                res.setHeader('Access-Control-Allow-Origin', '*');
-                res.setHeader("Content-Type", "ERROR");
-                res.end();
-            } else {
-                obj.playerId = token.name;
-                if(obj.playerId !== null && obj.playerId !== "") {
-                    if (await ActivePlayer.findOne({playerid: obj.playerId}) === null) {
-                        const newActivePlayer = new ActivePlayer({
-                            playerid: obj.playerId,
-                            location: {
-                                latitude: obj.latitude,
-                                longitude: obj.longitude,
-                            }
-                        });
-                        newActivePlayer.save();
-                    }
-                    getPlayerPositionRadar(obj, res);
-                } else {
-                    console.log("invalid playerid");
-                    res.setHeader('Access-Control-Allow-Origin', '*');
-                    res.setHeader("Content-Type", "ERROR");
-                    res.end();
-                }
-            }
-        });
-    }
-}
+// BATTLE
 
-async function getPlayerPositionRadar(jsonData,res) {
-    // let fp = await getFirstActivePlayer();
-    // fp = { firstPlayer : fp };
+// ============================================================================
 
-    var playerId = jsonData.playerId;
-    var playerLongitude = jsonData.longitude;
-    var playerLatitude = jsonData.latitude;
-    var sendSignal = jsonData.sendSignal;
 
-    ActivePlayer.findOne({ playerid: playerId}, function (error, result) {
-        if (result!== null) {
-            result.location.latitude = playerLatitude;
-            result.location.longitude = playerLongitude;
-            result.updated_at = Date.now();
-            result.save();
-        }
-    });
 
-    ActivePlayer.find({}, '-created_at -_id -updated_at -__v', {lean: true}, async function(error, result) {
-        if (error) {
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.setHeader("Content-Type", "ERROR");
-            res.write("No player positions available");
-            throw error;
-        } else {
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.setHeader("Content-Type", "application/json");
 
-            result.forEach(function (elem) {
-                elem.playerId = elem.playerid;
-                delete elem.playerid;
-                elem.longitude = elem.location.longitude;
-                elem.latitude = elem.location.latitude;
-                delete elem.location.longitude;
-                delete elem.location.latitude;
-                delete elem.location;
-            });
 
-            // result.push(fp);
-
-            res.write(JSON.stringify(result)); //write a response to the client
-            res.end(); //end the response
-
-            ActivePlayer.findOne({playerid: playerId}, function (error, result) {
-                if (error) throw error;
-                if (result !== null) {
-                    result.sendSignal = "falseSignal";
-                    result.dataSignal = null;
-                    result.save();
-                }
-            });
-        }
-    });
-}
-
-function sendSignal(obj) {
-    ActivePlayer.findOne({playerid: obj.playerId}, function (error, result) {
-        if (error) throw error;
-        if (result !== null) {
-            result.sendSignal = obj.sendSignal;
-            result.dataSignal = obj.dataSignal;
-            result.save();
-        }
-    });
-}
-
+// Functie van vorig semester
 function calculateAttack(self, other) {
     return (self.attack * self.attack / (self.attack + other.defence)) * (Math.random() * 11 + 4 + self.level) / (20 + self.level);
 }
 
-function fight(obj){
+function fight(data, socket){
+    if (data.token) {
+        jwt.verify(data.token, secret, async function(err, token) {
+            if (err) {
+                console.log("(fight)         invalid token");
+            } else {
+                User.findById(token.id).then(
+                    function (error, attacker) {
+                        User.findById(data.enemy).then(
+                            function (error, defender) {
+                                if (attacker === null || defender === null || attacker === undefined || defender === undefined) {
+                                    console.log("(attack)           Player of enemy not found.");
+                                    return;
+                                }
+
+                                // TODO: pas data aan, check eventueel ./db/userModel.js voor namen andere attributen
+                                attacker.health = attacker.health;
+                                defender.health = defender.health;
+                                // TODO
+                                if (defender.health <= 0) {
+                                    // TODO
+                                }
+
+                                attacker.save();
+                                defender.save();
+
+                                // TODO: indien er andere stats doorgestuurd moeten worden, pas dan de methoden
+                                //              getUserData en getEnemyData aan in ./db/userModel.js
+
+                                // Send user data to attacker and to defender
+                                socket.emit("stats", attacker.getUserData());
+                                socket.emit("enemystats", defender.getEnemyData());
+                                if (game[defender.name] !== undefined && game[defender.name] !== null) {
+                                    game[defender.name].socket.emit("stats", defender.getUserData());
+                                    game[defender.name].socket.emit("enemystats", defender.getEnemyData());
+                                }
+                            }
+                        )
+                    }
+                )
+            }
+        })
+    }
+}
+
+
+/*  FIGHT VAN VORIG SEMESTER
+
+
+
     User.findOne({ name: obj.playerId}, function(error, self) {
         User.findOne({name: obj.enemyPlayerId}, function (error, enemy) {
             if (self !== null && enemy !== null) {
@@ -579,21 +598,7 @@ function fight(obj){
         });
     });
 
-    ActivePlayer.findOne({ playerid: obj.playerId }, function(error, result) {
-        if (error) throw error;
-        if (result !== null) {
-            result.enemyPlayerId = obj.enemyPlayerId;
-            result.save();
-        }
-    });
-
-    ActivePlayer.findOne({ playerid: obj.enemyPlayerId }, function(error, result) {
-        if (error) throw error;
-        if (result !== null) {
-            result.enemyPlayerId = obj.playerId;
-            result.save();
-        }
-    });
-
     console.log(obj.playerId + " kicked " + obj.enemyPlayerId +"!");
-}
+
+
+*/
