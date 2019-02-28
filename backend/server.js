@@ -467,8 +467,10 @@ function signuphttp(obj, res) {
         res.setHeader("Content-Type", "ERROR");
         res.write(JSON.stringify({
             success: false,
-            message: "You're not a field test participant and therefor can't join this game.",
+            message: "You're not a field test participant and are not allowed to join this game.",
         }));
+        res.end();
+        return;
     }
     const newUser = new User(obj);
     newUser.save( function(error) {
