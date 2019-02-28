@@ -290,21 +290,21 @@ function updateLocation(data, socket) {
                             // Object.keys(game).forEach( function(player) {
                             //     console.log(player + ":\n   (" + game[player].latitude +", " + game[player].longitude +")");
                             // });
-                            // socket.broadcast.emit("playerdata", {
-                            //     id: user.name,
-                            //     latitude: data.latitude,
-                            //     longitude: data.longitude,
-                            //     updatedAt: new Date()
-                            // });
-                            let broadcast = {
+                            socket.broadcast.emit("playerdata", {
                                 id: user.name,
                                 latitude: data.latitude,
                                 longitude: data.longitude,
                                 updatedAt: new Date()
-                            };
-                            Object.keys(game).forEach( function (key) {
-                                game[key].socket.emit("playerdata", broadcast)
-                            })
+                            });
+                            // let broadcast = {
+                            //     id: user.name,
+                            //     latitude: data.latitude,
+                            //     longitude: data.longitude,
+                            //     updatedAt: new Date()
+                            // };
+                            // Object.keys(game).forEach( function (key) {
+                            //     game[key].socket.emit("playerdata", broadcast)
+                            // })
                         }
                     }
                 )
