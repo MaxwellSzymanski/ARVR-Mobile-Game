@@ -15,6 +15,7 @@ import EmailVerif from "./pages/EmailVerif.js";
 import ProfilePage from "./pages/ProfilePage";
 import CapturePlayer from "./pages/CapturePlayer.js";
 import FactionChooser from "./pages/FactionChooser";
+import QRCode from "./pages/QRCode";
 import BattlePage from "./pages/BattlePage";
 import Settings from "./pages/Settings.js";
 import Cookies from 'universal-cookie';
@@ -72,12 +73,13 @@ class App extends Component {
                             <UnauthRoute exact path="/takePicture" component={CameraComp} redirectTo="/map" authenticated={this.state.verified}/>
                             <UnauthRoute exact path="/imageConfirm" component={ImageConfirm} redirectTo="/map" authenticated={this.state.verified}/>
                             <UnauthRoute exact path="/verify" component={EmailVerif} redirectTo="/map" authenticated={this.state.verified}/>
+                            <UnauthRoute exact path="/qrCode" component={QRCode} redirectTo="/map" authenticated={this.state.verified}/>
 
                             <AuthRoute exact path="/factionChooser" component={FactionChooser} redirectTo="/sign-in" authenticated={this.state.verified}/>
-                            <AuthRoute  exact path="/map" component={Trial} redirectTo="/sign-in" authenticated={this.state.verified}/>
-                            <AuthRoute  exact path="/profilePage" component={ProfilePage} redirectTo="/sign-in" authenticated={this.state.verified}/>
-                            <AuthRoute  exact path="/settings" component={Settings} redirectTo="/sign-in" authenticated={this.state.verified} />
-                            <AuthRoute   exact path="/capturePlayer" component={CapturePlayer} redirectTo="/sign-in" authenticated={this.state.verified}/>
+                            <AuthRoute exact path="/map" component={Trial} redirectTo="/sign-in" authenticated={this.state.verified}/>
+                            <AuthRoute exact path="/profilePage" component={ProfilePage} redirectTo="/sign-in" authenticated={this.state.verified}/>
+                            <AuthRoute exact path="/settings" component={Settings} redirectTo="/sign-in" authenticated={this.state.verified} />
+                            <AuthRoute exact path="/capturePlayer" component={CapturePlayer} redirectTo="/sign-in" authenticated={this.state.verified}/>
                             <AuthRoute exact path="/view" component={View} redirectTo="/sign-in" authenticated={this.state.verified} />
                             <AuthRoute exact path="/battlePage" component={BattlePage} redirectTo="/sign-in" authenticated={this.state.verified} />
                         </Switch>
