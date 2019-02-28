@@ -104,6 +104,8 @@ io.sockets.on('connection', function (socket) {
 
     socket.on("newmail", (data) => {newMail(data)});
 
+    socket.on("faction", (data) => {faction(data, socket)});
+
     socket.on("signin", (data) => {signin(data, socket)});
 
     socket.on("signout", (data) => {signout(data, socket)});
@@ -203,6 +205,27 @@ function newMail(data) {
             });
         }
     })
+}
+
+function faction(data, socket) {
+    jwt.verify(data.token, secret, async function (err, token) {
+        if (err) {
+            console.log("(faction)       invalid token");
+            socket.emit("faction", {success: false})
+        } else {
+            User.findById(token.id).then(
+                function (user) {
+                    if (user === null ||
+                        (data.faction !== "loneWolf" && data.faction !== "adventurer" && data.faction !== "scavenger")) {
+                        socket.emit("faction", {success: false});
+                    } else {
+                        user.faction = data.faction;
+                        user.save();
+                        socket.emit("faction", {success: true});
+                    }
+                });
+        }
+    });
 }
 
 async function signin(dat, socket) {

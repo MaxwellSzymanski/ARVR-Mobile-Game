@@ -101,7 +101,10 @@ class ProfilePage extends React.Component {
     }
 
     logOut() {
-        this.context.emit("signout", {token: cookies.get("token")});
+        cookies.remove("token");
+        cookies.remove("name");
+        window.location.reload();
+        // this.context.emit("signout", {token: cookies.get("token")});
     }
 
     renderRedirect = () => {

@@ -4,6 +4,7 @@ import "./factionChooser.css"
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import ReactDOM from 'react-dom';
 import swal from '@sweetalert/with-react';
+import SocketContext from "../socketContext";
 
 class FactionChooser extends React.Component {
     constructor() {
@@ -17,6 +18,13 @@ class FactionChooser extends React.Component {
 
     componentDidMount() {
         setTimeout(() => this.showInfo(), 1000);
+        this.context.on("faction", (data) => {
+            if (data.success) {
+                window.location.reload();
+            } else {
+                swal("Something went wrong. Please try again.", {icon: "error"} )
+            }
+        })
     }
 
     showInfo(){
@@ -50,7 +58,7 @@ class FactionChooser extends React.Component {
     }
 
     confirm() {
-        // TODO: redirect
+        this.context.emit("faction", {token: cookies.get('token'), faction: this.state.faction})
     }
 
     render() {
@@ -82,5 +90,6 @@ class FactionChooser extends React.Component {
 
 
 }
+FactionChooser.contextType = SocketContext;
 
 export default FactionChooser;

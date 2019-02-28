@@ -82,6 +82,10 @@ const Schema = new mongoose.Schema({
     items: {
         type: Object,
         default: null
+    },
+    faction: {
+        type: String,
+        default: null
     }
 }, {timestamps: true});
 
@@ -130,6 +134,7 @@ Schema.methods.getUserData = function() {
         kills: this.kills,
         deaths: this.deaths,
         items: this.items,
+        faction: this.faction,
     };
 };
 
