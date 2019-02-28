@@ -127,9 +127,9 @@ io.sockets.on('connection', function (socket) {
         })
     });
 	
-	socket.on('getStatsById', () => {
-        getStatsById(function(result) {
-            socket.emit('sentStatsbyId', result);
+	socket.on('getStatsById', (id) => {
+        getStatsById(function(result, id) {
+            socket.emit('sentStatsById', result);
         })
     });
 
