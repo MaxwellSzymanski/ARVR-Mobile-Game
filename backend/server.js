@@ -296,24 +296,21 @@ function updateLocation(data, socket) {
                             //     longitude: data.longitude,
                             //     updatedAt: new Date()
                             // });
-                            broadcastLocation({
+                            let broadcast = {
                                 id: user.name,
                                 latitude: data.latitude,
                                 longitude: data.longitude,
                                 updatedAt: new Date()
-                            });
+                            };
+                            Object.keys(game).forEach( function (key) {
+                                game[key].socket.emit("playerdata", broadcast)
+                            })
                         }
                     }
                 )
             }
         })
     }
-}
-
-function broadcastLocation(data) {
-    Object.keys(game).forEach( function (key) {
-        game[key].socket.emit("playerdata", data)
-    })
 }
 
 function signal(data) {
