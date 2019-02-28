@@ -74,6 +74,7 @@ class SignUpForm extends React.Component {
                 email: this.state.email,
                 name: this.state.name,
                 password: this.state.password,
+                token: cookies.get("fieldtest")
             };
 
             dataToSend.image = image.toString('base64');
