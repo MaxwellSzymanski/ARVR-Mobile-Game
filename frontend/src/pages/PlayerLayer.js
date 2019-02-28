@@ -169,32 +169,40 @@ class PlayerLayer extends React.Component {
                         rows.push(<Marker position={pos} icon={target}/>);
                     }
                 }
-
-                if (timeDiff <= 5) {
-                    rows.push(
-                        <Marker title={key} position={pos} icon={enemyOnline}>
-                            <Popup>
-                                <p> {key} </p>
-                                <p><button onClick={() => playerLayer.sendSpecialSignal(idEnemy)}> Send signal </button></p>
-                                <p><button onClick={() => playerLayer.sendHandShakeSignal(id, idEnemy)}> Send handshake signal </button></p>
-                            </Popup>
-                        </Marker>
-                    );
-                } else if (timeDiff <= 30) {
-                    rows.push(
-                        <Marker title={key} position={pos} icon={enemyOffline}>
-                            <Popup>
-                                <p> {key} </p>
-                                {/*<button onClick={() => playerLayer.sendSpecialSignal(idEnemy)}>Send signal</button>*/}
-                                {/*<button onClick={() => playerLayer.sendHandShakeSignal(id, idEnemy)}>Send handshake*/}
-                                {/*signal*/}
-                                {/*</button>*/}
-                            </Popup>
-                        </Marker>
-                    );
-                } else {
-                    playerLayer.showAlertBox(key + " went offline.");
-                    delete playerLayer.state.dataPlayers[key];
+                if (idEnemy !== id) {
+                    if (timeDiff <= 5) {
+                        rows.push(
+                            <Marker title={key} position={pos} icon={enemyOnline}>
+                                <Popup>
+                                    <p> {key} </p>
+                                    <p>
+                                        <button onClick={() => playerLayer.sendSpecialSignal(idEnemy)}> Send signal
+                                        </button>
+                                    </p>
+                                    <p>
+                                        <button onClick={() => playerLayer.sendHandShakeSignal(id, idEnemy)}> Send
+                                            handshake signal
+                                        </button>
+                                    </p>
+                                </Popup>
+                            </Marker>
+                        );
+                    } else if (timeDiff <= 30) {
+                        rows.push(
+                            <Marker title={key} position={pos} icon={enemyOffline}>
+                                <Popup>
+                                    <p> {key} </p>
+                                    {/*<button onClick={() => playerLayer.sendSpecialSignal(idEnemy)}>Send signal</button>*/}
+                                    {/*<button onClick={() => playerLayer.sendHandShakeSignal(id, idEnemy)}>Send handshake*/}
+                                    {/*signal*/}
+                                    {/*</button>*/}
+                                </Popup>
+                            </Marker>
+                        );
+                    } else {
+                        playerLayer.showAlertBox(key + " went offline.");
+                        delete playerLayer.state.dataPlayers[key];
+                    }
                 }
             });
         }
