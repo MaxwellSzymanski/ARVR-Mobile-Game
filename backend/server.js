@@ -284,6 +284,7 @@ function stats(data, socket) {
                         socket.emit("photo", {image: user.image} )
                     }
                 });
+            if (data.)
         }
     })
 }

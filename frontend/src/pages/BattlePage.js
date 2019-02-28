@@ -32,6 +32,9 @@ class BattlePage extends React.Component {
 
     componentDidMount() {
         let id = localStorage.getItem("capturedPlayerId");
+
+        this.context.emit("stats", {token: cookies.get("token"), enemy: id);
+
         this.context.emit("getStatsById", id);
 
         this.context.on("sentStatsById", (data) => {
@@ -54,7 +57,21 @@ class BattlePage extends React.Component {
                opponentPic: image,
            });
         });
-        
+        this.context.on("stats", (data) => {
+            let items = 0;
+            if (data.items !== null)
+                items = data.items.length;
+            this.setState({
+                selfAttack: data.attack,
+                selfHealth: data.health,
+                selfDefence: data.defence,
+                selfLevel: data.level,
+                selfExperience: data.experience,
+                selfKills: data.kills,
+                selfDeaths: data.deaths,
+                selfItems: items,
+            });
+        });
         this.interval = setInterval(() => {
             this.sendLocation();
         }, 750);
@@ -119,8 +136,7 @@ class BattlePage extends React.Component {
 
     attack() {
 
-        // TODO: comment invullen
-        this.context.emit("fight", {token: cookies.get('token'), /* enemy: ENEMY_NAME */ });
+        this.context.emit("fight", {token: cookies.get('token'), enemy: localStorage.getItem("capturedPlayerId")});
 
 
         // TODO: ik denk dat ge dan best het grootste deel van deze code op de server zet,
