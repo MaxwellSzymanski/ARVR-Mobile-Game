@@ -126,7 +126,7 @@ io.sockets.on('connection', function (socket) {
             socket.emit('sentFVfromDB', result);
         })
     });
-	
+
 	socket.on('getStatsById', (id) => {
         getStatsById(id, socket) });
         // function(result, id) {

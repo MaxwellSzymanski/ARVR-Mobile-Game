@@ -32,7 +32,7 @@ class BattlePage extends React.Component {
         this.context.emit("getStatsById", id);
 
         this.context.on("sentStatsById", (data) => {
-            console.log("hello");
+            console.log("stats received: " + data);
             this.setState({
                 oppName: data.name,
                 oppHealth: data.attack,

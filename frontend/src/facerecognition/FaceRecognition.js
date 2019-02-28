@@ -45,7 +45,6 @@ import {loadMtcnnModel, loadFaceLandmarkModel, loadFaceDetectionModel, loadFaceR
 
   async function getFeatureVector(image) {
     var fv = await calculateFeatureVector(image);
-    console.log("hello")
     return fv
   }
 
