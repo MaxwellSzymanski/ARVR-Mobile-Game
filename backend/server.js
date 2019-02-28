@@ -296,7 +296,7 @@ function updateLocation(data, socket) {
                             //     longitude: data.longitude,
                             //     updatedAt: new Date()
                             // });
-                            broadcastLocation(socket, {
+                            broadcastLocation({
                                 id: user.name,
                                 latitude: data.latitude,
                                 longitude: data.longitude,
