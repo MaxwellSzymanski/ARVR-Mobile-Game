@@ -284,7 +284,18 @@ function stats(data, socket) {
                         socket.emit("photo", {image: user.image} )
                     }
                 });
-            if (data.)
+            if (data.enemy) {
+                User.findById(data.enemy).then(
+                    function(enemy) {
+                        if (enemy === null) {
+                            console.log("(stats)         No enemy found");
+                        } else {
+                            socket.emit("enemystats", enemy.getEnemyData());
+                            socket.emit("enemyphoto", enemy.image);
+                        }
+                    }
+                )
+            }
         }
     })
 }
