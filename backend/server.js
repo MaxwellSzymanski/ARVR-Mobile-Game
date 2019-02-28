@@ -382,7 +382,7 @@ var names;
 // }
 
 async function getStatsById(callBack, id) {
-  User.find( {id}, 'name image level health defense attack').lean().exec( function(error, array) {
+  User.find( {id}, 'name image level health defence attack').lean().exec( function(error, array) {
       if (error) throw error;
       console.log(array);
       return callBack(array);

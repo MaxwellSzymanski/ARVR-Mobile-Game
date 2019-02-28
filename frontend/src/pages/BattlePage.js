@@ -12,7 +12,7 @@ class BattlePage extends React.Component {
         super();
 
         this.state = {
-            oppName: 'Test name',
+            oppName: 'Target Player',
             //oppName: cookies.get('name'),
             oppHealth: 40,
             oppDefence: 200,
@@ -24,6 +24,26 @@ class BattlePage extends React.Component {
             loggedOut: true
             //TODO
         };
+    }
+
+    componentDidMount() {
+        let id = localStorage.getItem("capturedPlayerId")
+        this.context.emit("getStatsById", id);
+
+        this.context.on("sentStatsById", (data) => {
+            this.setState({
+                oppName: data.name,
+                oppHealth: data.attack,
+                oppDefence: data.defence,
+                opplevel: data.level,
+                //opponentPic:
+                //selfKills:
+                //selfDeaths:
+                //selfHealth:
+                visibility: 50,
+
+            });
+        });
     }
 
     // Generate attribute boxes
