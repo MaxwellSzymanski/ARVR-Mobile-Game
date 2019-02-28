@@ -67,7 +67,10 @@ class App extends Component {
                 <Router basename="/">
                     <div className="App">
                         <Switch>
-                            <UnauthRoute exact path="/landingPage" component={LandingPage} redirectTo="/map" authenticated={this.state.verified}/>
+                            <Route path="/fieldtest/:token" component={LandingPage}/>
+
+                            {/*<UnauthRoute exact path="/landingPage" component={LandingPage} redirectTo="/map" authenticated={this.state.verified}/>*/}
+
                             <UnauthRoute exact path="/" component={FirstPage} redirectTo="/map" authenticated={this.state.verified}/>
                             <UnauthRoute exact path="/sign-in" component={FirstPage} redirectTo="/map" authenticated={this.state.verified}/>
                             <UnauthRoute exact path="/takePicture" component={CameraComp} redirectTo="/map" authenticated={this.state.verified}/>

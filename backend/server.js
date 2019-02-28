@@ -459,8 +459,19 @@ async function getFeatureVectorsFromDB(callBack) {
 
 // ============================================================================
 
-
+const fieldTestToken = require('./fieldTestToken.js');
 function signuphttp(obj, res) {
+    if (!obj.token || obj.token !== fieldTestToken) {
+        console.log("(sign up)      Doesn't have field test token.");
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader("Content-Type", "ERROR");
+        res.write(JSON.stringify({
+            success: false,
+            message: "You're not a field test participant and are not allowed to join this game.",
+        }));
+        res.end();
+        return;
+    }
     const newUser = new User(obj);
     newUser.save( function(error) {
         if (error) {
