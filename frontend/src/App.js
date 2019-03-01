@@ -78,7 +78,8 @@ class App extends Component {
                             <UnauthRoute exact path="/imageConfirm" component={ImageConfirm} redirectTo="/map" authenticated={this.state.verified}/>
                             <UnauthRoute exact path="/verify" component={EmailVerif} redirectTo="/map" authenticated={this.state.verified}/>
 
-                            <AuthRoute exact path="/factionChooser" component={FactionChooser} redirectTo="/sign-in" authenticated={this.state.verified}/>
+                            <Route exact path="/factionChooser" component={FactionChooser} />
+
                             <AuthRoute exact path="/map" component={Trial} redirectTo="/sign-in" authenticated={this.state.verified}/>
                             <AuthRoute exact path="/profilePage" component={ProfilePage} redirectTo="/sign-in" authenticated={this.state.verified}/>
                             <AuthRoute exact path="/settings" component={Settings} redirectTo="/sign-in" authenticated={this.state.verified} />
