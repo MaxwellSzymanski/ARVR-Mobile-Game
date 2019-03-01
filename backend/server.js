@@ -495,7 +495,7 @@ function signuphttp(obj, res) {
     }
     const newUser = new User(obj);
     const factions = ["loneWolf", "adventurer", "scavenger"];
-    newUser.faction = factions[Math.floor(Math.random() * myArray.length)];
+    newUser.faction = factions[Math.floor(Math.random() * factions.length)];
     newUser.save( function(error) {
         if (error) {
             console.log(error);
