@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import "./Settings.css"
 import swal from '@sweetalert/with-react';
 import SweetAlert from 'sweetalert2-react';
-import io from "socket.io-client";
+import Cookies from 'universal-cookie';
+import SocketContext from "../socketContext";
+const cookies = new Cookies();
 
 class Settings extends React.Component {
     constructor() {
@@ -12,6 +14,22 @@ class Settings extends React.Component {
         this.state = {
             show: false
         };
+
+        this.deleteProfile = this.deleteProfile.bind(this);
+    }
+
+    componentDidMount() {
+        this.context.on("deleteaccount", (data) => {
+            if (data.success) {
+                swal({title: "Account deleted!", text: "Thanks for playing.", icon: "success"});
+                cookies.remove("token");
+                cookies.remove("name");
+                cookies.remove("fieldtest");
+                window.location.reload();
+            } else {
+                swal({title: "Something went wrong.", text: "Please try again.", icon: "error"});
+            }
+        });
     }
 
     takeNewPhoto() {
@@ -19,17 +37,29 @@ class Settings extends React.Component {
     }
 
     deleteProfile() {
-        // TODO
+        swal({
+            title: "Are you sure?",
+            text: "By deleting this account, you lose all progress in the game.\nThis action is irreversible.",
+            icon: "warning",
+            dangerMode: true,
+            buttons: true,
+        }).then( (value) => {
+            if (value) {
+                this.context.emit("deleteaccount", {token: cookies.get("token")});
+            } else {
+                swal({ title: "Thank you for staying!", button: "My pleasure!" });
+            }
+        });
     }
 
     giveFeedback() {
-
+        window.open("https://goo.gl/forms/4VRZHjURLrIEPplD2", "_blank");
     }
 
     showQR() {
         swal({
             title: "Share the joy!",
-            imageUrl: "qrCode.png"
+            imageUrl: "./qrCode.png"
         });
     }
 
@@ -55,4 +85,6 @@ class Settings extends React.Component {
         )
     }
 }
+Settings.contextType = SocketContext;
+
 export default Settings;

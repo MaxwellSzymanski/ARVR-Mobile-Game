@@ -17,7 +17,7 @@ class Settings extends React.Component {
     render() {
         return (
             <div>
-                <h1 className="subTitle fadeIn0"> Share app</h1>
+                <h1 className="subTitle fadeIn0"> Share the joy! </h1>
                 <div className="qrCode fadeIn1"> </div>
                 <div>
                     <Link to="/settings"><button className="normalButton fadeIn2">Go back</button></Link>

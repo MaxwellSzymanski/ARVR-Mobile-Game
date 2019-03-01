@@ -25,6 +25,8 @@ class ProfilePage extends React.Component {
             encodedPic: require("../assets/icons/user.png"),
             loggedOut: false,
         };
+
+        this.logOut = this.logOut.bind(this);
     }
 
     componentDidMount() {
@@ -54,13 +56,13 @@ class ProfilePage extends React.Component {
                 encodedPic: data.image
             })
         });
-        const that = this;
         this.context.on("signout", (data) => {
             if (data.success) {
                 cookies.remove("token");
                 cookies.remove("name");
+                cookies.remove("fieldtest");
                 swal("Logged out!", {icon: "success"});
-                that.setState({loggedOut:true});
+                window.location.reload();
             } else {
                 swal("Something went wrong. Please try again.", {icon: "error"});
             }
@@ -102,10 +104,7 @@ class ProfilePage extends React.Component {
     }
 
     logOut() {
-        cookies.remove("token");
-        cookies.remove("name");
-        window.location.reload();
-        // this.context.emit("signout", {token: cookies.get("token")});
+        this.context.emit("signout", {token: cookies.get("token")});
     }
 
     renderRedirect = () => {
