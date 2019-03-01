@@ -50,6 +50,7 @@ class Settings extends React.Component {
                 <Link to="/QRCode"><div> <button className="normalButton fadeIn2">Share QR code</button></div></Link>
                 <div> <button className="normalButton fadeIn3" onClick={this.showLicences}>Licences</button></div>
                 <div> <button className="normalButton delete fadeIn4" onClick={this.deleteProfile}>Delete profile</button></div>
+                <div> <h1> Icons used: "https://icons8.com/license" </h1> </div>
             </div>
         )
     }
