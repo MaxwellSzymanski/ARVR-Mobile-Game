@@ -19,6 +19,7 @@ class ProfilePage extends React.Component {
             level: 1,
             visibility: 50,
             experience: 0,
+            faction: "wolf",
             kills: 8,
             deaths: 3,
             items: 13,
@@ -46,6 +47,7 @@ class ProfilePage extends React.Component {
                 kills: data.kills,
                 deaths: data.deaths,
                 items: items,
+                faction: data.faction,
             });
             // Update XP bar
             const xp = (((10 + data.experience)/365)*100).toString() + '%';
@@ -124,7 +126,7 @@ class ProfilePage extends React.Component {
                 <div className="profileCard fadeIn0">
                     <div className="profilePhoto"><img src={this.state.encodedPic} alt={"Profile image"}/></div>
                     <h1 className="name">{this.state.name}</h1>
-                    <h3 className="smallText">Level {this.state.level}</h3>
+                    <h3 className="smallText">Level {this.state.level} {this.state.faction}</h3>
                     <div className="xpBar">
                         <div className="xpGained" id="xpBar"> </div>
                     </div>

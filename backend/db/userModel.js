@@ -91,13 +91,16 @@ const Schema = new mongoose.Schema({
 
 Schema.plugin(uniqueValidator, {message: 'The {PATH} you gave ({VALUE}) is already in use'});
 
-Schema.pre('save', async function(){
+Schema.pre('save', async function(next) {
+    if (!this.isModified('password'))
+        return next();
     const hash = await bcrypt.hash(this.password, saltRounds);
     this.password = hash;
+    next();
 });
 
 Schema.methods.checkPassword = async function(password) {
-     return await bcrypt.compare(password, this.password);
+    return await bcrypt.compare(password, this.password);
 };
 
 Schema.methods.createToken = function() {
@@ -157,9 +160,6 @@ Schema.methods.getUserFV = function() {
 Schema.methods.sendVerifMail = function() {
     this.verifCode = Math.trunc(100000 + 899998*(Math.random()));
     this.save();
-
-    let message = this.name + ",\n\n\nUse the following code to activate your account:\n\n" +
-        this.verifCode.toString() + "\n\n\nThe Game of Wolves team";
 
     const options = {
         from: 'Game Of Wolves',
