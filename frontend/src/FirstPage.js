@@ -7,7 +7,7 @@ import Maps from './pages/Maps'
 class FirstPage extends React.Component {
 
     setPage() {
-        document.body.style = 'background: #910f0f'
+        document.body.style = 'background: white'
     }
 
   render() {
