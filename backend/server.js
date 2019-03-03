@@ -110,6 +110,8 @@ io.sockets.on('connection', function (socket) {
 
     socket.on("signout", (data) => {signout(data, socket)});
 
+    socket.on("deleteaccount", (data) => {deleteAccount(data, socket)});
+
     socket.on("stats", (data) => {stats(data, socket)});
 
     socket.on("location", (data) => {updateLocation(data, socket)});
@@ -266,6 +268,25 @@ function signout(data, socket) {
         } else {
             socket.emit("signout", {success: true});
             delete game[token.name];
+        }
+    });
+}
+
+function deleteAccount(data, socket) {
+    jwt.verify(data.token, secret, async function(err, token) {
+        if (err) {
+            console.log("(delete)        invalid token");
+            socket.emit("deleteaccount", {success: false});
+        } else {
+            User.findByIdAndRemove(token.id).then(
+                function (user) {
+                    if (user === null) {
+                        console.log("(delete)        No user found");
+                        socket.emit("deleteaccount", {success: false});
+                    } else {
+                        socket.emit("deleteaccount", {success: true});
+                    }
+                });
         }
     });
 }
@@ -473,6 +494,8 @@ function signuphttp(obj, res) {
         return;
     }
     const newUser = new User(obj);
+    const factions = ["loneWolf", "adventurer", "scavenger"];
+    newUser.faction = factions[Math.floor(Math.random() * factions.length)];
     newUser.save( function(error) {
         if (error) {
             console.log(error);
