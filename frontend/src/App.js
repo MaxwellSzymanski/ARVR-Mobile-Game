@@ -86,7 +86,7 @@ class App extends Component {
                             <AuthRoute exact path="/qrCode" component={QRCode} redirectTo="/map" authenticated={this.state.verified}/>
                             <AuthRoute exact path="/capturePlayer" component={CapturePlayer} redirectTo="/sign-in" authenticated={this.state.verified}/>
                             <AuthRoute exact path="/view" component={View} redirectTo="/sign-in" authenticated={this.state.verified} />
-                            <AuthRoute exact path="/battlePage" component={BattlePage} redirectTo="/sign-in" authenticated={this.state.verified} />
+                            <Route exact path="/battlePage" component={BattlePage} redirectTo="/sign-in" authenticated={this.state.verified} />
                         </Switch>
                     </div>
                 </Router>
