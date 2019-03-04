@@ -94,8 +94,8 @@ class ProfilePage extends React.Component {
     generateAttributes(number) {
         const active = Math.round(number / 100);
         let html = [];
-        for (let i = 1; i <= this.state.subjects.length; i++) {
-            html.push(<div key={i} className="attributeValueActive"> Subject</div>)
+        for (let i = 1; i <= active; i++) {
+            html.push(<div key={i} className="attributeValueActive"> </div>)
         }
         if (active !== 4) {
             for (let j = 1; j <= 4-active; j++) {
