@@ -15,7 +15,7 @@ class NotFound extends Component {
         </div>
 
         <div>
-          <center><Link className="linkBack" to="/">Return to Home Page</Link></center>
+          <center><Link className="linkBack" to="/map">Return to Game of Wolves</Link></center>
         </div>
       </div>
 
