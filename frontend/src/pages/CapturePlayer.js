@@ -55,6 +55,12 @@ class CapturePlayer extends React.Component {
      this.context.on('sentFVfromDB', async (results) => {
         let capturedPlayerId = await this.getMatchingPlayerFromFV(results);
         let playerId = null;
+
+        this.context.emit("stats", {token: cookies.get("token")});
+        this.context.on("stats", (data) => {
+          playerId = data._id;
+        });
+
         if (capturedPlayerId == null){
             this.setState({calculating:false});
             swal({
@@ -65,11 +71,6 @@ class CapturePlayer extends React.Component {
           });
         }
 
-        this.context.emit("stats", {token: cookies.get("token")});
-        this.context.on("stats", (data) => {
-          playerId = data._id
-        };
-
         else if (playerId == capturedPlayerId){
           swal({
             title: "This is you!",
@@ -77,9 +78,9 @@ class CapturePlayer extends React.Component {
             icon: "warning",
             button: "try again!",
         });
-        }
+      }
 
-        else if {
+        else {
           console.log(capturedPlayerId)
           localStorage.setItem("capturedPlayerId", capturedPlayerId);
           this.setRedirect();
@@ -87,6 +88,7 @@ class CapturePlayer extends React.Component {
 
     });
   }
+
 
   async getMatchingPlayerFromFV(results) {
 
