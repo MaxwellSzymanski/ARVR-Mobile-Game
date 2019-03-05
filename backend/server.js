@@ -308,7 +308,7 @@ function newImage(data) {
                     }
                 });
 		}
-	}
+	})
 }
 
 
@@ -501,7 +501,7 @@ async function getFVById(data, socket) {
                     }
                 });
 		}
-	}
+	})
 }
 
 async function getFeatureVectorsFromDB(callBack) {
