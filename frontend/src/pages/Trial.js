@@ -56,7 +56,7 @@ class Trial extends React.Component {
                 showAlertBox: false,
                 content: [],
             });
-            this.setTarget(this.state.id, this.state.location);
+            this.setTarget(this.state.id, [this.state.location.lat, this.state.location.lng]);
         });
     }
 
