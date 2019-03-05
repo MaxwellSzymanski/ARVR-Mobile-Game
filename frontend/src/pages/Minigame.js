@@ -53,7 +53,7 @@ class Minigame extends React.Component {
 
     this.context.on("mission", (data) => {
 
-        this.setState({targetLocation: data})
+        this.setState({targetLocation: data.location})
 
     })
   }
