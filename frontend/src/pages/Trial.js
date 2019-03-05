@@ -55,7 +55,8 @@ class Trial extends React.Component {
                 zoom: 18,
                 showAlertBox: false,
                 content: [],
-            })
+            });
+            this.setTarget(this.state.id, this.state.location);
         });
     }
 
@@ -92,7 +93,7 @@ class Trial extends React.Component {
 
     mapChanged(feature, layer){
 
-      if(this.state.idTarget === null){
+      if(this.state.idTarget === null) {
         var rows = [];
         rows.push(<Link to="/profilepage"><button> Profile Page </button></Link>);
           rows.push(<Link to="/captureplayer"><button> Capture Player </button></Link>);

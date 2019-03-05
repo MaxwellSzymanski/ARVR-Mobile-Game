@@ -21,7 +21,6 @@ class FactionChooser extends React.Component {
     }
 
     componentDidMount() {
-        setTimeout(() => this.showInfo(), 1000);
         this.context.on("faction", (data) => {
             if (data.success) {
                 window.location.reload();
@@ -29,10 +28,6 @@ class FactionChooser extends React.Component {
                 swal("Something went wrong. Please try again.", {icon: "error"} )
             }
         })
-    }
-
-    showInfo(){
-        swal( {icon: 'info', title: "Factions", text: "Tap and hold on a faction to join it."});
     }
 
     selectFaction(number) {
