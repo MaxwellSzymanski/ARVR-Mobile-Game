@@ -13,6 +13,20 @@ var myIcon = L.icon({
     popupAnchor:  [0, -30] // point from which the popup should open relative to the iconAnchor
 });
 
+
+var targetIcon = L.icon({
+    iconUrl: "https://img.icons8.com/material/24/000000/point-of-interest.png",
+    //shadowUrl: 'leaf-shadow.png',
+
+    iconSize:     [70, 70], // size of the icon
+    shadowSize:   [50, 64], // size of the shadow
+    iconAnchor:   [35, 35], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [0, -30] // point from which the popup should open relative to the iconAnchor
+});
+
+
+
 class Minigame extends React.Component {
 
 
@@ -20,6 +34,7 @@ class Minigame extends React.Component {
       super(props);
       this.setCenter = this.setCenter.bind(this);
       this.showAlertBox = this.showAlertBox.bind(this);
+      this.sendPhoto = this.sendPhoto.bind(this);
   }
 
   state = {
@@ -30,24 +45,44 @@ class Minigame extends React.Component {
       zoom: 14,
       centerMap: [50.8632811, 4.6762872],
       showAlertBox: true,
-      content: "Please allow access to your location."
+      content: "Please allow access to your location.",
+      targetLocation: [30.8632811, 4.6762872]
+  }
+
+  componentDidMount(){
+
+    this.context.on("mission", (data) => {
+
+        this.setState({targetLocation: data})
+
+    })
   }
 
   componentWillMount() {
+      this.context.emit("mission",{token:cookies.get('token')});
+
+      this.interval = setInterval(() => {
+            this.sendLocation();
+            this.setCenter([this.state.location.lat, this.state.location.lng]);
+        });
+      }, 500);
+  }
+
+  sendLocation() {
       navigator.geolocation.getCurrentPosition((position) => {
           this.setState({
-              location: {
-                  lat: position.coords.latitude,
-                  lng: position.coords.longitude
-              },
-              haveUsersLocation: true,
-              zoom: 18,
-              showAlertBox: false,
-              content: [],
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+              accuracy: Math.round(position.coords.accuracy)
           });
-          this.setCenter([this.state.location.lat, this.state.location.lng]);
+
+          this.context.emit("location", {
+              token: cookies.get('token'),
+              longitude: this.state.longitude,
+              latitude: this.state.latitude,
+              accuracy: this.state.accuracy,
+          })
       });
-      this.context.emit("mission",{token:cookies.get('token')});
   }
 
   setCenter(pos){
@@ -58,8 +93,12 @@ class Minigame extends React.Component {
 
   mapChanged(feature, layer){
     var rows = [];
-    //rows.push(<Link to="/captureplayer"><button> Capture Player </button></Link>);
-    //this.showAlertBox(rows);
+    rows.push(<button onClick={this.sendPhoto().bind(this)}>Take photo</button>);
+    this.showAlertBox(rows);
+  }
+
+  sendPhoto(){
+
   }
 
   showAlertBox(content){
@@ -79,11 +118,12 @@ class Minigame extends React.Component {
               url='https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
           />
           <Marker position={this.state.centerMap} icon={myIcon}/>
+          <Marker position={this.state.targetLocation} icon={targetIcon}/>
           <PopPop open={this.state.showAlertBox} closeBtn={true} closeOnEsc={true} closeOnOverlay={true}>
               <div>{this.state.content}</div>
           </PopPop>
       </Map>);
   }
 }
-
+Minigame.contextType = SocketContext;
 export default Minigame;
