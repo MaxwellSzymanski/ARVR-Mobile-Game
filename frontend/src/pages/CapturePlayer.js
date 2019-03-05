@@ -53,13 +53,12 @@ class CapturePlayer extends React.Component {
 
   componentDidMount() {
      this.context.on('sentFVfromDB', async (results) => {
-        let capturedPlayerId = await this.getMatchingPlayerFromFV(results);
-        let playerId = null;
+        let capturedPlayer = await this.getMatchingPlayerFromFV(results)
+        let capturedPlayerId = capturedPlayer._id;
+        let playerName = cookies.get('name');
 
-        this.context.emit("stats", {token: cookies.get("token")});
-        this.context.on("stats", (data) => {
-          playerId = data._id;
-        });
+        console.log(capturedPlayer.name)
+        console.log(playerName)
 
         if (capturedPlayerId == null){
             this.setState({calculating:false});
@@ -71,7 +70,10 @@ class CapturePlayer extends React.Component {
           });
         }
 
-        else if (playerId == capturedPlayerId){
+        else if (playerName === capturedPlayer.name){
+          console.log(toString(playerName) === toString(capturedPlayer.name))
+
+          this.setState({calculating:false});
           swal({
             title: "This is you!",
             text: "You can NOT capture yourself!",
@@ -88,6 +90,11 @@ class CapturePlayer extends React.Component {
 
     });
   }
+
+
+  async getPlayerId() {
+
+  };
 
 
   async getMatchingPlayerFromFV(results) {
@@ -111,7 +118,7 @@ class CapturePlayer extends React.Component {
     }
     if (index != null) {
       console.log(results[index].name)
-      return (results[index]._id);
+      return (results[index]);
     }
     else return null;
   };
