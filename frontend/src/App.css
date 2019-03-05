@@ -34,7 +34,7 @@ body {
   margin: 0px;
   width: 100vw;
   height: 100vh;
-  height: calc(var(--vh, 1vh) * 100);
+    background-color: #910f0f;
 }
 
 #root {
@@ -539,6 +539,42 @@ p {
 
 .fadeIn4 {
     animation: hideComp 400ms, fadeInLeft 500ms 400ms;
+}
+
+.confirmButton {
+    background-color: white;
+    width: 80px;
+    height: 40px;
+    font-size: 20px;
+    font-family: Orkney;
+    font-weight: bold;
+    color: #910f0f;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+    border: transparent;
+    margin-bottom: 40px;
+}
+
+.rejectButton {
+    background-color: #490b0b;
+    margin-right: 10px;
+    width: 80px;
+    height: 40px;
+    font-size: 20px;
+    font-family: Orkney;
+    font-weight: bold;
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+    border: transparent;
+    margin-bottom: 40px;
+}
+
+.unselectable {
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
 }
 
 .notfound{

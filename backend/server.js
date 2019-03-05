@@ -591,6 +591,8 @@ function fight(data, socket){
                                 if (game[defender.name] !== undefined && game[defender.name] !== null) {
                                     game[defender.name].socket.emit("stats", defender.getUserData());
                                     game[defender.name].socket.emit("enemystats", defender.getEnemyData());
+                                    // TODO
+                                    game[defender.name].socket.emit("message", defender.getEnemyData());
                                 }
                             }
                         )

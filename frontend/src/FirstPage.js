@@ -6,14 +6,10 @@ import SignInForm from './pages/SignInForm';
 import Maps from './pages/Maps'
 class FirstPage extends React.Component {
 
-    setPage() {
-        document.body.style = 'background: white'
-    }
 
   render() {
     return(
       <div className="heleSign">
-          {this.setPage()}
       <div className="Title">
           <div className="wolfIcon"/>
           <h1 className="titleGOW">Game Of Wolves</h1>

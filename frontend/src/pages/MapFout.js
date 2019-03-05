@@ -11,7 +11,7 @@ class MapFout extends React.Component {
     render() {
       return(
         <div>
-        <meta http-equiv="refresh" content="1; url=https://35.241.198.186:80/"></meta>
+            <meta http-equiv="refresh" content="1; url=https://35.241.198.186:80/"></meta>
         </div>);
 
     }
