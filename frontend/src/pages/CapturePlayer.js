@@ -55,10 +55,6 @@ class CapturePlayer extends React.Component {
      this.context.on('sentFVfromDB', async (results) => {
         let capturedPlayer = await this.getMatchingPlayerFromFV(results)
         let capturedPlayerId = capturedPlayer._id;
-        let playerName = cookies.get('name');
-
-        console.log(capturedPlayer.name)
-        console.log(playerName)
 
         if (capturedPlayerId == null){
             this.setState({calculating:false});
@@ -70,8 +66,7 @@ class CapturePlayer extends React.Component {
           });
         }
 
-        else if (playerName === capturedPlayer.name){
-          console.log(toString(playerName) === toString(capturedPlayer.name))
+        else if (cookies.get('name') == capturedPlayer.name){
 
           this.setState({calculating:false});
           swal({
