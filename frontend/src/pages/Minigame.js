@@ -3,6 +3,11 @@ import PopPop from 'react-poppop';
 import { Map, TileLayer} from 'react-leaflet';
 import Camera from 'react-html5-camera-photo';
 import Cookies from 'universal-cookie';
+import L from 'leaflet';
+import { Marker } from 'react-leaflet';
+import SocketContext from "../socketContext";
+
+
 
 const cookies = new Cookies();
 
@@ -40,6 +45,7 @@ class Minigame extends React.Component {
       this.showAlertBox = this.showAlertBox.bind(this);
       this.sendPhoto = this.sendPhoto.bind(this);
       this.votePhoto = this.votePhoto.bind(this);
+      this.sendLocation = this.sendLocation.bind(this);
   }
 
   state = {
@@ -81,7 +87,6 @@ class Minigame extends React.Component {
       this.interval = setInterval(() => {
             this.sendLocation();
             this.setCenter([this.state.location.lat, this.state.location.lng]);
-        });
       }, 500);
   }
 
@@ -90,7 +95,8 @@ class Minigame extends React.Component {
           this.setState({
               latitude: position.coords.latitude,
               longitude: position.coords.longitude,
-              accuracy: Math.round(position.coords.accuracy)
+              accuracy: Math.round(position.coords.accuracy),
+              showAlertBox: false
           });
 
           this.context.emit("location", {
