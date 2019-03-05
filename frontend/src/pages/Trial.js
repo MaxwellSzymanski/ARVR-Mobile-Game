@@ -129,11 +129,13 @@ class Trial extends React.Component {
                 <PlayerLayer idTarget={this.state.idTarget} setTarget={this.setTarget} showAlertBox={this.showAlertBox} id={this.state.id} locationEnabled={this.state.haveUsersLocation}/>
             </Map>
             </div>
+
             <Draggable>
             <div id="block2">
-            <button onClick={this.goToMinigame()}>Mission</button>
+            <Link to="/minigame"><button>Mission</button></Link>
             </div>
             </Draggable>
+
             </div>
         )
     }

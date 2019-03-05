@@ -82,10 +82,9 @@ class App extends Component {
                             <UnauthRoute exact path="/verify" component={EmailVerif} redirectTo="/map" authenticated={this.state.verified}/>
                             <UnauthRoute exact path="/factionChooser" component={FactionChooser} redirectTo="/map" authenticated={this.state.verified}/>
 
-                            <SwipeableRoutes>
+
                             <AuthRoute exact path="/map" component={Trial} redirectTo="/sign-in" authenticated={this.state.verified}/>
                             <AuthRoute exact path="/minigame" component={Minigame} redirectTo="/sign-in" authenticated={this.state.verified}/>
-                            </SwipeableRoutes>
                             <AuthRoute exact path="/profilePage" component={ProfilePage} redirectTo="/sign-in" authenticated={this.state.verified}/>
                             <AuthRoute exact path="/settings" component={Settings} redirectTo="/sign-in" authenticated={this.state.verified} />
                             <AuthRoute exact path="/qrCode" component={QRCode} redirectTo="/sign-in" authenticated={this.state.verified}/>
