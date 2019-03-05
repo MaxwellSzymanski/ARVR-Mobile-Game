@@ -14,7 +14,6 @@ class BattlePage extends React.Component {
 
         this.state = {
             oppName: 'Target Player',
-            //oppName: cookies.get('name'),
             oppHealth: 40,
             oppDefence: 200,
             oppLevel: 1,
@@ -44,7 +43,6 @@ class BattlePage extends React.Component {
                 oppHealth: data.attack,
                 oppDefence: data.defence,
                 opplevel: data.level,
-                //opponentPic:
                 //selfKills:
                 //selfDeaths:
                 //selfHealth:

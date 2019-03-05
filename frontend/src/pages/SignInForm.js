@@ -94,7 +94,7 @@ class SignInForm extends React.Component {
                         };
                         cookies.set('token', json.data.token, options);
                         cookies.set('name', json.data.name, options);
-                        that.setState({redirect: true, verified: json.data.verified});
+                        window.location.reload();
                     }
                 }
             );

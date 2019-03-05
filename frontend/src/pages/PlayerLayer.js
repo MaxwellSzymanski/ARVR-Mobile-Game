@@ -95,6 +95,8 @@ class PlayerLayer extends React.Component {
         this.context.on("specialsignal", (data) => {this.receiveSpecialSignal(data)});
         this.context.on("handshake", (data) => {this.acknowledgeHandshake(data)});
         this.context.on("ACKhandshake", (data) => {this.handshakeAcknowledged(data)});
+        // TODO
+        this.context.on("message", (data) => {this.handshakeAcknowledged(data)});
     }
 
     componentWillUnmount() {

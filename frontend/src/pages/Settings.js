@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import "./Settings.css"
 import swal from '@sweetalert/with-react';
 import SweetAlert from 'sweetalert2-react';
@@ -12,10 +12,20 @@ class Settings extends React.Component {
         super();
 
         this.state = {
-            show: false
+          redirect: false,
+          show: false
         };
 
         this.deleteProfile = this.deleteProfile.bind(this);
+        this.takeNewPhoto = this.takeNewPhoto.bind(this);
+    }
+
+    setRedirect = () => {
+        this.setState({redirect: true})
+      }
+
+    renderRedirect = () => {
+      if (this.state.redirect) {return <Redirect to="/changePicture" />}
     }
 
     componentDidMount() {
@@ -33,7 +43,8 @@ class Settings extends React.Component {
     }
 
     takeNewPhoto() {
-        // TODO
+      this.setRedirect();
+      console.log("hey")
     }
 
     deleteProfile() {
@@ -71,6 +82,7 @@ class Settings extends React.Component {
     render() {
         return (
             <div>
+            {this.renderRedirect()}
                 <div>
                     <Link to="/profilePage"> <button className="smallButton back topLeft fadeIn0"/></Link>
                     <h1 className="subTitle fadeIn0">Settings</h1>

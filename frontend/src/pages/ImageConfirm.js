@@ -36,9 +36,9 @@ class ImageConfirm extends React.Component {
                 <img className="polaroid"  src={localStorage.getItem("PhotoOfMe")} alt="Photo of me"/>
                 <div><h2>Happy with this picture?</h2></div>
                 <div>
-                    <Link to="/takePicture"><button >No</button></Link>
-                    <div className="divider"/>
-                    <Link to="/"><button onClick={this.confirmPhoto}>Yes</button></Link>
+                    <Link to="/takePicture"><button className="rejectButton">No</button></Link>
+
+                    <Link to="/"><button  className="confirmButton" onClick={this.confirmPhoto}>Yes</button></Link>
                 </div>
             </div>
 

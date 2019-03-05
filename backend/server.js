@@ -133,11 +133,13 @@ io.sockets.on('connection', function (socket) {
 
 	socket.on('getStatsById', (id) => {
         getStatsById(id, socket) });
-        // function(result, id) {
-        //         socket.emit('sentStatsById', result);
-        //     }
-        // })
-    // });
+		
+	socket.on('getFVById', (id) => {
+        getFVById(id, socket) });
+	
+	socket.on('newImage', (data) => {
+         });
+
 
     socket.on('addToJSON', (json, callback) => {
         fs.writeFile('testFeatureVectors.json', json, 'utf8', callback);
@@ -290,6 +292,25 @@ function deleteAccount(data, socket) {
         }
     });
 }
+
+function newImage(data) {
+    jwt.verify(data.token, secret, async function(err, token) {
+        if (err) {
+            console.log("(stats)         invalid token");
+        } else {
+            User.findById(token.id).then(
+                function (user) {
+                    if (user === null) {
+                        console.log("(stats)         No user found");
+                    } else {
+                        user.image = data.img;
+						user.save();
+                    }
+                });
+		}
+	}
+}
+
 
 function stats(data, socket) {
     jwt.verify(data.token, secret, async function(err, token) {
@@ -466,6 +487,23 @@ async function getStatsById(id, socket) {
   });
 }
 
+async function getFVById(data, socket) {
+    jwt.verify(data.token, secret, async function(err, token) {
+        if (err) {
+            console.log("(stats)         invalid token");
+        } else {
+            User.findById(token.id).then(
+                function (user) {
+                    if (user === null) {
+                        console.log("(stats)         No user found");
+                    } else {
+                        socket.emit('sentFVById', user.featureVector);
+                    }
+                });
+		}
+	}
+}
+
 async function getFeatureVectorsFromDB(callBack) {
   User.find( {}, 'name featureVector').lean().exec( function(error, array) {
       if (error) throw error;
@@ -591,6 +629,8 @@ function fight(data, socket){
                                 if (game[defender.name] !== undefined && game[defender.name] !== null) {
                                     game[defender.name].socket.emit("stats", defender.getUserData());
                                     game[defender.name].socket.emit("enemystats", defender.getEnemyData());
+                                    // TODO
+                                    game[defender.name].socket.emit("message", defender.getEnemyData());
                                 }
                             }
                         )

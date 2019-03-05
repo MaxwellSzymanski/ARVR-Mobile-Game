@@ -54,9 +54,8 @@ class CapturePlayer extends React.Component {
   componentDidMount() {
      this.context.on('sentFVfromDB', async (results) => {
         let capturedPlayer = await this.getMatchingPlayerFromFV(results)
-        let capturedPlayerId = capturedPlayer._id;
 
-        if (capturedPlayerId == null){
+        if (capturedPlayer == null){
             this.setState({calculating:false});
             swal({
               title: "Unkown Person",
@@ -66,23 +65,25 @@ class CapturePlayer extends React.Component {
           });
         }
 
-        else if (cookies.get('name') == capturedPlayer.name){
-
-          this.setState({calculating:false});
-          swal({
-            title: "This is you!",
-            text: "You can NOT capture yourself!",
-            icon: "warning",
-            button: "try again!",
-        });
-      }
-
         else {
-          console.log(capturedPlayerId)
-          localStorage.setItem("capturedPlayerId", capturedPlayerId);
-          this.setRedirect();
-        }
 
+          if (cookies.get('name') == capturedPlayer.name){
+
+            this.setState({calculating:false});
+            swal({
+              title: "This is you!",
+              text: "You can NOT capture yourself!",
+              icon: "warning",
+              button: "try again!",
+              });
+          }
+
+          else {
+            console.log(capturedPlayer._id)
+            localStorage.setItem("capturedPlayerId", capturedPlayer._id);
+            this.setRedirect();
+          }
+        }
     });
   }
 

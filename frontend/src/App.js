@@ -16,6 +16,7 @@ import ProfilePage from "./pages/ProfilePage";
 import CapturePlayer from "./pages/CapturePlayer.js";
 import FactionChooser from "./pages/FactionChooser";
 import QRCode from "./pages/QRCode";
+import ChangePicture from "./pages/changePicture.js";
 import BattlePage from "./pages/BattlePage";
 import NotFound from "./pages/NotFound.js";
 import Settings from "./pages/Settings.js";
@@ -78,7 +79,7 @@ class App extends Component {
                             <UnauthRoute exact path="/takePicture" component={CameraComp} redirectTo="/map" authenticated={this.state.verified}/>
                             <UnauthRoute exact path="/imageConfirm" component={ImageConfirm} redirectTo="/map" authenticated={this.state.verified}/>
                             <UnauthRoute exact path="/verify" component={EmailVerif} redirectTo="/map" authenticated={this.state.verified}/>
-                            <UnauthRoute exact path="/factionChooser" component={FactionChooser} redirectTo="/map" authenticated={this.state.verified}/>
+                            <Route exact path="/factionChooser" component={FactionChooser} redirectTo="/map" authenticated={this.state.verified}/>
 
                             <AuthRoute exact path="/map" component={Trial} redirectTo="/sign-in" authenticated={this.state.verified}/>
                             <AuthRoute exact path="/profilePage" component={ProfilePage} redirectTo="/sign-in" authenticated={this.state.verified}/>
@@ -87,6 +88,7 @@ class App extends Component {
                             <AuthRoute exact path="/capturePlayer" component={CapturePlayer} redirectTo="/sign-in" authenticated={this.state.verified}/>
                             <AuthRoute exact path="/view" component={View} redirectTo="/sign-in" authenticated={this.state.verified} />
                             <Route exact path="/battlePage" component={BattlePage} redirectTo="/sign-in" authenticated={this.state.verified} />
+                            <Route exact path="/changePicture" component={ChangePicture} redirectTo="/sign-in" authenticated={this.state.verified} />
                             <Route path="*" component={NotFound} />
                         </Switch>
                     </div>
