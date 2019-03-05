@@ -86,9 +86,10 @@ class Trial extends React.Component {
     }
 
     setTarget(id,pos){
-      this.setState({showAlertBox: false})
-      this.setState({centerMap: [pos[0],pos[1]]});
-      this.setState({idTarget: id});
+        this.setState({idTarget: null});
+        this.setState({showAlertBox: false})
+        this.setState({centerMap: [pos[0],pos[1]]});
+        this.setState({idTarget: id});
     }
 
     mapChanged(feature, layer){
