@@ -106,9 +106,9 @@ class EmailVerif extends React.Component {
                 <div>
                     <h1>Game Of Wolves</h1>
                 </div>
-                <div className="FormCenter">
+                <div className="FormCenter white">
                     <form onSubmit={this.handleSubmit} className="FormFields">
-                    <div className="FormField">
+                    <div className="FormField white">
                         <p>A six digit verification code has been sent to your e-mail account. Enter it below.</p>
                         <p>If you can't find it in your inbox, please check your spam folder.</p>
                         <div className="VerificationCode">
