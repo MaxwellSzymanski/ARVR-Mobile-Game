@@ -69,19 +69,19 @@ class FactionChooser extends React.Component {
         return (
             <div>
                 <h1 className="subTitle fadeIn0 unselectable">Choose your faction</h1>
-               <div className="cell" onClick={() => this.selectFaction(1)}>
+               <div className="cell fadeIn1" onClick={() => this.selectFaction(1)}>
                     <div className="header scavenger">Scavenger</div>
                     <div className="cardImage scavenger">
                         <h1 className="white unselectable"> Stamina reduces slower. </h1>
                     </div>
                 </div>
-                <div className="cell" onClick={() => this.selectFaction(2)}>
+                <div className="cell fadeIn2" onClick={() => this.selectFaction(2)}>
                     <div className="header loneWolf unselectable">Lone Wolf</div>
                     <div className="cardImage loneWolf">
                         <h1 className="white unselectable"> Increases chances of successful attacks. </h1>
                     </div>
                 </div>
-                <div className="cell" onClick={() => this.selectFaction(3)}>
+                <div className="cell fadeIn3" onClick={() => this.selectFaction(3)}>
                     <div className="header adventurer unselectable">Adventurer</div>
                     <div className="cardImage adventurer">
                         <h1 className="white unselectable"> Gain attack and defence after battles.</h1>

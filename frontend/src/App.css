@@ -144,7 +144,6 @@ body {
     padding-top: 50px;
     text-align: center;
     height: 100vh;
-    height: calc(var(--vh, 1vh) * 100);
 }
 
 h1 {
@@ -479,6 +478,10 @@ p {
 
 .bigButton:active {
     background-color: #dfd7d7;
+}
+
+.colorWhite {
+    color: white;
 }
 
 @keyframes fadeInLeft {
