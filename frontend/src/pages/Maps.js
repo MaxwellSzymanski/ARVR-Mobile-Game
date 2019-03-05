@@ -2,6 +2,7 @@ import React from 'react';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import '../App.css';
 import L from 'leaflet';
+import {Overlay} from 'react-overlays';
 
 
 //Gebruik dit voor je eigen icon
@@ -72,6 +73,11 @@ class Maps extends React.Component {
   render() {
       const position = [this.state.location.lat, this.state.location.lng]
       return (
+        <div>
+        <div id="block2">
+          <p>Hallo</p>
+        </div>
+        <div>
         <Map id='map' className="trial" center={position} zoom={this.state.zoom}>
           <TileLayer
             //attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -79,6 +85,7 @@ class Maps extends React.Component {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url='https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
           />
+
           {this.state.haveUsersLocation ?
             <Marker position={position} icon={myIcon}>
               <Popup>
@@ -86,7 +93,10 @@ class Maps extends React.Component {
               </Popup>
             </Marker> : ''
           }
-        </Map>
+        </Map></div>
+
+
+        </div>
       )
     }
 

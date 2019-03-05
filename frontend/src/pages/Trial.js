@@ -4,7 +4,8 @@ import '../App.css';
 import PlayerLayer from './PlayerLayer'
 import Cookies from 'universal-cookie';
 import PopPop from 'react-poppop';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import Draggable from 'react-draggable';
 
 
 
@@ -17,6 +18,7 @@ class Trial extends React.Component {
         this.setCenter = this.setCenter.bind(this);
         this.showAlertBox = this.showAlertBox.bind(this);
         this.setTarget = this.setTarget.bind(this);
+        this.goToMinigame = this.goToMinigame.bind(this);
     }
 
     //dit is gwn een standaard setting, van af blijven
@@ -105,9 +107,15 @@ class Trial extends React.Component {
 
     }
 
+    goToMinigame() {
+      return <Redirect to="/minigame" />
+    }
+
 
     render() {
         return (
+            <div>
+            <div>
             <Map onClick={()=> this.mapChanged()} className="mapss" center={this.state.centerMap} zoom={this.state.zoom}>
                 <TileLayer
                     //attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -120,6 +128,13 @@ class Trial extends React.Component {
                 </PopPop>
                 <PlayerLayer idTarget={this.state.idTarget} setTarget={this.setTarget} showAlertBox={this.showAlertBox} id={this.state.id} locationEnabled={this.state.haveUsersLocation}/>
             </Map>
+            </div>
+            <Draggable>
+            <div id="block2">
+            <button onClick={this.goToMinigame()}>Mission</button>
+            </div>
+            </Draggable>
+            </div>
         )
     }
 }
