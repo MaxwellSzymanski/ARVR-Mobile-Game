@@ -5,6 +5,9 @@ import { Link, Redirect } from 'react-router-dom';
 import { getFeatureVector, getFVDistance } from '../facerecognition/FaceRecognition';
 import swal from '@sweetalert/with-react';
 import SocketContext from "../socketContext";
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 class CapturePlayer extends React.Component {
 
@@ -51,13 +54,14 @@ class CapturePlayer extends React.Component {
   componentDidMount() {
      this.context.on('sentFVfromDB', async (results) => {
         let capturedPlayerId = await this.getMatchingPlayerFromFV(results);
-        if (capturedPlayerId !== null) {
-          console.log(capturedPlayerId)
-          localStorage.setItem("capturedPlayerId", capturedPlayerId);
-          this.setRedirect();
-        }
-        //else if (matchingPlayerId = playerId){ "You can't capture yourself!" }
-        else {
+        let playerId = null;
+
+        this.context.emit("stats", {token: cookies.get("token")});
+        this.context.on("stats", (data) => {
+          playerId = data._id;
+        });
+
+        if (capturedPlayerId == null){
             this.setState({calculating:false});
             swal({
               title: "Unkown Person",
@@ -65,10 +69,26 @@ class CapturePlayer extends React.Component {
               icon: "warning",
               button: "try again!",
           });
-
         }
+
+        else if (playerId == capturedPlayerId){
+          swal({
+            title: "This is you!",
+            text: "You can NOT capture yourself!",
+            icon: "warning",
+            button: "try again!",
+        });
+      }
+
+        else {
+          console.log(capturedPlayerId)
+          localStorage.setItem("capturedPlayerId", capturedPlayerId);
+          this.setRedirect();
+        }
+
     });
   }
+
 
   async getMatchingPlayerFromFV(results) {
 
