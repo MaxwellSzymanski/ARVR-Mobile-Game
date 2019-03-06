@@ -4,7 +4,7 @@ import { Map, TileLayer} from 'react-leaflet';
 import Camera from 'react-html5-camera-photo';
 import Cookies from 'universal-cookie';
 import L from 'leaflet';
-import { Marker } from 'react-leaflet';
+import { Marker,Popup } from 'react-leaflet';
 import SocketContext from "../socketContext";
 
 
@@ -46,6 +46,7 @@ class Minigame extends React.Component {
       this.sendPhoto = this.sendPhoto.bind(this);
       this.votePhoto = this.votePhoto.bind(this);
       this.sendLocation = this.sendLocation.bind(this);
+      this.alertBoxIsClosed = this.alertBoxIsClosed.bind(this);
   }
 
   state = {
@@ -55,7 +56,7 @@ class Minigame extends React.Component {
       },
       zoom: 14,
       centerMap: [50.8632811, 4.6762872],
-      showAlertBox: true,
+      showAlertBox: false,
       content: "Please allow access to your location.",
       targetLocation: [30.8632811, 4.6762872],
       encodedPic: require("../assets/icons/user.png")
@@ -96,7 +97,6 @@ class Minigame extends React.Component {
               latitude: position.coords.latitude,
               longitude: position.coords.longitude,
               accuracy: Math.round(position.coords.accuracy),
-              showAlertBox: false
           });
 
           this.context.emit("location", {
@@ -119,20 +119,23 @@ class Minigame extends React.Component {
   }
 
   mapChanged(feature, layer){
-    var rows = [];
-    rows.push(
-      <Camera
-          onTakePhoto = { (dataUri) => { this.sendPhoto(dataUri); } }
-          isImageMirror = {true}
-          imageType = {'IMAGE_TYPES.PNG'}
-          imageCompression = {0.97}
-      />
-    );
-    this.showAlertBox(rows);
+    if(this.state.showAlertBox === false) {
+      var rows = [];
+      rows.push(
+        <Camera
+            onTakePhoto = { (dataUri) => { this.sendPhoto(dataUri); } }
+            isImageMirror = {true}
+            imageType = {'IMAGE_TYPES.PNG'}
+            imageCompression = {0.97}
+        />
+      );
+      this.showAlertBox(rows);
+  }
   }
 
   sendPhoto(dataUri){
     this.context.emit("missionPhoto", {token: cookies.get('token'), photo: dataUri} );
+    this.setState({showAlertBox: false});
   }
 
   showAlertBox(content){
@@ -142,9 +145,14 @@ class Minigame extends React.Component {
       })
   }
 
+  alertBoxIsClosed(){
+    this.setState({ showAlertBox: false});
+  }
+
   render() {
 
-    return(  <Map onClick={()=> this.mapChanged()} className="mapss" center={this.state.centerMap} zoom={this.state.zoom}>
+    return(
+      <Map onClick={()=> this.mapChanged()} className="mapss" center={this.state.centerMap} zoom={this.state.zoom}>
           <TileLayer
               //attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               //url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -153,7 +161,7 @@ class Minigame extends React.Component {
           />
           <Marker position={this.state.centerMap} icon={myIcon}/>
           <Marker position={this.state.targetLocation} icon={targetIcon}/>
-          <PopPop open={this.state.showAlertBox} closeBtn={true} closeOnEsc={true} closeOnOverlay={true}>
+          <PopPop open={this.state.showAlertBox} closeBtn={true} closeOnEsc={true} onClose={()=>this.alertBoxIsClosed()} closeOnOverlay={true} position={"topCenter"} contentStyle={this.state.alertBoxStyle}>
               <div>{this.state.content}</div>
           </PopPop>
       </Map>);
