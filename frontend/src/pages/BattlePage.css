@@ -1,9 +1,9 @@
 .bName {
     font-family: Futura;
-    font-size: 30px;
+    font-size: 22px;
     color: #454F63;
     left: 40px;
-    top: 20px;
+    top: 30px;
     float: left;
     position: relative;
 }
@@ -12,10 +12,10 @@
     font-family: Futura;
     font-size: 15px;
     color: #a5a89d;
-    left: -120px;
     float: left;
     position: relative;
-    top: 65px;
+    top: 40px;
+    left: -117px;
 }
 
 .bHealth {

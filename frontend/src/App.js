@@ -81,13 +81,13 @@ class App extends Component {
                             <UnauthRoute exact path="/verify" component={EmailVerif} redirectTo="/map" authenticated={this.state.verified}/>
                             <Route exact path="/factionChooser" component={FactionChooser} redirectTo="/map" authenticated={this.state.verified}/>
 
-                            <Route exact path="/map" component={Trial} redirectTo="/sign-in" authenticated={this.state.verified}/>
+                            <AuthRoute exact path="/map" component={Trial} redirectTo="/sign-in" authenticated={this.state.verified}/>
                             <AuthRoute exact path="/profilePage" component={ProfilePage} redirectTo="/sign-in" authenticated={this.state.verified}/>
                             <AuthRoute exact path="/settings" component={Settings} redirectTo="/sign-in" authenticated={this.state.verified} />
                             <AuthRoute exact path="/qrCode" component={QRCode} redirectTo="/sign-in" authenticated={this.state.verified}/>
                             <AuthRoute exact path="/capturePlayer" component={CapturePlayer} redirectTo="/sign-in" authenticated={this.state.verified}/>
                             <AuthRoute exact path="/view" component={View} redirectTo="/sign-in" authenticated={this.state.verified} />
-                            <Route exact path="/battlePage" component={BattlePage} redirectTo="/sign-in" authenticated={this.state.verified} />
+                            <AuthRoute exact path="/battlePage" component={BattlePage} redirectTo="/sign-in" authenticated={this.state.verified} />
                             <Route exact path="/changePicture" component={ChangePicture} redirectTo="/sign-in" authenticated={this.state.verified} />
                             <Route path="*" component={NotFound} />
                         </Switch>

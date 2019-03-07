@@ -175,7 +175,8 @@ class BattlePage extends React.Component {
                 <div className="bProfileCard fadeIn1">
                     <div className="headerTop">
                         <div className="bProfilePhoto"><img src={this.state.opponentPic} alt={"Profile image"}/></div>
-                        <h1 className="bName">{this.state.oppName}</h1>
+
+                        <h1 className="bName">{this.state.oppName}</h1><br/>
                         <h3 className="bSmallText">Level {this.state.oppLevel}</h3>
                     </div>
 
