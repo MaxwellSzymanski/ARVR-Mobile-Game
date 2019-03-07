@@ -70,6 +70,7 @@ class Minigame extends React.Component {
 
         this.interval = setInterval(() => {
             this.sendLocation();
+            this.setCenter([this.state.location.lat, this.state.location.lng]);
         }, 1000);
     }
 
@@ -105,8 +106,6 @@ class Minigame extends React.Component {
                 longitude: position.coords.longitude,
                 accuracy: Math.round(position.coords.accuracy),
             });
-
-            this.setCenter([position.coords.latitude, position.coords.longitude]);
 
             this.context.emit("location", {
                 token: cookies.get('token'),
@@ -169,8 +168,9 @@ class Minigame extends React.Component {
     }
 
     setCenter(pos){
+        let center = [pos[0], pos[1]];
         if(pos!==null) {
-            this.setState({centerMap: pos});
+            this.setState({centerMap: center});
         }
     }
 
