@@ -120,6 +120,8 @@ class Trial extends React.Component {
     }
 
 
+
+
     render() {
         return (
             <div>
@@ -143,12 +145,13 @@ class Trial extends React.Component {
 
             <Draggable style={{zIndex:1}}><div id="block2">
             <div >
-                <button id="missionB" onClick={() => this.changeMenu()}><p id="plusSign">+</p></button>
+                <button id="missionB" onClick={() => this.changeMenu()}></button>
             </div>
             { this.state.displayMenu ? (
             <ul>
-           <li><Link to="/profilePage"><div id="buttonsDiv"><button id="profileButton"></button></div></Link></li>
+           <li><Link to="/capturePlayer"><div id="buttonsDiv"><button id="capturePButton"></button></div></Link></li>
            <li><Link to="/minigame"><div id="buttonsDiv"><button id="minigameButton"></button></div></Link></li>
+           <li><Link to="/profilePage"><div id="buttonsDiv"><button id="profileButton"></button></div></Link></li>
            <li><Link to="/settings"><div id="buttonsDiv"><button id="settingsButton"></button></div></Link></li>
 
             </ul>

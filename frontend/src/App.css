@@ -562,20 +562,21 @@ p {
   background: #910F0F;
   right: 10%; bottom: 10%;
   z-index: 1;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   border-radius: 50px;
 
 }
 
 #missionB {
-  color: white;
-  font-size: 40px;
-  border-radius: 50px;
-  width: 30px;
-  height: 30px;
   background-color: #910F0F;
+  background-image: url("assets/buttons/add.png");
+  background-size: cover;
   border-radius: 50px;
+  height: 40px;
+  width: 40px;
+  z-index: 10;
+  border: none;
 
 }
 
@@ -583,7 +584,7 @@ p {
   position: relative;
   color: white;
   font-weight: bold;
-  font-size: 30px;
+  font-size: 40px;
   bottom: 34px;
   right: 5px;
 }
@@ -593,8 +594,8 @@ p {
      list-style-type: none;
      margin: 0;
      padding: 0;
-     top: -110px;
-     width: 30px;
+     top: -185px;
+     width: 40px;
      background-color: none;
      font-weight:bold;
      position: absolute;
@@ -606,8 +607,8 @@ p {
      text-decoration: none;
      background-color: #910F0F;
      border-radius: 50px;
-     width: 30px;
-     height: 30px;
+     width: 40px;
+     height: 40px;
      text-align: center;
      margin-top: 5px;
      margin-bottom: 5px;
@@ -619,8 +620,8 @@ p {
   background-image: url("assets/buttons/avatarWhite.png");
   background-size: cover;
   border-radius: 50px;
-  height: 30px;
-  width: 30px;
+  height: 40px;
+  width: 40px;
   z-index: 10;
   border: none;
 }
@@ -630,8 +631,8 @@ p {
   background-image: url("assets/buttons/settingsRed.png");
   background-size: cover;
   border-radius: 50px;
-  height: 30px;
-  width: 30px;
+  height: 40px;
+  width: 40px;
   z-index: 10;
   border: none;
 }
@@ -641,8 +642,19 @@ p {
   background-image: url("assets/buttons/joystick.png");
   background-size: cover;
   border-radius: 50px;
-  height: 30px;
-  width: 30px;
+  height: 40px;
+  width: 40px;
+  z-index: 10;
+  border: none;
+}
+
+#capturePButton {
+  background-color: #910F0F;
+  background-image: url("assets/buttons/cameraWhite.png");
+  background-size: cover;
+  border-radius: 50px;
+  height: 40px;
+  width: 40px;
   z-index: 10;
   border: none;
 }
