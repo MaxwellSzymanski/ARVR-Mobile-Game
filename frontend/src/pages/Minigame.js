@@ -59,6 +59,7 @@ class Minigame extends React.Component {
         content: "Please allow access to your location.",
         targetLocation: [30.8632811, 4.6762872],
         encodedPic: require("../assets/icons/user.png"),
+        timer: 0,
     }
 
     componentWillMount() {
@@ -78,10 +79,11 @@ class Minigame extends React.Component {
 
         this.context.on("missionPhoto", (data) => {
             this.setState({
-                encodedPic: data.image
+                encodedPic: data.photo
             });
             let interval = Math.floor(Math.abs(new Date() - new Date(data.expiry)) / 1000 - 0.5);
-            this.countDown(interval);
+            this.setState({timer: interval});
+            this.countDown();
         });
 
         this.context.on("voteResult", (data) => { this.voteResult(data); });
@@ -104,8 +106,9 @@ class Minigame extends React.Component {
         });
     }
 
-    countDown(seconds) {
-        // alert(seconds);
+    countDown() {
+        let seconds = this.state.timer;
+        this.setState({timer: seconds-1});
         let stupidAnimation = ".".repeat(3 - seconds%3);
         var content = [];
         content.push(<img src={this.state.encodedPic}/>);
@@ -117,7 +120,7 @@ class Minigame extends React.Component {
         this.showAlertBox(content);
 
         if (seconds >= 1) {
-            setTimeout( function() { this.countDown(seconds-1); }.bind(this), 999)
+            setTimeout( function() { this.countDown(); }.bind(this), 999)
         } else {
             this.setState({showAlertBox: false});
             this.votePhoto(true)
@@ -125,6 +128,7 @@ class Minigame extends React.Component {
     }
 
     votePhoto(vote){
+        this.setState({ timer: 0});
         this.context.emit("votePhoto",{token: cookies.get('token'), vote: vote});
     }
 

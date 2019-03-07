@@ -643,8 +643,8 @@ function fight(data, socket){
 // ============================================================================
 
 
-let missionList = [ [4.683394, 50.863137], ];
-let currentMission = [4.683394, 50.863137];
+let missionList = [ [50.863137, 4.683394], [50.8632811, 4.6762872], ];
+let currentMission = missionList[0];
 let missionPlayers = [];
 let timeInterval = 15 * 1000;      // in milliseconds
 let currentPhoto = null;
@@ -683,7 +683,7 @@ function missionPhoto(data, socket) {
                 Object.keys(missionPlayers).forEach( function (key) {
                     if (key !== data.token) {
                         missionPlayers[key].socket.emit("missionPhoto", {
-                            image: data.image,
+                            photo: data.photo,
                             expiry: exp
                         });
                     }
