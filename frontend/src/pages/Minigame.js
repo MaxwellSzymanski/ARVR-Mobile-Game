@@ -38,6 +38,7 @@ class Minigame extends React.Component {
 
     constructor(props){
         super(props);
+        this.setCenter = this.setCenter.bind(this);
         this.showAlertBox = this.showAlertBox.bind(this);
         this.sendPhoto = this.sendPhoto.bind(this);
         this.votePhoto = this.votePhoto.bind(this);
@@ -49,6 +50,10 @@ class Minigame extends React.Component {
     }
 
     state = {
+        location: {
+            lat: 50.8632811,
+            lng: 4.6762872,
+        },
         zoom: 14,
         centerMap: [50.8632811, 4.6762872],
         showAlertBox: false,
@@ -95,16 +100,18 @@ class Minigame extends React.Component {
 
     sendLocation() {
         navigator.geolocation.getCurrentPosition((position) => {
-            const center = [position.coords.latitude, position.coords.longitude];
             this.setState({
-                centerMap: center,
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
                 accuracy: Math.round(position.coords.accuracy),
             });
 
+            this.setCenter([position.coords.latitude, position.coords.longitude]);
+
             this.context.emit("location", {
                 token: cookies.get('token'),
-                longitude: position.coords.longitude,
-                latitude: position.coords.latitude,
+                longitude: this.state.longitude,
+                latitude: this.state.latitude,
                 accuracy: this.state.accuracy,
             })
         });
@@ -161,6 +168,12 @@ class Minigame extends React.Component {
         this.context.emit("newMission", {token: cookies.get("token")})
     }
 
+    setCenter(pos){
+        if(pos===null){
+            this.setState({centerMap: pos});
+        }
+    }
+
     mapChanged(feature, layer){
         if(this.state.showAlertBox === false) {
             let rows = [];
@@ -178,7 +191,7 @@ class Minigame extends React.Component {
                 );
             } else {
                 rows.push(<img src={this.state.encodedPic}/>);
-                rows.push(<p>Thanks for voting! Please wait for all the mission players to vote.</p>);
+                rows.push(<p>Please wait for all the mission players to vote.</p>);
 
             }
             this.showAlertBox(rows);
