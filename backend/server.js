@@ -6,7 +6,6 @@ const secret = require('./db/config.js');
 var frequency = 1000;
 
 const mongoose = require('mongoose');
-// mongoose.connect("mongodb://localhost:27017/userdb", { useNewUrlParser: true });
 mongoose.connect('mongodb://team12:mongoDBteam12@35.241.198.186:27017/userdb?authMechanism=SCRAM-SHA-1&authSource=userdb',  { useNewUrlParser: true });
 
 const User = require('./db/userModel.js');
@@ -14,8 +13,8 @@ const ActivePlayer = require('./db/gameModel');
 
 const getFirstActivePlayer = async function () {
     return (await ActivePlayer.findOne(
-            {}, 'playerid', { sort: { 'created_at' : 1 } })
-    ).playerid;
+        {}, 'playerid', { sort: { 'created_at' : 1 } })
+).playerid;
 };
 
 const HTTPSsecret = require('./ssl/https_config.js');
@@ -51,40 +50,40 @@ const server = https.createServer(https_options, async function (req, res) {
     let body = [];
     req.on('error', (err) => {
         console.error(err);
-    }).on('data', (chunk) => {
+}).on('data', (chunk) => {
         body.push(chunk);
-    }).on('end', async () => {
+}).on('end', async () => {
         body = Buffer.concat(body).toString();
 
-        let obj = JSON.parse(body);
-        const request = (obj.request).toLowerCase();
+    let obj = JSON.parse(body);
+    const request = (obj.request).toLowerCase();
 
-        console.log("\n\n\nRequest:    " + request + "    ===============    current time:    " + new Date().toLocaleTimeString());
-        switch (request) {
-            case "signup":
-                signuphttp(obj, res);
-                break;
-            case "signin":
-                signinhttp(obj, res);
-                break;
-            case "fight":
-                fight(obj);
-                res.end();
-                break;
-            case "updatefrequency":
-                updateFrequency(obj,res);
-                break;
-            case "frequency":
-                getFrequency(obj,res);
-                break;
-            default:
-                console.log("\n\n\n ----------------------- ");
-                console.log("/                       \\");
-                console.log("|  ! unknown request !  |");
-                console.log("\\                       /");
-                console.log(" ----------------------- \n\n\n");
-                res.end();
-                break;
+    console.log("\n\n\nRequest:    " + request + "    ===============    current time:    " + new Date().toLocaleTimeString());
+    switch (request) {
+        case "signup":
+            signuphttp(obj, res);
+            break;
+        case "signin":
+            signinhttp(obj, res);
+            break;
+        case "fight":
+            fight(obj);
+            res.end();
+            break;
+        case "updatefrequency":
+            updateFrequency(obj,res);
+            break;
+        case "frequency":
+            getFrequency(obj,res);
+            break;
+        default:
+            console.log("\n\n\n ----------------------- ");
+            console.log("/                       \\");
+            console.log("|  ! unknown request !  |");
+            console.log("\\                       /");
+            console.log(" ----------------------- \n\n\n");
+            res.end();
+            break;
     }
     // console.log("\n");
 });
@@ -129,23 +128,31 @@ io.sockets.on('connection', function (socket) {
         getFeatureVectorsFromDB(function(result) {
             socket.emit('sentFVfromDB', result);
         })
-    });
+});
 
-	socket.on('getStatsById', (id) => {
+    socket.on('getStatsById', (id) => {
         getStatsById(id, socket) });
-        // function(result, id) {
-        //         socket.emit('sentStatsById', result);
-        //     }
-        // })
+    // function(result, id) {
+    //         socket.emit('sentStatsById', result);
+    //     }
+    // })
     // });
 
     socket.on('addToJSON', (json, callback) => {
         fs.writeFile('testFeatureVectors.json', json, 'utf8', callback);
-    });
+});
 
     socket.on("fight", (data) => {fight(data, socket)});
 
+    socket.on("mission", (data) => {mission(data, socket)});
 
+    socket.on("leaveMission", (data) => {leaveMission(data, socket)});
+
+    socket.on("missionPhoto", (data) => {missionPhoto(data, socket)});
+
+    socket.on("votePhoto", (data) => {missionVote(data, socket)});
+
+    // socket.on("")
 });
 
 
@@ -204,7 +211,7 @@ function newMail(data) {
             User.findById(token.id).then(
                 function(user) {
                     user.sendVerifMail();
-            });
+                });
         }
     })
 }
@@ -417,16 +424,16 @@ function verifyJWT(data, socket) {
         }
         User.findById(token.id).then(
             async function (user) {
-                let jwtValid = false;
-                let emailVerified = false;
-                if (user !== null) {
-                    jwtValid = await user.checkToken(token);
-                    emailVerified = user.verified;
-                }
-                console.log("jwt valid:" + jwtValid);
-                socket.emit("jwt", {
-                    loggedIn: jwtValid,
-                    verified: emailVerified
+            let jwtValid = false;
+            let emailVerified = false;
+            if (user !== null) {
+                jwtValid = await user.checkToken(token);
+                emailVerified = user.verified;
+            }
+            console.log("jwt valid:" + jwtValid);
+            socket.emit("jwt", {
+                loggedIn: jwtValid,
+                verified: emailVerified
             });
         });
     });
@@ -457,20 +464,20 @@ var names;
 // }
 
 async function getStatsById(id, socket) {
-  User.findById(id).exec( function(error, result) {
-      if (error) throw error;
-      if (result !== null) {
-          socket.emit('sentStatsById', result.getEnemyData());
-          socket.emit('enemyphoto', result.image);
-      }
-  });
+    User.findById(id).exec( function(error, result) {
+        if (error) throw error;
+        if (result !== null) {
+            socket.emit('sentStatsById', result.getEnemyData());
+            socket.emit('enemyphoto', result.image);
+        }
+    });
 }
 
 async function getFeatureVectorsFromDB(callBack) {
-  User.find( {}, 'name featureVector').lean().exec( function(error, array) {
-      if (error) throw error;
-      return callBack(array);
-  });
+    User.find( {}, 'name featureVector').lean().exec( function(error, array) {
+        if (error) throw error;
+        return callBack(array);
+    });
 }
 
 
@@ -625,3 +632,84 @@ function fight(data, socket){
 
 
 */
+
+
+// ============================================================================
+// ============================================================================
+
+// MISSION
+
+// ============================================================================
+// ============================================================================
+
+
+let missionList = [ [4.683394, 50.863137], ];
+let currentMission = missionList[0];
+let missionPlayers = [];
+let timeInterval = 15 * 1000;      // in milliseconds
+let currentPhoto = null;
+function mission(data, socket) {
+    if (data.token) {
+        jwt.verify(data.token, secret, async function (err, token) {
+            if (err) {
+                console.log("(mission)        invalid token");
+            } else {
+                missionPlayers[data.token] = {
+                    socket: socket,
+                    agreed: false,
+                };
+                socket.emit("mission", {location: currentMission})
+            }
+        });
+    }
+};
+
+function leaveMission(data, socket) {
+    if (data.token) {
+        if (missionPlayers[data.token] !== undefined && missionPlayers[data.token] !== null)
+            delete missionPlayers[data.token];
+    }
+};
+
+function missionPhoto(data, socket) {
+    if (data.token) {
+        jwt.verify(data.token, secret, async function (err, token) {
+            if (err) {
+                console.log("(missionPhoto)        invalid token");
+            } else {
+                currentPhoto = data.image;
+                const exp = new Date(new Date().getTime() + timeInterval);
+                setTimeout( photoAccepted() , timeInterval);
+                Object.keys(missionPlayers).forEach( function (key) {
+                    if (key !== data.token) {
+                        missionPlayers[key].socket.emit("missionPhoto", {
+                            image: data.image,
+                            expiry: exp
+                        });
+                    }
+                })
+            }
+        });
+    }
+}
+
+function photoAccepted() {
+    if (currentPhoto !== null) {
+        Object.keys(missionPlayers).forEach( function (key) {
+            missionPlayers[key].socket.emit("voteResult", {accepted: true})
+        })
+    }
+}
+
+function missionVote(data, socket) {
+    if (data.token) {
+        if (missionPlayers[data.token] !== undefined && missionPlayers[data.token] !== null) {
+            if (!data.vote) {
+                Object.keys(missionPlayers).forEach( function (key) {
+                    missionPlayers[key].socket.emit("voteResult", {accepted: true})
+                })
+            }
+        }
+    }
+}
+
