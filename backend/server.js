@@ -152,7 +152,7 @@ io.sockets.on('connection', function (socket) {
 
     socket.on("votePhoto", (data) => {missionVote(data, socket)});
 
-    // socket.on("")
+    socket.on("newMission", (data) => {newMission(data, socket)});
 });
 
 
@@ -619,7 +619,7 @@ function fight(data, socket){
 
 
 let missionList = [ [50.863137, 4.683394], [50.8632811, 4.6762872], ];
-let currentMission = missionList[0];
+let currentMission = 0;
 let missionPlayers = [];
 let timeInterval = 15 * 1000;       // in milliseconds
 let currentPhoto = null;
@@ -692,6 +692,7 @@ function photoAccepted() {
             missionPlayers[key].socket.emit("voteResult", {accepted: true})
         });
         firstPhotoAccepted = true;
+        voting = false;
     }
 }
 
@@ -700,6 +701,7 @@ function missionVote(data, socket) {
         if (missionPlayers[data.token] !== undefined && missionPlayers[data.token] !== null) {
             if (!data.vote) {
                 currentPhoto = null;
+                voting = false;
                 Object.keys(missionPlayers).forEach( function (key) {
                     missionPlayers[key].socket.emit("voteResult", {accepted: false})
                 })
@@ -708,3 +710,17 @@ function missionVote(data, socket) {
     }
 }
 
+function newMission(data, socket) {
+    if (data.token) {
+        if (missionPlayers[data.token] !== undefined && missionPlayers[data.token] !== null) {
+            if (firstPhotoAccepted && !voting) {
+                firstPhotoAccepted = false;
+                currentMission += 1;
+                currentMission %= missionList.length;
+                Object.keys(missionPlayers).forEach(function (key) {
+                    missionPlayers[key].socket.emit("mission", {location: currentMission})
+                })
+            }
+        }
+    }
+}

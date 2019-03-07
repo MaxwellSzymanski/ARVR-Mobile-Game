@@ -50,10 +50,6 @@ class Minigame extends React.Component {
     }
 
     state = {
-        location: {
-            lat: 50.8632811,
-            lng: 4.6762872,
-        },
         zoom: 14,
         centerMap: [50.8632811, 4.6762872],
         showAlertBox: false,
@@ -101,16 +97,16 @@ class Minigame extends React.Component {
 
     sendLocation() {
         navigator.geolocation.getCurrentPosition((position) => {
+            const center = [position.coords.latitude, position.coords.longitude];
             this.setState({
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
+                centerMap: center,
                 accuracy: Math.round(position.coords.accuracy),
             });
 
             this.context.emit("location", {
                 token: cookies.get('token'),
-                longitude: this.state.longitude,
-                latitude: this.state.latitude,
+                longitude: position.coords.longitude,
+                latitude: position.coords.latitude,
                 accuracy: this.state.accuracy,
             })
         });
@@ -162,8 +158,9 @@ class Minigame extends React.Component {
         content.push(<img src={this.state.encodedPic}/>);
         content.push(<img src={data.photo}/>);
         content.push(<p>These photos need to be compared.</p>);
-        content.push(<p>Restart the mission by closing this window.</p>);
+        content.push(<p>A new mission will be started.</p>);
         this.showAlertBox(content);
+        this.context.emit("newMission", {token: cookies.get("token")})
     }
 
     setCenter(pos){
