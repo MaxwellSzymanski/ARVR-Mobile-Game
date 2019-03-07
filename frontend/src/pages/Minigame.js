@@ -38,7 +38,6 @@ class Minigame extends React.Component {
 
     constructor(props){
         super(props);
-        this.setCenter = this.setCenter.bind(this);
         this.showAlertBox = this.showAlertBox.bind(this);
         this.sendPhoto = this.sendPhoto.bind(this);
         this.votePhoto = this.votePhoto.bind(this);
@@ -66,7 +65,6 @@ class Minigame extends React.Component {
 
         this.interval = setInterval(() => {
             this.sendLocation();
-            this.setCenter([this.state.location.lat, this.state.location.lng]);
         }, 1000);
     }
 
