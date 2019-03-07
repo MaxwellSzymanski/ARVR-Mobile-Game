@@ -6,8 +6,7 @@ import Cookies from 'universal-cookie';
 import L from 'leaflet';
 import { Marker,Popup } from 'react-leaflet';
 import SocketContext from "../socketContext";
-
-
+import swal from '@sweetalert/with-react';
 
 const cookies = new Cookies();
 
@@ -27,145 +26,215 @@ var targetIcon = L.icon({
     iconUrl: "https://img.icons8.com/material/24/000000/point-of-interest.png",
     //shadowUrl: 'leaf-shadow.png',
 
-    iconSize:     [70, 70], // size of the icon
-    shadowSize:   [50, 64], // size of the shadow
-    iconAnchor:   [35, 35], // point of the icon which will correspond to marker's location
+    iconSize:     [50, 50], // size of the icon
+    shadowSize:   [40, 45], // size of the shadow
+    iconAnchor:   [25, 50], // point of the icon which will correspond to marker's location
     shadowAnchor: [4, 62],  // the same for the shadow
     popupAnchor:  [0, -30] // point from which the popup should open relative to the iconAnchor
 });
 
 
-
 class Minigame extends React.Component {
 
+    constructor(props){
+        super(props);
+        this.setCenter = this.setCenter.bind(this);
+        this.showAlertBox = this.showAlertBox.bind(this);
+        this.sendPhoto = this.sendPhoto.bind(this);
+        this.votePhoto = this.votePhoto.bind(this);
+        this.sendLocation = this.sendLocation.bind(this);
+        this.alertBoxIsClosed = this.alertBoxIsClosed.bind(this);
+        this.countDown = this.countDown.bind(this);
+        this.voteResult = this.voteResult.bind(this);
+        this.secondPhoto = this.secondPhoto.bind(this)
+    }
 
-  constructor(props){
-      super(props);
-      this.setCenter = this.setCenter.bind(this);
-      this.showAlertBox = this.showAlertBox.bind(this);
-      this.sendPhoto = this.sendPhoto.bind(this);
-      this.votePhoto = this.votePhoto.bind(this);
-      this.sendLocation = this.sendLocation.bind(this);
-      this.alertBoxIsClosed = this.alertBoxIsClosed.bind(this);
-  }
+    state = {
+        location: {
+            lat: 50.8632811,
+            lng: 4.6762872,
+        },
+        zoom: 14,
+        centerMap: [50.8632811, 4.6762872],
+        showAlertBox: false,
+        content: "Please allow access to your location.",
+        targetLocation: [30.8632811, 4.6762872],
+        encodedPic: require("../assets/icons/user.png"),
+        timer: 0,
+        firstPicTaken: false,
+        firstPicAccepted: false,
+    };
 
-  state = {
-      location: {
-          lat: 50.8632811,
-          lng: 4.6762872,
-      },
-      zoom: 14,
-      centerMap: [50.8632811, 4.6762872],
-      showAlertBox: false,
-      content: "Please allow access to your location.",
-      targetLocation: [30.8632811, 4.6762872],
-      encodedPic: require("../assets/icons/user.png")
-  }
+    componentWillMount() {
+        this.context.emit("mission",{token:cookies.get('token')});
 
-  componentDidMount(){
-
-    this.context.on("mission", (data) => {
-
-        this.setState({targetLocation: data.location})
-
-    });
-    this.context.on("missionPhoto", (data) => {
-      // see profile page
-      this.setState({
-          encodedPic: data.image
-      });
-      var content = [];
-      content.push(<img src={this.state.encodedPic}/>);
-      content.push(<button onClick={this.votePhoto.bind(this,true)}>Yes</button>);
-      content.push(<button onClick={this.votePhoto.bind(this,false)}>False</button>);
-      this.showAlertBox(content);
-    })
-  }
-
-  componentWillMount() {
-      this.context.emit("mission",{token:cookies.get('token')});
-
-      this.interval = setInterval(() => {
+        this.interval = setInterval(() => {
             this.sendLocation();
             this.setCenter([this.state.location.lat, this.state.location.lng]);
-      }, 500);
-  }
+        }, 1000);
+    }
 
-  sendLocation() {
-      navigator.geolocation.getCurrentPosition((position) => {
-          this.setState({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-              accuracy: Math.round(position.coords.accuracy),
-          });
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
 
-          this.context.emit("location", {
-              token: cookies.get('token'),
-              longitude: this.state.longitude,
-              latitude: this.state.latitude,
-              accuracy: this.state.accuracy,
-          })
-      });
-  }
+    componentDidMount(){
 
-  votePhoto(vote){
-    this.context.emit("votePhoto",{token: cookies.get('token'), vote: vote});
-  }
+        this.context.on("mission", (data) => {
+            this.setState({targetLocation: data.location})
+        });
 
-  setCenter(pos){
-      if(pos===null){
-          this.setState({centerMap: pos});
-      }
-  }
+        this.context.on("missionPhoto", (data) => {
+            this.setState({
+                encodedPic: data.photo,
+                firstPicTaken: true,
+            });
+            let interval = Math.floor(Math.abs(new Date() - new Date(data.expiry)) / 1000 - 0.5);
+            this.setState({timer: interval});
+            this.countDown();
+        });
 
-  mapChanged(feature, layer){
-    if(this.state.showAlertBox === false) {
-      var rows = [];
-      rows.push(
-        <Camera
-            onTakePhoto = { (dataUri) => { this.sendPhoto(dataUri); } }
-            isImageMirror = {true}
-            imageType = {'IMAGE_TYPES.PNG'}
-            imageCompression = {0.97}
-        />
-      );
-      this.showAlertBox(rows);
-  }
-  }
+        this.context.on("voteResult", (data) => { this.voteResult(data); });
+        this.context.on("secondPhoto", (data) => {this.secondPhoto(data); });
+        this.context.on("message", (data) => {this.showAlertBox(data.message); });
+    }
 
-  sendPhoto(dataUri){
-    this.context.emit("missionPhoto", {token: cookies.get('token'), photo: dataUri} );
-    this.setState({showAlertBox: false});
-  }
+    sendLocation() {
+        navigator.geolocation.getCurrentPosition((position) => {
+            this.setState({
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                accuracy: Math.round(position.coords.accuracy),
+            });
 
-  showAlertBox(content){
-      this.setState({
-          content: content,
-          showAlertBox: true
-      })
-  }
+            this.context.emit("location", {
+                token: cookies.get('token'),
+                longitude: this.state.longitude,
+                latitude: this.state.latitude,
+                accuracy: this.state.accuracy,
+            })
+        });
+    }
 
-  alertBoxIsClosed(){
-    this.setState({ showAlertBox: false});
-  }
+    countDown() {
+        let seconds = this.state.timer;
+        this.setState({timer: seconds-1});
+        let stupidAnimation = ".".repeat(3 - seconds%3);
+        var content = [];
+        content.push(<img src={this.state.encodedPic}/>);
+        content.push(<p>Is this a good picture of the mission location? Please vote in time. <br></br>
+            If you dismiss this window, you vote in favor of the picture.</p>);
+        content.push(<p>{seconds} seconds left to vote{stupidAnimation}</p>);
+        content.push(<button onClick={this.votePhoto.bind(this,true)}>Yes</button>);
+        content.push(<button onClick={this.votePhoto.bind(this,false)}>No</button>);
+        this.showAlertBox(content);
 
-  render() {
+        if (seconds >= 1) {
+            setTimeout( function() { this.countDown(); }.bind(this), 999)
+        } else {
+            this.setState({showAlertBox: false});
+            this.votePhoto(true)
+        }
+    }
 
-    return(
-      <Map onClick={()=> this.mapChanged()} className="mapss" center={this.state.centerMap} zoom={this.state.zoom}>
-          <TileLayer
-              //attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-              //url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url='https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
-          />
-          <Marker position={this.state.centerMap} icon={myIcon}/>
-          <Marker position={this.state.targetLocation} icon={targetIcon}/>
-          <PopPop open={this.state.showAlertBox} closeBtn={true} closeOnEsc={true} onClose={()=>this.alertBoxIsClosed()} closeOnOverlay={true} position={"topCenter"} contentStyle={this.state.alertBoxStyle}>
-              <div>{this.state.content}</div>
-          </PopPop>
-      </Map>);
-  }
+    votePhoto(vote){
+        this.setState({ timer: 0});
+        this.context.emit("votePhoto",{token: cookies.get('token'), vote: vote});
+    }
+
+    voteResult(data) {
+        let content = [];
+        if (data.accepted) {
+            this.setState({firstPicTaken: true, firstPicAccepted: true});
+            content.push(<p>The photo is accepted by all active mission players!</p>);
+            content.push(<p>Go to the mission location and take a similar photo.</p>);
+        } else {
+            this.setState({encodedPic: require("../assets/icons/user.png"), firstPicTaken: false, firstPicAccepted: false});
+            content.push(<p>The photo is rejected!</p>);
+            content.push(<p>Go to the mission location and take a better photo.</p>);
+        }
+        this.showAlertBox(content)
+    }
+
+    secondPhoto(data) {
+        this.setState({firstPicAccepted: false, firstPicTaken: false});
+        var content = [];
+        content.push(<img src={this.state.encodedPic}/>);
+        content.push(<img src={data.photo}/>);
+        content.push(<p>These photos need to be compared.</p>);
+        content.push(<p>A new mission will be started.</p>);
+        this.showAlertBox(content);
+        this.context.emit("newMission", {token: cookies.get("token")})
+    }
+
+    setCenter(pos){
+        let center = [pos[0], pos[1]];
+        if(pos!==null) {
+            this.setState({centerMap: center});
+        }
+    }
+
+    mapChanged(feature, layer){
+        if(this.state.showAlertBox === false) {
+            let rows = [];
+            if (!this.state.firstPicTaken || this.state.firstPicAccepted) {
+                rows.push(
+                    <Camera
+                        onTakePhoto={(dataUri) => {
+                            this.sendPhoto(dataUri);
+                        }}
+                        // isImageMirror = {false}
+                        imageType={'IMAGE_TYPES.PNG'}
+                        imageCompression={0.97}
+                        idealFacingMode={"FACING_MODES.ENVIRONMENT"}
+                    />
+                );
+            } else {
+                rows.push(<img src={this.state.encodedPic}/>);
+                rows.push(<p>Please wait for all the mission players to vote.</p>);
+
+            }
+            this.showAlertBox(rows);
+        }
+    }
+
+    sendPhoto(dataUri){
+        this.context.emit("missionPhoto", {token: cookies.get('token'), photo: dataUri} );
+        if (this.state.firstPicTaken) {
+            this.setState({showAlertBox: false, firstPicAccepted: true});
+        } else {
+            this.setState({showAlertBox: false, firstPicTaken: true, encodedPic: dataUri});
+        }
+    }
+
+    showAlertBox(content){
+        this.setState({
+            content: content,
+            showAlertBox: true
+        })
+    }
+
+    alertBoxIsClosed(){
+        this.setState({ showAlertBox: false});
+    }
+
+    render() {
+
+        return(
+            <Map onClick={()=> this.mapChanged()} className="mapss" center={this.state.centerMap} zoom={this.state.zoom}>
+                <TileLayer
+                    //attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                    //url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url='https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
+                />
+                <Marker position={this.state.centerMap} icon={myIcon}/>
+                <Marker position={this.state.targetLocation} icon={targetIcon}/>
+                <PopPop open={this.state.showAlertBox} closeBtn={true} closeOnEsc={true} onClose={()=>this.alertBoxIsClosed()} closeOnOverlay={true} position={"topCenter"} contentStyle={this.state.alertBoxStyle}>
+                    <div>{this.state.content}</div>
+                </PopPop>
+            </Map>);
+    }
 }
 Minigame.contextType = SocketContext;
 export default Minigame;

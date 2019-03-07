@@ -111,7 +111,7 @@ class SignInForm extends React.Component {
     renderRedirect = () => {
         if (this.state.redirect) {
             if (this.state.verified) {
-                return <Redirect to="/map"/>
+                window.location.reload();
             } else {
                 return <Redirect to="/verify"/>
             }
