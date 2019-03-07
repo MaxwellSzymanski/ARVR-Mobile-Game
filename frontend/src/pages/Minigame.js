@@ -169,7 +169,7 @@ class Minigame extends React.Component {
     }
 
     setCenter(pos){
-        if(pos===null){
+        if(pos!==null) {
             this.setState({centerMap: pos});
         }
     }
