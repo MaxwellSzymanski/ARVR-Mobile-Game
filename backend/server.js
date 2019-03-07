@@ -637,7 +637,7 @@ function mission(data, socket) {
                     socket: socket,
                     agreed: false,
                 };
-                socket.emit("mission", {location: currentMission})
+                socket.emit("mission", {location: missionList[currentMission]})
             }
         });
     }
@@ -718,7 +718,7 @@ function newMission(data, socket) {
                 currentMission += 1;
                 currentMission %= missionList.length;
                 Object.keys(missionPlayers).forEach(function (key) {
-                    missionPlayers[key].socket.emit("mission", {location: currentMission})
+                    missionPlayers[key].socket.emit("mission", {location: missionList[currentMission]})
                 })
             }
         }
