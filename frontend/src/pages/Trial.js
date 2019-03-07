@@ -6,7 +6,7 @@ import Cookies from 'universal-cookie';
 import PopPop from 'react-poppop';
 import { Link, Redirect } from 'react-router-dom';
 import Draggable from 'react-draggable';
-
+import {Overlay} from 'react-overlays';
 
 
 const cookies = new Cookies();
@@ -15,10 +15,13 @@ class Trial extends React.Component {
 
     constructor(props){
         super(props);
+
+
         this.setCenter = this.setCenter.bind(this);
         this.showAlertBox = this.showAlertBox.bind(this);
         this.setTarget = this.setTarget.bind(this);
         this.goToMinigame = this.goToMinigame.bind(this);
+        this.changeMenu = this.changeMenu.bind(this);
     }
 
     //dit is gwn een standaard setting, van af blijven
@@ -27,6 +30,7 @@ class Trial extends React.Component {
             lat: 50.8632811,
             lng: 4.6762872,
         },
+        displayMenu: false,
         zoom: 14,
         id: cookies.get('name'),
         idTarget: cookies.get('name'),
@@ -111,12 +115,16 @@ class Trial extends React.Component {
       return <Redirect to="/minigame" />
     }
 
+    changeMenu(event) {
+        this.setState({displayMenu: !this.state.displayMenu})
+    }
+
 
     render() {
         return (
             <div>
             <div>
-            <Map onClick={()=> this.mapChanged()} className="mapss" center={this.state.centerMap} zoom={this.state.zoom}>
+            <Map style={{zIndex:0}}onClick={()=> this.mapChanged()} className="mapss" center={this.state.centerMap} zoom={this.state.zoom}>
                 <TileLayer
                     //attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     //url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -130,11 +138,27 @@ class Trial extends React.Component {
             </Map>
             </div>
 
-            <Draggable>
-            <div id="block2">
-            <Link to="/minigame"><button>Mission</button></Link>
+
+            <div>
+
+            <Draggable style={{zIndex:1}}><div id="block2">
+            <div >
+                <button id="missionB" onClick={() => this.changeMenu()}><p id="plusSign">+</p></button>
             </div>
-            </Draggable>
+            { this.state.displayMenu ? (
+            <ul>
+           <li><button className="extraB"></button></li>
+           <li><a>2</a></li>
+           <li><a>3</a></li>
+           <li><a>4</a></li>
+            </ul>
+          ):
+          (
+            null
+          )
+        }
+          </div></Draggable>
+            </div>
 
             </div>
         )

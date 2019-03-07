@@ -559,11 +559,64 @@ p {
 
 #block2{
   position: absolute;
-  left: 1; right: 10%; bottom:10%;
-  background: #ff4444;
-  padding: 3px 8px;
-  color: #fff;
+  background: #910F0F;
+  right: 10%; bottom: 10%;
   z-index: 1;
-  alignSelf:'center';
+  width: 30px;
+  height: 30px;
+  border-radius: 50px;
+
+}
+
+#missionB {
+  color: white;
+  font-size: 40px;
+  border-radius: 50px;
+  width: 30px;
+  height: 30px;
+  background-color: #910F0F;
+  border-radius: 50px;
+
+}
+
+#plusSign {
+  position: relative;
+  color: white;
+  font-weight: bold;
+  font-size: 30px;
+  bottom: 34px;
+  right: 5px;
+}
+
+
+ ul {
+     list-style-type: none;
+     margin: 0;
+     padding: 0;
+     top: -150px;
+     width: 30px;
+     background-color: none;
+     font-weight:bold;
+     position: absolute;
+     z-index: 1;
+
+}
+ li  {
+     color: white;
+     text-decoration: none;
+     background-color: #910F0F;
+     border-radius: 50px;
+     width: 30px;
+     height: 30px;
+     text-align: center;
+     margin-top: 5px;
+     margin-bottom: 5px;
+     }
+
+.extraB {
+  background-color: #910F0F;
+  background-image: url(assets/buttons/avatarWhite.png);
+  height: 30px;
+  width: 30px;
   border-radius: 50px;
 }
