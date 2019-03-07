@@ -147,10 +147,10 @@ class Trial extends React.Component {
             </div>
             { this.state.displayMenu ? (
             <ul>
-           <li><button className="extraB"></button></li>
-           <li><a>2</a></li>
-           <li><a>3</a></li>
-           <li><a>4</a></li>
+           <li><Link to="/profilePage"><div id="buttonsDiv"><button id="profileButton"></button></div></Link></li>
+           <li><Link to="/minigame"><div id="buttonsDiv"><button id="minigameButton"></button></div></Link></li>
+           <li><Link to="/settings"><div id="buttonsDiv"><button id="settingsButton"></button></div></Link></li>
+
             </ul>
           ):
           (
