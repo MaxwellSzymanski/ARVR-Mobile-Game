@@ -644,7 +644,7 @@ function fight(data, socket){
 
 
 let missionList = [ [4.683394, 50.863137], ];
-let currentMission = missionList[0];
+let currentMission = [4.683394, 50.863137];
 let missionPlayers = [];
 let timeInterval = 15 * 1000;      // in milliseconds
 let currentPhoto = null;
@@ -679,7 +679,7 @@ function missionPhoto(data, socket) {
             } else {
                 currentPhoto = data.image;
                 const exp = new Date(new Date().getTime() + timeInterval);
-                setTimeout( photoAccepted() , timeInterval);
+                setTimeout( () => {photoAccepted(); } , timeInterval);
                 Object.keys(missionPlayers).forEach( function (key) {
                     if (key !== data.token) {
                         missionPlayers[key].socket.emit("missionPhoto", {
@@ -705,6 +705,7 @@ function missionVote(data, socket) {
     if (data.token) {
         if (missionPlayers[data.token] !== undefined && missionPlayers[data.token] !== null) {
             if (!data.vote) {
+                currentPhoto = null;
                 Object.keys(missionPlayers).forEach( function (key) {
                     missionPlayers[key].socket.emit("voteResult", {accepted: true})
                 })

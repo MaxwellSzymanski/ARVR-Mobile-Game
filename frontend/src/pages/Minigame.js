@@ -80,7 +80,7 @@ class Minigame extends React.Component {
             this.setState({
                 encodedPic: data.image
             });
-            let interval = Math.floor(Math.abs(new Date() - new Date(data.expiry)) / 1000);
+            let interval = Math.floor(Math.abs(new Date() - new Date(data.expiry)) / 1000 - 0.5);
             this.countDown(interval);
         });
 
