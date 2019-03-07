@@ -593,7 +593,7 @@ p {
      list-style-type: none;
      margin: 0;
      padding: 0;
-     top: -150px;
+     top: -110px;
      width: 30px;
      background-color: none;
      font-weight:bold;
@@ -611,12 +611,42 @@ p {
      text-align: center;
      margin-top: 5px;
      margin-bottom: 5px;
+     text-align: center;
      }
 
-.extraB {
+#profileButton {
   background-color: #910F0F;
-  background-image: url(assets/buttons/avatarWhite.png);
+  background-image: url("assets/buttons/avatarWhite.png");
+  background-size: cover;
+  border-radius: 50px;
   height: 30px;
   width: 30px;
+  z-index: 10;
+  border: none;
+}
+
+#settingsButton {
+  background-color: #910F0F;
+  background-image: url("assets/buttons/settingsRed.png");
+  background-size: cover;
   border-radius: 50px;
+  height: 30px;
+  width: 30px;
+  z-index: 10;
+  border: none;
+}
+
+#minigameButton {
+  background-color: #910F0F;
+  background-image: url("assets/buttons/joystick.png");
+  background-size: cover;
+  border-radius: 50px;
+  height: 30px;
+  width: 30px;
+  z-index: 10;
+  border: none;
+}
+
+* {
+	outline: none;
 }
