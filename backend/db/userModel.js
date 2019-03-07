@@ -57,7 +57,7 @@ const Schema = new mongoose.Schema({
     },
     defence: {
         type: Number,
-        default: 100
+        default: 200
     },
     health: {
         type: Number,

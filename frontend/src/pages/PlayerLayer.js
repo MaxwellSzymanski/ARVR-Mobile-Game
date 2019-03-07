@@ -153,8 +153,8 @@ class PlayerLayer extends React.Component {
         rows.push(
             <Marker ref={playerLayer.popup} title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
                 <Popup>
-                    <div>Accuracy: {playerLayer.state.accuracy} m</div>
-                    <button onClick={playerLayer.showFindEnemyAlertBox.bind(playerLayer)}> Find other players </button>
+                    <p className="textAccuracy">Accuracy: {playerLayer.state.accuracy} m</p>
+                    <button className="findPlayers" onClick={playerLayer.showFindEnemyAlertBox.bind(playerLayer)}> Find other players </button>
                 </Popup>
             </Marker>
         );
@@ -292,7 +292,7 @@ class PlayerLayer extends React.Component {
 
         var playerLayer = this;
 
-        rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,this.state.id,[this.state.latitude,this.state.longitude])}>Follow yourself</button> );
+        rows.push(<button className="confirmButton wider" onClick={playerLayer.props.setTarget.bind(playerLayer,this.state.id,[this.state.latitude,this.state.longitude])}>Follow yourself</button> );
 
         var jsonObject = this.state.dataPlayers;
         if(jsonObject !== null){
@@ -307,7 +307,7 @@ class PlayerLayer extends React.Component {
 
                 // check for enemy!
                 if(idEnemy !== playerLayer.state.id){
-                    rows.push(<button onClick={playerLayer.props.setTarget.bind(playerLayer,idEnemy,[playerData.latitude,playerData.longitude])}>Follow {idEnemy}</button>);
+                    rows.push(<button className="confirmButton wider" onClick={playerLayer.props.setTarget.bind(playerLayer,idEnemy,[playerData.latitude,playerData.longitude])}>Follow {idEnemy}</button>);
                 }
             });
         }

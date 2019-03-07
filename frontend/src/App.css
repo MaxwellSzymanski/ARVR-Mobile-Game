@@ -573,6 +573,27 @@ p {
     margin-bottom: 40px;
 }
 
+.textAccuracy {
+    font-size: 16px;
+    font-family: Orkney;
+    color: #490b0b;
+}
+
+.findPlayers {
+    padding-top: 5px;
+    background-color: #910F0F;
+    margin-right: 10px;
+    width: 190px;
+    height: 40px;
+    font-size: 16px;
+    font-family: Orkney;
+    font-weight: bold;
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+    border: transparent;
+}
+
 .unselectable {
     -webkit-user-select: none; /* Safari */
     -moz-user-select: none; /* Firefox */
@@ -583,6 +604,11 @@ p {
 .notfound{
   color: white;
   margin:30px;
+}
+
+.wider {
+    width: 250px;
+    margin-bottom: 10px;
 }
 
 .linkBack {

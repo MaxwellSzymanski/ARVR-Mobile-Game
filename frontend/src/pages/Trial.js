@@ -30,7 +30,6 @@ class Trial extends React.Component {
         idTarget: cookies.get('name'),
         accuracy: 0,
         centerMap: [50.8632811,4.6762872],
-        centerMap: [50.8632811, 4.6762872],
         showAlertBox: true,
         content: ["Please allow access to your location.",],
         alertBoxStyle: {
@@ -42,7 +41,7 @@ class Trial extends React.Component {
             maxWidth: '70vw',
             padding: '10px 20px'
         }
-    }
+    };
 
     componentWillMount() {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -97,8 +96,8 @@ class Trial extends React.Component {
 
       if(this.state.idTarget === null) {
         var rows = [];
-        rows.push(<Link to="/profilepage"><button> Profile Page </button></Link>);
-          rows.push(<Link to="/captureplayer"><button> Capture Player </button></Link>);
+        rows.push(<Link to="/profilepage"><button className="confirmButton wider"> Profile Page </button></Link>);
+          rows.push(<Link to="/captureplayer"><button className="confirmButton wider"> Capture Player </button></Link>);
         this.showAlertBox(rows);
       }
 

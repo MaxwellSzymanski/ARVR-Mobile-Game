@@ -130,7 +130,7 @@ class ProfilePage extends React.Component {
                     <h1 className="name">{this.state.name}</h1>
                     <h3 className="smallText">Level {this.state.level} {this.state.faction}</h3>
                     <div className="xpBar">
-                        <div className="xpGained" id="xpBar" style="width: {this.state.xpWidth}"> </div>
+                        <div className="xpGained" id="xpBar"> </div>
                     </div>
                     <h3 className="smallText">{this.state.experience}<b>/350 xp</b></h3>
                 </div>
