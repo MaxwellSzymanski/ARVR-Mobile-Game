@@ -62,7 +62,7 @@ class Minigame extends React.Component {
         encodedPic: require("../assets/icons/user.png"),
         timer: 0,
         firstPicTaken: false,
-        secondPicTaken: false,
+        firstPicAccepted: false,
     };
 
     componentWillMount() {
@@ -71,7 +71,11 @@ class Minigame extends React.Component {
         this.interval = setInterval(() => {
             this.sendLocation();
             this.setCenter([this.state.location.lat, this.state.location.lng]);
-        }, 500);
+        }, 1000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
     }
 
     componentDidMount(){
@@ -92,6 +96,7 @@ class Minigame extends React.Component {
 
         this.context.on("voteResult", (data) => { this.voteResult(data); });
         this.context.on("secondPhoto", (data) => {this.secondPhoto(data); });
+        this.context.on("message", (data) => {this.showAlertBox(data.message); });
     }
 
     sendLocation() {
@@ -140,11 +145,11 @@ class Minigame extends React.Component {
     voteResult(data) {
         let content = [];
         if (data.accepted) {
-            this.setState({firstPicTaken: true, secondPicTaken: false});
+            this.setState({firstPicTaken: true, firstPicAccepted: true});
             content.push(<p>The photo is accepted by all active mission players!</p>);
             content.push(<p>Go to the mission location and take a similar photo.</p>);
         } else {
-            this.setState({encodedPic: require("../assets/icons/user.png"), firstPicTaken: false, secondPicTaken: false});
+            this.setState({encodedPic: require("../assets/icons/user.png"), firstPicTaken: false, firstPicAccepted: false});
             content.push(<p>The photo is rejected!</p>);
             content.push(<p>Go to the mission location and take a better photo.</p>);
         }
@@ -152,11 +157,12 @@ class Minigame extends React.Component {
     }
 
     secondPhoto(data) {
-        this.setState({secondPicTaken: true});
+        this.setState({firstPicAccepted: false, firstPicTaken: false});
         var content = [];
         content.push(<img src={this.state.encodedPic}/>);
         content.push(<img src={data.photo}/>);
         content.push(<p>These photos need to be compared.</p>);
+        content.push(<p>Restart the mission by closing this window.</p>);
         this.showAlertBox(content);
     }
 
@@ -169,7 +175,7 @@ class Minigame extends React.Component {
     mapChanged(feature, layer){
         if(this.state.showAlertBox === false) {
             let rows = [];
-            if (!this.state.firstPicTaken || !this.state.secondPicTaken) {
+            if (!this.state.firstPicTaken || this.state.firstPicAccepted) {
                 rows.push(
                     <Camera
                         onTakePhoto={(dataUri) => {
@@ -193,7 +199,7 @@ class Minigame extends React.Component {
     sendPhoto(dataUri){
         this.context.emit("missionPhoto", {token: cookies.get('token'), photo: dataUri} );
         if (this.state.firstPicTaken) {
-            this.setState({showAlertBox: false, secondPicTaken: true});
+            this.setState({showAlertBox: false, firstPicAccepted: true});
         } else {
             this.setState({showAlertBox: false, firstPicTaken: true, encodedPic: dataUri});
         }

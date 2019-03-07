@@ -623,6 +623,7 @@ let currentMission = missionList[0];
 let missionPlayers = [];
 let timeInterval = 15 * 1000;       // in milliseconds
 let currentPhoto = null;
+let voting = false;
 let firstPhotoAccepted = false;     // used to determine whether or not a received photo should be:
                                         // (false)  send to players for voting, or
                                         //  (true)  compared to the first photo
@@ -655,20 +656,24 @@ function missionPhoto(data, socket) {
             if (firstPhotoAccepted) {
                 secondPhoto(data, socket);
                 return;
+            } else if (voting) {
+                socket.emit("message", {message: "The vote for the last photo is still going on. Please wait."})
+            } else {
+                voting = true;
+                currentPhoto = data.image;
+                const exp = new Date(new Date().getTime() + timeInterval);
+                setTimeout(() => {
+                    photoAccepted();
+                }, timeInterval);
+                Object.keys(missionPlayers).forEach(function (key) {
+                    if (key !== data.token) {
+                        missionPlayers[key].socket.emit("missionPhoto", {
+                            photo: data.photo,
+                            expiry: exp
+                        });
+                    }
+                })
             }
-            currentPhoto = data.image;
-            const exp = new Date(new Date().getTime() + timeInterval);
-            setTimeout( () => {
-                photoAccepted();
-            }, timeInterval);
-            Object.keys(missionPlayers).forEach(function (key) {
-                if (key !== data.token) {
-                    missionPlayers[key].socket.emit("missionPhoto", {
-                        photo: data.photo,
-                        expiry: exp
-                    });
-                }
-            })
         }
     }
 }
