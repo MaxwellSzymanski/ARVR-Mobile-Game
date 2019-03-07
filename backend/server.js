@@ -687,7 +687,7 @@ function secondPhoto(data, socket) {
 }
 
 function photoAccepted() {
-    if (currentPhoto !== null) {
+    if (currentPhoto !== null && voting) {
         Object.keys(missionPlayers).forEach( function (key) {
             missionPlayers[key].socket.emit("voteResult", {accepted: true})
         });
@@ -715,6 +715,7 @@ function newMission(data, socket) {
         if (missionPlayers[data.token] !== undefined && missionPlayers[data.token] !== null) {
             if (firstPhotoAccepted && !voting) {
                 firstPhotoAccepted = false;
+                currentPhoto = null;
                 currentMission += 1;
                 currentMission %= missionList.length;
                 Object.keys(missionPlayers).forEach(function (key) {
