@@ -609,31 +609,6 @@ function fight(data, socket){
 }
 
 
-/*  FIGHT VAN VORIG SEMESTER
-
-
-
-    User.findOne({ name: obj.playerId}, function(error, self) {
-        User.findOne({name: obj.enemyPlayerId}, function (error, enemy) {
-            if (self !== null && enemy !== null) {
-                const enemyDamage = calculateAttack(self, enemy);
-                enemy.health = Math.floor(enemy.health - enemyDamage);
-                if (enemy.health <= 0) {
-                    enemy.health = 100;
-                    self.level = self.level + 1;
-                    self.save();
-                }
-                enemy.save();
-            }
-        });
-    });
-
-    console.log(obj.playerId + " kicked " + obj.enemyPlayerId +"!");
-
-
-*/
-
-
 // ============================================================================
 // ============================================================================
 
@@ -646,8 +621,11 @@ function fight(data, socket){
 let missionList = [ [50.863137, 4.683394], [50.8632811, 4.6762872], ];
 let currentMission = missionList[0];
 let missionPlayers = [];
-let timeInterval = 15 * 1000;      // in milliseconds
+let timeInterval = 15 * 1000;       // in milliseconds
 let currentPhoto = null;
+let firstPhotoAccepted = false;     // used to determine whether or not a received photo should be:
+                                        // (false)  send to players for voting, or
+                                        //  (true)  compared to the first photo
 function mission(data, socket) {
     if (data.token) {
         jwt.verify(data.token, secret, async function (err, token) {
@@ -673,31 +651,42 @@ function leaveMission(data, socket) {
 
 function missionPhoto(data, socket) {
     if (data.token) {
-        jwt.verify(data.token, secret, async function (err, token) {
-            if (err) {
-                console.log("(missionPhoto)        invalid token");
-            } else {
-                currentPhoto = data.image;
-                const exp = new Date(new Date().getTime() + timeInterval);
-                setTimeout( () => {photoAccepted(); } , timeInterval);
-                Object.keys(missionPlayers).forEach( function (key) {
-                    if (key !== data.token) {
-                        missionPlayers[key].socket.emit("missionPhoto", {
-                            photo: data.photo,
-                            expiry: exp
-                        });
-                    }
-                })
+        if (missionPlayers[data.token] !== undefined && missionPlayers[data.token] !== null) {
+            if (firstPhotoAccepted) {
+                secondPhoto(data, socket);
+                return;
             }
-        });
+            currentPhoto = data.image;
+            const exp = new Date(new Date().getTime() + timeInterval);
+            setTimeout( () => {
+                photoAccepted();
+            }, timeInterval);
+            Object.keys(missionPlayers).forEach(function (key) {
+                if (key !== data.token) {
+                    missionPlayers[key].socket.emit("missionPhoto", {
+                        photo: data.photo,
+                        expiry: exp
+                    });
+                }
+            })
+        }
     }
+}
+
+function secondPhoto(data, socket) {
+    console.log("   Second photo received!");
+    Object.keys(missionPlayers).forEach( function (key) {
+        missionPlayers[key].socket.emit("secondPhoto", {photo: data.photo})
+    });
+
 }
 
 function photoAccepted() {
     if (currentPhoto !== null) {
         Object.keys(missionPlayers).forEach( function (key) {
             missionPlayers[key].socket.emit("voteResult", {accepted: true})
-        })
+        });
+        firstPhotoAccepted = true;
     }
 }
 
@@ -707,7 +696,7 @@ function missionVote(data, socket) {
             if (!data.vote) {
                 currentPhoto = null;
                 Object.keys(missionPlayers).forEach( function (key) {
-                    missionPlayers[key].socket.emit("voteResult", {accepted: true})
+                    missionPlayers[key].socket.emit("voteResult", {accepted: false})
                 })
             }
         }

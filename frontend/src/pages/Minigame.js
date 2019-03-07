@@ -26,9 +26,9 @@ var targetIcon = L.icon({
     iconUrl: "https://img.icons8.com/material/24/000000/point-of-interest.png",
     //shadowUrl: 'leaf-shadow.png',
 
-    iconSize:     [70, 70], // size of the icon
-    shadowSize:   [50, 64], // size of the shadow
-    iconAnchor:   [35, 0], // point of the icon which will correspond to marker's location
+    iconSize:     [50, 50], // size of the icon
+    shadowSize:   [40, 45], // size of the shadow
+    iconAnchor:   [25, 50], // point of the icon which will correspond to marker's location
     shadowAnchor: [4, 62],  // the same for the shadow
     popupAnchor:  [0, -30] // point from which the popup should open relative to the iconAnchor
 });
@@ -46,6 +46,7 @@ class Minigame extends React.Component {
         this.alertBoxIsClosed = this.alertBoxIsClosed.bind(this);
         this.countDown = this.countDown.bind(this);
         this.voteResult = this.voteResult.bind(this);
+        this.secondPhoto = this.secondPhoto.bind(this)
     }
 
     state = {
@@ -60,7 +61,8 @@ class Minigame extends React.Component {
         targetLocation: [30.8632811, 4.6762872],
         encodedPic: require("../assets/icons/user.png"),
         timer: 0,
-    }
+        firstPicTaken: false,
+    };
 
     componentWillMount() {
         this.context.emit("mission",{token:cookies.get('token')});
@@ -79,7 +81,8 @@ class Minigame extends React.Component {
 
         this.context.on("missionPhoto", (data) => {
             this.setState({
-                encodedPic: data.photo
+                encodedPic: data.photo,
+                firstPicTaken: true,
             });
             let interval = Math.floor(Math.abs(new Date() - new Date(data.expiry)) / 1000 - 0.5);
             this.setState({timer: interval});
@@ -87,6 +90,7 @@ class Minigame extends React.Component {
         });
 
         this.context.on("voteResult", (data) => { this.voteResult(data); });
+        this.context.on("secondPhoto", (data) => {this.secondPhoto(data); });
     }
 
     sendLocation() {
@@ -135,13 +139,23 @@ class Minigame extends React.Component {
     voteResult(data) {
         let content = [];
         if (data.accepted) {
+            this.setState({})
             content.push(<p>The photo is accepted by all active mission players!</p>);
             content.push(<p>Go to the mission location and take a similar photo.</p>);
         } else {
+            this.setState({encodedPic: require("../assets/icons/user.png"), firstPicTaken: false});
             content.push(<p>The photo is rejected!</p>);
             content.push(<p>Go to the mission location and take a better photo.</p>);
         }
         this.showAlertBox(content)
+    }
+
+    secondPhoto(data) {
+        var content = [];
+        content.push(<img src={this.state.encodedPic} style="width:50vw;"/>);
+        content.push(<img src={data.photo} style="width:50vw;"/>);
+        content.push(<p>These photos need to be compared.</p>);
+        this.showAlertBox(content);
     }
 
     setCenter(pos){
@@ -153,22 +167,29 @@ class Minigame extends React.Component {
     mapChanged(feature, layer){
         if(this.state.showAlertBox === false) {
             var rows = [];
-            rows.push(
-                <Camera
-                    onTakePhoto = { (dataUri) => { this.sendPhoto(dataUri); } }
-                    // isImageMirror = {false}
-                    imageType = {'IMAGE_TYPES.PNG'}
-                    imageCompression = {0.97}
-                    idealFacingMode = {"FACING_MODES.ENVIRONMENT"}
-                />
-            );
+            if (this.state.firstPicTaken) {
+                rows.push(<img src={this.state.encodedPic}/>);
+                rows.push(<p>Thanks for voting! Please wait for all the mission players to vote.</p>);
+            } else {
+                rows.push(
+                    <Camera
+                        onTakePhoto={(dataUri) => {
+                            this.sendPhoto(dataUri);
+                        }}
+                        // isImageMirror = {false}
+                        imageType={'IMAGE_TYPES.PNG'}
+                        imageCompression={0.97}
+                        idealFacingMode={"FACING_MODES.ENVIRONMENT"}
+                    />
+                );
+            }
             this.showAlertBox(rows);
         }
     }
 
     sendPhoto(dataUri){
         this.context.emit("missionPhoto", {token: cookies.get('token'), photo: dataUri} );
-        this.setState({showAlertBox: false});
+        this.setState({showAlertBox: false, firstPicTaken: true});
     }
 
     showAlertBox(content){
