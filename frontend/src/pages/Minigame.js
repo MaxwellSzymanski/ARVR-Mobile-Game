@@ -163,12 +163,6 @@ class Minigame extends React.Component {
         this.context.emit("newMission", {token: cookies.get("token")})
     }
 
-    setCenter(pos){
-        if(pos===null){
-            this.setState({centerMap: pos});
-        }
-    }
-
     mapChanged(feature, layer){
         if(this.state.showAlertBox === false) {
             let rows = [];
