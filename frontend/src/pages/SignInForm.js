@@ -94,7 +94,7 @@ class SignInForm extends React.Component {
                         };
                         cookies.set('token', json.data.token, options);
                         cookies.set('name', json.data.name, options);
-                        window.location.reload();
+                        that.setRedirect();
                     }
                 }
             );
@@ -111,15 +111,11 @@ class SignInForm extends React.Component {
     renderRedirect = () => {
         if (this.state.redirect) {
             if (this.state.verified) {
-                return <Redirect to="/map"/>
+                window.location.reload();
             } else {
                 return <Redirect to="/verify"/>
             }
         }
-    };
-
-    goToMap() {
-        this.setRedirect();
     };
 
     render() {
@@ -142,8 +138,6 @@ class SignInForm extends React.Component {
                         <button className="FormField__Button mr-20">Sign In</button> <Link to="/" className="FormField__Link">Create an account</Link>
                     </div>
                 </form>
-
-
             </div>
         );
     }

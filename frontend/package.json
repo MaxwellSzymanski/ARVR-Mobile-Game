@@ -6,6 +6,7 @@
     "@material/button": "^0.41.0",
     "@sweetalert/with-react": "^0.1.1",
     "axios": "^0.18.0",
+    "bad-words": "^3.0.1",
     "face-api.js": "^0.16.2",
     "flickity": "^2.2.0",
     "leaflet": "^1.4.0",

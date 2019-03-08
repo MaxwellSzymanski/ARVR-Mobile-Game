@@ -4,6 +4,8 @@ import swal from '@sweetalert/with-react';
 import Cookies from 'universal-cookie';
 import SocketContext from "../socketContext";
 import axios from 'axios';
+const Filter = require('bad-words');
+const filter = new Filter();
 const cookies = new Cookies();
 const url = require('./serveradress.js');
 
@@ -67,8 +69,9 @@ class SignUpForm extends React.Component {
             swal("Please fill in all fields.", {icon: 'warning'});
         } else if (!this.state.hasAgreed) {
             swal("You need to agree to the terms and conditions in order to continue.", {icon: 'warning'})
+        } else if (filter.isProfane(this.state.name)) {
+            swal({title: "Watch that mouth!", text: "We do not tolerate such usernames in this game. Please pick another.", icon: "error"});
         } else {
-
             const dataToSend = {
                 request: "signup",
                 email: this.state.email,
