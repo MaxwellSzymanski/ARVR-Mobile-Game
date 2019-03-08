@@ -41,7 +41,7 @@ class SignInForm extends React.Component {
                 };
                 cookies.set('token', data.token, options);
                 cookies.set('name', data.name, options);
-                this.setState({redirect: true, verified: json.data.verified});
+                this.setState({redirect: true, verified: data.verified});
             }
         })
     }
