@@ -41,7 +41,7 @@ class SignInForm extends React.Component {
                 };
                 cookies.set('token', data.token, options);
                 cookies.set('name', data.name, options);
-                window.location.reload();
+                this.setState({redirect: true, verified: json.data.verified});
             }
         })
     }
@@ -94,7 +94,7 @@ class SignInForm extends React.Component {
                         };
                         cookies.set('token', json.data.token, options);
                         cookies.set('name', json.data.name, options);
-                        that.setRedirect();
+                        that.setState({redirect: true, verified: json.data.verified});
                     }
                 }
             );
