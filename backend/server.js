@@ -710,11 +710,13 @@ function missionVote(data, socket) {
                 currentPhoto = null;
                 voting = false;
                 Object.keys(missionPlayers).forEach( function (key) {
-                    if (key !== data.token)
-                        missionPlayers[key].socket.emit("voteResult", {accepted: false})
+                    if (key !== firstPlayer)
+                        missionPlayers[key].socket.emit("voteResult", {accepted: false});
+                    else {
+                        const exp = new Date(new Date().getTime() + 2 * timeInterval);
+                        missionPlayers[key].socket.emit("rejected", {expiry: exp})
+                    }
                 });
-                const exp = new Date(new Date().getTime() + 2*timeInterval);
-                socket.emit("rejected", {expiry: exp})
             }
         }
     }
