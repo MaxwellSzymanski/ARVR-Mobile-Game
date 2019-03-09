@@ -32,16 +32,6 @@ var targetIcon = L.icon({
     popupAnchor:  [0, -30] // point from which the popup should open relative to the iconAnchor
 });
 
-const camera = <Camera
-    onTakePhoto={(dataUri) => {
-        this.sendPhoto(dataUri);
-    }}
-    // isImageMirror = {false}
-    imageType={'IMAGE_TYPES.PNG'}
-    imageCompression={0.97}
-    idealFacingMode={"FACING_MODES.ENVIRONMENT"}
-/>;
-
 class Minigame extends React.Component {
 
     constructor(props){
@@ -206,7 +196,15 @@ class Minigame extends React.Component {
         if(this.state.showAlertBox === false) {
             let rows = [];
             if (!this.state.firstPicTaken || this.state.firstPicAccepted) {
-                rows.push(camera);
+                rows.push(<Camera
+                    onTakePhoto={(dataUri) => {
+                        this.sendPhoto(dataUri);
+                    }}
+                    // isImageMirror = {false}
+                    imageType={'IMAGE_TYPES.PNG'}
+                    imageCompression={0.97}
+                    idealFacingMode={"FACING_MODES.ENVIRONMENT"}
+                />);
             } else {
                 rows.push(<img src={this.state.encodedPic}/>);
                 rows.push(<p>Please wait for all the mission players to vote.</p>);
