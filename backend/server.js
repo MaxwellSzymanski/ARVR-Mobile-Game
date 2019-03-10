@@ -612,19 +612,21 @@ function fight(data, socket){
                                 // TODO: ik heb hier tijdelijk iets ingevuld, zodat er op de field test wa waarden wijzigen.
                                 //          Wijzig zo veel ge wilt
 
-                                attacker.experience = attacker.experience + 100;
-                                defender.experience = defender.experience + 10;
-                                [attacker, defender].forEach( (player) => {
-                                    if (player.experience >= 350) {
-                                        player.level = player.level + 1;
-                                        player.experience = player.experience % 350;
-                                    }
-                                });
-
                                 defender.health = defender.health - calculateAttack(attacker, defender);
                                 if (defender.health <= 0) {
                                     defender.deaths = defender.deaths + 1;
                                     attacker.kills = attacker.kills + 1;
+                                }
+
+                                attacker.experience = attacker.experience + 100;
+                                defender.experience = defender.experience + 10;
+                                if (attacker.experience >= 350) {
+                                    attacker.level = attacker.level + 1;
+                                    attacker.experience = attacker.experience % 350;
+                                }
+                                if (defender.experience >= 350) {
+                                    defender.level = defender.level + 1;
+                                    defender.experience = defender.experience % 350;
                                 }
 
                                 attacker.save();
