@@ -605,16 +605,26 @@ function fight(data, socket){
                         User.findById(data.enemy).then(
                             function (error, defender) {
                                 if (attacker === null || defender === null || attacker === undefined || defender === undefined) {
-                                    console.log("(attack)           Player of enemy not found.");
+                                    console.log("(attack)           Player or enemy not found.");
                                     return;
                                 }
 
-                                // TODO: pas data aan, check eventueel ./db/userModel.js voor namen andere attributen
-                                attacker.health = attacker.health;
-                                defender.health = defender.health;
-                                // TODO
+                                // TODO: ik heb hier tijdelijk iets ingevuld, zodat er op de field test wa waarden wijzigen.
+                                //          Wijzig zo veel ge wilt
+
+                                attacker.experience = attacker.experience + 100;
+                                defender.experience = defender.experience + 10;
+                                [attacker, defender].forEach( (player) => {
+                                    if (player.experience >= 350) {
+                                        player.level = player.level + 1;
+                                        player.experience = player.experience % 350;
+                                    }
+                                });
+
+                                defender.health = defender.health - calculateAttack(attacker, defender);
                                 if (defender.health <= 0) {
-                                    // TODO
+                                    defender.deaths = defender.deaths + 1;
+                                    attacker.kills = attacker.kills + 1;
                                 }
 
                                 attacker.save();
@@ -630,7 +640,8 @@ function fight(data, socket){
                                     game[defender.name].socket.emit("stats", defender.getUserData());
                                     game[defender.name].socket.emit("enemystats", defender.getEnemyData());
                                     // TODO
-                                    game[defender.name].socket.emit("message", defender.getEnemyData());
+                                    const msg = "You have been attacked by " + attacker.name;
+                                    game[defender.name].socket.emit("message", {message: msg});
                                 }
                             }
                         )

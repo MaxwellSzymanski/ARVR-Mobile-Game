@@ -59,13 +59,17 @@ class Trial extends React.Component {
         });
     }
 
+    componentDidMount() {
+        this.context.on("message", (data) => {this.showAlertBox(data.message); });
+    }
+
     setCenter(pos){
         if(pos===null){
             this.setState({centerMap: pos});
         }
     }
 
-    showAlertBox(content){
+    showAlertBox(content) {
         let newContent = this.state.content;
         newContent.push(content);
         this.setState({
@@ -97,7 +101,7 @@ class Trial extends React.Component {
       if(this.state.idTarget === null) {
         var rows = [];
         rows.push(<Link to="/profilepage"><button className="confirmButton wider"> Profile Page </button></Link>);
-          rows.push(<Link to="/captureplayer"><button className="confirmButton wider"> Capture Player </button></Link>);
+        rows.push(<Link to="/captureplayer"><button className="confirmButton wider"> Capture Player </button></Link>);
         this.showAlertBox(rows);
       }
 
