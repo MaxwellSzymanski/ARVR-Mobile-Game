@@ -606,10 +606,11 @@ function fight(data, socket){
                             function (error, defender) {
                                 if (attacker === null || defender === null) {
                                     console.log("(attack)           Player or enemy not found.");
-                                    console.log("  attacker:     " + token.id + "\n" + attacker);
-                                    console.log("  defender:     " + data.enemy + "\n" + defender);
                                     return;
                                 }
+
+                                console.log("  attacker:     " + token.id + "\n" + attacker);
+                                console.log("  defender:     " + data.enemy + "\n" + defender);
 
                                 // TODO: ik heb hier tijdelijk iets ingevuld, zodat er op de field test wa waarden wijzigen.
                                 //          Wijzig zo veel ge wilt
