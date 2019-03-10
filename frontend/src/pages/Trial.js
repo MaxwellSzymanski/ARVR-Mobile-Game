@@ -5,6 +5,7 @@ import PlayerLayer from './PlayerLayer'
 import Cookies from 'universal-cookie';
 import PopPop from 'react-poppop';
 import { Link } from 'react-router-dom';
+import SocketContext from "../socketContext";
 
 
 
@@ -127,5 +128,6 @@ class Trial extends React.Component {
         )
     }
 }
+Trial.contextType = SocketContext;
 
 export default Trial;
