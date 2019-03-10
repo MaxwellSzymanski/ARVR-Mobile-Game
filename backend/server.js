@@ -604,7 +604,7 @@ function fight(data, socket){
                     function (error, attacker) {
                         User.findById(data.enemy).then(
                             function (error, defender) {
-                                if (attacker === null || defender === null || attacker === undefined || defender === undefined) {
+                                if (attacker === null || defender === null) {
                                     console.log("(attack)           Player or enemy not found.");
                                     return;
                                 }
