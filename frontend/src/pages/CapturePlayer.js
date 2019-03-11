@@ -80,7 +80,7 @@ class CapturePlayer extends React.Component {
 
           else {
             console.log(capturedPlayer._id)
-            localStorage.setItem("capturedPlayerId", capturedPlayer._id);
+            localStorage.setItem("capturedPlayerId", capturedPlayer.name);
             this.setRedirect();
           }
         }

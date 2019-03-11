@@ -612,9 +612,7 @@ function fight(data, socket){
                         console.log("(attack)           attacker not found.");
                         return;
                     }
-                    console.log("  attacker:     " + token.id + "\n" + attacker + "\n\n");
-
-                    User.findById(data.enemy).then(
+                    User.findOne({name: data.enemy}).then(
                         async function (errr, defender) {
                             if (errr) {
                                 console.log("(fight)         find defender error:");
@@ -626,7 +624,7 @@ function fight(data, socket){
                                 return;
                             }
 
-                            console.log("  defender:     " + data.enemy + "\n" + defender + "\n\n");
+                            console.log("  defender:     " + data.enemy + "\n" + defender.health + "\n\n");
 
                             // TODO: ik heb hier tijdelijk iets ingevuld, zodat er op de field test wa waarden wijzigen.
                             //          Wijzig zo veel ge wilt
