@@ -40,7 +40,7 @@ class BattlePage extends React.Component {
             console.log("stats received: " + data);
             this.setState({
                 oppName: data.name,
-                oppHealth: data.attack,
+                oppHealth: data.health,
                 oppDefence: data.defence,
                 opplevel: data.level,
                 //selfKills:

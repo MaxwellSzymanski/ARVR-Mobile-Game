@@ -601,7 +601,7 @@ function fight(data, socket){
                 console.log("(fight)         invalid token");
                 return;
             }
-            User.ById(token.id).then(
+            User.findById(token.id).then(
                 async function (attacker) {
                     if (attacker === null) {
                         console.log("(attack)           attacker not found.");
