@@ -599,65 +599,75 @@ function fight(data, socket){
         jwt.verify(data.token, secret, async function(err, token) {
             if (err) {
                 console.log("(fight)         invalid token");
-            } else {
-                User.findById(token.id).then(
-                    async function (error, attacker) {
-                        if (attacker === null) {
-                            console.log("(attack)           attacker not found.");
-                            return;
-                        }
-                        console.log("  attacker:     " + token.id + "\n" + attacker + "\n\n");
-
-                        User.findById(data.enemy).then(
-                            async function (error, defender) {
-                                if (defender === null) {
-                                    console.log("(attack)           defender not found.");
-                                    return;
-                                }
-
-                                console.log("  defender:     " + data.enemy + "\n" + defender + "\n\n");
-
-                                // TODO: ik heb hier tijdelijk iets ingevuld, zodat er op de field test wa waarden wijzigen.
-                                //          Wijzig zo veel ge wilt
-
-                                defender.health = defender.health - calculateAttack(attacker, defender);
-                                if (defender.health <= 0) {
-                                    defender.deaths = defender.deaths + 1;
-                                    attacker.kills = attacker.kills + 1;
-                                }
-
-                                attacker.experience = attacker.experience + 100;
-                                defender.experience = defender.experience + 10;
-                                if (attacker.experience >= 350) {
-                                    attacker.level = attacker.level + 1;
-                                    attacker.experience = attacker.experience % 350;
-                                }
-                                if (defender.experience >= 350) {
-                                    defender.level = defender.level + 1;
-                                    defender.experience = defender.experience % 350;
-                                }
-
-                                attacker.save();
-                                defender.save();
-
-                                // TODO: indien er andere stats doorgestuurd moeten worden, pas dan de methoden
-                                //              getUserData en getEnemyData aan in ./db/userModel.js
-
-                                // Send user data to attacker and to defender
-                                socket.emit("stats", attacker.getUserData());
-                                socket.emit("enemystats", defender.getEnemyData());
-                                if (game[defender.name] !== undefined && game[defender.name] !== null) {
-                                    game[defender.name].socket.emit("stats", defender.getUserData());
-                                    game[defender.name].socket.emit("enemystats", defender.getEnemyData());
-                                    // TODO
-                                    const msg = "You have been attacked by " + attacker.name;
-                                    game[defender.name].socket.emit("message", {message: msg});
-                                }
-                            }
-                        )
-                    }
-                )
+                return;
             }
+            User.findOne({ name: token.name}).then(
+                async function (error, attacker) {
+                    if (error) {
+                        console.log("(fight)         find attacker error:");
+                        console.log(error);
+                        return;
+                    }
+                    if (attacker === null) {
+                        console.log("(attack)           attacker not found.");
+                        return;
+                    }
+                    console.log("  attacker:     " + token.id + "\n" + attacker + "\n\n");
+
+                    User.findById(data.enemy).then(
+                        async function (errr, defender) {
+                            if (errr) {
+                                console.log("(fight)         find defender error:");
+                                console.log(errr);
+                                return;
+                            }
+                            if (defender === null) {
+                                console.log("(attack)           defender not found.");
+                                return;
+                            }
+
+                            console.log("  defender:     " + data.enemy + "\n" + defender + "\n\n");
+
+                            // TODO: ik heb hier tijdelijk iets ingevuld, zodat er op de field test wa waarden wijzigen.
+                            //          Wijzig zo veel ge wilt
+
+                            defender.health = defender.health - calculateAttack(attacker, defender);
+                            if (defender.health <= 0) {
+                                defender.deaths = defender.deaths + 1;
+                                attacker.kills = attacker.kills + 1;
+                            }
+
+                            attacker.experience = attacker.experience + 100;
+                            defender.experience = defender.experience + 10;
+                            if (attacker.experience >= 350) {
+                                attacker.level = attacker.level + 1;
+                                attacker.experience = attacker.experience % 350;
+                            }
+                            if (defender.experience >= 350) {
+                                defender.level = defender.level + 1;
+                                defender.experience = defender.experience % 350;
+                            }
+
+                            attacker.save();
+                            defender.save();
+
+                            // TODO: indien er andere stats doorgestuurd moeten worden, pas dan de methoden
+                            //              getUserData en getEnemyData aan in ./db/userModel.js
+
+                            // Send user data to attacker and to defender
+                            socket.emit("stats", attacker.getUserData());
+                            socket.emit("enemystats", defender.getEnemyData());
+                            if (game[defender.name] !== undefined && game[defender.name] !== null) {
+                                game[defender.name].socket.emit("stats", defender.getUserData());
+                                game[defender.name].socket.emit("enemystats", defender.getEnemyData());
+                                // TODO
+                                const msg = "You have been attacked by " + attacker.name;
+                                game[defender.name].socket.emit("message", {message: msg});
+                            }
+                        }
+                    )
+                }
+            )
         })
     }
 }
