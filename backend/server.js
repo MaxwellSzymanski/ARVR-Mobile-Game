@@ -619,11 +619,13 @@ function fight(data, socket){
 
                             defender.health = Math.floor(defender.health - calculateAttack(attacker, defender));
                             if (defender.health <= 0) {
+                                defender.health = defender.health + 400;
                                 defender.deaths = defender.deaths + 1;
                                 attacker.kills = attacker.kills + 1;
+                                attacker.experience = attacker.experience + 50;
                             }
 
-                            attacker.experience = attacker.experience + 100;
+                            attacker.experience = attacker.experience + 50;
                             defender.experience = defender.experience + 10;
                             if (attacker.experience >= 350) {
                                 attacker.level = attacker.level + 1;

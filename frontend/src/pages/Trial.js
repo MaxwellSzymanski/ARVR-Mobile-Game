@@ -61,7 +61,11 @@ class Trial extends React.Component {
     }
 
     componentDidMount() {
-        this.context.on("message", (data) => {this.showAlertBox(data.message); });
+        this.context.on("message", (data) => {
+            let rows = [];
+            rows.push(<p>{data.message}</p>);
+            this.showAlertBox(rows);
+        });
     }
 
     setCenter(pos){
