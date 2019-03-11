@@ -602,23 +602,13 @@ function fight(data, socket){
                 return;
             }
             User.findOne({ name: token.name}).then(
-                async function (error, attacker) {
-                    if (error) {
-                        console.log("(fight)         find attacker error:");
-                        console.log(error);
-                        return;
-                    }
+                async function (attacker) {
                     if (attacker === null) {
                         console.log("(attack)           attacker not found.");
                         return;
                     }
                     User.findOne({name: data.enemy}).then(
-                        async function (errr, defender) {
-                            if (errr) {
-                                console.log("(fight)         find defender error:");
-                                console.log(errr);
-                                return;
-                            }
+                        async function (defender) {
                             if (defender === null) {
                                 console.log("(attack)           defender not found.");
                                 return;
