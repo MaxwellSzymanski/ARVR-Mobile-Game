@@ -134,7 +134,7 @@ class BattlePage extends React.Component {
 
     attack() {
 
-        this.context.emit("fight", {token: cookies.get('token'), enemy: localStorage.getItem("capturedPlayerId")});
+        this.context.emit("fight", {token: cookies.get('token'), enemy: localStorage.getItem("capturedPlayerName")});
 
 
         // TODO: ik denk dat ge dan best het grootste deel van deze code op de server zet,
