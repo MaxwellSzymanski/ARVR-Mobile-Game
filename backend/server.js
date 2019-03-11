@@ -204,7 +204,7 @@ function newMail(data) {
             throw err;
         } else {
             User.findById(token.id).then(
-                function(user) {
+                async function(user) {
                     user.sendVerifMail();
             });
         }
@@ -601,16 +601,21 @@ function fight(data, socket){
                 console.log("(fight)         invalid token");
             } else {
                 User.findById(token.id).then(
-                    function (error, attacker) {
+                    async function (error, attacker) {
+                        if (attacker === null) {
+                            console.log("(attack)           attacker not found.");
+                            return;
+                        }
+                        console.log("  attacker:     " + token.id + "\n" + attacker + "\n\n");
+
                         User.findById(data.enemy).then(
-                            function (error, defender) {
-                                if (attacker === null || defender === null) {
-                                    console.log("(attack)           Player or enemy not found.");
+                            async function (error, defender) {
+                                if (defender === null) {
+                                    console.log("(attack)           defender not found.");
                                     return;
                                 }
 
-                                console.log("  attacker:     " + token.id + "\n" + attacker);
-                                console.log("  defender:     " + data.enemy + "\n" + defender);
+                                console.log("  defender:     " + data.enemy + "\n" + defender + "\n\n");
 
                                 // TODO: ik heb hier tijdelijk iets ingevuld, zodat er op de field test wa waarden wijzigen.
                                 //          Wijzig zo veel ge wilt
