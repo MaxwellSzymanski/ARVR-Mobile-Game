@@ -601,25 +601,23 @@ function fight(data, socket){
                 console.log("(fight)         invalid token");
                 return;
             }
-            User.findOne({ name: token.name}).then(
+            User.ById(token.id).then(
                 async function (attacker) {
                     if (attacker === null) {
                         console.log("(attack)           attacker not found.");
                         return;
                     }
-                    User.findOne({name: data.enemy}).then(
+                    User.findById(data.enemy).then(
                         async function (defender) {
                             if (defender === null) {
                                 console.log("(attack)           defender not found.");
                                 return;
                             }
 
-                            console.log("  defender:     " + data.enemy + "\n" + defender.health + "\n\n");
-
                             // TODO: ik heb hier tijdelijk iets ingevuld, zodat er op de field test wa waarden wijzigen.
                             //          Wijzig zo veel ge wilt
 
-                            defender.health = defender.health - calculateAttack(attacker, defender);
+                            defender.health = Math.floor(defender.health - calculateAttack(attacker, defender));
                             if (defender.health <= 0) {
                                 defender.deaths = defender.deaths + 1;
                                 attacker.kills = attacker.kills + 1;
