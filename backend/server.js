@@ -619,7 +619,7 @@ function fight(data, socket){
 
                             defender.health = Math.floor(defender.health - calculateAttack(attacker, defender));
                             if (defender.health <= 0) {
-                                defender.health = defender.health + 400;
+                                defender.health = defender.health + 100;
                                 defender.deaths = defender.deaths + 1;
                                 attacker.kills = attacker.kills + 1;
                                 attacker.experience = attacker.experience + 50;

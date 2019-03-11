@@ -60,6 +60,9 @@ class ProfilePage extends React.Component {
                 encodedPic: data.image
             })
         });
+        this.context.on("message", (data) => {
+            swal({text: data.message});
+        });
         this.context.on("signout", (data) => {
             if (data.success) {
                 cookies.remove("token");

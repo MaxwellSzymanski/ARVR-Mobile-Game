@@ -73,6 +73,9 @@ class BattlePage extends React.Component {
         this.interval = setInterval(() => {
             this.sendLocation();
         }, 750);
+        this.context.on("message", (data) => {
+            swal({text: data.message});
+        });
     }
 
     componentWillUnmount() {
@@ -144,7 +147,7 @@ class BattlePage extends React.Component {
         //              als er iemand gewoon maar weet welke signalen hij moet sturen.
 
         const prob = this.calculateProbability(3);
-        // TODO: Fix error
+
         if (Math.random() < prob) {
             swal({title: 'You attacked successfully!', icon: 'success'})
             // TODO: implement attack

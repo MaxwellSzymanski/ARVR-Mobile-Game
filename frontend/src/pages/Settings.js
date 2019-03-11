@@ -40,6 +40,9 @@ class Settings extends React.Component {
                 swal({title: "Something went wrong.", text: "Please try again.", icon: "error"});
             }
         });
+        this.context.on("message", (data) => {
+            swal({text: data.message});
+        });
     }
 
     takeNewPhoto() {
