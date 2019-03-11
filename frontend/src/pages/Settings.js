@@ -43,6 +43,25 @@ class Settings extends React.Component {
         this.context.on("message", (data) => {
             swal({text: data.message});
         });
+
+        this.interval = setInterval(() => {
+            this.sendLocation();
+        }, 750);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
+    sendLocation() {
+        navigator.geolocation.getCurrentPosition((position) => {
+            this.context.emit("location", {
+                token: cookies.get('token'),
+                longitude: position.coords.longitude,
+                latitude: position.coords.latitude,
+                accuracy: Math.round(position.coords.accuracy)
+            })
+        });
     }
 
     takeNewPhoto() {

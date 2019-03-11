@@ -86,7 +86,27 @@ class CapturePlayer extends React.Component {
           }
         }
     });
+
+    this.interval = setInterval(() => {
+      this.sendLocation();
+    }, 750);
   }
+
+  sendLocation() {
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.context.emit("location", {
+        token: cookies.get('token'),
+        longitude: position.coords.longitude,
+        latitude: position.coords.latitude,
+        accuracy: Math.round(position.coords.accuracy)
+      })
+    });
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
 
 
   async getPlayerId() {
