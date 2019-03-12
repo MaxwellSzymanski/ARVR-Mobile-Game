@@ -659,7 +659,7 @@ p {
      list-style-type: none;
      margin: 0;
      padding: 0;
-     top: -140px;
+     top: -185px;
      width: 40px;
      background-color: none;
      font-weight:bold;
@@ -682,8 +682,10 @@ p {
 
 #profileButton {
   background-color: #910F0F;
-  background-image: url("assets/buttons/avatarWhite.png");
-  background-size: cover;
+  background-image: url("assets/buttons/avatarWhiteFilled.png");
+  background-size: 65% 65%;
+  background-position: center;
+  background-repeat: no-repeat;
   border-radius: 50px;
   height: 40px;
   width: 40px;
@@ -693,8 +695,10 @@ p {
 
 #settingsButton {
   background-color: #910F0F;
-  background-image: url("assets/buttons/settingsRed.png");
-  background-size: cover;
+  background-image: url("assets/buttons/settingsFilled.png");
+  background-size: 65% 65%;
+  background-position: center;
+  background-repeat: no-repeat;
   border-radius: 50px;
   height: 40px;
   width: 40px;
@@ -705,7 +709,9 @@ p {
 #minigameButton {
   background-color: #910F0F;
   background-image: url("assets/buttons/joystick.png");
-  background-size: cover;
+  background-size: 75% 75%;
+  background-position: center;
+  background-repeat: no-repeat;
   border-radius: 50px;
   height: 40px;
   width: 40px;
@@ -716,8 +722,25 @@ p {
 #capturePButton {
   background-color: #910F0F;
   background-image: url("assets/buttons/cameraWhite.png");
-  background-size: cover;
+  background-size: 80% 80%;
+  background-position: center;
+  background-repeat: no-repeat;
   border-radius: 50px;
+  height: 40px;
+  width: 40px;
+  z-index: 10;
+  border: none;
+}
+
+#followPButton {
+  background-color: #910F0F;
+  background-image: url("assets/buttons/follow.png");
+  background-size: 65% 65%;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  border-radius: 50px;
+
   height: 40px;
   width: 40px;
   z-index: 10;
