@@ -137,7 +137,6 @@ class Trial extends React.Component {
                 <PlayerLayer idTarget={this.state.idTarget} setTarget={this.setTarget} showAlertBox={this.showAlertBox} id={this.state.id} locationEnabled={this.state.haveUsersLocation}/>
             </Map>
             </div>
-
             <div>
 
             <Draggable style={{zIndex:1}}><div id="block2">
@@ -159,6 +158,8 @@ class Trial extends React.Component {
         }
           </div></Draggable>
             </div>
+
+
 
             </div>
         )

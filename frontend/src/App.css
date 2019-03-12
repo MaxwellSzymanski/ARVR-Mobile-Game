@@ -747,6 +747,13 @@ p {
   border: none;
 }
 
+#followYourself {
+  z-index: 20;
+  bottom: 5px;
+  background-color: #910F0F;
+  color: white;
+}
+
 * {
 	outline: none;
 }
