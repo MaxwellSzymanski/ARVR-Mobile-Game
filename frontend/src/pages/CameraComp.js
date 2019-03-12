@@ -95,7 +95,7 @@ class CameraComp extends React.Component {
 
 
     render () {
-      if (!(isSafari || isIOS)) return (
+      if (isSafari || isIOS) return (
           <div>
           {this.renderRedirect()}
               <p className="subTitle">Upload an image</p>
