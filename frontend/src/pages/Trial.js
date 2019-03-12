@@ -7,7 +7,6 @@ import PopPop from 'react-poppop';
 import { Link, Redirect } from 'react-router-dom';
 import SocketContext from "../socketContext";
 import Draggable from 'react-draggable';
-import {Overlay} from 'react-overlays';
 
 
 
@@ -125,7 +124,7 @@ class Trial extends React.Component {
         return (
             <div>
             <div>
-            <Map onClick={()=> this.mapChanged()} className="mapss" center={this.state.centerMap} zoom={this.state.zoom}>
+            <Map style={{zIndex:0}} onClick={()=> this.mapChanged()} className="mapss" center={this.state.centerMap} zoom={this.state.zoom}>
                 <TileLayer
                     //attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     //url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
