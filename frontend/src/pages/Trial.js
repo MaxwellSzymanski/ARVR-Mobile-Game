@@ -137,7 +137,6 @@ class Trial extends React.Component {
                 <PlayerLayer idTarget={this.state.idTarget} setTarget={this.setTarget} showAlertBox={this.showAlertBox} id={this.state.id} locationEnabled={this.state.haveUsersLocation}/>
             </Map>
             </div>
-
             <div>
 
             <Draggable style={{zIndex:1}}><div id="block2">
@@ -147,6 +146,7 @@ class Trial extends React.Component {
             { this.state.displayMenu ? (
             <ul>
            <li><Link to="/capturePlayer"><div id="buttonsDiv"><button id="capturePButton"></button></div></Link></li>
+           <li><div id="buttonsDiv"><button id="followPButton"></button></div></li>
            <li><Link to="/profilePage"><div id="buttonsDiv"><button id="profileButton"></button></div></Link></li>
            <li><Link to="/settings"><div id="buttonsDiv"><button id="settingsButton"></button></div></Link></li>
 
@@ -158,6 +158,8 @@ class Trial extends React.Component {
         }
           </div></Draggable>
             </div>
+
+
 
             </div>
         )

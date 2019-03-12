@@ -4,6 +4,8 @@ import '../App.css';
 import L from 'leaflet';
 import Cookies from 'universal-cookie';
 import SocketContext from "../socketContext";
+import { Link, Redirect } from 'react-router-dom';
+import Draggable from 'react-draggable';
 
 const cookies = new Cookies();
 
@@ -315,6 +317,12 @@ class PlayerLayer extends React.Component {
 
     }
 
+    followYourselfMethod() {
+      var rows = [];
+      var playerLayer = this;
+      playerLayer.props.setTarget.bind(playerLayer,this.state.id,[this.state.latitude,this.state.longitude]);
+    }
+
 
     render() {
         var markers = this.state.playerMarkers;
@@ -324,6 +332,8 @@ class PlayerLayer extends React.Component {
         } else {
             return (null)
         }
+
+
     }
 
 }
