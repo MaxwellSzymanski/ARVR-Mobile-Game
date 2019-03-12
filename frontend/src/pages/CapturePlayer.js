@@ -153,7 +153,7 @@ class CapturePlayer extends React.Component {
           {!this.state.calculating && <div className="polaroid">
               <Camera
                   onTakePhoto = { (dataUri) => { this.onTakePhoto(dataUri); } }
-                  isImageMirror = {true}
+                  isImageMirror = {false}
                   idealFacingMode = {FACING_MODES.ENVIRONMENT}
               />
           </div>}
