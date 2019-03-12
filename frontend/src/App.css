@@ -635,25 +635,17 @@ p {
 
 #missionB {
   background-color: #910F0F;
-  background-image: url("assets/buttons/add.png");
-  background-size: cover;
+  background-image: url("assets/buttons/options.png");
+    background-size: 60% 60%;
+    background-position: center;
+    background-repeat: no-repeat;
   border-radius: 50px;
-  height: 40px;
-  width: 40px;
+  height: 45px;
+  width: 45px;
   z-index: 10;
   border: none;
 
 }
-
-#plusSign {
-  position: relative;
-  color: white;
-  font-weight: bold;
-  font-size: 40px;
-  bottom: 34px;
-  right: 5px;
-}
-
 
  ul {
      list-style-type: none;
@@ -671,11 +663,12 @@ p {
      color: white;
      text-decoration: none;
      background-color: #910F0F;
-     border-radius: 50px;
+     border-radius: 20px;
      width: 40px;
      height: 40px;
      text-align: center;
      margin-top: 5px;
+     margin-left: 3px;
      margin-bottom: 5px;
      text-align: center;
      }
@@ -686,7 +679,7 @@ p {
   background-size: 65% 65%;
   background-position: center;
   background-repeat: no-repeat;
-  border-radius: 50px;
+  border-radius: 20px;
   height: 40px;
   width: 40px;
   z-index: 10;
@@ -699,7 +692,7 @@ p {
   background-size: 65% 65%;
   background-position: center;
   background-repeat: no-repeat;
-  border-radius: 50px;
+  border-radius: 20px;
   height: 40px;
   width: 40px;
   z-index: 10;

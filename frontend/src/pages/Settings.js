@@ -95,7 +95,7 @@ class Settings extends React.Component {
             imageUrl: "./qrCode.png"
         });
     }
-    
+
 
     showLicences() {
         swal("Licences", "Flickity - GNU General Public License v3 \nFace-api.js - MIT Licence", "Icons used: 'https://icons8.com/license'")
