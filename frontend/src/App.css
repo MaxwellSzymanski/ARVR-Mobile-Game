@@ -144,7 +144,6 @@ body {
     padding-top: 50px;
     text-align: center;
     height: 100vh;
-    height: calc(var(--vh, 1vh) * 97);
 }
 
 h1 {
