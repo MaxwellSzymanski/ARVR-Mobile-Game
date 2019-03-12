@@ -34,6 +34,8 @@ class ProfilePage extends React.Component {
     componentDidMount() {
         this.context.emit("stats", {token: cookies.get('token')});
 
+        let xp = (((10 + this.state.experience)/365)*100).toString() + '%';
+        document.getElementById('xpBar').style.width = xp;
         this.context.on("stats", (data) => {
             let items = 0;
             if (data.items !== null)
@@ -51,8 +53,8 @@ class ProfilePage extends React.Component {
                 faction: data.faction,
             });
             // Update XP bar
-            const xp = (((10 + data.experience)/365)*100).toString() + '%';
-            //document.getElementById('xpBar').style.width = xp;
+            xp = (((10 + data.experience)/365)*100).toString() + '%';
+            document.getElementById('xpBar').style.width = xp;
             this.setState({xpWidth: xp})
         });
         this.context.on("photo", (data) => {
