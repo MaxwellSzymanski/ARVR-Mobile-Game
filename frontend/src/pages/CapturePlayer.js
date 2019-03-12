@@ -1,5 +1,5 @@
 import React from 'react';
-import Camera from 'react-html5-camera-photo';
+import Camera, { FACING_MODES, IMAGE_TYPES } from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
 import { Link, Redirect } from 'react-router-dom';
 import { getFeatureVector, getFVDistance } from '../facerecognition/FaceRecognition';
@@ -154,6 +154,7 @@ class CapturePlayer extends React.Component {
               <Camera
                   onTakePhoto = { (dataUri) => { this.onTakePhoto(dataUri); } }
                   isImageMirror = {true}
+                  idealFacingMode = {FACING_MODES.ENVIRONMENT}
               />
           </div>}
           {this.state.calculating && <div className="polaroid">
