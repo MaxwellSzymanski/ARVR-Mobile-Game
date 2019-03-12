@@ -34,7 +34,8 @@ body {
   margin: 0px;
   width: 100vw;
   height: 100vh;
-    background-color: #910f0f;
+  height: calc(var(--vh, 1vh) * 97);
+  background-color: #910f0f;
 }
 
 #root {
@@ -144,6 +145,7 @@ body {
     padding-top: 50px;
     text-align: center;
     height: 100vh;
+    height: calc(var(--vh, 1vh) * 97);
 }
 
 h1 {
@@ -651,7 +653,7 @@ p {
      list-style-type: none;
      margin: 0;
      padding: 0;
-     top: -185px;
+     top: -140px;
      width: 40px;
      background-color: none;
      font-weight:bold;
