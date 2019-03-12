@@ -2,7 +2,6 @@ import React from 'react';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import '../App.css';
 import L from 'leaflet';
-import {Overlay} from 'react-overlays';
 
 
 //Gebruik dit voor je eigen icon

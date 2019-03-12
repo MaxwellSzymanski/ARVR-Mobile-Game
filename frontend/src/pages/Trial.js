@@ -6,7 +6,7 @@ import Cookies from 'universal-cookie';
 import PopPop from 'react-poppop';
 import { Link, Redirect } from 'react-router-dom';
 import Draggable from 'react-draggable';
-import {Overlay} from 'react-overlays';
+
 
 
 const cookies = new Cookies();

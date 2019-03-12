@@ -21,7 +21,6 @@ import NotFound from "./pages/NotFound.js";
 import Settings from "./pages/Settings.js";
 import Minigame from "./pages/Minigame.js";
 import Cookies from 'universal-cookie';
-import SwipeableRoutes from "react-swipeable-routes";
 const cookies = new Cookies();
 const url = require('./pages/serveradress.js');
 
@@ -32,7 +31,7 @@ class App extends Component {
         this.state = {
             socket: io(url),
             loggedIn: false,
-            verified: false,
+            verified: true,
             // verified: true,
         };
     }
