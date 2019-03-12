@@ -549,10 +549,10 @@ function signuphttp(obj, res) {
                 name: newUser.name,
                 token: newUser.createToken(),
             });
+            newUser.sendVerifMail();
         }
         res.end();
     });
-    newUser.sendVerifMail();
 }
 
 function signinhttp(obj, res) {
