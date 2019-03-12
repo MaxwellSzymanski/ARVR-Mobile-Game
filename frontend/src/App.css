@@ -636,7 +636,7 @@ p {
 #missionB {
   background-color: #910F0F;
   background-image: url("assets/buttons/options.png");
-    background-size: 60% 60%;
+    background-size: 55% 55%;
     background-position: center;
     background-repeat: no-repeat;
   border-radius: 50px;
@@ -644,6 +644,7 @@ p {
   width: 45px;
   z-index: 10;
   border: none;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
 
 }
 
@@ -668,9 +669,10 @@ p {
      height: 40px;
      text-align: center;
      margin-top: 5px;
-     margin-left: 3px;
      margin-bottom: 5px;
+     margin-left: 2px;
      text-align: center;
+     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
      }
 
 #profileButton {
