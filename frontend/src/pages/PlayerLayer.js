@@ -247,7 +247,7 @@ class PlayerLayer extends React.Component {
     }
 
     receiveSpecialSignal(data) {
-        this.showAlertBox("Special signal received from " + data.sender);
+        this.showAlertBox(<p>Special signal received from {data.sender}</p>);
     }
 
     // Send special signal to server

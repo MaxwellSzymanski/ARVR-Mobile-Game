@@ -105,12 +105,12 @@ class Trial extends React.Component {
 
     mapChanged(feature, layer){
 
-      if(this.state.idTarget === null) {
-        var rows = [];
-        rows.push(<Link to="/profilepage"><button className="confirmButton wider"> Profile Page </button></Link>);
-        rows.push(<Link to="/captureplayer"><button className="confirmButton wider"> Capture Player </button></Link>);
-        this.showAlertBox(rows);
-      }
+      // if(this.state.idTarget === null) {
+      //   var rows = [];
+      //   rows.push(<Link to="/profilepage"><button className="confirmButton wider"> Profile Page </button></Link>);
+      //   rows.push(<Link to="/captureplayer"><button className="confirmButton wider"> Capture Player </button></Link>);
+      //   this.showAlertBox(rows);
+      // }
 
       this.setState({idTarget:null});
 
