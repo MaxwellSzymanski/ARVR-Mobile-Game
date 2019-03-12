@@ -10,12 +10,16 @@ import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 
 class CameraComp extends React.Component {
+  constructor() {
+        super();
+          this.state = {
+              redirect : false,
+              picture: null,
+              calculating: false
+          };
 
-    state = {
-        redirect : false,
-        picture: null,
-        calculating: false
-    };
+          this.handleUpload = this.handleUpload.bind(this);
+    }
 
     setRedirect = () => {
         this.setState({redirect: true})
@@ -25,14 +29,11 @@ class CameraComp extends React.Component {
         if (this.state.redirect) {return <Redirect to="/imageConfirm" />}
     };
 
-    async onTakePhoto (dataUri, iosPhoto) {
+    async onTakePhoto(dataUri) {
         this.setState({ calculating: true});
         let photo = new Image;
-        if (iosPhoto == null) {
-          let photoSrc = dataUri;
-          photo.src = photoSrc;
-        }
-        else { photo = iosPhoto }
+        let photoSrc = dataUri;
+        photo.src = photoSrc;
         console.log(photo);
         let fv = await getFeatureVector(photo);
 
@@ -58,12 +59,28 @@ class CameraComp extends React.Component {
         return <Redirect to="/view"/>;
     }
 
-    handleUpload(picture) {
-        //TODO: Handle image upload.
+    async handleUpload(picture) {
         if (picture.toString() !== "") {
-            // Picture uploaded.
-            this.onTakePhoto(null, picture)
-            // TODO: Make sure to redirect.
+          this.setState({ calculating: true});
+          let photo = new Image;
+          let photoSrc = URL.createObjectURL(picture[0])
+          photo.src = photoSrc;
+          let fv = await getFeatureVector(photo);
+          if (fv === null) {
+            console.log("No face detected!");
+            swal({
+                title: "No face detected",
+                text: "Make sure you are facing the camera with good lighting conditions.",
+                icon: "warning",
+                button: "I'll try!",
+            });
+            this.setState({ calculating: false});
+          }
+          else {
+            localStorage.setItem("PhotoOfMe", photoSrc);
+            localStorage.setItem("fv", JSON.stringify(fv));
+            this.setRedirect();
+          }
         }
         else {
             // Error, either too big or
@@ -78,8 +95,9 @@ class CameraComp extends React.Component {
 
 
     render () {
-      if (isSafari || isIOS) return (
+      if (!(isSafari || isIOS)) return (
           <div>
+          {this.renderRedirect()}
               <p className="subTitle">Upload an image</p>
               <span style={{margin:'10px'}}> </span>
               <div className="polaroid" style={{width:'300px'}}>
@@ -98,7 +116,7 @@ class CameraComp extends React.Component {
               <button className="smallButton info" style={{marginTop:'20px'}} onClick={this.showInfo}> </button>
           </div>
     );
-
+    else {
     return (
       <div className="background">
         {this.renderRedirect()}
@@ -116,7 +134,8 @@ class CameraComp extends React.Component {
               <p>Detecting face. This can take up to 30 seconds.</p>
           </div>}
       </div>
-    );
+      );
+      }
     }
 }
 
