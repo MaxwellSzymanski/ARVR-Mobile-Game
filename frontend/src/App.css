@@ -614,3 +614,116 @@ p {
 .linkBack {
   color: white;
 }
+
+#block1{
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #000;
+  z-index: 0;
+}
+
+#block2{
+  position: absolute;
+  background: #910F0F;
+  right: 10%; bottom: 10%;
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+  border-radius: 50px;
+
+}
+
+#missionB {
+  background-color: #910F0F;
+  background-image: url("assets/buttons/add.png");
+  background-size: cover;
+  border-radius: 50px;
+  height: 40px;
+  width: 40px;
+  z-index: 10;
+  border: none;
+
+}
+
+#plusSign {
+  position: relative;
+  color: white;
+  font-weight: bold;
+  font-size: 40px;
+  bottom: 34px;
+  right: 5px;
+}
+
+
+ ul {
+     list-style-type: none;
+     margin: 0;
+     padding: 0;
+     top: -185px;
+     width: 40px;
+     background-color: none;
+     font-weight:bold;
+     position: absolute;
+     z-index: 1;
+
+}
+ li  {
+     color: white;
+     text-decoration: none;
+     background-color: #910F0F;
+     border-radius: 50px;
+     width: 40px;
+     height: 40px;
+     text-align: center;
+     margin-top: 5px;
+     margin-bottom: 5px;
+     text-align: center;
+     }
+
+#profileButton {
+  background-color: #910F0F;
+  background-image: url("assets/buttons/avatarWhite.png");
+  background-size: cover;
+  border-radius: 50px;
+  height: 40px;
+  width: 40px;
+  z-index: 10;
+  border: none;
+}
+
+#settingsButton {
+  background-color: #910F0F;
+  background-image: url("assets/buttons/settingsRed.png");
+  background-size: cover;
+  border-radius: 50px;
+  height: 40px;
+  width: 40px;
+  z-index: 10;
+  border: none;
+}
+
+#minigameButton {
+  background-color: #910F0F;
+  background-image: url("assets/buttons/joystick.png");
+  background-size: cover;
+  border-radius: 50px;
+  height: 40px;
+  width: 40px;
+  z-index: 10;
+  border: none;
+}
+
+#capturePButton {
+  background-color: #910F0F;
+  background-image: url("assets/buttons/cameraWhite.png");
+  background-size: cover;
+  border-radius: 50px;
+  height: 40px;
+  width: 40px;
+  z-index: 10;
+  border: none;
+}
+
+* {
+	outline: none;
+}
