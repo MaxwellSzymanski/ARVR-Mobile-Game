@@ -174,7 +174,7 @@ class BattlePage extends React.Component {
     render() {
         return (
             <div>
-                <h1 className="subTitle fadeIn0">Player Match!</h1>
+                <h1 className="subTitle fadeIn0">Player match!</h1>
                 <div className="bProfileCard fadeIn1">
                     <div className="headerTop">
                         <div className="bProfilePhoto"><img src={this.state.opponentPic} alt={"Profile image"}/></div>
