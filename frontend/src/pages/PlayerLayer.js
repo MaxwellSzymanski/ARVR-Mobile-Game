@@ -89,7 +89,7 @@ class PlayerLayer extends React.Component {
         this.interval = setInterval(() => {
             this.sendLocation();
             this.addPlayerLayer();
-        }, 500);
+        }, 750);
 
         this.context.on("playerdata", (data) => {this.receivePlayer(data)});
         this.context.on("specialsignal", (data) => {this.receiveSpecialSignal(data)});
@@ -203,7 +203,7 @@ class PlayerLayer extends React.Component {
                             </Marker>
                         );
                     } else {
-                        playerLayer.showAlertBox(key + " went offline.");
+                        playerLayer.showAlertBox(<p className="colorWhite">{key} went offline.</p>);
                         delete playerLayer.state.dataPlayers[key];
                     }
                 }
@@ -247,7 +247,7 @@ class PlayerLayer extends React.Component {
     }
 
     receiveSpecialSignal(data) {
-        this.showAlertBox(<p>Special signal received from {data.sender}</p>);
+        this.showAlertBox(<p className="colorWhite">Special signal received from {data.sender}</p>);
     }
 
     // Send special signal to server
@@ -259,13 +259,13 @@ class PlayerLayer extends React.Component {
 
     // Send acknowledgement to server
     acknowledgeHandshake(data){
-        this.showAlertBox(data.sender +" sent you a handshake signal.");
+        this.showAlertBox(<p className="colorWhite">{data.sender} sent you a handshake signal.</p>);
 
         this.context.emit("signal", {token: cookies.get('token'), receiver: data.sender, type: "ACKhandshake"})
     }
 
     handshakeAcknowledged(data) {
-        this.showAlertBox(data.sender +" is online and acknowledged your handshake! Go find him and challenge him to battle!");
+        this.showAlertBox(<p className="colorWhite">{data.sender} is online and acknowledged your handshake! Go find him and challenge him to battle!</p>);
     }
 
     // Send fight signal to server (fight: id vs idEnemy)

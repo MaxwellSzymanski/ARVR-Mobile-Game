@@ -65,7 +65,7 @@ class Trial extends React.Component {
     componentDidMount() {
         this.context.on("message", (data) => {
             let rows = [];
-            rows.push(<p>{data.message}</p>);
+            rows.push(<p className="colorWhite">{data.message}</p>);
             this.showAlertBox(rows);
         });
     }
