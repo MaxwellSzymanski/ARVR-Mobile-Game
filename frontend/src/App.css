@@ -652,7 +652,7 @@ p {
      list-style-type: none;
      margin: 0;
      padding: 0;
-     top: -140px;
+     top: -185px;
      width: 40px;
      background-color: none;
      font-weight:bold;
@@ -727,6 +727,19 @@ p {
   border: none;
 }
 
+#questionButton {
+  background-color: #910F0F;
+  background-image: url("assets/buttons/question.png");
+  background-size: 70% 70%;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 50px;
+  height: 40px;
+  width: 40px;
+  z-index: 10;
+  border: none;
+}
+
 #followPButton {
   background-color: #910F0F;
   background-image: url("assets/buttons/follow.png");
@@ -751,4 +764,81 @@ p {
 
 * {
 	outline: none;
+}
+
+#tutorial {
+  background-color: #910F0F;
+}
+
+#stepDiv {
+
+}
+
+#stepsTitle {
+  color: #FFFF;
+  font-size: 200%;
+  font-family: Futura;
+  font-weight: bold;
+  text-align: center;
+  margin: 0;
+  margin-bottom: 30px;
+}
+
+#stepsText {
+  color: #FFFF;
+  font-size: 90%; /* something big enough to force wrap without extra markup */
+    white-space: normal;
+  margin: 0;
+
+}
+
+#tutorialButton {
+  background: white;
+  color: #9190F0;
+  background-image: url("assets/buttons/next.png");
+  background-size: 65% 65%;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  border-radius: 50px;
+
+  height: 40px;
+  width: 40px;
+  z-index: 10;
+  border: none;
+}
+
+#tutorialVid {
+  height: 300px;
+  width: 300px;
+}
+#gifDiv {
+  height: 50vh;
+}
+#gif1 {
+  background-color: #910F0F;
+  background-image: url("assets/videos/step1.gif");
+  background-size: 50vh 50vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 20px;
+  height: 40vh;
+  width: 40vh;
+  text-align: center;
+  margin:0;
+  margin-left: 80px;
+}
+
+#gif2 {
+  background-color: #910F0F;
+  background-image: url("assets/videos/step2.gif");
+  background-size: 50vh 50vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 20px;
+  height: 40vh;
+  width: 40vh;
+  text-align: center;
+  margin:0;
+  margin-left: 80px;
 }

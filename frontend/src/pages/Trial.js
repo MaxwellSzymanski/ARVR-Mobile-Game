@@ -1,14 +1,30 @@
 import React from 'react';
 import { Map, TileLayer} from 'react-leaflet';
 import '../App.css';
-import PlayerLayer from './PlayerLayer'
+import PlayerLayer from './PlayerLayer';
 import Cookies from 'universal-cookie';
 import PopPop from 'react-poppop';
 import { Link, Redirect } from 'react-router-dom';
 import SocketContext from "../socketContext";
 import Draggable from 'react-draggable';
+import Modal from 'react-modal';
+import Tutorial from './Tutorial';
 
 
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)',
+    height                : '80%',
+    width                 : '55%',
+    backgroundColor       : '#910F0F',
+  }
+
+};
 
 const cookies = new Cookies();
 
@@ -20,6 +36,8 @@ class Trial extends React.Component {
         this.showAlertBox = this.showAlertBox.bind(this);
         this.setTarget = this.setTarget.bind(this);
         this.changeMenu = this.changeMenu.bind(this);
+        this.handleShow = this.handleShow.bind(this);
+        this.handleClose = this.handleClose.bind(this);
     }
 
     //dit is gwn een standaard setting, van af blijven
@@ -34,6 +52,7 @@ class Trial extends React.Component {
         accuracy: 0,
         centerMap: [50.8632811,4.6762872],
         showAlertBox: true,
+        show:false,
         content: ["Please allow access to your location.",],
         alertBoxStyle: {
             transition: 'all 0.2s',
@@ -57,6 +76,7 @@ class Trial extends React.Component {
                 zoom: 18,
                 showAlertBox: false,
                 content: [],
+
             });
             this.setTarget(this.state.id, [this.state.location.lat, this.state.location.lng]);
         });
@@ -120,10 +140,26 @@ class Trial extends React.Component {
         this.setState({displayMenu: !this.state.displayMenu})
     }
 
+    handleClose() {
+    this.setState({ show: false });
+  }
+
+  handleShow() {
+    this.setState({ show: true });
+  }
+
+
+
     render() {
         return (
             <div>
             <div>
+            <Modal
+              isOpen={this.state.show}
+              onRequestClose={this.handleClose}
+              style={customStyles}>
+                <Tutorial/>
+            </Modal>
             <Map style={{zIndex:0}} onClick={()=> this.mapChanged()} className="mapss" center={this.state.centerMap} zoom={this.state.zoom}>
                 <TileLayer
                     //attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -147,6 +183,7 @@ class Trial extends React.Component {
             <ul>
            <li><Link to="/capturePlayer"><div id="buttonsDiv"><button id="capturePButton"></button></div></Link></li>
            <li><Link to="/profilePage"><div id="buttonsDiv"><button id="profileButton"></button></div></Link></li>
+           <li><div id="buttonsDiv"><button onClick={()=>this.handleShow()} id="questionButton"></button></div></li>
            <li><Link to="/settings"><div id="buttonsDiv"><button id="settingsButton"></button></div></Link></li>
 
             </ul>
