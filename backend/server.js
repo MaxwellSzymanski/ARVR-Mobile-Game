@@ -617,15 +617,18 @@ function fight(data, socket){
                             // TODO: ik heb hier tijdelijk iets ingevuld, zodat er op de field test wa waarden wijzigen.
                             //          Wijzig zo veel ge wilt
 
-                            defender.health = Math.floor(defender.health - calculateAttack(attacker, defender));
+                            let attack = Math.ceil(calculateAttack(attacker, defender));
+                            let attackXP = Math.ceil(attack * (1.5 + 0.5*Math.random()));
+                            let msgA = "You inflicted " + attack + " damage to " + defender.name + " and ";
+                            defender.health = defender.health - attack;
                             if (defender.health <= 0) {
                                 defender.health = defender.health + 100;
                                 defender.deaths = defender.deaths + 1;
                                 attacker.kills = attacker.kills + 1;
-                                attacker.experience = attacker.experience + 50;
+                                attackXP += 50;
+                                msgA += "killed him/her.\nYou "
                             }
-
-                            attacker.experience = attacker.experience + 50;
+                            attacker.experience = attacker.experience + attackXP;
                             defender.experience = defender.experience + 10;
                             if (attacker.experience >= 350) {
                                 attacker.level = attacker.level + 1;
@@ -635,6 +638,7 @@ function fight(data, socket){
                                 defender.level = defender.level + 1;
                                 defender.experience = defender.experience % 350;
                             }
+                            msgA += "gained " + attackXP + " experience points.";
 
                             attacker.save();
                             defender.save();
@@ -644,13 +648,14 @@ function fight(data, socket){
 
                             // Send user data to attacker and to defender
                             socket.emit("stats", attacker.getUserData());
-                            socket.emit("enemystats", defender.getEnemyData());
+                            // socket.emit("enemystats", defender.getEnemyData());
+                            socket.emit("message", {message: msgA});
+
                             if (game[defender.name] !== undefined && game[defender.name] !== null) {
                                 game[defender.name].socket.emit("stats", defender.getUserData());
-                                game[defender.name].socket.emit("enemystats", defender.getEnemyData());
-                                // TODO
-                                const msg = "You have been attacked by " + attacker.name;
-                                game[defender.name].socket.emit("message", {message: msg});
+                                // game[defender.name].socket.emit("enemystats", defender.getEnemyData());
+                                const msgD = "You have been attacked by " + attacker.name +"!";
+                                game[defender.name].socket.emit("message", {message: msgD});
                             }
                         }
                     )

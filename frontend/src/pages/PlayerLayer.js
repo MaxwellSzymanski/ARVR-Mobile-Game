@@ -4,8 +4,6 @@ import '../App.css';
 import L from 'leaflet';
 import Cookies from 'universal-cookie';
 import SocketContext from "../socketContext";
-import { Link, Redirect } from 'react-router-dom';
-import Draggable from 'react-draggable';
 
 const cookies = new Cookies();
 
@@ -75,6 +73,8 @@ class PlayerLayer extends React.Component {
         this.state.id = props.id;
         this.state.locationEnabled = props.locationEnabled;
         this.popup = React.createRef();
+
+        this.updateLocation = this.updateLocation.bind(this);
     }
 
     state = {
@@ -93,33 +93,39 @@ class PlayerLayer extends React.Component {
             this.addPlayerLayer();
         }, 750);
 
+        this.updateLocation()
+
         this.context.on("playerdata", (data) => {this.receivePlayer(data)});
         this.context.on("specialsignal", (data) => {this.receiveSpecialSignal(data)});
         this.context.on("handshake", (data) => {this.acknowledgeHandshake(data)});
         this.context.on("ACKhandshake", (data) => {this.handshakeAcknowledged(data)});
-        // TODO
-        this.context.on("message", (data) => {this.handshakeAcknowledged(data)});
+
+        // this.context.on("message", (data) => {this.handshakeAcknowledged(data)});
     }
 
     componentWillUnmount() {
         clearInterval(this.interval);
     }
 
-    sendLocation() {
+    updateLocation() {
         navigator.geolocation.getCurrentPosition((position) => {
             this.setState({
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
                 accuracy: Math.round(position.coords.accuracy)
             });
-
-            this.context.emit("location", {
-                token: cookies.get('token'),
-                longitude: this.state.longitude,
-                latitude: this.state.latitude,
-                accuracy: this.state.accuracy,
-            })
         });
+
+        setTimeout(this.updateLocation, 250);
+    }
+
+    sendLocation() {
+        this.context.emit("location", {
+            token: cookies.get('token'),
+            longitude: this.state.longitude,
+            latitude: this.state.latitude,
+            accuracy: this.state.accuracy,
+        })
     }
 
     receivePlayer(data) {
