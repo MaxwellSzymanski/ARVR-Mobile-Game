@@ -34,7 +34,7 @@ class Trial extends React.Component {
         accuracy: 0,
         centerMap: [50.8632811,4.6762872],
         showAlertBox: true,
-        content: ["Please allow access to your location.",],
+        content: [<p className="colorWhite">Please allow access to your location.</p>,],
         alertBoxStyle: {
             transition: 'all 0.2s',
             backgroundColor: '#910F0F',
