@@ -788,7 +788,8 @@ p {
   color: #FFFF;
   font-size: 90%; /* something big enough to force wrap without extra markup */
     white-space: normal;
-  margin: 0;
+  margin-top: -60%;
+  margin-bottom: 5%;
 
 }
 
@@ -818,27 +819,27 @@ p {
 #gif1 {
   background-color: #910F0F;
   background-image: url("assets/videos/step1.gif");
-  background-size: 50vh 50vh;
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 20px;
-  height: 40vh;
-  width: 40vh;
+  height: 25vh;
+  width: 25vh;
   text-align: center;
   margin:0;
-  
+
 }
 
 #gif2 {
   background-color: #910F0F;
   background-image: url("assets/videos/step2.gif");
-  background-size: 50vh 50vh;
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 20px;
-  height: 40vh;
-  width: 40vh;
+  height: 25vh;
+  width: 25vh;
   text-align: center;
   margin:0;
-  margin-left: 47px;
+
 }

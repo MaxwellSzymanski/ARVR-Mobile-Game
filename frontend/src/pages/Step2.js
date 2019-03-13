@@ -11,13 +11,12 @@ class Step2 extends Component {
     return(
       <div>
 
-      <div id="stepDiv">
+      <div align="center" id="stepDiv">
       <p id="stepsTitle">Battle</p>
-      <div  id="gifDiv">
-      <p  id="gif2">
+      <div width="100vh" id="gifDiv">
+      <p align="center" id="gif2">
       </p>
-      </div>
-      <p align="center" id="stepsText">Take a picture from the other wolf and attack him</p>
+      </div><p id="stepsText">Take a picture from another player.</p>
       </div>
       </div>
     );
