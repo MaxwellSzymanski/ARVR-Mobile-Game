@@ -11,10 +11,10 @@ class Step1 extends Component {
     return(
       <div>
 
-      <div id="stepDiv">
+      <div align="center" id="stepDiv">
       <p id="stepsTitle">Find another wolf</p>
-      <div  id="gifDiv">
-      <p  id="gif1">
+      <div width="100vh" id="gifDiv">
+      <p align="center" id="gif1">
       </p>
       </div>
       <p id="stepsText">Look for other wolves on the map and send them a handshake to show them you want to battle</p>
