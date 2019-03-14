@@ -111,8 +111,8 @@ class PlayerLayer extends React.Component {
     updateLocation() {
         navigator.geolocation.getCurrentPosition((position) => {
             this.setState({
-                latitude: 0.3 * this.state.latitude + 0.7 * position.coords.latitude,
-                longitude: 0.3 * this.state.longitude + 0.7 * position.coords.longitude,
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
                 accuracy: Math.round(position.coords.accuracy)
             });
         });
@@ -180,15 +180,6 @@ class PlayerLayer extends React.Component {
         const id = this.state.id;
         const playerData = this.state.dataPlayers;
 
-        rows.push(
-            <Marker ref={playerLayer.popup} title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
-                <Popup>
-                    <p className="textAccuracy">Accuracy: {playerLayer.state.accuracy} m</p>
-                    <button className="findPlayers" onClick={playerLayer.showFindEnemyAlertBox.bind(playerLayer)}> Find other players </button>
-                </Popup>
-            </Marker>
-        );
-
         if (playerData !== null) {
             Object.keys(playerData).forEach(function (key) {
                 const player = playerData[key];
@@ -235,6 +226,15 @@ class PlayerLayer extends React.Component {
                 }
             });
         }
+
+        rows.push(
+            <Marker ref={playerLayer.popup} title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
+                <Popup>
+                    <p className="textAccuracy">Accuracy: {playerLayer.state.accuracy} m</p>
+                    <button className="findPlayers" onClick={playerLayer.showFindEnemyAlertBox.bind(playerLayer)}> Find other players </button>
+                </Popup>
+            </Marker>
+        );
         this.setState({playerMarkers: rows});
     }
 
