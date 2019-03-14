@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import "./BattlePage.css"
 import swal from '@sweetalert/with-react';
 import Cookies from 'universal-cookie';
@@ -14,23 +14,24 @@ class BattlePage extends React.Component {
 
         this.state = {
             oppName: 'Target Player',
-            oppHealth: 40,
+            oppHealth: 0,
             oppDefence: 200,
             oppLevel: 1,
             opponentPic: require("../assets/icons/userInverted.png"),
             selfKills: 3,
             selfDeaths: 4,
             selfHealth: 30,
-            loggedOut: true
             //TODO
+            redirect:false
         };
 
         this.attack = this.attack.bind(this);
-
     }
 
     componentDidMount() {
         let id = localStorage.getItem("capturedPlayerId");
+        let oppHealth = (((5 + this.state.oppHealth)/105)*100).toString() + '%';
+        document.getElementById('oppHealth').style.width = oppHealth;
 
         this.context.emit("stats", {token: cookies.get("token"), enemy: id});
 
@@ -43,12 +44,11 @@ class BattlePage extends React.Component {
                 oppHealth: data.health,
                 oppDefence: data.defence,
                 opplevel: data.level,
-                //selfKills:
-                //selfDeaths:
-                //selfHealth:
                 visibility: 50,
 
             });
+            oppHealth = (((10 + data.health)/115)*100).toString() + '%';
+            document.getElementById('oppHealth').style.width = oppHealth;
         });
         this.context.on("enemyphoto", (image) => {
            this.setState({
@@ -73,8 +73,10 @@ class BattlePage extends React.Component {
         this.interval = setInterval(() => {
             this.sendLocation();
         }, 750);
-        this.context.on("message", (data) => {
-            swal({text: data.message});
+        this.context.on("attack", (data) => {
+            swal({title: 'You attacked successfully!', icon: 'success', text: data.message, confirm: true}).then( (value) => {
+                this.setState({redirect: true})
+            });
         });
     }
 
@@ -169,11 +171,14 @@ class BattlePage extends React.Component {
         return prob;
     }
 
-
+    renderRedirect = () => {
+        if (this.state.redirect) {return <Redirect to="/map" />}
+    };
 
     render() {
         return (
             <div>
+                {this.renderRedirect()}
                 <h1 className="subTitle fadeIn0">Player match!</h1>
                 <div className="bProfileCard fadeIn1">
                     <div className="headerTop">
@@ -185,7 +190,7 @@ class BattlePage extends React.Component {
 
                     <div className="middleContent">
                         <div className="healthBar">
-                            <div className="healthCurrent"> </div>
+                            <div className="healthCurrent" id="oppHealth"> </div>
                             <h3 className="bHealth">{this.state.oppHealth}/100 HP</h3>
                         </div>
                     </div>
@@ -228,9 +233,7 @@ class BattlePage extends React.Component {
                 </div>
 
                 <div>
-                    <Link to="/map">
                     <button className="buttonFlee fadeIn3" onClick={this.flee}>Flee</button>
-                    </Link>
                 </div>
 
 

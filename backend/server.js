@@ -643,17 +643,13 @@ function fight(data, socket){
                             attacker.save();
                             defender.save();
 
-                            // TODO: indien er andere stats doorgestuurd moeten worden, pas dan de methoden
-                            //              getUserData en getEnemyData aan in ./db/userModel.js
-
                             // Send user data to attacker and to defender
                             socket.emit("stats", attacker.getUserData());
-                            // socket.emit("enemystats", defender.getEnemyData());
-                            socket.emit("message", {message: msgA});
+                            socket.emit("enemystats", defender.getEnemyData());
+                            socket.emit("attack", {message: msgA});
 
                             if (game[defender.name] !== undefined && game[defender.name] !== null) {
                                 game[defender.name].socket.emit("stats", defender.getUserData());
-                                // game[defender.name].socket.emit("enemystats", defender.getEnemyData());
                                 const msgD = "You have been attacked by " + attacker.name +"!";
                                 game[defender.name].socket.emit("message", {message: msgD});
                             }
