@@ -37,6 +37,7 @@ class Minigame extends React.Component {
     constructor(props){
         super(props);
         this.setCenter = this.setCenter.bind(this);
+        this.distanceBetween = this.distanceBetween.bind(this);
         this.showAlertBox = this.showAlertBox.bind(this);
         this.sendPhoto = this.sendPhoto.bind(this);
         this.votePhoto = this.votePhoto.bind(this);
@@ -107,6 +108,7 @@ class Minigame extends React.Component {
             this.setState({
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
+                centerMap: [position.coords.latitude,position.coords.longitude],
                 accuracy: Math.round(position.coords.accuracy),
             });
 
@@ -192,10 +194,37 @@ class Minigame extends React.Component {
         }
     }
 
+    distanceBetween(lat1, lon1, lat2, lon2) {
+      var lat1 = this.state.latitude;
+      var lon1 = this.state.longitude;
+      var taget = this.state.targetLocation;
+      var lat2 = target[0];
+      var lon2 = target[1];
+
+        if (lat1 != null &&  lon1 != null && lat2 != null && lon2 != null ){
+          var earthRadiusKm = 6371;
+
+          var dLat = this.degreesToRadians(lat2-lat1);
+          var dLon = this.degreesToRadians(lon2-lon1);
+
+          lat1 = this.degreesToRadians(lat1);
+          lat2 = this.degreesToRadians(lat2);
+
+          var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+          var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+          return earthRadiusKm * c * 1000; // * 1000 (answer in meters)
+        }
+    }
+
     mapChanged(feature, layer){
         if(this.state.showAlertBox === false) {
             let rows = [];
-            if (!this.state.firstPicTaken || this.state.firstPicAccepted) {
+            var close = false;
+            if ( distanceBetween() < 100 ){
+              close = true;
+            }
+            if ((!this.state.firstPicTaken || this.state.firstPicAccepted) && (close)) {
                 rows.push(<Camera
                     onTakePhoto={(dataUri) => {
                         this.sendPhoto(dataUri);
