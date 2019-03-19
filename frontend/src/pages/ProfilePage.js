@@ -18,14 +18,13 @@ class ProfilePage extends React.Component {
             defence: 200,
             level: 1,
             visibility: 50,
-            experience: 0,
+            experience: 40,
             faction: "wolf",
             kills: 8,
             deaths: 3,
             items: 13,
             encodedPic: require("../assets/icons/user.png"),
             loggedOut: false,
-            xpWidth: ''
         };
 
         this.logOut = this.logOut.bind(this);
@@ -34,8 +33,6 @@ class ProfilePage extends React.Component {
     componentDidMount() {
         this.context.emit("stats", {token: cookies.get('token')});
 
-        let xp = (((10 + this.state.experience)/365)*100).toString() + '%';
-        document.getElementById('xpBar').style.width = xp;
         this.context.on("stats", (data) => {
             let items = 0;
             if (data.items !== null)
@@ -52,10 +49,6 @@ class ProfilePage extends React.Component {
                 items: items,
                 faction: data.faction,
             });
-            // Update XP bar
-            xp = (((10 + data.experience)/365)*100).toString() + '%';
-            document.getElementById('xpBar').style.width = xp;
-            this.setState({xpWidth: xp})
         });
         this.context.on("photo", (data) => {
             this.setState({
@@ -113,13 +106,13 @@ class ProfilePage extends React.Component {
     }
 
     generateXPBar() {
-        let xp = (((10 + data.experience)/365)*100).toString() + '%';
+        let xp = (((10 + this.state.experience)/365)*100).toString() + '%';
         var style = {
             width: xp
         };
         return(
         <div className="xpBar">
-            <div className="xpGained" style=""> </div>
+            <div className="xpGained" style={style}> </div>
         </div>)
     }
 
