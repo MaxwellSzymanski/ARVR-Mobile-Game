@@ -626,7 +626,7 @@ function fight(data, socket){
                                 defender.deaths = defender.deaths + 1;
                                 attacker.kills = attacker.kills + 1;
                                 attackXP += 50;
-                                msgA += "killed him/her.\nYou "
+                                msgA += "killed them.\nYou "
                             }
                             attacker.experience = attacker.experience + attackXP;
                             defender.experience = defender.experience + 10;

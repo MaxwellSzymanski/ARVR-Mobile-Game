@@ -118,14 +118,20 @@ class BattlePage extends React.Component {
     generateValue(type) {
         switch (type) {
             case "stamina":
-                return (this.state.health / 100);
+                return this.capValue((this.state.health / 100) + Math.min(this.state.level / 30, 0.3));
             case "motivation":
-                return (this.state.selfKills / (this.state.selfKills + this.state.selfDeaths));
+                return this.capValue((this.state.selfKills / (this.state.selfKills + this.state.selfDeaths) +  ((this.state.experience / 350) * 0.5)));
             case "fatigue":
-                return ((this.state.deaths / (this.state.selfKills + this.state.selfDeaths) + (1 - (this.state.health / 100)))/2);
+                return this.capValue(1-(this.state.health/100) - Math.min(this.state.level / 30, 0.3));
             default:
                 return -1;
         }
+    }
+
+    capValue(value) {
+        if (value < 0) {return 0}
+        else if (value > 0) {return 1}
+        else {return value}
     }
 
     generateText(type) {
