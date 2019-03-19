@@ -22,7 +22,8 @@ const customStyles = {
     width                 : '40vh',
     height                : '70vh',
     backgroundColor       : '#910F0F',
-    borderRadius          : '30px'
+    borderRadius          : '30px',
+    boxShadow: '0 0 12px rgba(0,0,0,.14),0 12px 24px rgba(0,0,0,.28)',
   }
 
 };
