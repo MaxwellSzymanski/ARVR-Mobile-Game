@@ -58,7 +58,7 @@ class Minigame extends React.Component {
         centerMap: [50.8632811, 4.6762872],
         showAlertBox: false,
         content: "Please allow access to your location.",
-        targetLocation: [30.8632811, 4.6762872],
+        targetLocation: [50.8632811, 4.6762872],
         encodedPic: require("../assets/icons/user.png"),
         timer: 0,
         firstPicTaken: false,
