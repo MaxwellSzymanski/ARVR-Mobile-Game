@@ -198,8 +198,8 @@ class Minigame extends React.Component {
       var lat1 = this.state.latitude;
       var lon1 = this.state.longitude;
       var taget = this.state.targetLocation;
-      var lat2 = target[0];
-      var lon2 = target[1];
+      var lat2 = this.state.target[0];
+      var lon2 = this.state.target[1];
 
         if (lat1 != null &&  lon1 != null && lat2 != null && lon2 != null ){
           var earthRadiusKm = 6371;
