@@ -194,7 +194,7 @@ class Minigame extends React.Component {
         }
     }
 
-    distanceBetween(lat1, lon1, lat2, lon2) {
+    distanceBetween() {
       var lat1 = this.state.latitude;
       var lon1 = this.state.longitude;
       var taget = this.state.targetLocation;
@@ -221,7 +221,7 @@ class Minigame extends React.Component {
         if(this.state.showAlertBox === false) {
             let rows = [];
             var close = false;
-            if ( distanceBetween() < 100 ){
+            if ( this.distanceBetween() < 100 ){
               close = true;
             }
             if ((!this.state.firstPicTaken || this.state.firstPicAccepted) && (close)) {
