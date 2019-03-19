@@ -149,7 +149,13 @@ class Trial extends React.Component {
   }
 
   setZoom(){
-    this.setState({zoom: this.map.leafletElement.getZoom()});
+    var zoom = this.map.leafletElement.getZoom();
+    if ( zoom > 18 ){
+      this.setState({zoom: 18});
+
+    } else {
+      this.setState({zoom: this.map.leafletElement.getZoom()});
+    }
   }
 
 
