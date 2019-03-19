@@ -221,8 +221,6 @@ class Minigame extends React.Component {
     }
 
     mapChanged(feature, layer){
-        var zoomUpdate = this.getMapZoom();
-        this.setState({zoom: zoomUpdate});
         if(this.state.showAlertBox === false) {
             let rows = [];
             var close = false;
@@ -268,14 +266,14 @@ class Minigame extends React.Component {
         this.setState({ showAlertBox: false});
     }
 
-    getMapZoom() {
-        console.log(this.map.leafletElement.getZoom());
+    setZoom(){
+      this.setState({zoom: this.map.leafletElement.getZoom()});
     }
 
     render() {
 
         return(
-            <Map ref={(ref) => { this.map = ref; }} onClick={()=> this.mapChanged()} className="mapss" center={this.state.centerMap} zoom={this.state.zoom}>
+            <Map ref={(ref) => { this.map = ref; }} onViewportChange={()=> this.setZoom()} onClick={()=> this.mapChanged()} className="mapss" center={this.state.centerMap} zoom={this.state.zoom}>
                 <TileLayer
                     //attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     //url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
