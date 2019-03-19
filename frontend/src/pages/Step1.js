@@ -17,7 +17,7 @@ class Step1 extends Component {
       <p align="center" id="gif1">
       </p>
       </div>
-      <p id="stepsText">Look for other wolves on the map and send them a handshake to show them you want to battle</p>
+      <p id="stepsText">Look for other wolves on the map and send them a handshake to show them you want to battle.</p>
       </div>
       </div>
     );

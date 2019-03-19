@@ -441,6 +441,11 @@ p {
     background-image: url(assets/buttons/back.png);
 }
 
+.next {
+    background-image: url(assets/buttons/back.png);
+    transform: rotateY(180deg);
+}
+
 .settings {
     background-image: url(assets/buttons/settings.png);
 }
@@ -451,6 +456,10 @@ p {
 
 .info {
     background-image: url(assets/buttons/info.png);
+}
+
+.left {
+    float: left;
 }
 
 /* UI Buttons */
@@ -768,6 +777,7 @@ p {
 
 #tutorial {
   background-color: #910F0F;
+    border-radius: 30px;
 }
 
 #stepDiv {
@@ -793,7 +803,7 @@ p {
 
 }
 
-#tutorialButton {
+#tutorialButtonNext {
   background: white;
   color: #9190F0;
   background-image: url("assets/buttons/next.png");
@@ -807,6 +817,10 @@ p {
   width: 40px;
   z-index: 10;
   border: none;
+}
+
+#tutorialButtonPrevious {
+    z-index: 10;
 }
 
 #tutorialVid {

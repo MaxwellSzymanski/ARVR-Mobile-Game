@@ -3,9 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="62846d24-a773-43e7-bd6f-fcd39c23315b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/BattlePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/BattlePage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/ProfilePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/ProfilePage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/Step1.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/Step1.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/Step2.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/Step2.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/Trial.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/Trial.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/Tutorial.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/Tutorial.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -30,7 +32,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/db/userModel.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1261">
+            <state relative-caret-position="-87">
               <caret line="161" column="16" lean-forward="true" selection-start-line="161" selection-start-column="16" selection-end-line="161" selection-end-column="16" />
             </state>
           </provider>
@@ -108,12 +110,12 @@
       <updated>1551801204466</updated>
       <workItem from="1551801206093" duration="1865000" />
       <workItem from="1551980566258" duration="765000" />
-      <workItem from="1553010286347" duration="6867000" />
+      <workItem from="1553010286347" duration="7214000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9497000" />
+    <option name="totallyTimeSpent" value="9844000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -151,7 +153,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/db/userModel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1261">
+        <state relative-caret-position="-87">
           <caret line="161" column="16" lean-forward="true" selection-start-line="161" selection-start-column="16" selection-end-line="161" selection-end-column="16" />
         </state>
       </provider>

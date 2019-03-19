@@ -22,6 +22,7 @@ const customStyles = {
     width                 : '40vh',
     height                : '70vh',
     backgroundColor       : '#910F0F',
+    borderRadius          : '30px'
   }
 
 };
@@ -158,8 +159,6 @@ class Trial extends React.Component {
       this.setState({zoom: this.map.leafletElement.getZoom()});
     }
   }
-
-
 
     render() {
         return (
