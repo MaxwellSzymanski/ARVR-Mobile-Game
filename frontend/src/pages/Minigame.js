@@ -194,12 +194,15 @@ class Minigame extends React.Component {
         }
     }
 
+    degreesToRadians(degrees){
+        return degrees * Math.PI / 180;
+    }
+
     distanceBetween() {
       var lat1 = this.state.latitude;
       var lon1 = this.state.longitude;
-      var taget = this.state.targetLocation;
-      var lat2 = this.state.target[0];
-      var lon2 = this.state.target[1];
+      var lat2 = this.state.targetLocation[0];
+      var lon2 = this.state.targetLocation[1];
 
         if (lat1 != null &&  lon1 != null && lat2 != null && lon2 != null ){
           var earthRadiusKm = 6371;
@@ -218,6 +221,8 @@ class Minigame extends React.Component {
     }
 
     mapChanged(feature, layer){
+        var zoomUpdate = this.getMapZoom();
+        this.setState({zoom: zoomUpdate});
         if(this.state.showAlertBox === false) {
             let rows = [];
             var close = false;
@@ -263,10 +268,14 @@ class Minigame extends React.Component {
         this.setState({ showAlertBox: false});
     }
 
+    getMapZoom() {
+        console.log(this.map.leafletElement.getZoom());
+    }
+
     render() {
 
         return(
-            <Map onClick={()=> this.mapChanged()} className="mapss" center={this.state.centerMap} zoom={this.state.zoom}>
+            <Map ref={(ref) => { this.map = ref; }} onClick={()=> this.mapChanged()} className="mapss" center={this.state.centerMap} zoom={this.state.zoom}>
                 <TileLayer
                     //attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     //url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
