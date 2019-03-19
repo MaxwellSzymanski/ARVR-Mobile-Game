@@ -148,6 +148,10 @@ class Trial extends React.Component {
     this.setState({ show: true });
   }
 
+  setZoom(){
+    this.setState({zoom: this.map.leafletElement.getZoom()});
+  }
+
 
 
     render() {
@@ -160,7 +164,7 @@ class Trial extends React.Component {
               style={customStyles}>
                 <Tutorial/>
             </Modal>
-            <Map style={{zIndex:0}} onClick={()=> this.mapChanged()} className="mapss" center={this.state.centerMap} zoom={this.state.zoom}>
+            <Map ref={(ref) => { this.map = ref; }} onViewportChange={()=> this.setZoom()}  style={{zIndex:0}} onClick={()=> this.mapChanged()} className="mapss" center={this.state.centerMap} zoom={this.state.zoom}>
                 <TileLayer
                     //attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     //url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
