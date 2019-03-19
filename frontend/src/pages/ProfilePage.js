@@ -112,6 +112,17 @@ class ProfilePage extends React.Component {
         return html
     }
 
+    generateXPBar() {
+        let xp = (((10 + data.experience)/365)*100).toString() + '%';
+        var style = {
+            width: xp
+        };
+        return(
+        <div className="xpBar">
+            <div className="xpGained" style=""> </div>
+        </div>)
+    }
+
     logOut() {
         this.context.emit("signout", {token: cookies.get("token")});
     }
@@ -134,9 +145,7 @@ class ProfilePage extends React.Component {
                     <div className="profilePhoto"><img src={this.state.encodedPic} alt={"Profile image"}/></div>
                     <h1 className="name">{this.state.name}</h1>
                     <h3 className="smallText">Level {this.state.level} {this.state.faction}</h3>
-                    <div className="xpBar">
-                        <div className="xpGained" id="xpBar"> </div>
-                    </div>
+                    {this.generateXPBar()}
                     <h3 className="smallText">{this.state.experience}<b>/350 xp</b></h3>
                 </div>
 
