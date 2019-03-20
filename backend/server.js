@@ -623,6 +623,7 @@ let currentMission = 0;
 let missionPlayers = [];
 const timeInterval = 16 * 1000;       // in milliseconds
 let currentPhoto = null;
+let currentPhotoID = 0;
 let firstPlayer = null;
 let voting = false;
 let firstPhotoAccepted = false;     // used to determine whether or not a received photo should be:
@@ -654,12 +655,11 @@ function leaveMission(data, socket) {
 function missionPhoto(data, socket) {
     if (data.token) {
         if (missionPlayers[data.token] !== undefined && missionPlayers[data.token] !== null) {
-            // if (distanceBetween(data.location, missionList[currentMission]) > range) {
-            //     const msg = "You haven't reached the mission location yet. You need to be within " + range + "m of the target in order to send a photo.";
-            //     socket.emit("message", {message: msg});
-            //     return;
-            // } else if (firstPhotoAccepted) {
-            if (firstPhotoAccepted) {
+            if (distanceBetween(data.location, missionList[currentMission]) > range) {
+                const msg = "You haven't reached the mission location yet. You need to be within " + range + "m of the target in order to send a photo.";
+                socket.emit("message", {message: msg});
+                return;
+            } else if (firstPhotoAccepted) {
                 secondPhoto(data, socket);
                 return;
             } else if (voting) {
@@ -670,13 +670,15 @@ function missionPhoto(data, socket) {
             firstPlayer = data.token;
             currentPhoto = data.image;
             const exp = new Date(new Date().getTime() + timeInterval);
+            const ID = currentPhotoID;
             setTimeout(() => {
-                photoAccepted(data.image);
+                photoAccepted(ID);
             }, timeInterval);
             Object.keys(missionPlayers).forEach(function (key) {
                 if (key !== data.token) {
                     missionPlayers[key].socket.emit("missionPhoto", {
-                        photo: data.photo,
+                        firstPhoto: currentPhoto,
+                        secondPhoto: data.photo,
                         expiry: exp
                     });
                 }
@@ -690,13 +692,12 @@ function secondPhoto(data, socket) {
     Object.keys(missionPlayers).forEach( function (key) {
         missionPlayers[key].socket.emit("secondPhoto", {photo: data.photo})
     });
-
 }
 
-function photoAccepted(photoToCheck) {
-    if (currentPhoto !== null && currentPhoto === photoToCheck) {
+function photoAccepted(ID) {
+    if (currentPhoto !== null && currentPhotoID === ID) {
         Object.keys(missionPlayers).forEach( function (key) {
-            missionPlayers[key].socket.emit("voteResult", {accepted: true})
+            missionPlayers[key].socket.emit("voteResult", {accepted: true })
         });
         firstPhotoAccepted = true;
         voting = false;
@@ -709,6 +710,7 @@ function missionVote(data, socket) {
             if (!data.vote) {
                 currentPhoto = null;
                 voting = false;
+                currentPhotoID += 1;
                 Object.keys(missionPlayers).forEach( function (key) {
                     if (key !== firstPlayer)
                         missionPlayers[key].socket.emit("voteResult", {accepted: false});

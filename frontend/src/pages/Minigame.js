@@ -179,8 +179,8 @@ class Minigame extends React.Component {
     secondPhoto(data) {
         this.setState({firstPicAccepted: false, firstPicTaken: false});
         var content = [];
-        content.push(<img src={this.state.encodedPic}/>);
-        content.push(<img src={data.photo}/>);
+        content.push(<img src={data.firstPhoto}/>);
+        content.push(<img src={data.secondPhoto}/>);
         content.push(<p>These photos need to be compared.</p>);
         content.push(<p>A new mission will be started.</p>);
         this.showAlertBox(content);
