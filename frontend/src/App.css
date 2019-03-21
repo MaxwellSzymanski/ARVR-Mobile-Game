@@ -390,20 +390,15 @@ p {
 }
 
 .cameraLoader {
-    display: inline-block ;
-    border: 7.5vw solid #79675c;
-    border-top: 7.5vw solid #4d0c04;
-    border-radius: 50%;
-    width: 40vw;
-    height: 40vw;
-    animation: spin 2s ease-out infinite;
+    background-image: url(assets/icons/loader.gif);
+    width: 100px;
+    height: 100px;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: auto;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); border-color: #79675c; border-top-color: #4d0c04;}
-    50% {transform: rotate(540deg); border-color: #7f7a9c; border-top-color: #841604; }
-    100% { transform: rotate(1080deg); border-color: #79675c; border-top-color: #4d0c04;}
-}
 
 
 .divider{
@@ -441,6 +436,11 @@ p {
     background-image: url(assets/buttons/back.png);
 }
 
+.next {
+    background-image: url(assets/buttons/back.png);
+    transform: rotateY(180deg);
+}
+
 .settings {
     background-image: url(assets/buttons/settings.png);
 }
@@ -451,6 +451,10 @@ p {
 
 .info {
     background-image: url(assets/buttons/info.png);
+}
+
+.left {
+    float: left;
 }
 
 /* UI Buttons */
@@ -768,6 +772,7 @@ p {
 
 #tutorial {
   background-color: #910F0F;
+    border-radius: 30px;
 }
 
 #stepDiv {
@@ -793,7 +798,7 @@ p {
 
 }
 
-#tutorialButton {
+#tutorialButtonNext {
   background: white;
   color: #9190F0;
   background-image: url("assets/buttons/next.png");
@@ -807,6 +812,10 @@ p {
   width: 40px;
   z-index: 10;
   border: none;
+}
+
+#tutorialButtonPrevious {
+    z-index: 10;
 }
 
 #tutorialVid {

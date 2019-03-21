@@ -6,26 +6,33 @@ import { getFeatureVector, getFVDistance } from '../facerecognition/FaceRecognit
 import swal from '@sweetalert/with-react';
 import SocketContext from "../socketContext";
 import Cookies from 'universal-cookie';
+import Webcam from "react-webcam";
 
 const cookies = new Cookies();
 
 class CapturePlayer extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.onTakePhoto = this.onTakePhoto.bind(this);
+    }
+
   state = {
     redirect : false,
     calculating: false
-  }
+  };
 
   setRedirect = () => {
       this.setState({redirect: true})
-    }
+    };
 
   renderRedirect = () => {
     if (this.state.redirect) {return <Redirect to="/battlePage" />}
-  }
+  };
 
 
-  async onTakePhoto (dataUri) {
+  async onTakePhoto () {
+      let dataUri = this.refs["webcam"].getScreenshot();
       this.setState({calculating:true});
       var photoSrc = dataUri;
       var photo = new Image;
@@ -40,7 +47,7 @@ class CapturePlayer extends React.Component {
               title: "No face detected",
               text: "Make sure the target is exposed to enough light.",
               icon: "warning",
-              button: "try again!",
+              button: "Try again!",
           });
       }
 
@@ -62,7 +69,7 @@ class CapturePlayer extends React.Component {
               title: "Unkown Person",
               text: "The Person in the photo is NOT a player",
               icon: "warning",
-              button: "try again!",
+              button: "Try again!",
           });
         }
 
@@ -73,9 +80,9 @@ class CapturePlayer extends React.Component {
             this.setState({calculating:false});
             swal({
               title: "This is you!",
-              text: "You can NOT capture yourself!",
+              text: "You can not capture yourself! Nice try though.",
               icon: "warning",
-              button: "try again!",
+              button: "Try again!",
               });
           }
 
@@ -128,7 +135,7 @@ class CapturePlayer extends React.Component {
       }
     }
     if (index != null) {
-      console.log(results[index].name)
+      console.log(results[index].name);
       return (results[index]);
     }
     else return null;
@@ -139,17 +146,22 @@ class CapturePlayer extends React.Component {
     this.context.emit('getCapturedPlayerStats', id);
   };
 
-
   render () {
+      const videoConstraints = {
+          facingMode: "environment"
+      };
+
     return (
       <div className="background">
         {this.renderRedirect()}
           {!this.state.calculating && <div className="polaroid">
-              <Camera
-                  onTakePhoto = { (dataUri) => { this.onTakePhoto(dataUri); } }
-                  isImageMirror = {false}
-                  idealFacingMode = {FACING_MODES.ENVIRONMENT}
+              <Webcam
+                  audio={false}
+                  ref="webcam"
+                  screenshotFormat="image/jpeg"
+                  videoConstraints={videoConstraints}
               />
+              <button className="smallButton camera" onClick={this.onTakePhoto}> </button>
           </div>}
           {this.state.calculating && <div className="polaroid">
               <div className="cameraLoader"></div>
@@ -160,6 +172,8 @@ class CapturePlayer extends React.Component {
     );
   }
 }
+
+
 
 CapturePlayer.contextType = SocketContext;
 

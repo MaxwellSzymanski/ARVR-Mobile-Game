@@ -7,6 +7,7 @@ import swal from '@sweetalert/with-react';
 import {isIOS, isSafari} from 'react-device-detect';
 import ImageUploader from 'react-images-upload';
 import Cookies from 'universal-cookie';
+import Webcam from "./CapturePlayer";
 const cookies = new Cookies();
 
 class CameraComp extends React.Component {
@@ -29,7 +30,8 @@ class CameraComp extends React.Component {
         if (this.state.redirect) {return <Redirect to="/imageConfirm" />}
     };
 
-    async onTakePhoto(dataUri) {
+    async onTakePhoto() {
+        let dataUri = this.refs['webcam'].getScreenshot();
         this.setState({ calculating: true});
         let photo = new Image;
         let photoSrc = dataUri;
@@ -95,39 +97,22 @@ class CameraComp extends React.Component {
 
 
     render () {
-      if (isSafari || isIOS) return (
-          <div>
-          {this.renderRedirect()}
-              <p className="subTitle">Upload an image</p>
-              <span style={{margin:'10px'}}> </span>
-              <div className="polaroid" style={{width:'300px'}}>
-                  <ImageUploader
-                      withIcon={true}
-                      buttonText='Choose profile image'
-                      onChange={this.handleUpload}
-                      imgExtension={['.jpg', '.png']}
-                      maxFileSize={5242880}
-                      withLabel={false}
-                      fileSizeError={"Make sure it is smaller than 5MB."}
-                      fileTypeError={"Make sure it is a jpg or png image."}
-                      singleImage={true}
-                  />
-              </div>
-              <button className="smallButton info" style={{marginTop:'20px'}} onClick={this.showInfo}> </button>
-          </div>
-    );
-    else {
+        const videoConstraints = {
+            facingMode: "user"
+        };
+
     return (
       <div className="background">
         {this.renderRedirect()}
         <p className="subTitle">Take your profile picture</p>
           {!this.state.calculating && <div className="polaroid">
-            <Camera
-                onTakePhoto = { (dataUri) => { this.onTakePhoto(dataUri, null); } }
-                isImageMirror = {true}
-                imageType = {'IMAGE_TYPES.PNG'}
-                imageCompression = {0.97}
-            />
+              <Webcam
+                  audio={false}
+                  ref="webcam"
+                  screenshotFormat="image/jpeg"
+                  videoConstraints={videoConstraints}
+              />
+              <button className="smallButton camera" onClick={this.onTakePhoto}> </button>
             </div>}
           {this.state.calculating && <div className="polaroid">
               <div className="cameraLoader"></div>
@@ -136,7 +121,7 @@ class CameraComp extends React.Component {
       </div>
       );
       }
-    }
+
 }
 
 export default CameraComp;

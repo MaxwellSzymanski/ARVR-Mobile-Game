@@ -118,6 +118,8 @@ io.sockets.on('connection', function (socket) {
 
     socket.on("signal", (data) => {signal(data)});
 
+    socket.on("getProb", (data) => {calculateProbability(data, socket)});
+
     socket.on("disconnect", () => {removePlayer(socket)});
 
     // socket.on('getPlayerEntry', (name, fv) => {
@@ -134,10 +136,10 @@ io.sockets.on('connection', function (socket) {
 
 	socket.on('getStatsById', (id) => {
         getStatsById(id, socket) });
-		
+
 	socket.on('getFVById', (id) => {
         getFVById(id, socket) });
-	
+
 	socket.on('newImage', (data) => {
          });
 
@@ -147,6 +149,8 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on("fight", (data) => {fight(data, socket)});
+
+    socket.on("miss", (data) => {miss(data, socket)});
 
 
 });
@@ -603,7 +607,7 @@ if (index != null) {
   console.log(results[index].name)
   return (results[index]);
 }
-else return null;	
+else return null;
 }
 
 async function euclideanDistance(arr1, arr2) {
@@ -620,12 +624,95 @@ async function euclideanDistance(arr1, arr2) {
 
 
 
-// ============================================================================
+function miss(data, socket) {
+    if (data.token) {
+        jwt.verify(data.token, secret, async function (err, token) {
+            if (err) {
+                console.log("(battle)         invalid token");
+                return;
+            }
+            User.findById(token.id).then(
+                async function (player) {
+                    if (player === null) {
+                        console.log("(miss)           player not found.");
+                        return;
+                    }
+                    player.health = Math.round(player.health * 0.9);
+                    let message = "You took " + Math.round(player.health * 0.1) + " damage! " + generateWord("miss");
+                    player.save();
+                    socket.emit("miss", {message: message});
+                }
+            )
+        })
+    }
 
-// BATTLE
+}
 
-// ============================================================================
 
+function calculateProbability(data, socket) {
+    if (data.token) {
+        jwt.verify(data.token, secret, async function(err, token) {
+            if (err) {
+                console.log("(battle)         invalid token");
+                return;
+            }
+            User.findById(token.id).then(
+                async function (player) {
+                    if (player === null) {
+                        console.log("(prob)           player not found.");
+                        return;
+                    }
+                    const fatigue = this.calculateFatigue(player.health, player.level);
+                    const stamina = this.calculateFatigue(player.health, player.level);
+                    const motivation = this.calculateFatigue(player.kills, player.deaths, player.experience);
+                    const prob = Math.max((0.33 * fatigue + 0.33 * stamina + 0.33 * motivation), 0.30);
+                    socket.emit("probData", {
+                        probability: prob,
+                        fatigue: fatigue,
+                        motivation: motivation,
+                        stamina: stamina
+                    })
+                }
+            )
+        }
+        )
+    }
+}
+
+function generateWord(type) {
+    let words = ['']
+    switch(type) {
+        case 'shout':
+            words = ['Ow yes!', 'Hell yeah!', 'Sweet lord!', 'Ooh boy!', 'Sweet nibblets!'];
+            break;
+        case 'miss':
+            words = ['Better luck next time!', 'You gave it your best shot...', 'Ouch!', 'That hurt!'];
+            break;
+        case 'default':
+            break;
+    }
+    return words[Math.floor(Math.random() * words.length)];
+}
+
+function capValue(value) {
+    if (value < 0) {return 0}
+    else if (value > 0) {return 1}
+    else {return value}
+}
+
+function calculateFatigue(health, level) {
+    return this.capValue(1-(health/100) - Math.min(level / 30, 0.3));
+}
+
+function calculateStamina(health, level) {
+    this.capValue((health / 100) + Math.min(level / 30, 0.3));
+}
+
+function calculateMotivation(kills, deaths, experience) {
+    return this.capValue((kills / (kills + deaths) +  ((experience / 350) * 0.5)));
+}
+
+this.capValue(1-(this.state.health/100) - Math.min(this.state.level / 30, 0.3));
 
 // Functie van vorig semester
 function calculateAttack(self, other) {
