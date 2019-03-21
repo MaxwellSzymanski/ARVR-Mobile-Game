@@ -567,7 +567,6 @@ async function getFVMatch(fv, results) {
     let minDist = 1;
     let index = null;
     const threshold = 0.52;
-    console.log(results);
     let i = 0;
     for (i; i < results.length; i++) {
         if (results[i].featureVector != null) {
@@ -582,8 +581,12 @@ async function getFVMatch(fv, results) {
     }
     if (index !== null) {
         console.log(results[index].name);
-        results[index].token = await User.findOne({name: results[index].name}).createFightToken();
-        return (results[index]);
+        User.findOne({name: results[index].name}).then(async function (user) {
+            if (user === null)
+                return null;
+            results[index].token = await user.createFightToken();
+            return (results[index]);
+        });
     }
     else return null;
 }
