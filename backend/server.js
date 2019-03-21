@@ -125,9 +125,10 @@ io.sockets.on('connection', function (socket) {
     //     addPlayerEntry(name, fv);
     // });
 
-    socket.on('getFVfromDB', () => {
-        getFeatureVectorsFromDB(function(result) {
-            socket.emit('sentFVfromDB', result);
+    socket.on('getFVMatch', async (fv) => {
+        getFeatureVectorsFromDB( async function(result) {
+            let match = await getFVMatch(fv, result);
+			socket.emit('sentFVMatch', match);
         })
     });
 
@@ -231,6 +232,7 @@ function faction(data, socket) {
         }
     });
 }
+
 
 async function signin(dat, socket) {
     const data = JSON.parse(dat);
@@ -578,15 +580,51 @@ function signinhttp(obj, res) {
     });
 }
 
+// FACERECOGNITION ==============================================================
+async function getFVMatch(fv, result) {
+	let fv1 = Object.values(JSON.parse(fv));
+	let minDist = 1;
+	let index = null;
+	const threshold = 0.52;
+	console.log(results)
+	let i = 0
+	for (i ; i < results.length; i++) {
+		if (results[i].featureVector != null) {
+		let fv2 = Object.values(JSON.parse(results[i].featureVector));
+		let dist = await euclideanDistance(fv1, fv2)
+		if (minDist > dist && dist <= threshold) {
+	console.log(dist);
+	minDist = dist;
+	index = i;
+	}
+  }
+}
+if (index != null) {
+  console.log(results[index].name)
+  return (results[index]);
+}
+else return null;	
+}
+
+async function euclideanDistance(arr1, arr2) {
+	if (arr1.length !== arr2.length)
+		throw new Error('euclideanDistance: arr1.length !== arr2.length');
+	var desc1 = Array.from(arr1);
+	var desc2 = Array.from(arr2);
+	return Math.sqrt(desc1
+		.map(function (val, i) { return val - desc2[i]; })
+		.reduce(function (res, diff) { return res + Math.pow(diff, 2); }, 0));
+}
+// ============================================================================
+
+
+
 
 // ============================================================================
 
 // BATTLE
 
 // ============================================================================
-
-
-
 
 
 // Functie van vorig semester

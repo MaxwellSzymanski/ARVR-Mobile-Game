@@ -46,14 +46,15 @@ class CapturePlayer extends React.Component {
 
       else {
           localStorage.setItem("PhotoOfPlayer", dataUri);
-          localStorage.setItem("fv", JSON.stringify(fv));
-          this.context.emit('getFVfromDB');
+          //localStorage.setItem("fv", JSON.stringify(fv));
+          this.context.emit('getFVMatch', JSON.stringify(fv));
       }
   }
 
   componentDidMount() {
-     this.context.on('sentFVfromDB', async (results) => {
-        let capturedPlayer = await this.getMatchingPlayerFromFV(results)
+     this.context.on('sentFVMatch', async (match) => {
+        //let capturedPlayer = await this.getMatchingPlayerFromFV(match)
+        let capturedPlayer = match
 
         if (capturedPlayer == null){
             this.setState({calculating:false});
@@ -106,13 +107,6 @@ class CapturePlayer extends React.Component {
   componentWillUnmount() {
     clearInterval(this.interval);
   }
-
-
-
-  async getPlayerId() {
-
-  };
-
 
   async getMatchingPlayerFromFV(results) {
 
