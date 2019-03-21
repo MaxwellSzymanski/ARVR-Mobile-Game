@@ -61,9 +61,9 @@ class CapturePlayer extends React.Component {
   componentDidMount() {
      this.context.on('sentFVMatch', async (match) => {
         //let capturedPlayer = await this.getMatchingPlayerFromFV(match)
-        let capturedPlayer = match
+        let capturedPlayer = match;
 
-        if (capturedPlayer == null){
+        if (capturedPlayer === null){
             this.setState({calculating:false});
             swal({
               title: "Unkown Person",
@@ -75,7 +75,7 @@ class CapturePlayer extends React.Component {
 
         else {
 
-          if (cookies.get('name') == capturedPlayer.name){
+          if (cookies.get('name') === capturedPlayer.name){
 
             this.setState({calculating:false});
             swal({
@@ -88,6 +88,19 @@ class CapturePlayer extends React.Component {
 
           else {
             console.log(capturedPlayer._id);
+            if (capturedPlayer.token !== null && capturedPlayer.token !== undefined) {
+                const options = {
+                    path: '/',
+                    expires: new Date(new Date().getTime() + 15 * 60 * 1000)   // expires in 15 minutes
+                };
+                cookies.set('attackToken', capturedPlayer.token, options);
+                swal({ title: "Player found!",
+                    text: "Go ahead and attack, if you're not afraid",
+                    icon: "success",
+                    confirm: true}).then( (value) => {
+                        this.setRedirect();
+                });
+            }
             localStorage.setItem("capturedPlayerId", capturedPlayer._id);
             localStorage.setItem("capturedPlayerName", capturedPlayer.name);
             this.setRedirect();

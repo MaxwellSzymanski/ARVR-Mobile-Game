@@ -109,16 +109,20 @@ Schema.methods.createToken = function() {
 
     return jwt.sign({
         id: this._id,
-        name: this.name
+        name: this.name,
+        login: true,
+        attack: false,
     }, secret, {expiresIn : exp});
 };
 
 Schema.methods.createFightToken = function() {
-    let exp = 2;            // Number of hours before expiry
+    let exp = 0.25;            // Number of hours before expiry
     exp *= 60 * 60;         // hours * 60 sec * 60 min
 
     return jwt.sign({
-        name: this.name
+        name: this.name,
+        login: false,
+        attack: true,
     }, secret, {expiresIn : exp});
 };
 

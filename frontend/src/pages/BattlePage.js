@@ -5,7 +5,6 @@ import swal from '@sweetalert/with-react';
 import Cookies from 'universal-cookie';
 import SocketContext from "../socketContext";
 
-
 const cookies = new Cookies();
 
 class BattlePage extends React.Component {
@@ -35,7 +34,9 @@ class BattlePage extends React.Component {
     componentDidMount() {
         let id = localStorage.getItem("capturedPlayerId");
         let oppHealth = (((5 + this.state.oppHealth)/105)*100).toString() + '%';
-        document.getElementById('oppHealth').style.width = oppHealth;
+        let css = document.getElementById('oppHealth');
+        if (css !== null && css !== undefined)
+            css.style.width = oppHealth;
 
         this.context.emit("stats", {token: cookies.get("token"), enemy: id});
 
@@ -63,7 +64,9 @@ class BattlePage extends React.Component {
 
             });
             oppHealth = (((10 + data.health)/115)*100).toString() + '%';
-            document.getElementById('oppHealth').style.width = oppHealth;
+            css = document.getElementById('oppHealth');
+            if (css !== null && css !== undefined)
+                css.style.width = oppHealth;
         });
         this.context.on("enemyphoto", (image) => {
            this.setState({
