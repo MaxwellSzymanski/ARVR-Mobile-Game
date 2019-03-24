@@ -86,7 +86,15 @@ const Schema = new mongoose.Schema({
     faction: {
         type: String,
         default: null
-    }
+    },
+    battleTutorialSeen: {
+        type: Boolean,
+        default: false
+    },
+    mainTutorialSeen: {
+        type: Boolean,
+        default: false
+    },
 }, {timestamps: true});
 
 Schema.plugin(uniqueValidator, {message: 'The {PATH} you gave ({VALUE}) is already in use'});

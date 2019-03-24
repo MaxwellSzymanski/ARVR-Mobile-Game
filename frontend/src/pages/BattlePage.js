@@ -139,7 +139,7 @@ class BattlePage extends React.Component {
     }
 
     generateText(value) {
-        if (value == 0) {return "Very Low";}
+        if (value === 0) {return "Very Low";}
         else if (value < 0.25) {return "Low"}
         else if (value < 0.50) {return "Moderate"}
         else if (value < 0.75) {return "High"}
@@ -183,7 +183,7 @@ class BattlePage extends React.Component {
 
                     <div className="attackContent">
                         <h3 className="bSuccess">Attack success</h3>
-                        <h3 className="bPercent">{this.calculateProbability()}%</h3>
+                        <h3 className="bPercent">{this.state.probability}%</h3>
                     </div>
 
                     <div className="attributes">

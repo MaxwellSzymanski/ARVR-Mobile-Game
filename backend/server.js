@@ -129,6 +129,8 @@ io.sockets.on('connection', function (socket) {
     socket.on("fight", (data) => {fight(data, socket)});
     socket.on("miss", (data) => {miss(data, socket)});
 
+    socket.on("resetTutorials", (data) => {resetTutorial(data)});
+
     socket.on("disconnect", () => {removePlayer(socket)});
 });
 
@@ -561,6 +563,55 @@ function signinhttp(obj, res) {
     });
 }
 
+// ============================================================================
+
+// APP HELPER FUNCTIONS
+
+// ============================================================================
+
+
+function generateWord(type) {
+    let words = [''];
+    switch(type) {
+        case 'shout':
+            words = ['Ow yes!', 'Hell yeah!', 'Sweet lord!', 'Ooh boy!', 'Sweet nibblets!'];
+            break;
+        case 'miss':
+            words = ['Better luck next time!', 'You gave it your best shot...', 'Ouch!', 'That hurt!'];
+            break;
+        case 'default':
+            break;
+    }
+    return words[Math.floor(Math.random() * words.length)];
+}
+
+
+function resetTutorial(data) {
+    if (data.token) {
+        jwt.verify(data.token, secret, async function (err, token) {
+            if (err) {
+                console.log("(resetTutorial)         invalid token");
+                return;
+            }
+            User.findById(token.id).then(
+                async function (player) {
+                    if (player === null) {
+                        console.log("(resetTutorial)           player not found.");
+                        return;
+                    }
+                    player.battleTutorialSeen = false;
+                    player.mainTutorialSeen = false;
+                    player.save();
+                }
+            )
+        })
+    }
+}
+
+
+
+
+
 // FACERECOGNITION ==============================================================
 async function getFVMatch(fv, results) {
     let fv1 = Object.values(JSON.parse(fv));
@@ -658,21 +709,6 @@ function calculateProbability(data, socket) {
     }
 }
 
-function generateWord(type) {
-    let words = [''];
-    switch(type) {
-        case 'shout':
-            words = ['Ow yes!', 'Hell yeah!', 'Sweet lord!', 'Ooh boy!', 'Sweet nibblets!'];
-            break;
-        case 'miss':
-            words = ['Better luck next time!', 'You gave it your best shot...', 'Ouch!', 'That hurt!'];
-            break;
-        case 'default':
-            break;
-    }
-    return words[Math.floor(Math.random() * words.length)];
-}
-
 function capValue(value) {
     if (value < 0) {return 0}
     else if (value > 0) {return 1}
@@ -690,8 +726,6 @@ function calculateStamina(health, level) {
 function calculateMotivation(kills, deaths, experience) {
     return capValue((kills / (kills + deaths) +  ((experience / 350) * 0.5)));
 }
-
-// this.capValue(1-(this.state.health/100) - Math.min(this.state.level / 30, 0.3));
 
 // Functie van vorig semester
 function calculateAttack(self, other) {

@@ -545,7 +545,15 @@ p {
 }
 
 .fadeIn4 {
-    animation: hideComp 400ms, fadeInLeft 500ms 400ms;
+     animation: hideComp 400ms, fadeInLeft 500ms 400ms;
+ }
+
+.fadeIn5 {
+    animation: hideComp 500ms, fadeInLeft 500ms 500ms;
+}
+
+.fadeIn6 {
+    animation: hideComp 600ms, fadeInLeft 500ms 600ms;
 }
 
 .confirmButton {
