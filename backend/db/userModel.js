@@ -100,6 +100,14 @@ const Schema = new mongoose.Schema({
 Schema.plugin(uniqueValidator, {message: 'The {PATH} you gave ({VALUE}) is already in use'});
 
 Schema.pre('save', async function(next) {
+    this.attack = Math.round(this.attack);
+    this.defence = Math.round(this.defence);
+    this.health = Math.round(this.health);
+    this.experience = Math.round(this.experience);
+    this.level = Math.round(this.level);
+    this.deaths = Math.round(this.deaths);
+    this.kills = Math.round(this.kills);
+
     if (!this.isModified('password'))
         return next();
     const hash = await bcrypt.hash(this.password, saltRounds);
