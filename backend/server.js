@@ -114,6 +114,7 @@ io.sockets.on('connection', function (socket) {
     socket.on('getFVMatch', async (fv) => {
         getFeatureVectorsFromDB( async function(result) {
             let match = await getFVMatch(fv, result);
+            console.log("   match:\n" + match);
 			socket.emit('sentFVMatch', match);
         })
     });
@@ -636,8 +637,10 @@ async function getFVMatch(fv, results) {
             if (user === null)
                 return null;
             console.log(user.name);
-            results[index].token = await user.createFightToken();
-            return ({token: await user.createFightToken()});
+            // results[index].token = await user.createFightToken();
+            let result = { token: await user.createFightToken()};
+            console.log(result);
+            return (result);
         });
     }
     else return null;
