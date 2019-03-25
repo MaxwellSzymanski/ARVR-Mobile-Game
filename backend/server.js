@@ -321,7 +321,7 @@ function stats(data, socket) {
     });
     if (!data.enemy)
         return;
-    jwt.verify(data.token, secret, async function (err, token) {
+    jwt.verify(data.enemy, secret, async function (err, token) {
         if (err) {
             console.log("(stats)         invalid enemy token");
             return;
