@@ -62,12 +62,12 @@ class CapturePlayer extends React.Component {
      this.context.on('sentFVMatch', async (match) => {
         //let capturedPlayer = await this.getMatchingPlayerFromFV(match)
         let capturedPlayer = match;
-
+        alert(match);
         if (capturedPlayer === null){
             this.setState({calculating:false});
             swal({
               title: "Unkown Person",
-              text: "The Person in the photo is NOT a player",
+              text: "The Person in the photo is not a Game of Wolves player.\nSure you followed game protocol?",
               icon: "warning",
               button: "Try again!",
           });
