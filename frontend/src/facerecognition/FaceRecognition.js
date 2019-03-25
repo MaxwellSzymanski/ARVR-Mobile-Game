@@ -1,5 +1,5 @@
 import React from 'react';
-import {loadMtcnnModel, loadFaceLandmarkModel, loadFaceDetectionModel, loadFaceRecognitionModel, toNetInput, mtcnn, extractFaces, computeFaceDescriptor, euclideanDistance, loadTinyYolov2Model, tinyYolov2} from 'face-api.js';
+import {allFacesTinyYolov2, createCanvasFromMedia, detectLandmarks , drawLandmarks, loadMtcnnModel, loadFaceLandmarkModel, loadFaceDetectionModel, loadFaceRecognitionModel, toNetInput, mtcnn, extractFaces, computeFaceDescriptor, euclideanDistance, loadTinyYolov2Model, tinyYolov2} from 'face-api.js';
 
   async function calculateFeatureVector(image) {
 
@@ -7,23 +7,31 @@ import {loadMtcnnModel, loadFaceLandmarkModel, loadFaceDetectionModel, loadFaceR
     await loadFaceDetectionModel('/weights')
     await loadFaceRecognitionModel('/weights')
     await loadFaceLandmarkModel('/weights')
-    await loadMtcnnModel('/weights')
+    //await loadMtcnnModel('/weights')
 
-    //tinyYolov2 implemnatation
-    //let scoreThreshold = 0.5
-    //let sizeType = 'lg'
-    //const detections = await tinyYolov2(inputImgEl, forwardParams)
-
-    const allignedface = await locateAndAlignFacesWithMtcnn(image)
-    if (allignedface != null) {
-      var descriptor = await computeFaceDescriptor(allignedface)
-      console.log(descriptor)
-      return descriptor;
-    }
-    else {
-      return null;
+  const forwardParams = { inputSize: 608, scoreThreshold: 0.5 }
+  const facedescriptor = await allFacesTinyYolov2(image, forwardParams)
+  if (facedescriptor.length === 0) {
+    return null
+  }
+  let biggestDetection = {detection: null, area: 0}
+  for (let i = 0; i < facedescriptor.length; i++) {
+    let thisDetection = facedescriptor[i]
+    let thisArea = thisDetection.detection.box.width * thisDetection.detection.box.height
+    if (biggestDetection.area < thisArea) {
+      biggestDetection.detection = thisDetection
+      biggestDetection.area = thisArea
     }
   }
+  return biggestDetection.detection.descriptor
+}
+
+  async function showDetectedFace(inputImg) {
+    let drawLines = true
+    let landmarks = await detectLandmarks(inputImg)
+  }
+
+
 
   async function locateAndAlignFacesWithMtcnn(inputImg) {
 

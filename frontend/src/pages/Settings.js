@@ -22,11 +22,11 @@ class Settings extends React.Component {
 
     setRedirect = () => {
         this.setState({redirect: true})
-      }
+    };
 
     renderRedirect = () => {
       if (this.state.redirect) {return <Redirect to="/changePicture" />}
-    }
+    };
 
     componentDidMount() {
         this.context.on("deleteaccount", (data) => {
@@ -96,6 +96,11 @@ class Settings extends React.Component {
         });
     }
 
+    resetTutorials() {
+        swal({title: "Tutorials reset!", text: "The tutorials will be displayed again. You can always dismiss them when you think you know what to do.", icon: "success"})
+        this.context.emit("resetTutorial", {token: cookies.get('token')})
+    }
+
 
     showLicences() {
         swal("Licences", "Flickity - GNU General Public License v3 \nFace-api.js - MIT Licence", "Icons used: 'https://icons8.com/license'")
@@ -113,7 +118,8 @@ class Settings extends React.Component {
                 <div> <button className="normalButton fadeIn1" onClick={this.giveFeedback}>Give feedback</button></div>
                 <Link to="/QRCode"><div> <button className="normalButton fadeIn2">Share QR code</button></div></Link>
                 <div> <button className="normalButton fadeIn3" onClick={this.showLicences}>Licences</button></div>
-                <div> <button className="normalButton delete fadeIn4" onClick={this.deleteProfile}>Delete profile</button></div>
+                <div> <button className="normalButton fadeIn4" onClick={this.resetTutorials}>Reset tutorials</button></div>
+                <div> <button className="normalButton delete fadeIn5" onClick={this.deleteProfile}>Delete profile</button></div>
             </div>
         )
     }

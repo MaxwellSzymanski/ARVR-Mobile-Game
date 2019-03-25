@@ -5,7 +5,6 @@ import swal from '@sweetalert/with-react';
 import Cookies from 'universal-cookie';
 import SocketContext from "../socketContext";
 
-
 const cookies = new Cookies();
 
 class BattlePage extends React.Component {
@@ -21,6 +20,10 @@ class BattlePage extends React.Component {
             selfKills: 3,
             selfDeaths: 4,
             selfHealth: 30,
+            probability: 0,
+            fatigue: 0,
+            motivation: 0,
+            stamina: 0,
             //TODO
             redirect:false
         };
@@ -31,11 +34,24 @@ class BattlePage extends React.Component {
     componentDidMount() {
         let id = localStorage.getItem("capturedPlayerId");
         let oppHealth = (((5 + this.state.oppHealth)/105)*100).toString() + '%';
-        document.getElementById('oppHealth').style.width = oppHealth;
+        let css = document.getElementById('oppHealth');
+        if (css !== null && css !== undefined)
+            css.style.width = oppHealth;
 
         this.context.emit("stats", {token: cookies.get("token"), enemy: id});
 
         this.context.emit("getStatsById", id);
+
+        this.context.emit("getProb", {token: cookies.get('token')});
+
+        this.context.on("probData", (data) => {
+            this.setState({
+                probability: data.probability,
+                fatigue: data.fatigue,
+                motivation: data.motivation,
+                stamina: data.stamina,
+            })
+        });
 
         this.context.on("sentStatsById", (data) => {
             console.log("stats received: " + data);
@@ -48,7 +64,9 @@ class BattlePage extends React.Component {
 
             });
             oppHealth = (((10 + data.health)/115)*100).toString() + '%';
-            document.getElementById('oppHealth').style.width = oppHealth;
+            css = document.getElementById('oppHealth');
+            if (css !== null && css !== undefined)
+                css.style.width = oppHealth;
         });
         this.context.on("enemyphoto", (image) => {
            this.setState({
@@ -74,10 +92,15 @@ class BattlePage extends React.Component {
             this.sendLocation();
         }, 750);
         this.context.on("attack", (data) => {
-            swal({title: 'You attacked successfully!', icon: 'success', text: data.message, confirm: true}).then( (value) => {
+            swal({title: 'You attacked succesfully!', icon: 'success', text: data.message, confirm: true}).then( (value) => {
                 this.setState({redirect: true})
             });
         });
+        this.context.on("miss", (data) => {
+            swal({title: 'You missed!', icon: 'error', text: data.message, confirm: true}).then( (value) => {
+                this.setState({redirect: true})
+            });
+        })
     }
 
     componentWillUnmount() {
@@ -115,22 +138,8 @@ class BattlePage extends React.Component {
         return html
     }
 
-    generateValue(type) {
-        switch (type) {
-            case "stamina":
-                return (this.state.health / 100);
-            case "motivation":
-                return (this.state.selfKills / (this.state.selfKills + this.state.selfDeaths));
-            case "fatigue":
-                return ((this.state.deaths / (this.state.selfKills + this.state.selfDeaths) + (1 - (this.state.health / 100)))/2);
-            default:
-                return -1;
-        }
-    }
-
-    generateText(type) {
-        const value = this.generateValue(type);
-        if (value == 0) {return "Very Low";}
+    generateText(value) {
+        if (value === 0) {return "Very Low";}
         else if (value < 0.25) {return "Low"}
         else if (value < 0.50) {return "Moderate"}
         else if (value < 0.75) {return "High"}
@@ -138,38 +147,14 @@ class BattlePage extends React.Component {
     }
 
     attack() {
-
-        this.context.emit("fight", {token: cookies.get('token'), enemy: localStorage.getItem("capturedPlayerId")});
-
-
-        // TODO: ik denk dat ge dan best het grootste deel van deze code op de server zet,
-        //              binnenkort zorg ik ook dat er voor de enemy een token gegenereerd
-        //              wordt in plaats van hier gewoon de username mee te geven, dat is
-        //              ook veiliger. Anders kan er zo maar met de stats gefoefeld worden
-        //              als er iemand gewoon maar weet welke signalen hij moet sturen.
-
-        const prob = this.calculateProbability(3);
-
-        if (Math.random() < prob) {
-            swal({title: 'You attacked successfully!', icon: 'success'})
-            // TODO: implement attack
+        if (this.state.probability < Math.random()) {
+            this.context.emit("fight", {token: cookies.get('token'), enemy: localStorage.getItem("capturedPlayerId")});
         }
         else {
-            swal({title: 'You missed the opponent', text: 'You took some damage.',icon: 'error'})
-            // TODO: take damage
+            this.context.emit("miss", {token:cookies.get('token')});
         }
     }
 
-    flee() {
-        swal({title: 'You fled successfully', icon: 'success'})
-    }
-
-    calculateProbability(num) {
-        const prob = this.state.selfHealth + this.state.selfKills - this.state.selfKills;
-        if (prob <= 30) return 30;
-        if (prob >= 95) return 95;
-        return prob;
-    }
 
     renderRedirect = () => {
         if (this.state.redirect) {return <Redirect to="/map" />}
@@ -198,29 +183,29 @@ class BattlePage extends React.Component {
 
                     <div className="attackContent">
                         <h3 className="bSuccess">Attack success</h3>
-                        <h3 className="bPercent">{this.calculateProbability()}%</h3>
+                        <h3 className="bPercent">{this.state.probability}%</h3>
                     </div>
 
                     <div className="attributes">
                         <div className="bAttributeContainer">
                             <h3 className="bAttributeTitle">Fatigue</h3>
                             <div className="bAttributeValueContainer">
-                                <p className="bAttributeNumber">{this.generateText("fatigue")}</p>
-                                {this.generateAttributes(this.generateValue("fatigue"))}
+                                <p className="bAttributeNumber">{this.generateText(this.state.fatigue)}</p>
+                                {this.generateAttributes(this.state.fatigue)}
                             </div>
                         </div><hr className="shorterLine"/>
                         <div className="bAttributeContainer">
                             <h3 className="bAttributeTitle">Stamina</h3>
                             <div className="bAttributeValueContainer">
-                                <p className="bAttributeNumber">{this.generateText("stamina")}</p>
-                                {this.generateAttributes(this.generateValue("stamina"))}
+                                <p className="bAttributeNumber">{this.generateText(this.state.stamina)}</p>
+                                {this.generateAttributes(this.state.stamina)}
                             </div>
                         </div><hr className="shorterLine"/>
                         <div className="bAttributeContainer">
                             <h3 className="bAttributeTitle">Motivation</h3>
                             <div className="bAttributeValueContainer">
-                                <p className="bAttributeNumber">{this.generateText("motivation")}</p>
-                                {this.generateAttributes(this.generateValue("motivation"))}
+                                <p className="bAttributeNumber">{this.generateText(this.state.motivation)}</p>
+                                {this.generateAttributes(this.state.motivation)}
                             </div>
                         </div>
                     </div>

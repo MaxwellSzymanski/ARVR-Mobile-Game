@@ -95,59 +95,43 @@ var io = require('socket.io')(server);
 
 io.sockets.on('connection', function (socket) {
     console.log("new connection");
-
     socket.on("jwt", (data) => {verifyJWT(data, socket)});
-
     socket.on('signup', (data) => {signup(data, socket)});
-
     socket.on('verify', (data) => {verifyEmail(data, socket)});
-
     socket.on("newmail", (data) => {newMail(data)});
-
     socket.on("faction", (data) => {faction(data, socket)});
-
     socket.on("signin", (data) => {signin(data, socket)});
-
     socket.on("signout", (data) => {signout(data, socket)});
-
     socket.on("deleteaccount", (data) => {deleteAccount(data, socket)});
-
     socket.on("stats", (data) => {stats(data, socket)});
-
     socket.on("location", (data) => {updateLocation(data, socket)});
-
     socket.on("signal", (data) => {signal(data)});
-
-    socket.on("disconnect", () => {removePlayer(socket)});
-
+    socket.on("getProb", (data) => {calculateProbability(data, socket)});
     // socket.on('getPlayerEntry', (name, fv) => {
     //     console.log('received player entry from: ' + name);
     //     addPlayerEntry(name, fv);
     // });
-
-    socket.on('getFVfromDB', () => {
-        getFeatureVectorsFromDB(function(result) {
-            socket.emit('sentFVfromDB', result);
+    socket.on('getFVMatch', async (fv) => {
+        getFeatureVectorsFromDB( async function(result) {
+            let match = await getFVMatch(fv, result);
+			socket.emit('sentFVMatch', match);
         })
     });
-
 	socket.on('getStatsById', (id) => {
         getStatsById(id, socket) });
-		
 	socket.on('getFVById', (id) => {
         getFVById(id, socket) });
-	
 	socket.on('newImage', (data) => {
          });
-
-
     socket.on('addToJSON', (json, callback) => {
         fs.writeFile('testFeatureVectors.json', json, 'utf8', callback);
     });
-
     socket.on("fight", (data) => {fight(data, socket)});
+    socket.on("miss", (data) => {miss(data, socket)});
 
+    socket.on("resetTutorials", (data) => {resetTutorial(data)});
 
+    socket.on("disconnect", () => {removePlayer(socket)});
 });
 
 
@@ -232,6 +216,7 @@ function faction(data, socket) {
     });
 }
 
+
 async function signin(dat, socket) {
     const data = JSON.parse(dat);
     // console.log("\ndata.password    " + data.password);
@@ -264,13 +249,13 @@ async function signin(dat, socket) {
 function signout(data, socket) {
     jwt.verify(data.token, secret, async function(err, token) {
         if (err) {
-            console.log("(signout)       invalid token");
-            socket.emit("signout", {success:false});
-            throw err;
-        } else {
-            socket.emit("signout", {success: true});
-            delete game[token.name];
+            console.log("(signout)       invalid token:\n" + err);
+            socket.emit("signout", {success: false});
+            return;
         }
+        socket.emit("signout", {success: true});
+        delete game[token.name];
+        console.log(token.name + " signed out.");
     });
 }
 
@@ -279,36 +264,36 @@ function deleteAccount(data, socket) {
         if (err) {
             console.log("(delete)        invalid token");
             socket.emit("deleteaccount", {success: false});
-        } else {
-            User.findByIdAndRemove(token.id).then(
-                function (user) {
-                    if (user === null) {
-                        console.log("(delete)        No user found");
-                        socket.emit("deleteaccount", {success: false});
-                    } else {
-                        socket.emit("deleteaccount", {success: true});
-                    }
-                });
+            return;
         }
+        User.findByIdAndRemove(token.id).then(
+            function (user) {
+                if (user === null) {
+                    console.log("(delete)        No user found");
+                    socket.emit("deleteaccount", {success: false});
+                    return;
+                }
+                socket.emit("deleteaccount", {success: true});
+            });
     });
 }
 
 function newImage(data) {
     jwt.verify(data.token, secret, async function(err, token) {
         if (err) {
-            console.log("(stats)         invalid token");
-        } else {
-            User.findById(token.id).then(
-                function (user) {
-                    if (user === null) {
-                        console.log("(stats)         No user found");
-                    } else {
-                        user.image = data.img;
-						user.save();
-                    }
-                });
-		}
-	})
+            console.log("(newImage)     invalid token");
+            return;
+        }
+        User.findById(token.id).then(
+            function (user) {
+                if (user === null) {
+                    console.log("(newImage)     No user found");
+                    return;
+                }
+                user.image = data.img;
+                user.save();
+            });
+    })
 }
 
 
@@ -578,16 +563,169 @@ function signinhttp(obj, res) {
     });
 }
 
+// ============================================================================
+
+// APP HELPER FUNCTIONS
 
 // ============================================================================
 
-// BATTLE
 
+function generateWord(type) {
+    let words = [''];
+    switch(type) {
+        case 'shout':
+            words = ['Ow yes!', 'Hell yeah!', 'Sweet lord!', 'Ooh boy!', 'Sweet nibblets!'];
+            break;
+        case 'miss':
+            words = ['Better luck next time!', 'You gave it your best shot...', 'Ouch!', 'That hurt!'];
+            break;
+        case 'default':
+            break;
+    }
+    return words[Math.floor(Math.random() * words.length)];
+}
+
+
+function resetTutorial(data) {
+    if (data.token) {
+        jwt.verify(data.token, secret, async function (err, token) {
+            if (err) {
+                console.log("(resetTutorial)         invalid token");
+                return;
+            }
+            User.findById(token.id).then(
+                async function (player) {
+                    if (player === null) {
+                        console.log("(resetTutorial)           player not found.");
+                        return;
+                    }
+                    player.battleTutorialSeen = false;
+                    player.mainTutorialSeen = false;
+                    player.save();
+                }
+            )
+        })
+    }
+}
+
+
+
+
+
+// FACERECOGNITION ==============================================================
+async function getFVMatch(fv, results) {
+    let fv1 = Object.values(JSON.parse(fv));
+    let minDist = 1;
+    let index = null;
+    const threshold = 0.52;
+    let i = 0;
+    for (i; i < results.length; i++) {
+        if (results[i].featureVector != null) {
+            let fv2 = Object.values(JSON.parse(results[i].featureVector));
+            let dist = await euclideanDistance(fv1, fv2);
+            if (minDist > dist && dist <= threshold) {
+                console.log(dist);
+                minDist = dist;
+                index = i;
+            }
+        }
+    }
+    if (index !== null) {
+        console.log(results[index].name);
+        User.findOne({name: results[index].name}).then(async function (user) {
+            if (user === null)
+                return null;
+            results[index].token = await user.createFightToken();
+            return (results[index]);
+        });
+    }
+    else return null;
+}
+
+async function euclideanDistance(arr1, arr2) {
+	if (arr1.length !== arr2.length)
+		throw new Error('euclideanDistance: arr1.length !== arr2.length');
+	var desc1 = Array.from(arr1);
+	var desc2 = Array.from(arr2);
+	return Math.sqrt(desc1
+		.map(function (val, i) { return val - desc2[i]; })
+		.reduce(function (res, diff) { return res + Math.pow(diff, 2); }, 0));
+}
 // ============================================================================
 
 
 
+function miss(data, socket) {
+    if (data.token) {
+        jwt.verify(data.token, secret, async function (err, token) {
+            if (err) {
+                console.log("(miss)         invalid token");
+                return;
+            }
+            User.findById(token.id).then(
+                async function (player) {
+                    if (player === null) {
+                        console.log("(miss)           player not found.");
+                        return;
+                    }
+                    player.health = Math.round(player.health * 0.9);
+                    let message = "You took " + Math.round(player.health * 0.1) + " damage! " + generateWord("miss");
+                    player.save();
+                    socket.emit("miss", {message: message});
+                }
+            )
+        })
+    }
+}
 
+
+function calculateProbability(data, socket) {
+    if (data.token) {
+        jwt.verify(data.token, secret, async function(err, token) {
+            if (err) {
+                console.log("(prob)           invalid token");
+                return;
+            }
+            User.findById(token.id).then(
+                async function (player) {
+                    if (player === null) {
+                        console.log("(prob)             player not found.");
+                        return;
+                    }
+                    const fatigue = calculateFatigue(player.health, player.level);
+                    const stamina = calculateFatigue(player.health, player.level);
+                    const motivation = calculateFatigue(player.kills, player.deaths, player.experience);
+                    const prob = Math.max((0.33 * fatigue + 0.33 * stamina + 0.33 * motivation), 0.30);
+                    socket.emit("probData", {
+                        probability: prob,
+                        fatigue: fatigue,
+                        motivation: motivation,
+                        stamina: stamina
+                    })
+                }
+            )
+        }
+        )
+    }
+}
+
+function capValue(value) {
+    if (value < 0) {return 0}
+    else if (value > 0) {return 1}
+    else {return value}
+}
+
+function calculateFatigue(health, level) {
+    return capValue(1-(health/100) - Math.min(level / 30, 0.3));
+}
+
+function calculateStamina(health, level) {
+    capValue((health / 100) + Math.min(level / 30, 0.3));
+}
+
+function calculateMotivation(kills, deaths, experience) {
+    return capValue((kills / (kills + deaths) +  ((experience / 350) * 0.5)));
+}
 
 // Functie van vorig semester
 function calculateAttack(self, other) {

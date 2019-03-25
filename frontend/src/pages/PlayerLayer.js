@@ -196,27 +196,33 @@ class PlayerLayer extends React.Component {
                 if (idEnemy !== id) {
                     if (timeDiff <= 5) {
                         rows.push(
-                            <Marker title={key} position={pos} icon={enemyOnline}>
-                                <Popup>
-                                    <p> {key}, accuracy: {player.accuracy} m</p>
-                                    <p>
-                                        <button onClick={() => playerLayer.sendSpecialSignal(idEnemy)}> Send signal
-                                        </button>
-                                    </p>
-                                    <p>
-                                        <button onClick={() => playerLayer.sendHandShakeSignal(id, idEnemy)}> Send
-                                            handshake signal
-                                        </button>
-                                    </p>
-                                </Popup>
+                            <Marker onClick={
+                            () => this.showAlertBox(
+                              <div>
+                              <p> {key}, accuracy: {player.accuracy} m</p>
+                              <p>
+                                  <button onClick={() => playerLayer.sendSpecialSignal(idEnemy)}> Send signal
+                                  </button>
+                              </p>
+                              <p>
+                                  <button onClick={() => playerLayer.sendHandShakeSignal(id, idEnemy)}> Send
+                                      handshake signal
+                                  </button>
+                              </p>
+                              </div>
+                            )
+                            } title={key} position={pos} icon={enemyOnline}>
+
                             </Marker>
                         );
                     } else if (timeDiff <= 30) {
                         rows.push(
-                            <Marker title={key} position={pos} icon={enemyOffline}>
-                                <Popup>
-                                    <p> {key} seems to be be offline. </p>
-                                </Popup>
+                            <Marker onClick={
+                            () => this.showAlertBox(
+                              <div>  <p> {key} seems to be be offline. </p></div>
+                            )
+                            }
+                            title={key} position={pos} icon={enemyOffline}>
                             </Marker>
                         );
                     } else {
@@ -228,11 +234,14 @@ class PlayerLayer extends React.Component {
         }
 
         rows.push(
-            <Marker ref={playerLayer.popup} title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
-                <Popup>
-                    <p className="textAccuracy">Accuracy: {playerLayer.state.accuracy} m</p>
-                    <button className="findPlayers" onClick={playerLayer.showFindEnemyAlertBox.bind(playerLayer)}> Find other players </button>
-                </Popup>
+            <Marker ref={playerLayer.popup} onClick={
+              () => this.showAlertBox(
+                <div>
+                <p className="textAccuracy">Accuracy: {playerLayer.state.accuracy} m</p>
+                <button className="findPlayers" onClick={playerLayer.showFindEnemyAlertBox.bind(playerLayer)}> Find other players </button>
+                </div>
+              )
+            } title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
             </Marker>
         );
         this.setState({playerMarkers: rows});
@@ -253,10 +262,11 @@ class PlayerLayer extends React.Component {
                     const timeDiff =  Math.round(Math.abs(new Date() - new Date(playerData.updatedAt))/1000);
                     if (timeDiff <= 15)
                         rows.push(
-                            <Marker position={pos} icon={pathMark} opacity={opacity}>
-                                <Popup>
-                                    {playerData.id}, {timeDiff} s ago.
-                                </Popup>
+                            <Marker onClick={
+                            () => this.showAlertBox(
+                              <div> {playerData.id}, {timeDiff} s ago.</div>
+                            )
+                            } position={pos} icon={pathMark} opacity={opacity}>
                             </Marker>
                         );
                 }
@@ -308,10 +318,16 @@ class PlayerLayer extends React.Component {
     }
 
     showAlertBox(content){
+        this.alertBoxIsClosed();
         this.props.showAlertBox(content);
     }
 
+    alertBoxIsClosed(){
+      this.props.alertBoxIsClosed();
+    }
+
     showFindEnemyAlertBox(){
+        this.setState({showAlertBox: false})
         this.popup.current.leafletElement.options.leaflet.map.closePopup();
 
         var rows = [];

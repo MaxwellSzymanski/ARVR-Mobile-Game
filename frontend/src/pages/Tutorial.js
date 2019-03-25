@@ -20,9 +20,13 @@ class Tutorial extends Component {
     this.setState({ step: this.state.step+1})
   }
 
+  handlePrevious() {
+    this.setState({ step: this.state.step-1})
+  }
+
   render() {
     let steps;
-    let buttons;
+    let buttons = [];
 
     if (this.state.step == 1) {
       steps = <Step1/>
@@ -36,10 +40,15 @@ class Tutorial extends Component {
       steps = <Step3/>
     }
 
-    if (this.state.step == 2) {
-
-    } else {
-      buttons = <button id="tutorialButton" onClick={() => this.handleNext()}></button>
+    if (this.state.step == 1) {
+      buttons = <button className="smallButton next" onClick={() => this.handleNext()}></button>
+    }
+    else if (this.state.step == 3) {
+      buttons = <button className="smallButton back left" onClick={() => this.handlePrevious()}></button>
+    }
+    else {
+      buttons.push(<button className="smallButton back left" onClick={() => this.handlePrevious()}></button>);
+      buttons.push(<button className="smallButton next" onClick={() => this.handleNext()}></button>)
     }
 
 

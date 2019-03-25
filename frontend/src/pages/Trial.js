@@ -22,6 +22,8 @@ const customStyles = {
     width                 : '40vh',
     height                : '70vh',
     backgroundColor       : '#910F0F',
+    borderRadius          : '30px',
+    boxShadow: '0 0 12px rgba(0,0,0,.14),0 12px 24px rgba(0,0,0,.28)',
   }
 
 };
@@ -34,6 +36,7 @@ class Trial extends React.Component {
         super(props);
         this.setCenter = this.setCenter.bind(this);
         this.showAlertBox = this.showAlertBox.bind(this);
+        this.alertBoxIsClosed = this.alertBoxIsClosed.bind(this);
         this.setTarget = this.setTarget.bind(this);
         this.changeMenu = this.changeMenu.bind(this);
         this.handleShow = this.handleShow.bind(this);
@@ -148,7 +151,15 @@ class Trial extends React.Component {
     this.setState({ show: true });
   }
 
+  setZoom(){
+    var zoom = this.map.leafletElement.getZoom();
+    if ( zoom > 18 ){
+      this.setState({zoom: 18});
 
+    } else {
+      this.setState({zoom: this.map.leafletElement.getZoom()});
+    }
+  }
 
     render() {
         return (
@@ -160,7 +171,7 @@ class Trial extends React.Component {
               style={customStyles}>
                 <Tutorial/>
             </Modal>
-            <Map style={{zIndex:0}} onClick={()=> this.mapChanged()} className="mapss" center={this.state.centerMap} zoom={this.state.zoom}>
+            <Map ref={(ref) => { this.map = ref; }} onViewportChange={()=> this.setZoom()}  style={{zIndex:0}} onClick={()=> this.mapChanged()} className="mapss" center={this.state.centerMap} zoom={this.state.zoom}>
                 <TileLayer
                     //attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     //url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -170,7 +181,7 @@ class Trial extends React.Component {
                 <PopPop open={this.state.showAlertBox} closeBtn={true} closeOnEsc={true} onClose={()=>this.alertBoxIsClosed()} closeOnOverlay={true} position={"centerCenter"} contentStyle={this.state.alertBoxStyle}>
                     <div>{this.state.content[0]}</div>
                 </PopPop>
-                <PlayerLayer idTarget={this.state.idTarget} setTarget={this.setTarget} showAlertBox={this.showAlertBox} id={this.state.id} locationEnabled={this.state.haveUsersLocation}/>
+                <PlayerLayer idTarget={this.state.idTarget} setTarget={this.setTarget} showAlertBox={this.showAlertBox} alertBoxIsClosed={this.alertBoxIsClosed} id={this.state.id} locationEnabled={this.state.haveUsersLocation}/>
             </Map>
             </div>
             <div>

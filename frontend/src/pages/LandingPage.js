@@ -12,7 +12,6 @@ class LandingPage extends React.Component {
         this.state = {
             redirect: false,
         };
-
         cookies.set("fieldtest", props.match.params.token)
     }
 
