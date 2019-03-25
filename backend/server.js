@@ -114,8 +114,8 @@ io.sockets.on('connection', function (socket) {
     socket.on('getFVMatch', async (fv) => {
         getFeatureVectorsFromDB( async function(result) {
             let match = await getFVMatch(fv, result);
-            console.log("   match:\n" + await match);
-			socket.emit('sentFVMatch', await match);
+            console.log("   match:\n" + await getFVMatch(fv, result));
+			socket.emit('sentFVMatch', await getFVMatch(fv, result));
         })
     });
 	socket.on('getStatsById', (id) => {
