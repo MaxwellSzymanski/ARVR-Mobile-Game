@@ -389,6 +389,22 @@ p {
     max-width: 830px;
 }
 
+.polaroidMirror {
+    padding: 20px 20px 50px;
+    background-color: white;
+    margin-right: auto;
+    margin-left: auto;
+    max-height: 950px;
+    max-width: 830px;
+
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+
 .cameraLoader {
     background-image: url(assets/icons/loader.gif);
     width: 100px;
