@@ -114,8 +114,7 @@ io.sockets.on('connection', function (socket) {
     socket.on('getFVMatch', async (fv) => {
         getFeatureVectorsFromDB( async function(result) {
             let match = await getFVMatch(fv, result);
-            console.log("   match:\n" + await getFVMatch(fv, result));
-			socket.emit('sentFVMatch', await getFVMatch(fv, result));
+			socket.emit('sentFVMatch', match);
         })
     });
 	socket.on('getStatsById', (id) => {
@@ -299,33 +298,46 @@ function newImage(data) {
 
 
 function stats(data, socket) {
+    if (!data.token) {
+        console.log("(stats)     no token.");
+        return;
+    }
     jwt.verify(data.token, secret, async function(err, token) {
         if (err) {
             console.log("(stats)         invalid token");
-        } else {
-            User.findById(token.id).then(
-                function (user) {
-                    if (user === null) {
-                        console.log("(stats)         No user found");
-                    } else {
-                        socket.emit("stats", user.getUserData());
-                        socket.emit("photo", {image: user.image} )
-                    }
-                });
-            if (data.enemy) {
-                User.findById(data.enemy).then(
-                    function(enemy) {
-                        if (enemy === null) {
-                            console.log("(stats)         No enemy found");
-                        } else {
-                            socket.emit("enemystats", enemy.getEnemyData());
-                            socket.emit("enemyphoto", enemy.image);
-                        }
-                    }
-                )
+            return;
+        } else if (!token.login)
+            return;
+        User.findById(token.id).then(
+            function (user) {
+                if (user === null) {
+                    console.log("(stats)         No user found");
+                } else {
+                    socket.emit("stats", user.getUserData());
+                    socket.emit("photo", {image: user.image})
+                }
+            });
+
+    });
+    if (!data.enemy)
+        return;
+    jwt.verify(data.token, secret, async function (err, token) {
+        if (err) {
+            console.log("(stats)         invalid enemy token");
+            return;
+        } else if (!token.attack)
+            return;
+        User.findOne({name: token.name}).then(
+            function (enemy) {
+                if (enemy === null) {
+                    console.log("(stats)         No enemy found");
+                } else {
+                    socket.emit("enemystats", enemy.getEnemyData());
+                    socket.emit("enemyphoto", enemy.image);
+                }
             }
-        }
-    })
+        )
+    });
 }
 
 let game = {};
@@ -638,8 +650,8 @@ async function getFVMatch(fv, results) {
                 return null;
             // results[index].token = await user.createFightToken();
             let result = { name: user.name,
+                _id: user._id,
                 token: await user.createFightToken()};
-            console.log(result);
             return (result);
         });
     }

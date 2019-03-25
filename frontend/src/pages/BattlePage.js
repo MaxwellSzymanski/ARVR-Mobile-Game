@@ -32,15 +32,15 @@ class BattlePage extends React.Component {
     }
 
     componentDidMount() {
-        let id = localStorage.getItem("capturedPlayerId");
+        let attackToken = cookies.get("attackToken");
         let oppHealth = (((5 + this.state.oppHealth)/105)*100).toString() + '%';
         let css = document.getElementById('oppHealth');
         if (css !== null && css !== undefined)
             css.style.width = oppHealth;
 
-        this.context.emit("stats", {token: cookies.get("token"), enemy: id});
+        this.context.emit("stats", {token: cookies.get("token"), enemy: attackToken});
 
-        this.context.emit("getStatsById", id);
+        // this.context.emit("getStatsById", attackToken);
 
         this.context.emit("getProb", {token: cookies.get('token')});
 

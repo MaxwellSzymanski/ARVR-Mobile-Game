@@ -62,7 +62,7 @@ class CapturePlayer extends React.Component {
      this.context.on('sentFVMatch', async (match) => {
         //let capturedPlayer = await this.getMatchingPlayerFromFV(match)
         let capturedPlayer = match;
-        alert(match);
+
         if (capturedPlayer === null){
             this.setState({calculating:false});
             swal({
