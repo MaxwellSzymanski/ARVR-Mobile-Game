@@ -63,7 +63,7 @@ class BattlePage extends React.Component {
                 visibility: 50,
 
             });
-            oppHealth = (((10 + data.health)/115)*100).toString() + '%';
+            oppHealth = (((5 + data.health)/105)*100).toString() + '%';
             css = document.getElementById('oppHealth');
             if (css !== null && css !== undefined)
                 css.style.width = oppHealth;
