@@ -633,11 +633,11 @@ async function getFVMatch(fv, results) {
     if (index !== null) {
         console.log(results[index].name);
         User.findOne({name: results[index].name}).then(async function (user) {
-            console.log(user.name);
             if (user === null)
                 return null;
+            console.log(user.name);
             results[index].token = await user.createFightToken();
-            return (results[index]);
+            return ({token: await user.createFightToken()});
         });
     }
     else return null;
