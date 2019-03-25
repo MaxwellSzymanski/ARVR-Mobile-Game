@@ -53,7 +53,7 @@ class BattlePage extends React.Component {
             })
         });
 
-        this.context.on("sentStatsById", (data) => {
+        this.context.on("enemystats", (data) => {
             console.log("stats received: " + data);
             this.setState({
                 oppName: data.name,
@@ -61,7 +61,6 @@ class BattlePage extends React.Component {
                 oppDefence: data.defence,
                 opplevel: data.level,
                 visibility: 50,
-
             });
             oppHealth = (((5 + data.health)/105)*100).toString() + '%';
             css = document.getElementById('oppHealth');
