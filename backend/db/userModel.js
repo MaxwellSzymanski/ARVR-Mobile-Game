@@ -150,6 +150,8 @@ Schema.methods.getUserData = function() {
         deaths: this.deaths,
         items: this.items,
         faction: this.faction,
+        mainTutorialSeen: this.mainTutorialSeen,
+        battleTutorialSeen: this.battleTutorialSeen
     };
 };
 

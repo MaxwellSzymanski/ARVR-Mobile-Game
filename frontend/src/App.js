@@ -32,7 +32,7 @@ class App extends Component {
             socket: io(url),
             loggedIn: false,
             //verified: false,
-            verified: false,
+            verified: true,
         };
     }
 

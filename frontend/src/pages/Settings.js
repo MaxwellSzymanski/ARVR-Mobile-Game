@@ -2,7 +2,6 @@ import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import "./Settings.css"
 import swal from '@sweetalert/with-react';
-import SweetAlert from 'sweetalert2-react';
 import Cookies from 'universal-cookie';
 import SocketContext from "../socketContext";
 const cookies = new Cookies();
@@ -97,13 +96,13 @@ class Settings extends React.Component {
     }
 
     resetTutorials() {
+        this.context.emit("resetTutorial", {token: cookies.get('token')});
         swal({title: "Tutorials reset!", text: "The tutorials will be displayed again. You can always dismiss them when you think you know what to do.", icon: "success"})
-        this.context.emit("resetTutorial", {token: cookies.get('token')})
     }
 
 
     showLicences() {
-        swal("Licences", "Flickity - GNU General Public License v3 \nFace-api.js - MIT Licence", "Icons used: 'https://icons8.com/license'")
+        swal("Licences", "Flickity - GNU General Public License v3 \nFace-api.js - MIT Licence\nIcons used: 'https://icons8.com/license'")
     }
 
     render() {
