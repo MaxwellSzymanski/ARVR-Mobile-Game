@@ -655,37 +655,37 @@ function leaveMission(data, socket) {
 
 function missionPhoto(data, socket) {
     if (data.token) {
-        if (missionPlayers[data.token] !== undefined && missionPlayers[data.token] !== null) {
-            // if (distanceBetween(data.location, missionList[currentMission]) > range) {
-            //     const msg = "You haven't reached the mission location yet. You need to be within " + range + "m of the target in order to send a photo.";
-            //     socket.emit("message", {message: msg});
-            //     return;
-            } else if (firstPhotoAccepted) {
-                secondPhoto(data, socket);
-                return;
-            } else if (voting) {
-                socket.emit("message", {message: "The vote for the last photo is still going on. Please wait."});
-                return;
-            }
-            voting = true;
-            firstPlayer = data.token;
-            currentPhoto = data.image;
-            const exp = new Date(new Date().getTime() + timeInterval);
-            const ID = currentPhotoID;
-            console.log("  before timeout ID:    " + ID);
-            setTimeout(() => {
-                photoAccepted(ID);
-            }, timeInterval);
-            Object.keys(missionPlayers).forEach(function (key) {
-                if (key !== data.token) {
-                    missionPlayers[key].socket.emit("missionPhoto", {
-                        firstPhoto: currentPhoto,
-                        secondPhoto: data.photo,
-                        expiry: exp
-                    });
-                }
-            })
+        // if (missionPlayers[data.token] !== undefined && missionPlayers[data.token] !== null) {
+        //     if (distanceBetween(data.location, missionList[currentMission]) > range) {
+        //         const msg = "You haven't reached the mission location yet. You need to be within " + range + "m of the target in order to send a photo.";
+        //         socket.emit("message", {message: msg});
+        //         return;
+        // } else if (firstPhotoAccepted) {
+        if (firstPhotoAccepted) {
+            secondPhoto(data, socket);
+            return;
+        } else if (voting) {
+            socket.emit("message", {message: "The vote for the last photo is still going on. Please wait."});
+            return;
         }
+        voting = true;
+        firstPlayer = data.token;
+        currentPhoto = data.image;
+        const exp = new Date(new Date().getTime() + timeInterval);
+        const ID = currentPhotoID;
+        console.log("  before timeout ID:    " + ID);
+        setTimeout(() => {
+            photoAccepted(ID);
+        }, timeInterval);
+        Object.keys(missionPlayers).forEach(function (key) {
+            if (key !== data.token) {
+                missionPlayers[key].socket.emit("missionPhoto", {
+                    firstPhoto: currentPhoto,
+                    secondPhoto: data.photo,
+                    expiry: exp
+                });
+            }
+        })
     }
 }
 
