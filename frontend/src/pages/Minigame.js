@@ -6,7 +6,6 @@ import Cookies from 'universal-cookie';
 import L from 'leaflet';
 import { Marker,Popup } from 'react-leaflet';
 import SocketContext from "../socketContext";
-import swal from '@sweetalert/with-react';
 
 const cookies = new Cookies();
 
@@ -224,23 +223,23 @@ class Minigame extends React.Component {
         if(this.state.showAlertBox === false) {
             let rows = [];
             var close = false;
-            if ( this.distanceBetween() < 100 ){
-              close = true;
-            }
-            if ((!this.state.firstPicTaken || this.state.firstPicAccepted) && (close)) {
+            close = (this.distanceBetween() <= 1000);
+
+            if (!close) {
+                rows.push(<p>You're not close enough to the mission location.</p>)
+            } else if (!this.state.firstPicTaken || this.state.firstPicAccepted) {
                 rows.push(<Camera
                     onTakePhoto={(dataUri) => {
                         this.sendPhoto(dataUri);
                     }}
                     // isImageMirror = {false}
                     imageType={'IMAGE_TYPES.PNG'}
-                    imageCompression={0.97}
+                    imageCompression={0.98}
                     idealFacingMode={"FACING_MODES.ENVIRONMENT"}
                 />);
             } else {
                 rows.push(<img src={this.state.encodedPic}/>);
                 rows.push(<p>Please wait for all the mission players to vote.</p>);
-
             }
             this.showAlertBox(rows);
         }

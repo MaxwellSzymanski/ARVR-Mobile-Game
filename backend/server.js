@@ -671,6 +671,7 @@ function missionPhoto(data, socket) {
             currentPhoto = data.image;
             const exp = new Date(new Date().getTime() + timeInterval);
             const ID = currentPhotoID;
+            console.log("  before timeout ID:    " + ID);
             setTimeout(() => {
                 photoAccepted(ID);
             }, timeInterval);
@@ -695,6 +696,7 @@ function secondPhoto(data, socket) {
 }
 
 function photoAccepted(ID) {
+    console.log("  photoAccepted() ID:    " + ID);
     if (currentPhoto !== null && currentPhotoID === ID) {
         Object.keys(missionPlayers).forEach( function (key) {
             missionPlayers[key].socket.emit("voteResult", {accepted: true })
@@ -726,6 +728,7 @@ function missionVote(data, socket) {
 
 function newMission(data, socket) {
     if (data.token) {
+        console.log("\n New mission started!");
         if (missionPlayers[data.token] !== undefined && missionPlayers[data.token] !== null) {
             if (firstPhotoAccepted && !voting) {
                 firstPhotoAccepted = false;
@@ -734,7 +737,8 @@ function newMission(data, socket) {
                 currentMission %= missionList.length;
                 Object.keys(missionPlayers).forEach(function (key) {
                     missionPlayers[key].socket.emit("mission", {location: missionList[currentMission]})
-                })
+                });
+                console.log(" New mission number: " + currentMission + "\n")
             }
         }
     }
