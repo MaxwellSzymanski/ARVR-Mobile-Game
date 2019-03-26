@@ -1,7 +1,5 @@
 import numpy as np
 import cv2 as cv2
-import plotly as py
-import plotly.graph_objs as go
 import time
 #opencv-contrib needed to run SIFT
 
