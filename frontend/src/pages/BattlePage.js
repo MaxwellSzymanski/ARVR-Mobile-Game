@@ -24,6 +24,7 @@ class BattlePage extends React.Component {
             fatigue: 0,
             motivation: 0,
             stamina: 0,
+            showTutorial: true,
             //TODO
             redirect:false
         };
@@ -84,6 +85,7 @@ class BattlePage extends React.Component {
                 selfExperience: data.experience,
                 selfKills: data.kills,
                 selfDeaths: data.deaths,
+                tutorialSeen: data.battleTutorialSeen,
                 selfItems: items,
             });
         });
@@ -146,7 +148,7 @@ class BattlePage extends React.Component {
     }
 
     attack() {
-        if (this.state.probability < Math.random()) {
+        if (this.state.probability > Math.random()) {
             this.context.emit("fight", {token: cookies.get('token'), enemy: cookies.get("attackToken")});
         }
         else {
