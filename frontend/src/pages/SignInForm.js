@@ -44,17 +44,14 @@ class SignInForm extends React.Component {
                 this.setState({redirect: true, verified: data.verified});
             }
         })
-        if("vibrate" in window.navigator)
-        {
-            navigator.vibrate(2000);
-        }
-        else
-        {
-            console.log("Your browser doesn't support vibration API");
-        }
+
     }
 
     handleChange(e) {
+        if("vibrate" in window.navigator)
+            {navigator.vibrate(2000);}
+        else
+            {console.log("Your browser doesn't support vibration API");}
         let target = e.target;
         let value = target.type === 'checkbox' ? target.checked : target.value;
         let name = target.name;
@@ -62,6 +59,7 @@ class SignInForm extends React.Component {
         this.setState({
             [name]: value
         });
+
     }
 
     async handleSubmit(e) {
