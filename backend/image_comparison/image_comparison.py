@@ -23,8 +23,8 @@ def image_resize(image, width = None, height = None, inter = cv2.INTER_AREA):
 
     return resized
 
-original_jpg = " (" + str(1) + ")"
-comparison_jpg = " (" + str(2) + ")"
+original_jpg = "(" + str(1) + ")"
+comparison_jpg = "(" + str(2) + ")"
 
 original = cv2.imread(original_jpg + ".jpg")
 image_to_compare = cv2.imread(comparison_jpg + ".jpg")
