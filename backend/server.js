@@ -635,6 +635,7 @@ function mission(data, socket) {
             if (err) {
                 console.log("(mission)        invalid token");
             } else {
+                console.log("New mission player: " + token.name);
                 missionPlayers[data.token] = {
                     socket: socket,
                     agreed: false,
@@ -655,10 +656,10 @@ function leaveMission(data, socket) {
 function missionPhoto(data, socket) {
     if (data.token) {
         if (missionPlayers[data.token] !== undefined && missionPlayers[data.token] !== null) {
-            if (distanceBetween(data.location, missionList[currentMission]) > range) {
-                const msg = "You haven't reached the mission location yet. You need to be within " + range + "m of the target in order to send a photo.";
-                socket.emit("message", {message: msg});
-                return;
+            // if (distanceBetween(data.location, missionList[currentMission]) > range) {
+            //     const msg = "You haven't reached the mission location yet. You need to be within " + range + "m of the target in order to send a photo.";
+            //     socket.emit("message", {message: msg});
+            //     return;
             } else if (firstPhotoAccepted) {
                 secondPhoto(data, socket);
                 return;

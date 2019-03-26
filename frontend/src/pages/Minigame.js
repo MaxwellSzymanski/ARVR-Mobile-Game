@@ -224,7 +224,7 @@ class Minigame extends React.Component {
             let rows = [];
             var close = false;
             close = (this.distanceBetween() <= 1000);
-
+            rows.push(<p>distanceBetween(): {this.distanceBetween()}</p>);
             if (!close) {
                 rows.push(<p>You're not close enough to the mission location.</p>)
             } else if (!this.state.firstPicTaken || this.state.firstPicAccepted) {
