@@ -67,7 +67,7 @@ class CapturePlayer extends React.Component {
             this.setState({calculating:false});
             swal({
               title: "Unkown Person",
-              text: "The Person in the photo is NOT a player",
+              text: "The Person in the photo is not a Game of Wolves player.\nSure you followed game protocol?",
               icon: "warning",
               button: "Try again!",
           });
@@ -167,7 +167,7 @@ class CapturePlayer extends React.Component {
     return (
       <div className="background">
         {this.renderRedirect()}
-          {!this.state.calculating && <div className="polaroid">
+          {!this.state.calculating && <div className="polaroidMirror">
               <Webcam
                   audio={false}
                   ref="webcam"

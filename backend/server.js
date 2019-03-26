@@ -298,33 +298,46 @@ function newImage(data) {
 
 
 function stats(data, socket) {
+    if (!data.token) {
+        console.log("(stats)     no token.");
+        return;
+    }
     jwt.verify(data.token, secret, async function(err, token) {
         if (err) {
             console.log("(stats)         invalid token");
-        } else {
-            User.findById(token.id).then(
-                function (user) {
-                    if (user === null) {
-                        console.log("(stats)         No user found");
-                    } else {
-                        socket.emit("stats", user.getUserData());
-                        socket.emit("photo", {image: user.image} )
-                    }
-                });
-            if (data.enemy) {
-                User.findById(data.enemy).then(
-                    function(enemy) {
-                        if (enemy === null) {
-                            console.log("(stats)         No enemy found");
-                        } else {
-                            socket.emit("enemystats", enemy.getEnemyData());
-                            socket.emit("enemyphoto", enemy.image);
-                        }
-                    }
-                )
+            return;
+        } else if (!token.login)
+            return;
+        User.findById(token.id).then(
+            function (user) {
+                if (user === null) {
+                    console.log("(stats)         No user found");
+                } else {
+                    socket.emit("stats", user.getUserData());
+                    socket.emit("photo", {image: user.image})
+                }
+            });
+
+    });
+    if (!data.enemy)
+        return;
+    jwt.verify(data.enemy, secret, async function (err, token) {
+        if (err) {
+            console.log("(stats)         invalid enemy token");
+            return;
+        } else if (!token.attack)
+            return;
+        User.findOne({name: token.name}).then(
+            function (enemy) {
+                if (enemy === null) {
+                    console.log("(stats)         No enemy found");
+                } else {
+                    socket.emit("enemystats", enemy.getEnemyData());
+                    socket.emit("enemyphoto", enemy.image);
+                }
             }
-        }
-    })
+        )
+    });
 }
 
 let game = {};
@@ -503,21 +516,21 @@ async function getFeatureVectorsFromDB(callBack) {
 
 // ============================================================================
 
+const factions = ["loneWolf", "adventurer", "scavenger"];
 const fieldTestToken = require('./fieldTestToken.js');
 function signuphttp(obj, res) {
-    if (!obj.token || obj.token !== fieldTestToken) {
-        console.log("(sign up)      Doesn't have field test token.");
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.setHeader("Content-Type", "ERROR");
-        res.write(JSON.stringify({
-            success: false,
-            message: "You're not a field test participant and are not allowed to join this game.",
-        }));
-        res.end();
-        return;
-    }
+    // if (!obj.token || obj.token !== fieldTestToken) {
+    //     console.log("(sign up)      Doesn't have field test token.");
+    //     res.setHeader('Access-Control-Allow-Origin', '*');
+    //     res.setHeader("Content-Type", "ERROR");
+    //     res.write(JSON.stringify({
+    //         success: false,
+    //         message: "You're not a field test participant and are not allowed to join this game.",
+    //     }));
+    //     res.end();
+    //     return;
+    // }
     const newUser = new User(obj);
-    const factions = ["loneWolf", "adventurer", "scavenger"];
     newUser.faction = factions[Math.floor(Math.random() * factions.length)];
     newUser.save( function(error) {
         if (error) {
@@ -632,11 +645,14 @@ async function getFVMatch(fv, results) {
     }
     if (index !== null) {
         console.log(results[index].name);
-        User.findOne({name: results[index].name}).then(async function (user) {
+        return User.findOne({name: results[index].name}).then(async function (user) {
             if (user === null)
                 return null;
-            results[index].token = await user.createFightToken();
-            return (results[index]);
+            // results[index].token = await user.createFightToken();
+            let result = { name: user.name,
+                _id: user._id,
+                token: await user.createFightToken()};
+            return (result);
         });
     }
     else return null;
@@ -668,8 +684,8 @@ function miss(data, socket) {
                         console.log("(miss)           player not found.");
                         return;
                     }
-                    player.health = Math.round(player.health * 0.9);
                     let message = "You took " + Math.round(player.health * 0.1) + " damage! " + generateWord("miss");
+                    player.health = player.health * 0.9;
                     player.save();
                     socket.emit("miss", {message: message});
                 }
@@ -732,31 +748,35 @@ function calculateAttack(self, other) {
     return (self.attack * self.attack / (self.attack + other.defence)) * (Math.random() * 11 + 4 + self.level) / (20 + self.level);
 }
 
-function fight(data, socket){
-    if (data.token) {
-        jwt.verify(data.token, secret, async function(err, token) {
-            if (err) {
-                console.log("(fight)         invalid token");
-                return;
-            }
-            User.findById(token.id).then(
-                async function (attacker) {
-                    if (attacker === null) {
-                        console.log("(attack)           attacker not found.");
+function fight(data, socket) {
+    if (!data.enemy || !data.token)
+        return;
+    jwt.verify(data.token, secret, async function (err, token) {
+        if (err) {
+            console.log("(fight)         invalid token");
+            return;
+        }
+        User.findById(token.id).then(
+            async function (attacker) {
+                if (attacker === null) {
+                    console.log("(fight)           attacker not found.");
+                    return;
+                }
+                jwt.verify(data.enemy, secret, async function (err, token) {
+                    if (err) {
+                        console.log("(fight)         invalid defender token");
                         return;
-                    }
-                    User.findById(data.enemy).then(
+                    } else if (!token.attack)
+                        return;
+                    User.findOne({name: token.name}).then(
                         async function (defender) {
-                            if (defender === null) {
-                                console.log("(attack)           defender not found.");
+                            if (!defender) {
+                                console.log("(fight)           defender not found.");
                                 return;
                             }
 
-                            // TODO: ik heb hier tijdelijk iets ingevuld, zodat er op de field test wa waarden wijzigen.
-                            //          Wijzig zo veel ge wilt
-
                             let attack = Math.ceil(calculateAttack(attacker, defender));
-                            let attackXP = Math.ceil(attack * (1.5 + 0.5*Math.random()));
+                            let attackXP = Math.ceil(attack * (1.5 + 0.5 * Math.random()));
                             let msgA = "You inflicted " + attack + " damage to " + defender.name + " and ";
                             defender.health = defender.health - attack;
                             if (defender.health <= 0) {
@@ -788,15 +808,14 @@ function fight(data, socket){
 
                             if (game[defender.name] !== undefined && game[defender.name] !== null) {
                                 game[defender.name].socket.emit("stats", defender.getUserData());
-                                const msgD = "You have been attacked by " + attacker.name +"!";
+                                const msgD = "You have been attacked by " + attacker.name + "!";
                                 game[defender.name].socket.emit("message", {message: msgD});
                             }
                         }
                     )
-                }
-            )
-        })
-    }
+                })
+            })
+    })
 }
 
 

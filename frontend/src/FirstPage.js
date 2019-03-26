@@ -12,7 +12,7 @@ class FirstPage extends React.Component {
       <div className="heleSign">
       <div className="Title">
           <div className="wolfIcon"/>
-          <h1 className="titleGOW">Game Of Wolves</h1>
+          <h1 className="titleGOW">Game of Wolves</h1>
       </div>
       <div className="App__Form">
         <div className="PageSwitcher">

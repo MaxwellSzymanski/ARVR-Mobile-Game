@@ -105,14 +105,14 @@ class CameraComp extends React.Component {
       <div className="background">
         {this.renderRedirect()}
         <p className="subTitle">Take your profile picture</p>
-          {!this.state.calculating && <div className="polaroid">
+          {!this.state.calculating && <div className="polaroidMirror">
+              <button className="smallButton camera" onClick={this.onTakePhoto}> </button>
               <Webcam
                   audio={false}
                   ref="webcam"
                   screenshotFormat="image/jpeg"
                   videoConstraints={videoConstraints}
               />
-              <button className="smallButton camera" onClick={this.onTakePhoto}> </button>
             </div>}
           {this.state.calculating && <div className="polaroid">
               <div className="cameraLoader"></div>

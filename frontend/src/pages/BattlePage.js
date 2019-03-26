@@ -33,15 +33,15 @@ class BattlePage extends React.Component {
     }
 
     componentDidMount() {
-        let id = localStorage.getItem("capturedPlayerId");
+        let attackToken = cookies.get("attackToken");
         let oppHealth = (((5 + this.state.oppHealth)/105)*100).toString() + '%';
         let css = document.getElementById('oppHealth');
         if (css !== null && css !== undefined)
             css.style.width = oppHealth;
 
-        this.context.emit("stats", {token: cookies.get("token"), enemy: id});
+        this.context.emit("stats", {token: cookies.get("token"), enemy: attackToken});
 
-        this.context.emit("getStatsById", id);
+        // this.context.emit("getStatsById", attackToken);
 
         this.context.emit("getProb", {token: cookies.get('token')});
 
@@ -54,7 +54,7 @@ class BattlePage extends React.Component {
             })
         });
 
-        this.context.on("sentStatsById", (data) => {
+        this.context.on("enemystats", (data) => {
             console.log("stats received: " + data);
             this.setState({
                 oppName: data.name,
@@ -62,9 +62,8 @@ class BattlePage extends React.Component {
                 oppDefence: data.defence,
                 opplevel: data.level,
                 visibility: 50,
-
             });
-            oppHealth = (((10 + data.health)/115)*100).toString() + '%';
+            oppHealth = (((5 + data.health)/105)*100).toString() + '%';
             css = document.getElementById('oppHealth');
             if (css !== null && css !== undefined)
                 css.style.width = oppHealth;
@@ -150,7 +149,7 @@ class BattlePage extends React.Component {
 
     attack() {
         if (this.state.probability < Math.random()) {
-            this.context.emit("fight", {token: cookies.get('token'), enemy: localStorage.getItem("capturedPlayerId")});
+            this.context.emit("fight", {token: cookies.get('token'), enemy: cookies.get("attackToken")});
         }
         else {
             this.context.emit("miss", {token:cookies.get('token')});
