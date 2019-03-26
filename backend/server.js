@@ -684,8 +684,8 @@ function miss(data, socket) {
                         console.log("(miss)           player not found.");
                         return;
                     }
-                    player.health = Math.round(player.health * 0.9);
                     let message = "You took " + Math.round(player.health * 0.1) + " damage! " + generateWord("miss");
+                    player.health = player.health * 0.9;
                     player.save();
                     socket.emit("miss", {message: message});
                 }
@@ -748,31 +748,35 @@ function calculateAttack(self, other) {
     return (self.attack * self.attack / (self.attack + other.defence)) * (Math.random() * 11 + 4 + self.level) / (20 + self.level);
 }
 
-function fight(data, socket){
-    if (data.token) {
-        jwt.verify(data.token, secret, async function(err, token) {
-            if (err) {
-                console.log("(fight)         invalid token");
-                return;
-            }
-            User.findById(token.id).then(
-                async function (attacker) {
-                    if (attacker === null) {
-                        console.log("(attack)           attacker not found.");
+function fight(data, socket) {
+    if (!data.enemy || !data.token)
+        return;
+    jwt.verify(data.token, secret, async function (err, token) {
+        if (err) {
+            console.log("(fight)         invalid token");
+            return;
+        }
+        User.findById(token.id).then(
+            async function (attacker) {
+                if (attacker === null) {
+                    console.log("(fight)           attacker not found.");
+                    return;
+                }
+                jwt.verify(data.enemy, secret, async function (err, token) {
+                    if (err) {
+                        console.log("(fight)         invalid defender token");
                         return;
-                    }
-                    User.findById(data.enemy).then(
+                    } else if (!token.attack)
+                        return;
+                    User.findOne({name: token.name}).then(
                         async function (defender) {
-                            if (defender === null) {
-                                console.log("(attack)           defender not found.");
+                            if (!defender) {
+                                console.log("(fight)           defender not found.");
                                 return;
                             }
 
-                            // TODO: ik heb hier tijdelijk iets ingevuld, zodat er op de field test wa waarden wijzigen.
-                            //          Wijzig zo veel ge wilt
-
                             let attack = Math.ceil(calculateAttack(attacker, defender));
-                            let attackXP = Math.ceil(attack * (1.5 + 0.5*Math.random()));
+                            let attackXP = Math.ceil(attack * (1.5 + 0.5 * Math.random()));
                             let msgA = "You inflicted " + attack + " damage to " + defender.name + " and ";
                             defender.health = defender.health - attack;
                             if (defender.health <= 0) {
@@ -804,15 +808,14 @@ function fight(data, socket){
 
                             if (game[defender.name] !== undefined && game[defender.name] !== null) {
                                 game[defender.name].socket.emit("stats", defender.getUserData());
-                                const msgD = "You have been attacked by " + attacker.name +"!";
+                                const msgD = "You have been attacked by " + attacker.name + "!";
                                 game[defender.name].socket.emit("message", {message: msgD});
                             }
                         }
                     )
-                }
-            )
-        })
-    }
+                })
+            })
+    })
 }
 
 
