@@ -31,7 +31,6 @@ class App extends Component {
         this.state = {
             socket: io(url),
             loggedIn: false,
-s
             //verified: false,
             verified: true,
 
