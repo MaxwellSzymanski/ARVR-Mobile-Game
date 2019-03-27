@@ -223,7 +223,7 @@ class Minigame extends React.Component {
         if(this.state.showAlertBox === false) {
             let rows = [];
             var close = false;
-            close = (this.distanceBetween() <= 1000);
+            close = (this.distanceBetween() <= 100000);
             rows.push(<p>distanceBetween(): {this.distanceBetween()}</p>);
             if (!close) {
                 rows.push(<p>You're not close enough to the mission location.</p>)
@@ -246,11 +246,11 @@ class Minigame extends React.Component {
     }
 
     sendPhoto(dataUri){
-        this.context.emit("missionPhoto", {token: cookies.get('token'), photo: dataUri, location: [this.state.location.lat, this.state.location.lng]} );
+        this.context.emit("missionPhoto", {token: cookies.get('token'), photo: dataUri.toString('base64'), location: [this.state.location.lat, this.state.location.lng]} );
         if (this.state.firstPicTaken) {
             this.setState({showAlertBox: false, firstPicAccepted: true});
         } else {
-            this.setState({showAlertBox: false, firstPicTaken: true, encodedPic: dataUri});
+            this.setState({showAlertBox: false, firstPicTaken: true, encodedPic: dataUri.toString('base64')});
         }
     }
 
