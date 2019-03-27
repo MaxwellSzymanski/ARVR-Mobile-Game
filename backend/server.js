@@ -7,16 +7,10 @@ var frequency = 1000;
 
 const mongoose = require('mongoose');
 // mongoose.connect("mongodb://localhost:27017/userdb", { useNewUrlParser: true });
-mongoose.connect('mongodb://team12:mongoDBteam12@35.241.198.186:27017/userdb?authMechanism=SCRAM-SHA-1&authSource=userdb',  { useNewUrlParser: true });
+// mongoose.connect('mongodb://team12:mongoDBteam12@35.241.198.186:27017/userdb?authMechanism=SCRAM-SHA-1&authSource=userdb',  { useNewUrlParser: true });
+mongoose.connect('mongodb://13.95.120.117:27017/userdb',  { useNewUrlParser: true });
 
 const User = require('./db/userModel.js');
-const ActivePlayer = require('./db/gameModel');
-
-const getFirstActivePlayer = async function () {
-    return (await ActivePlayer.findOne(
-            {}, 'playerid', { sort: { 'created_at' : 1 } })
-    ).playerid;
-};
 
 const HTTPSsecret = require('./ssl/https_config.js');
 
