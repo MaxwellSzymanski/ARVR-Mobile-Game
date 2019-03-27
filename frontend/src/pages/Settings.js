@@ -17,6 +17,7 @@ class Settings extends React.Component {
 
         this.deleteProfile = this.deleteProfile.bind(this);
         this.takeNewPhoto = this.takeNewPhoto.bind(this);
+        this.resetTutorials = this.resetTutorials.bind(this);
     }
 
     setRedirect = () => {
