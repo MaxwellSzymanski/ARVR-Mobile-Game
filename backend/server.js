@@ -666,7 +666,7 @@ function missionPhoto(data, socket) {
         }
         voting = true;
         firstPlayer = data.token;
-        const img = new MissionImage({image: data.image});
+        const img = new MissionImage({image: data.photo});
         img.save();
         // const imgGroup = new MissionGroup({location: data.location});
         // imgGroup.addPhoto(img);
