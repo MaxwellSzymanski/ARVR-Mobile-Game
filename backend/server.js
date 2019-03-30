@@ -613,7 +613,7 @@ function fight(data, socket){
 // ============================================================================
 // ============================================================================
 
-const range = 100;                   // Players need to be within RANGE of te target in order to send a photo
+const range = 1000;                   // Players need to be within RANGE of te target in order to send a photo
 const missionList = [ [50.863137, 4.683394], [50.8632811, 4.6762872], ];
 let currentMission = 0;
 let missionPlayers = [];
@@ -653,10 +653,10 @@ function missionPhoto(data, socket) {
     if (data.token) {
         if (missionPlayers[data.token] === undefined || missionPlayers[data.token] === null) {
             return;
-        } if (distanceBetween(data.location, missionList[currentMission]) > range) {
-            const msg = "You haven't reached the mission location yet. You need to be within " + range + "m of the target in order to send a photo.";
-            socket.emit("message", {message: msg});
-            return;
+        // } if (distanceBetween(data.location, missionList[currentMission]) > range) {
+        //     const msg = "You haven't reached the mission location yet. You need to be within " + range + "m of the target in order to send a photo.";
+        //     socket.emit("message", {message: msg});
+        //     return;
         } if (firstPhotoAccepted) {
             secondPhoto(data, socket);
             return;
