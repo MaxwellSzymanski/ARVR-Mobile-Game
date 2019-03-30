@@ -681,8 +681,7 @@ function missionPhoto(data, socket) {
         Object.keys(missionPlayers).forEach(function (key) {
             if (key !== data.token) {
                 missionPlayers[key].socket.emit("missionPhoto", {
-                    firstPhoto: currentPhoto,
-                    secondPhoto: data.photo,
+                    photo: currentPhoto.image,
                     expiry: exp
                 });
             }

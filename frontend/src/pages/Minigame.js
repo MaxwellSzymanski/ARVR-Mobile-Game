@@ -65,8 +65,6 @@ class Minigame extends React.Component {
     };
 
     componentWillMount() {
-        this.context.emit("mission", {token:cookies.get('token')});
-
         this.interval = setInterval(() => {
             this.sendLocation();
             this.setCenter([this.state.location.lat, this.state.location.lng]);
@@ -77,12 +75,11 @@ class Minigame extends React.Component {
         clearInterval(this.interval);
     }
 
-    componentDidMount(){
-
+    componentDidMount() {
+        this.context.emit("mission", {token:cookies.get('token')});
         this.context.on("mission", (data) => {
             this.setState({targetLocation: data.location})
         });
-
         this.context.on("missionPhoto", (data) => {
             this.setState({
                 encodedPic: data.photo,
@@ -222,9 +219,7 @@ class Minigame extends React.Component {
     mapChanged(feature, layer){
         if(this.state.showAlertBox === false) {
             let rows = [];
-            var close = false;
-            close = (this.distanceBetween() <= 10000000);
-            rows.push(<p>distanceBetween(): {this.distanceBetween()}</p>);
+            rows.push(<p>Distance to the mission location: {Math.round(this.distanceBetween())} m.</p>);
             if (this.distanceBetween() > 10000000) {
                 rows.push(<p>You're not close enough to the mission location.</p>)
             } else if (!this.state.firstPicTaken || this.state.firstPicAccepted) {
