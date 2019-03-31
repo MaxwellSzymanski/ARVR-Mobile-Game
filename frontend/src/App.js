@@ -34,7 +34,6 @@ class App extends Component {
             //verified: false,
             verified: true
         };
-
     }
 
     async componentWillMount() {
