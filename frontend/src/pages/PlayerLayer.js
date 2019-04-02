@@ -350,7 +350,7 @@ class PlayerLayer extends React.Component {
 
                 // check for enemy!
                 if(idEnemy !== playerLayer.state.id){
-                    rows.push(<button className="confirmButton wider" onClick={playerLayer.props.setTarget.bind(playerLayer,idEnemy,[playerData.latitude,playerData.longitude])}>TicTacToe {idEnemy}</button>);
+                    rows.push(<Link to="/battlePage"><button className="confirmButton wider" onClick={cookies.set('attackToken', idEnemy)}>TicTacToe {idEnemy}</button></Link>);
                 }
             });
         }
