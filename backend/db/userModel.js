@@ -95,6 +95,10 @@ const Schema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    inBattle: {
+        type: Boolean,
+        default: false
+    },
 }, {timestamps: true});
 
 Schema.plugin(uniqueValidator, {message: 'The {PATH} you gave ({VALUE}) is already in use'});
