@@ -251,7 +251,7 @@ class BattlePage extends React.Component {
                 </div>
 
                 <div>
-                    <button className="buttonAttack fadeIn2" onClick={this.attack}>Attack</button>
+                    <button className="buttonAttack fadeIn2" onClick={()=>this.attack()}>Attack</button>
                 </div>
 
                 <div>
