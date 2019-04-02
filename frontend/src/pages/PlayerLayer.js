@@ -127,7 +127,7 @@ class PlayerLayer extends React.Component {
     }
 
     startTictac(data) {
-        return <Redirect to="/ticTacToe" />
+        this.receiveSpecialSignal(data)
     }
 
     sendLocation() {
@@ -293,7 +293,7 @@ class PlayerLayer extends React.Component {
     }
 
     receiveSpecialSignal(data) {
-        this.showAlertBox(<p className="colorWhite">Special signal received from {data.sender}</p>);
+        this.showAlertBox(<Link to="/ticTacToe"><p className="colorWhite">Special signal received from {data.sender}</p></Link>);
     }
 
     // Send special signal to server
