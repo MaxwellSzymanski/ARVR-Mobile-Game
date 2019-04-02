@@ -1,0 +1,16 @@
+Terminal/command prompt
+
+
+==  Connect to server  ==
+
+ connect:
+ ssh Perseus@13.95.120.117
+
+ wachtwoord:
+ GameOfWolves12
+
+
+==  Pull changes  ==
+
+ cd Perseus
+ git pull

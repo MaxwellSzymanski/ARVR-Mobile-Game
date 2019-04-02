@@ -86,12 +86,28 @@ const Schema = new mongoose.Schema({
     faction: {
         type: String,
         default: null
-    }
+    },
+    battleTutorialSeen: {
+        type: Boolean,
+        default: false
+    },
+    mainTutorialSeen: {
+        type: Boolean,
+        default: false
+    },
 }, {timestamps: true});
 
 Schema.plugin(uniqueValidator, {message: 'The {PATH} you gave ({VALUE}) is already in use'});
 
 Schema.pre('save', async function(next) {
+    this.attack = Math.round(this.attack);
+    this.defence = Math.round(this.defence);
+    this.health = Math.round(this.health);
+    this.experience = Math.round(this.experience);
+    this.level = Math.round(this.level);
+    this.deaths = Math.round(this.deaths);
+    this.kills = Math.round(this.kills);
+
     if (!this.isModified('password'))
         return next();
     const hash = await bcrypt.hash(this.password, saltRounds);
@@ -109,16 +125,20 @@ Schema.methods.createToken = function() {
 
     return jwt.sign({
         id: this._id,
-        name: this.name
+        name: this.name,
+        login: true,
+        attack: false,
     }, secret, {expiresIn : exp});
 };
 
 Schema.methods.createFightToken = function() {
-    let exp = 2;            // Number of hours before expiry
+    let exp = 0.25;            // Number of hours before expiry
     exp *= 60 * 60;         // hours * 60 sec * 60 min
 
     return jwt.sign({
-        name: this.name
+        name: this.name,
+        login: false,
+        attack: true,
     }, secret, {expiresIn : exp});
 };
 
@@ -138,6 +158,8 @@ Schema.methods.getUserData = function() {
         deaths: this.deaths,
         items: this.items,
         faction: this.faction,
+        mainTutorialSeen: this.mainTutorialSeen,
+        battleTutorialSeen: this.battleTutorialSeen
     };
 };
 

@@ -6,26 +6,33 @@ import { getFeatureVector, getFVDistance } from '../facerecognition/FaceRecognit
 import swal from '@sweetalert/with-react';
 import SocketContext from "../socketContext";
 import Cookies from 'universal-cookie';
+import Webcam from "react-webcam";
 
 const cookies = new Cookies();
 
 class CapturePlayer extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.onTakePhoto = this.onTakePhoto.bind(this);
+    }
+
   state = {
     redirect : false,
     calculating: false
-  }
+  };
 
   setRedirect = () => {
       this.setState({redirect: true})
-    }
+    };
 
   renderRedirect = () => {
     if (this.state.redirect) {return <Redirect to="/battlePage" />}
-  }
+  };
 
 
-  async onTakePhoto (dataUri) {
+  async onTakePhoto () {
+      let dataUri = this.refs["webcam"].getScreenshot();
       this.setState({calculating:true});
       var photoSrc = dataUri;
       var photo = new Image;
@@ -40,46 +47,60 @@ class CapturePlayer extends React.Component {
               title: "No face detected",
               text: "Make sure the target is exposed to enough light.",
               icon: "warning",
-              button: "try again!",
+              button: "Try again!",
           });
       }
 
       else {
           localStorage.setItem("PhotoOfPlayer", dataUri);
-          localStorage.setItem("fv", JSON.stringify(fv));
-          this.context.emit('getFVfromDB');
+          //localStorage.setItem("fv", JSON.stringify(fv));
+          this.context.emit('getFVMatch', JSON.stringify(fv));
       }
   }
 
   componentDidMount() {
-     this.context.on('sentFVfromDB', async (results) => {
-        let capturedPlayer = await this.getMatchingPlayerFromFV(results)
+     this.context.on('sentFVMatch', async (match) => {
+        //let capturedPlayer = await this.getMatchingPlayerFromFV(match)
+        let capturedPlayer = match;
 
-        if (capturedPlayer == null){
+        if (capturedPlayer === null){
             this.setState({calculating:false});
             swal({
               title: "Unkown Person",
-              text: "The Person in the photo is NOT a player",
+              text: "The Person in the photo is not a Game of Wolves player.\nSure you followed game protocol?",
               icon: "warning",
-              button: "try again!",
+              button: "Try again!",
           });
         }
 
         else {
 
-          if (cookies.get('name') == capturedPlayer.name){
+          if (cookies.get('name') === capturedPlayer.name){
 
             this.setState({calculating:false});
             swal({
               title: "This is you!",
-              text: "You can NOT capture yourself!",
+              text: "You can not capture yourself! Nice try though.",
               icon: "warning",
-              button: "try again!",
+              button: "Try again!",
               });
           }
 
           else {
             console.log(capturedPlayer._id);
+            if (capturedPlayer.token !== null && capturedPlayer.token !== undefined) {
+                const options = {
+                    path: '/',
+                    expires: new Date(new Date().getTime() + 15 * 60 * 1000)   // expires in 15 minutes
+                };
+                cookies.set('attackToken', capturedPlayer.token, options);
+                swal({ title: "Player found!",
+                    text: "Go ahead and attack, if you're not afraid",
+                    icon: "success",
+                    confirm: true}).then( (value) => {
+                        this.setRedirect();
+                });
+            }
             localStorage.setItem("capturedPlayerId", capturedPlayer._id);
             localStorage.setItem("capturedPlayerName", capturedPlayer.name);
             this.setRedirect();
@@ -107,13 +128,6 @@ class CapturePlayer extends React.Component {
     clearInterval(this.interval);
   }
 
-
-
-  async getPlayerId() {
-
-  };
-
-
   async getMatchingPlayerFromFV(results) {
 
     let fv1 = Object.values(JSON.parse(localStorage.getItem("fv")));
@@ -134,7 +148,7 @@ class CapturePlayer extends React.Component {
       }
     }
     if (index != null) {
-      console.log(results[index].name)
+      console.log(results[index].name);
       return (results[index]);
     }
     else return null;
@@ -145,17 +159,22 @@ class CapturePlayer extends React.Component {
     this.context.emit('getCapturedPlayerStats', id);
   };
 
-
   render () {
+      const videoConstraints = {
+          facingMode: "environment"
+      };
+
     return (
       <div className="background">
         {this.renderRedirect()}
-          {!this.state.calculating && <div className="polaroid">
-              <Camera
-                  onTakePhoto = { (dataUri) => { this.onTakePhoto(dataUri); } }
-                  isImageMirror = {false}
-                  idealFacingMode = {FACING_MODES.ENVIRONMENT}
+          {!this.state.calculating && <div className="polaroidMirror">
+              <Webcam
+                  audio={false}
+                  ref="webcam"
+                  screenshotFormat="image/jpeg"
+                  videoConstraints={videoConstraints}
               />
+              <button className="smallButton camera" onClick={this.onTakePhoto}> </button>
           </div>}
           {this.state.calculating && <div className="polaroid">
               <div className="cameraLoader"></div>
@@ -166,6 +185,8 @@ class CapturePlayer extends React.Component {
     );
   }
 }
+
+
 
 CapturePlayer.contextType = SocketContext;
 

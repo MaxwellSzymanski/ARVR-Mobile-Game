@@ -18,14 +18,13 @@ class ProfilePage extends React.Component {
             defence: 200,
             level: 1,
             visibility: 50,
-            experience: 0,
+            experience: 40,
             faction: "wolf",
             kills: 8,
             deaths: 3,
             items: 13,
             encodedPic: require("../assets/icons/user.png"),
             loggedOut: false,
-            xpWidth: ''
         };
 
         this.logOut = this.logOut.bind(this);
@@ -34,8 +33,6 @@ class ProfilePage extends React.Component {
     componentDidMount() {
         this.context.emit("stats", {token: cookies.get('token')});
 
-        let xp = (((10 + this.state.experience)/365)*100).toString() + '%';
-        document.getElementById('xpBar').style.width = xp;
         this.context.on("stats", (data) => {
             let items = 0;
             if (data.items !== null)
@@ -52,10 +49,6 @@ class ProfilePage extends React.Component {
                 items: items,
                 faction: data.faction,
             });
-            // Update XP bar
-            xp = (((10 + data.experience)/365)*100).toString() + '%';
-            document.getElementById('xpBar').style.width = xp;
-            this.setState({xpWidth: xp})
         });
         this.context.on("photo", (data) => {
             this.setState({
@@ -112,6 +105,17 @@ class ProfilePage extends React.Component {
         return html
     }
 
+    generateXPBar() {
+        let xp = (((10 + this.state.experience)/365)*100).toString() + '%';
+        var style = {
+            width: xp
+        };
+        return(
+        <div className="xpBar">
+            <div className="xpGained" style={style}> </div>
+        </div>)
+    }
+
     logOut() {
         this.context.emit("signout", {token: cookies.get("token")});
     }
@@ -134,9 +138,7 @@ class ProfilePage extends React.Component {
                     <div className="profilePhoto"><img src={this.state.encodedPic} alt={"Profile image"}/></div>
                     <h1 className="name">{this.state.name}</h1>
                     <h3 className="smallText">Level {this.state.level} {this.state.faction}</h3>
-                    <div className="xpBar">
-                        <div className="xpGained" id="xpBar"> </div>
-                    </div>
+                    {this.generateXPBar()}
                     <h3 className="smallText">{this.state.experience}<b>/350 xp</b></h3>
                 </div>
 

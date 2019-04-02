@@ -16,7 +16,7 @@ class Step2 extends Component {
       <div width="100vh" id="gifDiv">
       <p align="center" id="gif2">
       </p>
-      </div><p id="stepsText">Take a picture from another player.</p>
+      </div><p id="stepsText">Take a picture of another player.</p>
       </div>
       </div>
     );

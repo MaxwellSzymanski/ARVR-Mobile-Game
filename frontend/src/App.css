@@ -389,21 +389,32 @@ p {
     max-width: 830px;
 }
 
-.cameraLoader {
-    display: inline-block ;
-    border: 7.5vw solid #79675c;
-    border-top: 7.5vw solid #4d0c04;
-    border-radius: 50%;
-    width: 40vw;
-    height: 40vw;
-    animation: spin 2s ease-out infinite;
+.polaroidMirror {
+    padding: 20px 20px 50px;
+    background-color: white;
+    margin-right: auto;
+    margin-left: auto;
+    max-height: 950px;
+    max-width: 830px;
+
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); border-color: #79675c; border-top-color: #4d0c04;}
-    50% {transform: rotate(540deg); border-color: #7f7a9c; border-top-color: #841604; }
-    100% { transform: rotate(1080deg); border-color: #79675c; border-top-color: #4d0c04;}
+.cameraLoader {
+    background-image: url(assets/icons/loader.gif);
+    width: 100px;
+    height: 100px;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: auto;
 }
+
 
 
 .divider{
@@ -441,6 +452,11 @@ p {
     background-image: url(assets/buttons/back.png);
 }
 
+.next {
+    background-image: url(assets/buttons/back.png);
+    transform: rotateY(180deg);
+}
+
 .settings {
     background-image: url(assets/buttons/settings.png);
 }
@@ -451,6 +467,10 @@ p {
 
 .info {
     background-image: url(assets/buttons/info.png);
+}
+
+.left {
+    float: left;
 }
 
 /* UI Buttons */
@@ -541,7 +561,15 @@ p {
 }
 
 .fadeIn4 {
-    animation: hideComp 400ms, fadeInLeft 500ms 400ms;
+     animation: hideComp 400ms, fadeInLeft 500ms 400ms;
+ }
+
+.fadeIn5 {
+    animation: hideComp 500ms, fadeInLeft 500ms 500ms;
+}
+
+.fadeIn6 {
+    animation: hideComp 600ms, fadeInLeft 500ms 600ms;
 }
 
 .confirmButton {
@@ -768,6 +796,7 @@ p {
 
 #tutorial {
   background-color: #910F0F;
+    border-radius: 30px;
 }
 
 #stepDiv {
@@ -793,7 +822,7 @@ p {
 
 }
 
-#tutorialButton {
+#tutorialButtonNext {
   background: white;
   color: #9190F0;
   background-image: url("assets/buttons/next.png");
@@ -807,6 +836,10 @@ p {
   width: 40px;
   z-index: 10;
   border: none;
+}
+
+#tutorialButtonPrevious {
+    z-index: 10;
 }
 
 #tutorialVid {

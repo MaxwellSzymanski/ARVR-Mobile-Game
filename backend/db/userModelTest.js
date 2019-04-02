@@ -21,7 +21,22 @@ test.save();
 
 setTimeout( async () => {
     User.findOne({email: email}, async function(error, result) {
-        console.log(result);
-        console.log("\n" +  await result.checkPassword(pass) + "\n");
+        console.log(result.health);
+        result.health = 15.145;
+        result.save();
     })
 }, 1000);
+
+setTimeout( async () => {
+    User.findOne({email: email}, async function(error, result) {
+        console.log(result.health);
+        result.health = result.health + 0.49;
+        result.save();
+    })
+}, 2000);
+
+setTimeout( async () => {
+    User.findOne({email: email}, async function(error, result) {
+        console.log(result.health);
+    })
+}, 3000);
