@@ -177,7 +177,8 @@ class BattlePage extends React.Component {
             this.context.emit("miss", {token:cookies.get('token')});
         }
         */
-        return <Redirect to="/ticTacToe" />;
+
+        return <Redirect to="/settings" />;
     }
 
     handleClose() {
