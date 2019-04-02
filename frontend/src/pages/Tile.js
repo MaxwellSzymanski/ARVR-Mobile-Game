@@ -10,7 +10,7 @@ class Tile extends React.Component {
   render() {
     return(
       <div className={"tile"} onClick={() => this.tileClick(this.props)}>
-        <p>{this.props.value}</p>
+        <div id="sign"><p id="text" >{this.props.value}</p></div>
       </div>
     );
   }

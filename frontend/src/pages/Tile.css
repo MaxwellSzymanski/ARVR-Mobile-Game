@@ -1,14 +1,17 @@
 .tile {
   width: 33.33333%;
   height: 33.333333%;
-  font-size: 60px;
+  font-size: 80px;
   background: white;
-  border: 2px solid  black;
+  border: 2px solid  #910F0F;
   display: inline-block;
   float: left;
   text-align: center;
-  line-height: 150px;
+  vertical-align: middle;
+  line-height: 170%;
 }
+
+
 
 p {
    margin: 0;
