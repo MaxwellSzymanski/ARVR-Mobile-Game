@@ -23,7 +23,7 @@ class TicTacToe extends React.Component {
        turn: 'x',
        ownIcon: '',
        winner: null,
-     }
+     };
 
     this.updateBoard = this.updateBoard.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
@@ -52,6 +52,9 @@ class TicTacToe extends React.Component {
 
 
   updateBoard(loc, player) {
+
+    // For attack
+    // this.context.emit("fight", {token: cookies.get('token'), enemy: cookies.get("attackToken")});
     if (this.state.turn !== this.state.ownIcon) {
       return;
     }

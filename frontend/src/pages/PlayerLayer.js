@@ -78,6 +78,7 @@ class PlayerLayer extends React.Component {
         this.updateLocation = this.updateLocation.bind(this);
         this.receivePlayer = this.receivePlayer.bind(this);
         this.showAlertBox = this.showAlertBox.bind(this);
+        this.startTictac = this.startTictac.bind(this);
     }
 
     state = {
@@ -102,6 +103,9 @@ class PlayerLayer extends React.Component {
         this.context.on("specialsignal", (data) => {this.receiveSpecialSignal(data)});
         this.context.on("handshake", (data) => {this.acknowledgeHandshake(data)});
         this.context.on("ACKhandshake", (data) => {this.handshakeAcknowledged(data)});
+        //game[opponent.name].socket.emit("oppTictac", {ownIcon: you, turn: turn});
+        this.context.on("oppTictac", (data) => {this.startTictac(data)});
+
 
         // this.context.on("message", (data) => {this.handshakeAcknowledged(data)});
     }
@@ -120,6 +124,10 @@ class PlayerLayer extends React.Component {
         });
 
         setTimeout(this.updateLocation, 250);
+    }
+
+    startTictac(data) {
+        return <Redirect to="/ticTacToe" />
     }
 
     sendLocation() {
