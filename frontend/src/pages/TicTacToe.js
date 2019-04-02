@@ -114,7 +114,7 @@ class TicTacToe extends React.Component {
     return (
       <div className= "container">
         <div id="menu">
-          <div id="title"><h1>Tic-Tac-Toe</h1></div>
+          <div id="title"><h1 id="titleText">Tic-Tac-Toe</h1></div>
           <div  id="text"><Announcement
                               winner={this.state.winner}/></div>
         </div>

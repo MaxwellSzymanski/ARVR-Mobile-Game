@@ -425,6 +425,7 @@ p {
 
 /* UI Buttons */
 .smallButton {
+    bottom: 0;
     background-color: white;
     background-size: 65% 65%;
     background-repeat: no-repeat;
@@ -851,7 +852,7 @@ p {
 }
 #gif1 {
   background-color: #910F0F;
-  background-image: url("assets/videos/step1.gif");
+  background-image: url("assets/videos/step1gif.gif");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -865,7 +866,7 @@ p {
 
 #gif2 {
   background-color: #910F0F;
-  background-image: url("assets/videos/step2.gif");
+  background-image: url("assets/videos/step2gif.gif");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -875,4 +876,25 @@ p {
   text-align: center;
   margin:0;
 
+}
+
+#gif3 {
+  background-color: #910F0F;
+  background-image: url("assets/videos/step3gif.gif");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 20px;
+  height: 25vh;
+  width: 25vh;
+  text-align: center;
+  margin:0;
+
+}
+
+#pijltjes {
+  position: absolute;
+    bottom: 3vh;
+    left: 3vh;
+    right: 3vh;
 }
