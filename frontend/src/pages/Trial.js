@@ -149,6 +149,7 @@ class Trial extends React.Component {
 
   handleShow() {
     this.setState({ show: true });
+    this.changeMenu();
   }
 
   setZoom(){

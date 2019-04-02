@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import Step1 from './Step1.js';
-import Step2 from './Step2.js';
-import Step3 from './Step3.js';
+import Step1Attack from './Step1Attack.js';
+import Step2Attack from './Step2Attack.js';
+import Step3Attack from './Step3Attack.js';
 
-class Tutorial extends Component {
+class TutorialAttack extends Component {
 
   constructor() {
     super();
@@ -29,15 +29,15 @@ class Tutorial extends Component {
     let buttons = [];
 
     if (this.state.step == 1) {
-      steps = <Step1/>
+      steps = <Step1Attack/>
     }
 
     if (this.state.step == 2) {
-      steps = <Step2/>
+      steps = <Step2Attack/>
     }
 
     if (this.state.step == 3) {
-      steps = <Step3/>
+      steps = <Step3Attack/>
     }
 
     if (this.state.step == 1) {
@@ -63,4 +63,4 @@ class Tutorial extends Component {
 
 }
 
-export default Tutorial;
+export default TutorialAttack;

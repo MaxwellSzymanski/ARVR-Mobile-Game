@@ -4,8 +4,26 @@ import "./BattlePage.css"
 import swal from '@sweetalert/with-react';
 import Cookies from 'universal-cookie';
 import SocketContext from "../socketContext";
+import Modal from 'react-modal';
+import TutorialAttack from './TutorialAttack';
 
 const cookies = new Cookies();
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)',
+    width                 : '40vh',
+    height                : '70vh',
+    backgroundColor       : '#910F0F',
+    borderRadius          : '30px',
+    boxShadow: '0 0 12px rgba(0,0,0,.14),0 12px 24px rgba(0,0,0,.28)',
+  }
+
+};
 
 class BattlePage extends React.Component {
     constructor() {
@@ -13,6 +31,7 @@ class BattlePage extends React.Component {
 
         this.state = {
             oppName: 'Target Player',
+            show: false,
             oppHealth: 0,
             oppDefence: 200,
             oppLevel: 1,
@@ -30,7 +49,9 @@ class BattlePage extends React.Component {
         };
 
         this.attack = this.attack.bind(this);
-    }
+        this.handleShow = this.handleShow.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+          }
 
     componentDidMount() {
         let attackToken = cookies.get("attackToken");
@@ -156,6 +177,14 @@ class BattlePage extends React.Component {
         }
     }
 
+    handleClose() {
+    this.setState({ show: false });
+  }
+
+  handleShow() {
+    this.setState({ show: true });
+  }
+
 
     renderRedirect = () => {
         if (this.state.redirect) {return <Redirect to="/map" />}
@@ -164,6 +193,12 @@ class BattlePage extends React.Component {
     render() {
         return (
             <div>
+            <Modal
+              isOpen={this.state.show}
+              onRequestClose={this.handleClose}
+              style={customStyles}>
+                <TutorialAttack/>
+            </Modal>
                 {this.renderRedirect()}
                 <h1 className="subTitle fadeIn0">Player match!</h1>
                 <div className="bProfileCard fadeIn1">
@@ -216,6 +251,10 @@ class BattlePage extends React.Component {
                     <Link to="/map">
                     <button className="buttonAttack fadeIn2" onClick={this.attack}>Attack</button>
                     </Link>
+                </div>
+
+                <div>
+                    <button className="buttonAttack fadeIn3" onClick={this.handleShow}>Tutorial</button>
                 </div>
 
                 <div>

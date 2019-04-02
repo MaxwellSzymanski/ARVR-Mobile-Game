@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactPlayer from 'react-player';
 import { Player } from 'video-react';
 
-class Step1 extends Component {
+class Step3 extends Component {
 
 
 
@@ -12,12 +12,11 @@ class Step1 extends Component {
       <div>
 
       <div align="center" id="stepDiv">
-      <p id="stepsTitle">Find other players</p>
+      <p id="stepsTitle">Step 3</p>
       <div width="100vh" id="gifDiv">
-      <p align="center" id="gif1">
+      <p align="center" id="gif3">
       </p>
-      </div>
-      <p id="stepsText">Look for other wolves on the map and send them a handshake to show them you want to battle.</p>
+      </div><p id="stepsText">instructions for step 3</p>
       </div>
       </div>
     );
@@ -25,4 +24,4 @@ class Step1 extends Component {
 
 }
 
-export default Step1;
+export default Step3;
