@@ -122,6 +122,8 @@ io.sockets.on('connection', function (socket) {
     });
     socket.on("fight", (data) => {fight(data, socket)});
     socket.on("miss", (data) => {miss(data, socket)});
+    socket.on("tictacMove", (data) => {tictac(data, socket)});
+    socket.on("initTictac", (data) => {initTictac(data, socket)});
 
     socket.on("resetTutorials", (data) => {resetTutorial(data)});
 
@@ -811,6 +813,101 @@ function fight(data, socket) {
             })
     })
 }
+
+
+function initTictac(data, socket) {
+    if (!data.enemy || !data.token)
+        return;
+    jwt.verify(data.token, secret, async function (err, token) {
+        if (err) {
+            console.log("(initTictac)         invalid token");
+            return;
+        }
+        User.findById(token.id).then(
+            async function (attacker) {
+                if (attacker === null) {
+                    console.log("(initTictac)           attacker not found.");
+                    return;
+                }
+                jwt.verify(data.enemy, secret, async function (err, token) {
+                    if (err) {
+                        console.log("(initTictac)         invalid defender token");
+                        return;
+                    } else if (!token.attack)
+                        return;
+                    User.findOne({name: token.name}).then(
+                        async function (opponent) {
+                            if (!opponent) {
+                                console.log("(initTictac)           opponent not found.");
+                                return;
+                            }
+
+                            let you = Math.random() < 0.5 ? 'x' : 'o';
+                            let opp = you === 'x' ? 'o' : 'x';
+                            // TODO: Implement fatigue
+                            let turn = Math.random() < 0.5 ? you : opp;
+
+                            // Send user data to attacker and to defender
+                            socket.emit("initResponse", {ownIcon: you, turn: turn});
+
+                            if (game[opponent.name] !== undefined && game[opponent.name] !== null) {
+                                game[opponent.name].socket.emit("oppTictac", {ownIcon: you, turn: turn});
+                            }
+                        }
+                    )
+                })
+            })
+    })
+}
+
+
+function tictac(data, socket) {
+    if (!data.enemy || !data.token)
+        return;
+    jwt.verify(data.token, secret, async function (err, token) {
+        if (err) {
+            console.log("(tictac)         invalid token");
+            return;
+        }
+        User.findById(token.id).then(
+            async function (attacker) {
+                if (attacker === null) {
+                    console.log("(tictac)           attacker not found.");
+                    return;
+                }
+                jwt.verify(data.enemy, secret, async function (err, token) {
+                    if (err) {
+                        console.log("(tictac)         invalid defender token");
+                        return;
+                    } else if (!token.attack)
+                        return;
+                    User.findOne({name: token.name}).then(
+                        async function (opponent) {
+                            if (!opponent) {
+                                console.log("(tictac)           opponent not found.");
+                                return;
+                            }
+
+                            socket.emit("tictac", {board: data.gameBoard});
+
+
+                            // Send user data to attacker and to defender
+                            socket.emit("stats", attacker.getUserData());
+                            socket.emit("enemystats", defender.getEnemyData());
+                            socket.emit("attack", {message: msgA});
+
+                            if (game[defender.name] !== undefined && game[defender.name] !== null) {
+                                game[defender.name].socket.emit("stats", defender.getUserData());
+                                const msgD = "You have been attacked by " + attacker.name + "!";
+                                game[defender.name].socket.emit("message", {message: msgD});
+                            }
+                        }
+                    )
+                })
+            })
+    })
+}
+
 
 
 /*  FIGHT VAN VORIG SEMESTER

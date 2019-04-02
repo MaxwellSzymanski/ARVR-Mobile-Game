@@ -3,6 +3,7 @@ import './TicTacToe.css';
 import Announcement from './Announcement.js';
 import Tile from './Tile.js';
 import ResetButton from './ResetButton.js';
+import swal from "@sweetalert/with-react";
 
 
 
@@ -12,17 +13,44 @@ class TicTacToe extends React.Component {
      super();
      this.state = {
        gameBoard : [
-         '', '', ' ',
+         ' ', ' ', ' ',
          ' ', ' ', ' ',
          ' ', ' ', ' '
        ],
        turn: 'x',
+       ownIcon: '',
        winner: null,
      }
   }
 
+  componentDidMount() {
+    let attackToken = cookies.get("attackToken");
+
+    this.context.emit("initTictac", {token: cookies.get("token"), enemy: attackToken});
+
+    this.context.on("initResponse", (data) => {
+      this.setState({
+        ownIcon: data.ownIcon,
+        turn: data.turn
+      });
+    });
+
+    this.context.on("tictac", (data) => {
+      this.setState({
+        gameBoard: data.gameBoard,
+        turn: this.state.ownIcon
+      });
+
+    });
+
+  }
+
 
   updateBoard(loc, player) {
+    if (this.state.turn === this.state.ownIcon) {
+      return;
+    }
+    this.context.emit("initTictac", {token: cookies.get("token"), enemy: attackToken});
 
     if  (this.state.gameBoard[loc] === 'x' || this.state.gameBoard[loc] === 'o' || this.state.winner) {
       //Invalid move
