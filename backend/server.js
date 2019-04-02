@@ -849,7 +849,7 @@ function initTictac(data, socket) {
 
                             // Send user data to attacker and to defender
                             socket.emit("initResponse", {ownIcon: you, turn: turn});
-
+                            console.log("response:::" + opponent.name);
                             if (game[opponent.name] !== undefined && game[opponent.name] !== null) {
                                 game[opponent.name].socket.emit("oppTictac", {ownIcon: you, turn: turn});
                             }
@@ -896,10 +896,8 @@ function tictac(data, socket) {
                             socket.emit("enemystats", defender.getEnemyData());
                             socket.emit("attack", {message: msgA});
 
-                            if (game[defender.name] !== undefined && game[defender.name] !== null) {
-                                game[defender.name].socket.emit("stats", defender.getUserData());
-                                const msgD = "You have been attacked by " + attacker.name + "!";
-                                game[defender.name].socket.emit("message", {message: msgD});
+                            if (game[opponent.name] !== undefined && game[defender.name] !== null) {
+                                game[opponent.name].socket.emit("stats", defender.getUserData());
                             }
                         }
                     )
