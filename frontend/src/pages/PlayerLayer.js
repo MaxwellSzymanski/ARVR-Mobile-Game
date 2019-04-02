@@ -76,6 +76,7 @@ class PlayerLayer extends React.Component {
 
         this.updateLocation = this.updateLocation.bind(this);
         this.receivePlayer = this.receivePlayer.bind(this);
+        this.showAlertBox = this.showAlertBox.bind(this);
     }
 
     state = {
@@ -197,7 +198,7 @@ class PlayerLayer extends React.Component {
                     if (timeDiff <= 5) {
                         rows.push(
                             <Marker onClick={
-                            () => this.showAlertBox(
+                            () => playerLayer.showAlertBox(
                               <div>
                               <p> {key}, accuracy: {player.accuracy} m</p>
                               <p>
@@ -218,7 +219,7 @@ class PlayerLayer extends React.Component {
                     } else if (timeDiff <= 30) {
                         rows.push(
                             <Marker onClick={
-                            () => this.showAlertBox(
+                            () => playerLayer.showAlertBox(
                               <div>  <p> {key} seems to be be offline. </p></div>
                             )
                             }
