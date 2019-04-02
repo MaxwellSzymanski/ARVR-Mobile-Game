@@ -4,6 +4,7 @@ import '../App.css';
 import L from 'leaflet';
 import Cookies from 'universal-cookie';
 import SocketContext from "../socketContext";
+import {Link} from "react-router-dom";
 
 const cookies = new Cookies();
 
@@ -349,7 +350,7 @@ class PlayerLayer extends React.Component {
 
                 // check for enemy!
                 if(idEnemy !== playerLayer.state.id){
-                    rows.push(<button className="confirmButton wider" onClick={playerLayer.props.setTarget.bind(playerLayer,idEnemy,[playerData.latitude,playerData.longitude])}>Follow {idEnemy}</button>);
+                    rows.push( <Link to="/attackPage"><button className="confirmButton wider" onClick={cookies.set('attackToken', idEnemy)}>Tictactoe {idEnemy}</button></Link>);
                 }
             });
         }
