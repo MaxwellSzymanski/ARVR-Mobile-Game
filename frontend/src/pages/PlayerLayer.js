@@ -2,6 +2,7 @@ import React from 'react';
 import { Marker, Popup } from 'react-leaflet';
 import '../App.css';
 import L from 'leaflet';
+import { Link, Redirect } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import SocketContext from "../socketContext";
 
