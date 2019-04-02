@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="62846d24-a773-43e7-bd6f-fcd39c23315b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../frontend/src/pages/BattlePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/BattlePage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/PlayerLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/PlayerLayer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/TicTacToe.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/TicTacToe.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -116,12 +114,12 @@
       <workItem from="1553010286347" duration="7214000" />
       <workItem from="1553422734818" duration="3078000" />
       <workItem from="1553608085039" duration="1329000" />
-      <workItem from="1554208172270" duration="6441000" />
+      <workItem from="1554208172270" duration="6735000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="20692000" />
+    <option name="totallyTimeSpent" value="20986000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
