@@ -21,6 +21,7 @@ import BattlePage from "./pages/BattlePage";
 import NotFound from "./pages/NotFound.js";
 import Settings from "./pages/Settings.js";
 import Cookies from 'universal-cookie';
+import TicTacToe from './pages/TicTacToe.js';
 const cookies = new Cookies();
 const url = require('./pages/serveradress.js');
 
@@ -32,7 +33,7 @@ class App extends Component {
             socket: io(url),
             loggedIn: false,
             verified: false,
-            // verified: true,
+            //verified: true,
         };
     }
 
@@ -87,6 +88,7 @@ class App extends Component {
                             <AuthRoute exact path="/view" component={View} redirectTo="/sign-in" authenticated={this.state.verified} />
                             <AuthRoute exact path="/battlePage" component={BattlePage} redirectTo="/sign-in" authenticated={this.state.verified} />
                             <AuthRoute exact path="/changePicture" component={ChangePicture} redirectTo="/sign-in" authenticated={this.state.verified} />
+                            <AuthRoute exact path="/ticTacToe" component={TicTacToe} redirectTo="/sign-in" authenticated={this.state.verified} />
 
                             <Route path="*" component={NotFound} />
                         </Switch>

@@ -1,0 +1,16 @@
+.tile {
+  width: 33.33333%;
+  height: 33.333333%;
+  font-size: 60px;
+  background: white;
+  border: 2px solid  black;
+  display: inline-block;
+  float: left;
+  text-align: center;
+  line-height: 150px;
+}
+
+p {
+   margin: 0;
+   padding: 0;
+}

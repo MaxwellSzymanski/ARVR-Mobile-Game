@@ -1,0 +1,154 @@
+addWolf2() {
+  this.setState({count: (this.state.count+1)});
+}
+
+addFrog1() {
+  this.setState(prevState => ({
+      list: [...prevState.list, this.container.frog1]}));
+  this.setState({count: (this.state.count+1)});
+}
+
+addFrog2() {
+  this.setState(prevState => ({
+      list: [...prevState.list, this.container.frog2]}));
+  this.setState({count: (this.state.count+1)});
+}
+
+addHippo1() {
+  this.setState(prevState => ({
+      list: [...prevState.list, this.container.hippo1]}));
+  this.setState({count: (this.state.count+1)});
+}
+
+addHippo2() {
+  this.setState(prevState => ({
+      list: [...prevState.list, this.container.hippo2]}));
+  this.setState({count: (this.state.count+1)});
+}
+
+addLion1() {
+  this.setState(prevState => ({
+      list: [...prevState.list, this.container.lion1]}));
+  this.setState({count: (this.state.count+1)});
+}
+
+addLion2() {
+  this.setState(prevState => ({
+      list: [...prevState.list, this.container.lion2]}));
+  this.setState({count: (this.state.count+1)});
+}
+
+addSheep1() {
+  this.setState(prevState => ({
+      list: [...prevState.list, this.container.sheep1]}));
+  this.setState({count: (this.state.count+1)});
+}
+
+addSheep2() {
+  this.setState(prevState => ({
+      list: [...prevState.list, this.container.sheep2]}));
+  this.setState({count: (this.state.count+1)});
+}
+
+addRabbit1() {
+  this.setState(prevState => ({
+      list: [...prevState.list, this.container.rabbit1]}));
+  this.setState({count: (this.state.count+1)});
+}
+
+addRabbit2() {
+  this.setState(prevState => ({
+      list: [...prevState.list, this.container.rabbit2]}));
+  this.setState({count: (this.state.count+1)});
+}
+
+this.addWolf1 = this.addWolf1.bind(this);
+this.addWolf2 = this.addWolf2.bind(this);
+this.addLion2 = this.addLion2.bind(this);
+this.addLion1 = this.addLion1.bind(this);
+this.addFrog2 = this.addFrog2.bind(this);
+this.addHippo1 = this.addHippo1.bind(this);
+this.addHippo2 = this.addHippo2.bind(this);
+this.addSheep1 = this.addSheep1.bind(this);
+this.addSheep2 = this.addSheep2.bind(this);
+this.addRabbit1 = this.addRabbit1.bind(this);
+this.addRabbit2 = this.addRabbit2.bind(this);
+
+addWolf1={this.addWolf1}
+addWolf2={this.addWolf2}
+addLion1={this.addLion1}
+addLion2={this.addLion2}
+addSheep1={this.addSheep1}
+addSheep2={this.addSheep2}
+addHippo1={this.addHippo1}
+addHippo2={this.addHippo2}
+addFrog1={this.addFrog1}
+addFrog2={this.addFrog2}
+addRabbit1={this.addRabbit1}
+addRabbit2={this.addRabbit2}
+
+reset() {
+  if  (!this.state.wolves) {
+  this.container.current.wolf1.current.reset();
+  this.container.current.wolf2.current.reset();}
+  if (!this.state.sheep){
+  this.container.current.sheep1.current.reset();
+  this.container.current.sheep2.current.reset(); }
+  if (!this.state.hippos) {
+  this.container.current.hippo1.current.reset();
+  this.container.current.hippo2.current.reset(); }
+  if (!this.state.frogs) {
+  this.container.current.frog1.current.reset();
+  this.container.current.frog2.current.reset(); }
+  if (!this.state.rabbits) {
+  this.container.current.rabbit1.current.reset();
+  this.container.current.rabbit2.current.reset(); }
+  if (!this.state.lions) {
+  this.container.current.lion1.current.reset();
+  this.container.current.lion2.current.reset(); }
+  this.resetCount();
+
+}
+
+  resetCount() {
+    this.setState({count: 0});
+  }
+
+  check() {
+    if (this.state.list[1] == this.state.list[2]) {
+      if (this.state.list[1] == "wolf") {this.setState({wolves:true})};
+      if (this.state.list[1] == "sheep") {this.setState({sheep:true})};
+      if (this.state.list[1] == "rabbit") {this.setState({rabbit:true})};
+      if (this.state.list[1] == "hippo") {this.setState({hippo:true})};
+      if (this.state.list[1] == "frog") {this.setState({frog:true})};
+      if (this.state.list[1] == "lion") {this.setState({lion:true})};
+      this.resetCount();
+      this.setState({list: []});
+    }
+    else {
+      if  (!this.state.wolves && (this.state.list[1] == "wolf" || this.state.list[2] == "wolf")) {
+      this.container.current.wolf1.current.reset();
+      this.container.current.wolf2.current.reset();}
+      if (!this.state.sheep && (this.state.list[1] == "sheep" || this.state.list[2] == "sheep")){
+      this.container.current.sheep1.current.reset();
+      this.container.current.sheep2.current.reset(); }
+      if (!this.state.hippos && (this.state.list[1] == "hippo" || this.state.list[2] == "hippo")) {
+      this.container.current.hippo1.current.reset();
+      this.container.current.hippo2.current.reset(); }
+      if (!this.state.frogs && (this.state.list[1] == "frog" || this.state.list[2] == "frog")) {
+      this.container.current.frog1.current.reset();
+      this.container.current.frog2.current.reset(); }
+      if (!this.state.rabbits && (this.state.list[1] == "rabbit" || this.state.list[2] == "rabbit")) {
+      this.container.current.rabbit1.current.reset();
+      this.container.current.rabbit2.current.reset(); }
+      if (!this.state.lions && (this.state.list[1] == "lion" || this.state.list[2] == "lion")) {
+      this.container.current.lion1.current.reset();
+      this.container.current.lion2.current.reset(); }
+      this.resetCount();
+      this.setState({list: []});
+    }
+  }
+
+    resetCount() {
+      this.setState({count: 0});
+    }
