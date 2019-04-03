@@ -806,6 +806,9 @@ function fight(data, socket) {
                                 game[defender.name].socket.emit("stats", defender.getUserData());
                                 const msgD = "You have been attacked by " + attacker.name + "!";
                                 game[defender.name].socket.emit("message", {message: msgD});
+                            } else
+                            {
+                                console.log("player not online")
                             }
                         }
                     )
@@ -829,7 +832,7 @@ function initTictac(data, socket) {
                     console.log("(initTictac)           attacker not found.");
                     return;
                 }
-                jwt.verify(data.enemy, secret, async function (err, token) {
+
                     if (err) {
                         console.log("(initTictac)         invalid defender token");
                         return;
@@ -850,12 +853,12 @@ function initTictac(data, socket) {
                             // Send user data to attacker and to defender
                             socket.emit("initResponse", {ownIcon: you, turn: turn});
                             console.log("response:::" + opponent.name);
-                            if (game[opponent.name] !== undefined && game[opponent.name] !== null) {
-                                game[opponent.name].socket.emit("oppTictac", {ownIcon: you, turn: turn});
+                            if (game[opponent] !== undefined && game[opponent.name] !== null) {
+                                game[opponent].socket.emit("oppTictac", {ownIcon: you, turn: turn});
                             }
                         }
                     )
-                })
+
             })
     })
 }
