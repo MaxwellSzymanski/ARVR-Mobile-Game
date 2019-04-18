@@ -128,7 +128,7 @@ def connect(sid, environ):
 def compareNewImage(sid, jsondata):
     data = demjson.decode(jsondata)
     print(" >> new image received from Node server:")
-    print(data.player_id)
+    print(data)
     minigameImage = data.image
     with open("newImage.png", "wb") as fh:
         fh.write(minigameImage.decode('base64'))
