@@ -24,15 +24,15 @@ def checkForBestMatch(image_data):
 	best_index = 0
 	for img_data in image_data:
 		with open("image.png", "wb") as fh:
-			fh.write((img_data["encoded_image"]).decode('base64')
+			fh.write((img_data["encoded_image"]).decode('base64'))
 		isMatch, match_rate = compareImages()
-		if best_match_rate < match_rate && isMatch:
+		if best_match_rate < match_rate and isMatch:
 			best_index = index
 			n -= 1
 		if img_data["player_id"] not in winning_players:
-			winning_players.append(img_data["player_id"])
+			winning_players.append(img_data["player_id"]);
 	if n <= 0: 	
-		winning_players.append(imgage_data[best_index]["player_id"]) #Player with best match gets double the points
+		winning_players.append(image_data[best_index]["player_id"]) #Player with best match gets double the points
 		return winning_players	
 	else:
 		return [] 
@@ -73,11 +73,11 @@ def image_resize(image, width = None, height = None, inter = cv2.INTER_AREA):
     return resized
 
 def compareImages():
-	image_to_compare = cv2.imread"image.jpg")
+	image_to_compare = cv2.imread("image.jpg")
 	original = cv2.imread("newImage.jpg")
 
 	height, width, channels = original.shape
-	height_2, width_2, channels_2 = image_tocompare.shape
+	height_2, width_2, channels_2 = image_to_compare.shape
 
 	fixed_width = 360
 	if width > fixed_width :
@@ -120,14 +120,14 @@ def compareNewImage(sid, data):
 	print(data) 
 	minigameImage = data.image
 	with open("newImage.png", "wb") as fh:
-		fh.write(minigameImage.decode('base64')
+		fh.write(minigameImage.decode('base64'))
 	
 	groups = getDataBaseGroups()
 	index = 0
 	while index < len(groups):
 		for img_data in groups[index].image_data:
 			with open("image.png", "wb") as fh:
-				fh.write((img_data["encoded_image"]).decode('base64')
+				fh.write((img_data["encoded_image"]).decode('base64'))
 			
 			isMatch, match_rate = compareImages()
 			if isMatch:
