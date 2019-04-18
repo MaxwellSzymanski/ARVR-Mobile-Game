@@ -6,6 +6,7 @@ import socketio
 import pymongo
 import base64
 import json
+import demjson
 #opencv version 3.2.4.16
 myclient = pymongo.MongoClient("mongodb://13.95.120.117:27017/")
 mydb = myclient["userdb"]
@@ -125,7 +126,7 @@ def connect(sid, environ):
 
 @pyio.on('compareNewImage')
 def compareNewImage(sid, jsondata):
-    data = json.loads(jsondata)
+    data = demjson.decode(jsondata)
     print(" >> new image received from Node server:")
     print(data.player_id)
     minigameImage = data.image
