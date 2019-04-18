@@ -86,6 +86,11 @@ const Schema = new mongoose.Schema({
     faction: {
         type: String,
         default: null
+    },
+    score: {
+        type: Number,
+        default: 0,
+        required: false
     }
 }, {timestamps: true});
 

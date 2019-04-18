@@ -1,3 +1,4 @@
+import io from 'socket.io-client';
 const https = require('https');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
@@ -92,27 +93,16 @@ io.sockets.on('connection', function (socket) {
     console.log("new connection");
 
     socket.on("jwt", (data) => {verifyJWT(data, socket)});
-
     socket.on('signup', (data) => {signup(data, socket)});
-
     socket.on('verify', (data) => {verifyEmail(data, socket)});
-
     socket.on("newmail", (data) => {newMail(data)});
-
     socket.on("faction", (data) => {faction(data, socket)});
-
     socket.on("signin", (data) => {signin(data, socket)});
-
     socket.on("signout", (data) => {signout(data, socket)});
-
     socket.on("deleteaccount", (data) => {deleteAccount(data, socket)});
-
     socket.on("stats", (data) => {stats(data, socket)});
-
     socket.on("location", (data) => {updateLocation(data, socket)});
-
     socket.on("signal", (data) => {signal(data)});
-
     socket.on("disconnect", () => {removePlayer(socket)});
 
     // socket.on('getPlayerEntry', (name, fv) => {
@@ -139,15 +129,10 @@ io.sockets.on('connection', function (socket) {
 });
 
     socket.on("fight", (data) => {fight(data, socket)});
-
     socket.on("mission", (data) => {mission(data, socket)});
-
     socket.on("leaveMission", (data) => {leaveMission(data, socket)});
-
     socket.on("missionPhoto", (data) => {missionPhoto(data, socket)});
-
     socket.on("votePhoto", (data) => {missionVote(data, socket)});
-
     socket.on("newMission", (data) => {newMission(data, socket)});
 });
 
@@ -613,6 +598,9 @@ function fight(data, socket){
 // ============================================================================
 // ============================================================================
 
+const pythonPort = 5000;
+const pySocket = io('http://localhost:'+pythonPort);
+
 const range = 1000;                   // Players need to be within RANGE of te target in order to send a photo
 const missionList = [ [50.863137, 4.683394], [50.8632811, 4.6762872], ];
 let currentMission = 0;
@@ -635,7 +623,13 @@ function mission(data, socket) {
                 missionPlayers[data.token] = {
                     socket: socket,
                     agreed: false,
+                    name: token.name,
                 };
+                User.findOne({name: token.name}).then(function(user) {
+                    if (!user.score) {
+                        user.score = 0;
+                        user.save();7
+                }   });
                 socket.emit("mission", {location: missionList[currentMission]})
             }
         });
@@ -650,44 +644,75 @@ function leaveMission(data, socket) {
 };
 
 function missionPhoto(data, socket) {
-    if (data.token) {
-        if (missionPlayers[data.token] === undefined || missionPlayers[data.token] === null) {
-            return;
-        // } if (distanceBetween(data.location, missionList[currentMission]) > range) {
-        //     const msg = "You haven't reached the mission location yet. You need to be within " + range + "m of the target in order to send a photo.";
-        //     socket.emit("message", {message: msg});
-        //     return;
-        } if (firstPhotoAccepted) {
-            secondPhoto(data, socket);
-            return;
-        } if (voting) {
-            socket.emit("message", {message: "The vote for the last photo is still going on. Please wait."});
-            return;
-        }
-        voting = true;
-        firstPlayer = data.token;
-        const img = new MissionImage({image: data.photo});
-        img.save();
-        // const imgGroup = new MissionGroup({location: data.location});
-        // imgGroup.addPhoto(img);
-        // imgGroup.save();
-        currentPhoto = img;
-        const exp = new Date(new Date().getTime() + timeInterval);
-        const ID = currentPhotoID;
-        console.log("  before timeout ID:    " + ID);
-        setTimeout(() => {
-            photoAccepted(ID);
-        }, timeInterval);
-        Object.keys(missionPlayers).forEach(function (key) {
-            if (key !== data.token) {
-                missionPlayers[key].socket.emit("missionPhoto", {
-                    photo: currentPhoto.image,
-                    expiry: exp
-                });
-            }
-        })
-    }
+    if (!data.token || missionPlayers[data.token] === undefined || missionPlayers[data.token] === null)
+        return;
+    console.log("   * MISSION: new image -> emit to pyScript.");
+    pySocket.emit('compareNewImage', {image: data.photo, player_id: missionPlayers[data.token].name});
 }
+
+pySocket.on("comparisonResult", function(data) {
+    console.log("   * pyScript result received!");
+    if (data.winning_players === 0) {
+        console.log("no match found");
+        // Do something here ?
+        return;
+    }
+    data.winning_players.forEach(function (username) {
+        User.findOne({name: username}).then(function (user) {
+            user.score = user.score + 1;
+            user.save();
+        })
+    });
+    Object.keys(game).forEach(function (username) {
+        if (data.winning_players.includes(username)) {
+            if (game[username] !== undefined && game[username] !== null) {
+                const msg = "Congratulations, " + username + ", you received mission points.";
+                game[username].socket.emit('message', {message: msg})
+            }
+        }
+    })
+});
+
+// OUTDATED FUNCTION written for first deadline
+// function oldMissionPhoto(data, socket) {
+//     if (data.token) {
+//         if (missionPlayers[data.token] === undefined || missionPlayers[data.token] === null) {
+//             return;
+//         // } if (distanceBetween(data.location, missionList[currentMission]) > range) {
+//         //     const msg = "You haven't reached the mission location yet. You need to be within " + range + "m of the target in order to send a photo.";
+//         //     socket.emit("message", {message: msg});
+//         //     return;
+//         } if (firstPhotoAccepted) {
+//             secondPhoto(data, socket);
+//             return;
+//         } if (voting) {
+//             socket.emit("message", {message: "The vote for the last photo is still going on. Please wait."});
+//             return;
+//         }
+//         voting = true;
+//         firstPlayer = data.token;
+//         const img = new MissionImage({image: data.photo});
+//         img.save();
+//         // const imgGroup = new MissionGroup({location: data.location});
+//         // imgGroup.addPhoto(img);
+//         // imgGroup.save();
+//         currentPhoto = img;
+//         const exp = new Date(new Date().getTime() + timeInterval);
+//         const ID = currentPhotoID;
+//         console.log("  before timeout ID:    " + ID);
+//         setTimeout(() => {
+//             photoAccepted(ID);
+//         }, timeInterval);
+//         Object.keys(missionPlayers).forEach(function (key) {
+//             if (key !== data.token) {
+//                 missionPlayers[key].socket.emit("missionPhoto", {
+//                     photo: currentPhoto.image,
+//                     expiry: exp
+//                 });
+//             }
+//         })
+//     }
+// }
 
 function secondPhoto(data, socket) {
     console.log("   Second photo received!");
