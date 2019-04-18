@@ -646,10 +646,11 @@ function missionPhoto(data, socket) {
     if (!data.token || missionPlayers[data.token] === undefined || missionPlayers[data.token] === null)
         return;
     console.log("   * MISSION: new image -> emit to pyScript.");
-    pythonSocket.emit('compareNewImage', {image: data.photo, player_id: missionPlayers[data.token].name});
+    pythonSocket.emit('compareNewImage', JSON.stringify({image: data.photo, player_id: missionPlayers[data.token].name}));
 }
 
-pythonSocket.on("comparisonResult", function(data) {
+pythonSocket.on("comparisonResult", function(jsondata) {
+    data = JSON.parse(jsondata);
     console.log("   * pyScript result received!");
     if (data.winning_players === 0) {
         console.log("no match found");

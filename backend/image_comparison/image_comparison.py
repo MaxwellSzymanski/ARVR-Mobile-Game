@@ -5,6 +5,7 @@ import time
 import socketio
 import pymongo
 import base64
+import json
 #opencv version 3.2.4.16
 myclient = pymongo.MongoClient("mongodb://13.95.120.117:27017/")
 mydb = myclient["userdb"]
@@ -123,9 +124,10 @@ def connect(sid, environ):
 
 
 @pyio.on('compareNewImage')
-def compareNewImage(sid, data):
+def compareNewImage(sid, jsondata):
+    data = json.loads(jsondata)
     print(" >> new image received from Node server:")
-    print(data)
+    #print(data)
     minigameImage = data.image
     with open("newImage.png", "wb") as fh:
         fh.write(minigameImage.decode('base64'))
@@ -143,10 +145,11 @@ def compareNewImage(sid, data):
                 winning_players = checkForBestMatch(groups[index].image_data)
                 if len(winning_players) != 0:
                     setDataBaseImageInGroup(groups[index]._id, new_image_data)
-                    pyio.emit('comparisonResult', {'winning_players': winning_players})
+                    jsondata = json.dumps({'winning_players': winning_players})
+                    pyio.emit('comparisonResult', jsondata)
                 else:
-                    pyio.emit('comparisonResult', {'winning_players': 0 })
-		
+                    jsondata = json.dumps({'winning_players':0})
+                    pyio.emit('comparisonResult', jsondata)
 
 
 if __name__ == '__main__':
