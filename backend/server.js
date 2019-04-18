@@ -1,4 +1,3 @@
-import io from 'socket.io-client';
 const https = require('https');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
@@ -599,7 +598,7 @@ function fight(data, socket){
 // ============================================================================
 
 const pythonPort = 5000;
-const pySocket = io('http://localhost:'+pythonPort);
+const pythonSocket = require('socket.io-client')('http://localhost:'+pythonPort);
 
 const range = 1000;                   // Players need to be within RANGE of te target in order to send a photo
 const missionList = [ [50.863137, 4.683394], [50.8632811, 4.6762872], ];
@@ -647,10 +646,10 @@ function missionPhoto(data, socket) {
     if (!data.token || missionPlayers[data.token] === undefined || missionPlayers[data.token] === null)
         return;
     console.log("   * MISSION: new image -> emit to pyScript.");
-    pySocket.emit('compareNewImage', {image: data.photo, player_id: missionPlayers[data.token].name});
+    pythonSocket.emit('compareNewImage', {image: data.photo, player_id: missionPlayers[data.token].name});
 }
 
-pySocket.on("comparisonResult", function(data) {
+pythonSocket.on("comparisonResult", function(data) {
     console.log("   * pyScript result received!");
     if (data.winning_players === 0) {
         console.log("no match found");
