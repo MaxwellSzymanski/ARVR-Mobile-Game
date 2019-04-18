@@ -1,4 +1,5 @@
 import numpy as np
+import eventlet
 import cv2 as cv2
 import time
 import socketio
@@ -114,7 +115,13 @@ def compareImages():
     else:
         print("Images are NOT similar")
         return False, match_rate;
-		
+
+
+@pyio.on('connect')
+def connect(sid, environ):
+    print(' ** new connection:  ', sid)
+
+
 @pyio.on('compareNewImage')
 def compareNewImage(sid, data):
     print(" >> new image received from Node server:")
@@ -140,3 +147,7 @@ def compareNewImage(sid, data):
                 else:
                     pyio.emit('comparisonResult', {'winning_players': 0 })
 		
+
+
+if __name__ == '__main__':
+    eventlet.wsgi.server(eventlet.listen(('', 5000)), app)
