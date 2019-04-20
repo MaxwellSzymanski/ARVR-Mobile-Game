@@ -127,7 +127,9 @@ def connect(sid, environ):
 @pyio.on('compareNewImage')
 def compareNewImage(sid, jsondata):
     print(jsondata)
-    data = demjson.decode(jsondata)
+    print(jsondata.player_id)
+    data = jsondata
+    # data = demjson.decode(jsondata)
     print(" >> new image received from Node server:")
     print(data)
     minigameImage = data.image
