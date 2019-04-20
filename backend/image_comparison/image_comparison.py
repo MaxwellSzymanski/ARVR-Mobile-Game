@@ -53,7 +53,7 @@ def getDataBaseGroups():
     print(" -  getDataBaseGroups() called")
     mycol = mydb["missiongroups"]
     myquery = {}
-    mydoc = mycol.find(myquery,{"_id":1, "images":1})
+    mydoc = mycol.find(myquery,{"_id":1, "image_data":1})
     return mydoc
 		
 	
