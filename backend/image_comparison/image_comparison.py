@@ -82,8 +82,8 @@ def compareImages():
     image_to_compare = cv2.imread("image.jpg")
     original = cv2.imread("newImage.jpg")
 
-    height, width, channels = original.shape
     height_2, width_2, channels_2 = image_to_compare.shape
+    height, width, channels = original.shape
 
     fixed_width = 360
     if width > fixed_width :
@@ -150,7 +150,7 @@ def compareNewImage(sid, jsondata):
         print(current_group["_id"])
 
         for img_data in current_group["image_data"]:
-            print(img_data["encoded_image"])
+
             with open("image.png", "wb") as fh:
                 fh.write((img_data["encoded_image"]).decode('base64'))
             isMatch, match_rate = compareImages()
