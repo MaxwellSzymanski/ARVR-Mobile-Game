@@ -74,12 +74,12 @@ class App extends Component {
 
                             {/*<UnauthRoute exact path="/landingPage" component={LandingPage} redirectTo="/map" authenticated={this.state.verified}/>*/}
 
-                            <UnauthRoute exact path="/" component={FirstPage} redirectTo="/map" authenticated={this.state.verified}/>
-                            <UnauthRoute exact path="/sign-in" component={FirstPage} redirectTo="/map" authenticated={this.state.verified}/>
-                            <UnauthRoute exact path="/takePicture" component={CameraComp} redirectTo="/map" authenticated={this.state.verified}/>
-                            <UnauthRoute exact path="/imageConfirm" component={ImageConfirm} redirectTo="/map" authenticated={this.state.verified}/>
-                            <UnauthRoute exact path="/verify" component={EmailVerif} redirectTo="/map" authenticated={this.state.verified}/>
-                            <UnauthRoute exact path="/factionChooser" component={FactionChooser} redirectTo="/map" authenticated={this.state.verified}/>
+                            <UnauthRoute exact path="/" component={FirstPage} redirectTo="/minigame" authenticated={this.state.verified}/>
+                            <UnauthRoute exact path="/sign-in" component={FirstPage} redirectTo="/minigame" authenticated={this.state.verified}/>
+                            <UnauthRoute exact path="/takePicture" component={CameraComp} redirectTo="/minigame" authenticated={this.state.verified}/>
+                            <UnauthRoute exact path="/imageConfirm" component={ImageConfirm} redirectTo="/minigame" authenticated={this.state.verified}/>
+                            <UnauthRoute exact path="/verify" component={EmailVerif} redirectTo="/minigame" authenticated={this.state.verified}/>
+                            <UnauthRoute exact path="/factionChooser" component={FactionChooser} redirectTo="/minigame" authenticated={this.state.verified}/>
 
 
                             <AuthRoute exact path="/map" component={Trial} redirectTo="/sign-in" authenticated={this.state.verified}/>

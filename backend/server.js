@@ -646,8 +646,8 @@ function missionPhoto(data, socket) {
     if (!data.token || missionPlayers[data.token] === undefined || missionPlayers[data.token] === null)
         return;
     console.log("   * MISSION: new image -> emit to pyScript.");
-    // pythonSocket.emit('compareNewImage', JSON.stringify({image: data.photo, player_id: missionPlayers[data.token].name}));
-    pythonSocket.emit('compareNewImage', JSON.stringify({image: "temp_string", player_id: missionPlayers[data.token].name}));
+    pythonSocket.emit('compareNewImage', JSON.stringify({image: data.photo, player_id: missionPlayers[data.token].name}));
+    // pythonSocket.emit('compareNewImage', JSON.stringify({image: "temp_string", player_id: missionPlayers[data.token].name}));
 }
 
 pythonSocket.on("comparisonResult", function(jsondata) {

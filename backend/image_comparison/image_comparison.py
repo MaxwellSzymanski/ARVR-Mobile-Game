@@ -122,20 +122,18 @@ def compareImages():
 
 @pyio.on('connect')
 def connect(sid, environ):
-    print(' ** new connection:  ', sid)
+    print(' ** new connection:  ' + sid)
 
 
 @pyio.on('compareNewImage')
 def compareNewImage(sid, jsondata):
+    print()
     print(" >> new image received from Node server:")
-    print(jsondata)
     data = json.loads(jsondata)
-    # data = unicodedata.normalize('NFKD', jsondata).encode('ascii', 'ignore')
-    # data = jsondata
-    # data = demjson.decode(jsondata)
-    print(data)
-    print(data["player_id"])
-    minigameImage = data["image"]
+    player = unicodedata.normalize('NFKD', data["player_id"]).encode('ascii', 'ignore')
+    minigameImage = unicodedata.normalize('NFKD', data["image"]).encode('ascii', 'ignore')
+    print("player:  " + player)
+
     with open("newImage.png", "wb") as fh:
         fh.write(minigameImage.decode('base64'))
 	
@@ -148,7 +146,7 @@ def compareNewImage(sid, jsondata):
 			
             isMatch, match_rate = compareImages()
             if isMatch:
-                new_image_data = {"encoded_image": minigameImage, "player_id": data.player_id}
+                new_image_data = {"encoded_image": minigameImage, "player_id": player}
                 winning_players = checkForBestMatch(groups[index].image_data)
                 if len(winning_players) != 0:
                     setDataBaseImageInGroup(groups[index]._id, new_image_data)
