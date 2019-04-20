@@ -42,7 +42,7 @@ def checkForBestMatch(image_data):
 def createNewGroup(new_image_data):
     print(" -  createNewGroup() called")
     mycol = mydb["missiongroups"]
-    mycol.insert_one({'image_data': [new_image_data,]})
+    return mycol.insert_one({'image_data': [new_image_data,]})
 
 def setDataBaseImageInGroup(group_id, new_image_data):
     print(" -  setDataBaseImageInGroup() called      group_id:" + group_id)
@@ -133,13 +133,13 @@ def compareNewImage(sid, jsondata):
     data = json.loads(jsondata)
     player = unicodedata.normalize('NFKD', data["player_id"]).encode('ascii', 'ignore')
     minigameImage = unicodedata.normalize('NFKD', data["image"]).encode('ascii', 'ignore')
-    minigameImage += (4-(len(minigameImage)%4))*'='
+    location = unicodedata.normalize('NFKD', data["location"]).encode('ascii', 'ignore')
     print("player:  " + player)
 
     with open("newImage.png", "wb") as fh:
         fh.write(minigameImage.decode('base64'))
 
-    new_image_data = {"encoded_image": minigameImage, "player_id": player}
+    new_image_data = {"encoded_image": minigameImage, "player_id": player, "location": location}
 
     groups = getDataBaseGroups()
     print("number of groups:  " + str(groups.count()))
@@ -169,12 +169,10 @@ def compareNewImage(sid, jsondata):
     if not match_found:
         print(" ! no match found ! ")
 
-        createNewGroup(new_image_data)
+        id = createNewGroup(new_image_data)
 
-        jsondata = json.dumps({'winning_players': 0})
-        pyio.emit('comparisonResult', jsondata)
-
-
+        jsondata = json.dumps({'player_id': player, 'image': minigameImage, 'location': location, "group_id": id})
+        pyio.emit('newGroup', jsondata)
 
 
 if __name__ == '__main__':

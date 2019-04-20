@@ -646,9 +646,30 @@ function missionPhoto(data, socket) {
     if (!data.token || missionPlayers[data.token] === undefined || missionPlayers[data.token] === null)
         return;
     console.log("   * MISSION: new image -> emit to pyScript.");
-    pythonSocket.emit('compareNewImage', JSON.stringify({image: data.photo, player_id: missionPlayers[data.token].name}));
-    // pythonSocket.emit('compareNewImage', JSON.stringify({image: "temp_string", player_id: missionPlayers[data.token].name}));
+    const pyData = {
+        image: data.photo,
+        player_id: missionPlayers[data.token].name,
+        location: data.location
+    };
+    pythonSocket.emit('compareNewImage', JSON.stringify(pyData));
 }
+
+pythonSocket.on("newGroup", function (jsondata) {
+    data = JSON.parse(jsondata);
+    const exp = new Date(new Date().getTime() + timeInterval);
+    Object.keys(missionPlayers).forEach(function (key) {
+        if (missionPlayers[key].name !== data.player_id) {
+            missionPlayers[key].socket.emit("missionPhoto", {
+                photo: data.image,
+                expiry: exp,
+                location: data.location,
+                groupId: data.group_id
+            });
+        }
+    })
+});
+
+// TODO handle votes
 
 pythonSocket.on("comparisonResult", function(jsondata) {
     data = JSON.parse(jsondata);
