@@ -4,9 +4,7 @@ import cv2 as cv2
 import time
 import socketio
 import pymongo
-import base64
 import json
-import demjson
 import unicodedata
 #opencv version 3.2.4.16
 myclient = pymongo.MongoClient("mongodb://13.95.120.117:27017/")
@@ -21,7 +19,7 @@ app = socketio.WSGIApp(pyio)
 #After finding a match in a certain group this function is called to check for more matches in this image group
 #If more than n matches is found the new image is added to the group, and the players get rewarded, otherwise nothing happens.		
 def checkForBestMatch(image_data):
-    print(" -  checkForBestMatch()")
+    print(" -  checkForBestMatch() called")
     n = len(image_data)//3
     winning_players = []
     index = 0
@@ -41,15 +39,18 @@ def checkForBestMatch(image_data):
         return winning_players
     return []
 		
-		
+def createNewGroup(new_image_data):
+    print(" -  createNewGroup() called")
+    mycol = mydb["missiongroups"]
+    mycol.insert_one({'image_data': [new_image_data,]})
 
 def setDataBaseImageInGroup(group_id, new_image_data):
-    print(" -  setDataBaseImageInGroup()    group_id:" + group_id)
+    print(" -  setDataBaseImageInGroup() called      group_id:" + group_id)
     mycol = mydb["missiongroups"]
     mycol.update({'_id': group_id}, {'$push': {'image_data': new_image_data}})
 	
 def getDataBaseGroups():
-    print(" -  getDataBaseGroups()")
+    print(" -  getDataBaseGroups() called")
     mycol = mydb["missiongroups"]
     myquery = {}
     mydoc = mycol.find(myquery,{"_id":1, "images":1})
@@ -77,7 +78,7 @@ def image_resize(image, width = None, height = None, inter = cv2.INTER_AREA):
     return resized
 
 def compareImages():
-    print(" -  compareImages()")
+    print(" -  compareImages() called")
     image_to_compare = cv2.imread("image.jpg")
     original = cv2.imread("newImage.jpg")
 
@@ -127,7 +128,7 @@ def connect(sid, environ):
 
 @pyio.on('compareNewImage')
 def compareNewImage(sid, jsondata):
-    print("")
+    print("\n\n")
     print(" >> new image received from Node server:")
     data = json.loads(jsondata)
     player = unicodedata.normalize('NFKD', data["player_id"]).encode('ascii', 'ignore')
@@ -137,10 +138,11 @@ def compareNewImage(sid, jsondata):
 
     with open("newImage.png", "wb") as fh:
         fh.write(minigameImage.decode('base64'))
-	
+
+    new_image_data = {"encoded_image": minigameImage, "player_id": player}
+
     groups = getDataBaseGroups()
-    print("groups:")
-    print(groups)
+    print("number of groups:  " + groups.count)
     index = 0
     match_found = False
     while index < groups.count():
@@ -148,14 +150,12 @@ def compareNewImage(sid, jsondata):
         for img_data in current_group.image_data:
             with open("image.png", "wb") as fh:
                 fh.write((img_data["encoded_image"]).decode('base64'))
-			
             isMatch, match_rate = compareImages()
             if isMatch:
                 match_found = True
-                new_image_data = {"encoded_image": minigameImage, "player_id": player}
-                winning_players = checkForBestMatch(groups[index].image_data)
+                winning_players = checkForBestMatch(current_group.image_data)
                 if len(winning_players) != 0:
-                    setDataBaseImageInGroup(groups[index]._id, new_image_data)
+                    setDataBaseImageInGroup(current_group._id, new_image_data)
                     jsondata = json.dumps({'winning_players': winning_players})
                     pyio.emit('comparisonResult', jsondata)
                 else:
@@ -164,11 +164,14 @@ def compareNewImage(sid, jsondata):
         index += 1
     print(" -- while loop exited -- ")
     if not match_found:
-        # TODO: create new group with newly received image
-
         print(" ! no match found ! ")
+
+        createNewGroup(new_image_data)
+
         jsondata = json.dumps({'winning_players': 0})
         pyio.emit('comparisonResult', jsondata)
+
+
 
 
 if __name__ == '__main__':
