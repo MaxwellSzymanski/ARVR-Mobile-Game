@@ -133,7 +133,7 @@ def compareNewImage(sid, jsondata):
     data = json.loads(jsondata)
     player = unicodedata.normalize('NFKD', data["player_id"]).encode('ascii', 'ignore')
     minigameImage = unicodedata.normalize('NFKD', data["image"]).encode('ascii', 'ignore')
-    minigameImage += (4-len(minigameImage)%4)*'='
+    minigameImage += (4-(len(minigameImage)%4))*'='
     print("player:  " + player)
 
     with open("newImage.png", "wb") as fh:
@@ -142,7 +142,7 @@ def compareNewImage(sid, jsondata):
     new_image_data = {"encoded_image": minigameImage, "player_id": player}
 
     groups = getDataBaseGroups()
-    print("number of groups:  " + groups.count())
+    print("number of groups:  " + str(groups.count()))
     index = 0
     match_found = False
     while index < groups.count():
