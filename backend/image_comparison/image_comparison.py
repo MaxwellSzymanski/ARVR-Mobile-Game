@@ -127,12 +127,15 @@ def connect(sid, environ):
 
 @pyio.on('compareNewImage')
 def compareNewImage(sid, jsondata):
-    print()
+    print("")
     print(" >> new image received from Node server:")
     data = json.loads(jsondata)
     player = unicodedata.normalize('NFKD', data["player_id"]).encode('ascii', 'ignore')
     minigameImage = unicodedata.normalize('NFKD', data["image"]).encode('ascii', 'ignore')
     print("player:  " + player)
+
+    print("image:")
+    print(minigameImage)
 
     with open("newImage.png", "wb") as fh:
         fh.write(minigameImage.decode('base64'))
