@@ -142,7 +142,7 @@ def compareNewImage(sid, jsondata):
     new_image_data = {"encoded_image": minigameImage, "player_id": player}
 
     groups = getDataBaseGroups()
-    print("number of groups:  " + groups.count)
+    print("number of groups:  " + groups.count())
     index = 0
     match_found = False
     while index < groups.count():
