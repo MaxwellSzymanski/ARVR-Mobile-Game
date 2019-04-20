@@ -147,11 +147,10 @@ def compareNewImage(sid, jsondata):
     match_found = False
     while index < groups.count():
         current_group = groups.next()
-        print(current_group)
-        print(current_group["image_data"])
-        print(current_group["image_data"][0])
+        print(current_group["_id"])
 
         for img_data in current_group["image_data"]:
+            print(img_data["encoded_image"])
             with open("image.png", "wb") as fh:
                 fh.write((img_data["encoded_image"]).decode('base64'))
             isMatch, match_rate = compareImages()
