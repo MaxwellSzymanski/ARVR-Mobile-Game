@@ -132,10 +132,8 @@ def compareNewImage(sid, jsondata):
     data = json.loads(jsondata)
     player = unicodedata.normalize('NFKD', data["player_id"]).encode('ascii', 'ignore')
     minigameImage = unicodedata.normalize('NFKD', data["image"]).encode('ascii', 'ignore')
+    minigameImage += (4-len(minigameImage)%4)*'='
     print("player:  " + player)
-
-    print("image:")
-    print(minigameImage)
 
     with open("newImage.png", "wb") as fh:
         fh.write(minigameImage.decode('base64'))
