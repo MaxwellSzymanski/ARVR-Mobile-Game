@@ -142,6 +142,7 @@ def compareNewImage(sid, jsondata):
     print("groups:")
     print(groups)
     index = 0
+    match_found = False
     while index < groups.count():
         current_group = groups.next()
         for img_data in current_group.image_data:
@@ -150,6 +151,7 @@ def compareNewImage(sid, jsondata):
 			
             isMatch, match_rate = compareImages()
             if isMatch:
+                match_found = True
                 new_image_data = {"encoded_image": minigameImage, "player_id": player}
                 winning_players = checkForBestMatch(groups[index].image_data)
                 if len(winning_players) != 0:
@@ -160,6 +162,13 @@ def compareNewImage(sid, jsondata):
                     jsondata = json.dumps({'winning_players':0})
                     pyio.emit('comparisonResult', jsondata)
         index += 1
+    print(" -- while loop exited -- ")
+    if not match_found:
+        # TODO: create new group with newly received image
+
+        print(" ! no match found ! ")
+        jsondata = json.dumps({'winning_players': 0})
+        pyio.emit('comparisonResult', jsondata)
 
 
 if __name__ == '__main__':
