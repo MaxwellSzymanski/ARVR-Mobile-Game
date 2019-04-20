@@ -139,9 +139,12 @@ def compareNewImage(sid, jsondata):
         fh.write(minigameImage.decode('base64'))
 	
     groups = getDataBaseGroups()
+    print("groups:")
+    print(groups)
     index = 0
-    while index < len(groups):
-        for img_data in groups[index].image_data:
+    while index < groups.count():
+        current_group = groups.next()
+        for img_data in current_group.image_data:
             with open("image.png", "wb") as fh:
                 fh.write((img_data["encoded_image"]).decode('base64'))
 			
@@ -156,6 +159,7 @@ def compareNewImage(sid, jsondata):
                 else:
                     jsondata = json.dumps({'winning_players':0})
                     pyio.emit('comparisonResult', jsondata)
+        index += 1
 
 
 if __name__ == '__main__':
