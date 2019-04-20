@@ -148,6 +148,9 @@ def compareNewImage(sid, jsondata):
     while index < groups.count():
         current_group = groups.next()
         print(current_group)
+        print(current_group["image_data"])
+        print(current_group["image_data"][0])
+
         for img_data in current_group["image_data"]:
             with open("image.png", "wb") as fh:
                 fh.write((img_data["encoded_image"]).decode('base64'))
