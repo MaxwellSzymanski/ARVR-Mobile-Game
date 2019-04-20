@@ -147,13 +147,14 @@ def compareNewImage(sid, jsondata):
     match_found = False
     while index < groups.count():
         current_group = groups.next()
-        for img_data in current_group.image_data:
+        print(current_group)
+        for img_data in current_group["image_data"]:
             with open("image.png", "wb") as fh:
                 fh.write((img_data["encoded_image"]).decode('base64'))
             isMatch, match_rate = compareImages()
             if isMatch:
                 match_found = True
-                winning_players = checkForBestMatch(current_group.image_data)
+                winning_players = checkForBestMatch(current_group["image_data"])
                 if len(winning_players) != 0:
                     setDataBaseImageInGroup(current_group._id, new_image_data)
                     jsondata = json.dumps({'winning_players': winning_players})
