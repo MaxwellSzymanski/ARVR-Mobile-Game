@@ -6,6 +6,7 @@ import socketio
 import pymongo
 import json
 import unicodedata
+import math
 #opencv version 3.2.4.16
 myclient = pymongo.MongoClient("mongodb://13.95.120.117:27017/")
 mydb = myclient["userdb"]
@@ -39,10 +40,10 @@ def checkForBestMatch(image_data):
         return winning_players
     return []
 		
-def createNewGroup(new_image_data):
+def createNewGroup(new_image_data, location):
     print(" -  createNewGroup() called")
     mycol = mydb["missiongroups"]
-    return mycol.insert_one({'image_data': [new_image_data,]})
+    return mycol.insert_one({"location": location, 'image_data': [new_image_data,]})
 
 def setDataBaseImageInGroup(group_id, new_image_data):
     print(" -  setDataBaseImageInGroup() called      group_id:" + group_id)
@@ -120,6 +121,20 @@ def compareImages():
         print("Images are NOT similar")
         return False, match_rate;
 
+def degreesToRadians(degrees):
+    return degrees * math.pi / 180
+
+def distanceBetween(A, B):
+    lat1 = A[0]
+    lon1 = A[1]
+    lat2 = B[0]
+    lon2 = B[1]
+    x = degreesToRadians(lon2-lon1) * math.cos(degreesToRadians(lat2+lat1)/2);
+    y = degreesToRadians(lat2-lat1);
+    d = math.sqrt(x*x + y*y) * 6371;
+    return d * 1000; # * 1000 (answer in meters)
+
+range = 100     # max distance between two images
 
 @pyio.on('connect')
 def connect(sid, environ):
@@ -128,7 +143,7 @@ def connect(sid, environ):
 
 @pyio.on('compareNewImage')
 def compareNewImage(sid, jsondata):
-    print("\n\n")
+    print("\n")
     print(" >> new image received from Node server:")
     data = json.loads(jsondata)
     player = unicodedata.normalize('NFKD', data["player_id"]).encode('ascii', 'ignore')
@@ -139,7 +154,7 @@ def compareNewImage(sid, jsondata):
     with open("newImage.png", "wb") as fh:
         fh.write(minigameImage.decode('base64'))
 
-    new_image_data = {"encoded_image": minigameImage, "player_id": player, "location": location}
+    new_image_data = {"encoded_image": minigameImage, "player_id": player}
 
     groups = getDataBaseGroups()
     print("number of groups:  " + str(groups.count()))
@@ -148,28 +163,28 @@ def compareNewImage(sid, jsondata):
     while index < groups.count():
         current_group = groups.next()
         print(current_group["_id"])
+        if distanceBetween(location, current_group["location"]) < range:
+            for img_data in current_group["image_data"]:
 
-        for img_data in current_group["image_data"]:
-
-            with open("image.png", "wb") as fh:
-                fh.write((img_data["encoded_image"]).decode('base64'))
-            isMatch, match_rate = compareImages()
-            if isMatch:
-                match_found = True
-                winning_players = checkForBestMatch(current_group["image_data"])
-                if len(winning_players) != 0:
-                    setDataBaseImageInGroup(current_group._id, new_image_data)
-                    jsondata = json.dumps({'winning_players': winning_players})
-                    pyio.emit('comparisonResult', jsondata)
-                else:
-                    jsondata = json.dumps({'winning_players':0})
-                    pyio.emit('comparisonResult', jsondata)
+                with open("image.png", "wb") as fh:
+                    fh.write((img_data["encoded_image"]).decode('base64'))
+                isMatch, match_rate = compareImages()
+                if isMatch:
+                    match_found = True
+                    winning_players = checkForBestMatch(current_group["image_data"])
+                    if len(winning_players) != 0:
+                        setDataBaseImageInGroup(current_group._id, new_image_data)
+                        jsondata = json.dumps({'winning_players': winning_players})
+                        pyio.emit('comparisonResult', jsondata)
+                    else:
+                        jsondata = json.dumps({'winning_players':0})
+                        pyio.emit('comparisonResult', jsondata)
         index += 1
     print(" -- while loop exited -- ")
     if not match_found:
         print(" ! no match found ! ")
 
-        id = createNewGroup(new_image_data)
+        id = createNewGroup(new_image_data, location)
 
         jsondata = json.dumps({'player_id': player, 'image': minigameImage, 'location': location, "group_id": id})
         pyio.emit('newGroup', jsondata)

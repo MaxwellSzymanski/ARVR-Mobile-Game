@@ -24,9 +24,9 @@ var targetIcon = L.icon({
     iconUrl: "https://img.icons8.com/material/24/000000/point-of-interest.png",
     //shadowUrl: 'leaf-shadow.png',
 
-    iconSize:     [50, 50], // size of the icon
-    shadowSize:   [40, 45], // size of the shadow
-    iconAnchor:   [25, 50], // point of the icon which will correspond to marker's location
+    iconSize:     [40, 40], // size of the icon
+    shadowSize:   [35, 38], // size of the shadow
+    iconAnchor:   [20, 40], // point of the icon which will correspond to marker's location
     shadowAnchor: [4, 62],  // the same for the shadow
     popupAnchor:  [0, -30] // point from which the popup should open relative to the iconAnchor
 });
@@ -46,6 +46,7 @@ class Minigame extends React.Component {
         this.voteResult = this.voteResult.bind(this);
         this.secondPhoto = this.secondPhoto.bind(this);
         this.rejected = this.rejected.bind(this);
+        this.getCorrespondingImage = this.getCorrespondingImage.bind(this);
     }
 
     state = {
@@ -57,7 +58,7 @@ class Minigame extends React.Component {
         centerMap: [50.8632811, 4.6762872],
         showAlertBox: false,
         content: "Please allow access to your location.",
-        targetLocation: [50.8632811, 4.6762872],
+        targetLocations: {},
         encodedPic: require("../assets/icons/user.png"),
         timer: 0,
         firstPicTaken: false,
@@ -78,12 +79,33 @@ class Minigame extends React.Component {
     componentDidMount() {
         this.context.emit("mission", {token:cookies.get('token')});
         this.context.on("mission", (data) => {
-            this.setState({targetLocation: data.location})
+            this.setState({targetLocations: data});
+            const that = this;
+            for (let i = 0; i < data.length; i++) {
+
+                const lon = data[i]["location"][1];
+                const lat = data[i]["location"][0];
+                const id = data[i]["_id"];
+
+                const markerLocation = new L.LatLng(lat, lon);
+                let marker = new L.Marker(markerLocation);
+                marker.setIcon(targetIcon);
+                marker.on('click', function () {
+                    that.getCorrespondingImage(id);
+                });
+
+                marker.addTo(ref);
+
+                // ref.addLayer(marker);
+                // marker.bindPopup(popupText);
+
+            }
         });
         this.context.on("missionPhoto", (data) => {
             this.setState({
                 encodedPic: data.photo,
                 firstPicTaken: true,
+                groupId: data.groupId
             });
             let interval = Math.floor(Math.abs(new Date() - new Date(data.expiry)) / 1000 - 0.5);
             this.setState({timer: interval});
@@ -117,6 +139,10 @@ class Minigame extends React.Component {
         });
     }
 
+    getCorrespondingImage(id) {
+        this.context.emit("groupImage", {groupId: id});
+    }
+
     countDown() {
         let seconds = this.state.timer;
         this.setState({timer: seconds-1});
@@ -139,7 +165,7 @@ class Minigame extends React.Component {
 
     votePhoto(vote){
         this.setState({ timer: 0});
-        this.context.emit("votePhoto",{token: cookies.get('token'), vote: vote});
+        this.context.emit("votePhoto",{token: cookies.get('token'), vote: vote, groupId: this.state.groupId});
     }
 
     voteResult(data) {
@@ -275,7 +301,7 @@ class Minigame extends React.Component {
                     url='https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
                 />
                 <Marker position={this.state.centerMap} icon={myIcon}/>
-                <Marker position={this.state.targetLocation} icon={targetIcon}/>
+                {/*<Marker position={this.state.targetLocation} icon={targetIcon}/>*/}
                 <PopPop open={this.state.showAlertBox} closeBtn={true} closeOnEsc={true} onClose={()=>this.alertBoxIsClosed()} closeOnOverlay={true} position={"topCenter"} contentStyle={this.state.alertBoxStyle}>
                     <div>{this.state.content}</div>
                 </PopPop>

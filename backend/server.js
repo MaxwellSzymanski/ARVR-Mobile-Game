@@ -627,9 +627,12 @@ function mission(data, socket) {
                 User.findOne({name: token.name}).then(function(user) {
                     if (!user.score) {
                         user.score = 0;
-                        user.save();7
+                        user.save();
                 }   });
-                socket.emit("mission", {location: missionList[currentMission]})
+                MissionGroup.find({}, "_id location").lean().exec( (error, array)=> {
+                    if (error) throw error;
+                    socket.emit("mission", array)
+                });
             }
         });
     }
@@ -769,6 +772,7 @@ function missionVote(data, socket) {
                         missionPlayers[key].socket.emit("rejected", {expiry: exp})
                     }
                 });
+                MissionGroup.findByIdAndRemove(data.groupId)
             }
         }
     }
