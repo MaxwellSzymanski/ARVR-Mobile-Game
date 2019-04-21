@@ -274,11 +274,11 @@ class Minigame extends React.Component {
 
     sendPhoto(dataUri){
         this.context.emit("missionPhoto", {token: cookies.get('token'), photo: dataUri.toString('base64'), location: [this.state.location.lat, this.state.location.lng]} );
-        if (this.state.firstPicTaken) {
-            this.setState({showAlertBox: false, firstPicAccepted: true});
-        } else {
-            this.setState({showAlertBox: false, firstPicTaken: true, encodedPic: dataUri.toString('base64')});
-        }
+        // if (this.state.firstPicTaken) {
+        //     this.setState({showAlertBox: false, firstPicAccepted: true});
+        // } else {
+        //     this.setState({showAlertBox: false, firstPicTaken: true, encodedPic: dataUri.toString('base64')});
+        // }
     }
 
     showAlertBox(content){
