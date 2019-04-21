@@ -707,7 +707,7 @@ function groupImage(data, socket) {
         console.log(group._id);
         console.log("Group location:   " + group.location);
         console.log(group.image_data);
-        console.log(group.["image_data"].shift().player_id);
+        console.log(group["image_data"].shift().player_id);
         socket.emit("groupImage", {image: group["image_data"].shift()["encoded_image"],
             player: group["image_data"].shift()["player_id"]})
     });
