@@ -145,7 +145,7 @@ class Minigame extends React.Component {
         let content = [];
         content.push(<p>Try to take a similar picture when you reach this location.</p>);
         content.push(<img src={this.state.encodedPic}/>);
-        content.push(<p>This picture was taken by {this.state.imageCapturer}.</p>);
+        content.push(<p>This picture was taken by player {this.state.imageCapturer}.</p>);
         this.showAlertBox(content);
     }
 
@@ -251,10 +251,10 @@ class Minigame extends React.Component {
     mapChanged(feature, layer){
         if(this.state.showAlertBox === false) {
             let rows = [];
-            rows.push(<p>Distance to the mission location: {Math.round(this.distanceBetween())} m.</p>);
-            if (this.distanceBetween() > 10000000) {
-                rows.push(<p>You're not close enough to the mission location.</p>)
-            } else if (!this.state.firstPicTaken || this.state.firstPicAccepted) {
+            // rows.push(<p>Distance to the mission location: {Math.round(this.distanceBetween())} m.</p>);
+            // if (this.distanceBetween() > 10000000) {
+            //     rows.push(<p>You're not close enough to the mission location.</p>)
+            if (!this.state.firstPicTaken || this.state.firstPicAccepted) {
                 rows.push(<Camera
                     onTakePhoto={(dataUri) => {
                         this.sendPhoto(dataUri);
