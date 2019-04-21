@@ -94,7 +94,7 @@ class Minigame extends React.Component {
                     that.getCorrespondingImage(id);
                 });
 
-                marker.addTo(ref);
+                marker.addTo(this.refs.ref);
 
                 // ref.addLayer(marker);
                 // marker.bindPopup(popupText);
