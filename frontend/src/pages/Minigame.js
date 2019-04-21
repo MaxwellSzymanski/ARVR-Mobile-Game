@@ -83,7 +83,6 @@ class Minigame extends React.Component {
                 {location:[50.853137, 4.68334], _id: 5}]});
         this.context.emit("mission", {token:cookies.get('token')});
         this.context.on("mission", (data) => {
-            alert(data);
             this.setState({targetLocations: data});
         });
         this.context.on("missionPhoto", (data) => {
