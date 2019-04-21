@@ -148,7 +148,8 @@ def compareNewImage(sid, jsondata):
     data = json.loads(jsondata)
     player = unicodedata.normalize('NFKD', data["player_id"]).encode('ascii', 'ignore')
     minigameImage = unicodedata.normalize('NFKD', data["image"]).encode('ascii', 'ignore')
-    location = unicodedata.normalize('NFKD', data["location"]).encode('ascii', 'ignore')
+    location = [unicodedata.normalize('NFKD', data["location"][0]).encode('ascii', 'ignore'),
+                unicodedata.normalize('NFKD', data["location"][1]).encode('ascii', 'ignore')]
     print("player:  " + player)
 
     with open("newImage.png", "wb") as fh:
@@ -160,10 +161,12 @@ def compareNewImage(sid, jsondata):
     print("number of groups:  " + str(groups.count()))
     index = 0
     match_found = False
+    close_to_existing_target = False
     while index < groups.count():
         current_group = groups.next()
         print(current_group["_id"])
         if distanceBetween(location, current_group["location"]) < range:
+            close_to_existing_target = True
             for img_data in current_group["image_data"]:
 
                 with open("image.png", "wb") as fh:
@@ -181,7 +184,7 @@ def compareNewImage(sid, jsondata):
                         pyio.emit('comparisonResult', jsondata)
         index += 1
     print(" -- while loop exited -- ")
-    if not match_found:
+    if not match_found and not close_to_existing_target:
         print(" ! no match found ! ")
 
         id = createNewGroup(new_image_data, location)
