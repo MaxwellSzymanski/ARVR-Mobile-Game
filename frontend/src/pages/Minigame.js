@@ -64,6 +64,7 @@ class Minigame extends React.Component {
         timer: 0,
         firstPicTaken: false,
         firstPicAccepted: false,
+        imageCapturer: "you"
     };
 
     componentWillMount() {
@@ -134,7 +135,10 @@ class Minigame extends React.Component {
     }
 
     groupImage(data) {
-        this.setState({encodedPic: data.image});
+        let ply = data.player;
+        if (ply === cookies.get('name'))
+            ply = "you";
+        this.setState({encodedPic: data.image, imageCapturer: ply});
         this.showImage()
     }
 
@@ -142,6 +146,7 @@ class Minigame extends React.Component {
         let content = [];
         content.push(<p>Try to take a similar picture when you reach this location.</p>);
         content.push(<img src={this.state.encodedPic}/>);
+        content.push(<p>This picture was taken by {this.state.imageCapturer}.</p>);
         this.showAlertBox(content);
     }
 

@@ -703,7 +703,8 @@ function groupImage(data, socket) {
     MissionGroup.findById(data.groupId).then(function(group) {
         if (group===null)
             return;
-        socket.emit("groupImage", {image: group.image_data[0].encoded_image})
+        socket.emit("groupImage", {image: group["image_data"][0]["encoded_image"],
+            player: group["image_data"][0]["player_id"]})
     });
 }
 
