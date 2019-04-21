@@ -26,8 +26,8 @@ ImageSchema.pre('save', function(next) {
 // ========================================== GROUP
 
 const GroupSchema = new mongoose.Schema({
-    images: {
-        type: [ImageSchema],
+    image_data: {
+        type: Array,
     },
     location: {
         type: [Number],
