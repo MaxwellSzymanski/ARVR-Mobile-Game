@@ -46,6 +46,7 @@ class Minigame extends React.Component {
         this.voteResult = this.voteResult.bind(this);
         this.secondPhoto = this.secondPhoto.bind(this);
         this.rejected = this.rejected.bind(this);
+        this.groupImage = this.groupImage.bind(this);
         this.getCorrespondingImage = this.getCorrespondingImage.bind(this);
     }
 
@@ -58,7 +59,7 @@ class Minigame extends React.Component {
         centerMap: [50.8632811, 4.6762872],
         showAlertBox: false,
         content: "Please allow access to your location.",
-        targetLocations: {},
+        targetLocations: [],
         encodedPic: require("../assets/icons/user.png"),
         timer: 0,
         firstPicTaken: false,
@@ -77,29 +78,12 @@ class Minigame extends React.Component {
     }
 
     componentDidMount() {
+        this.setState({targetLocations: [{location:[50.863137, 4.683394], _id:2},
+                {location:[50.853137, 4.68334], _id: 5}]});
         this.context.emit("mission", {token:cookies.get('token')});
         this.context.on("mission", (data) => {
+            alert(data);
             this.setState({targetLocations: data});
-            const that = this;
-            for (let i = 0; i < data.length; i++) {
-
-                const lon = data[i]["location"][1];
-                const lat = data[i]["location"][0];
-                const id = data[i]["_id"];
-
-                const markerLocation = new L.LatLng(lat, lon);
-                let marker = new L.Marker(markerLocation);
-                marker.setIcon(targetIcon);
-                marker.on('click', function () {
-                    that.getCorrespondingImage(id);
-                });
-
-                marker.addTo(this.refs.ref);
-
-                // ref.addLayer(marker);
-                // marker.bindPopup(popupText);
-
-            }
         });
         this.context.on("missionPhoto", (data) => {
             this.setState({
@@ -111,7 +95,8 @@ class Minigame extends React.Component {
             this.setState({timer: interval});
             this.countDown();
         });
-        this.context.on("voteResult", (data) => { this.voteResult(data); });
+        this.context.on("groupImage", (data) => {this.groupImage(data); });
+        this.context.on("voteResult", (data) => {this.voteResult(data); });
         this.context.on("secondPhoto", (data) => {this.secondPhoto(data); });
         this.context.on("message", (data) => {this.showAlertBox(data.message); });
         this.context.on("rejected", (data) => {
@@ -140,7 +125,24 @@ class Minigame extends React.Component {
     }
 
     getCorrespondingImage(id) {
+        if (this.state.picId === id) {
+            this.showImage();
+            return;
+        }
         this.context.emit("groupImage", {groupId: id});
+        this.setState({picId: id});
+    }
+
+    groupImage(data) {
+        this.setState({encodedPic: data.image});
+        this.showImage()
+    }
+
+    showImage() {
+        let content = [];
+        content.push(<p>Try to take a similar picture when you reach this location.</p>);
+        content.push(<img src={this.state.encodedPic}/>);
+        this.showAlertBox(content);
     }
 
     countDown() {
@@ -301,7 +303,11 @@ class Minigame extends React.Component {
                     url='https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
                 />
                 <Marker position={this.state.centerMap} icon={myIcon}/>
-                {/*<Marker position={this.state.targetLocation} icon={targetIcon}/>*/}
+                {this.state.targetLocations.map((data) =>
+                    <Marker key={`marker-${data._id}`} position={data.location} icon={targetIcon}
+                            onClick={()=>{this.getCorrespondingImage(data._id)}}>
+                    </Marker>
+                )}
                 <PopPop open={this.state.showAlertBox} closeBtn={true} closeOnEsc={true} onClose={()=>this.alertBoxIsClosed()} closeOnOverlay={true} position={"topCenter"} contentStyle={this.state.alertBoxStyle}>
                     <div>{this.state.content}</div>
                 </PopPop>

@@ -130,6 +130,7 @@ io.sockets.on('connection', function (socket) {
     socket.on("fight", (data) => {fight(data, socket)});
     socket.on("mission", (data) => {mission(data, socket)});
     socket.on("leaveMission", (data) => {leaveMission(data, socket)});
+    socket.on("groupImage", (data) => {groupImage(data, socket)});
     socket.on("missionPhoto", (data) => {missionPhoto(data, socket)});
     socket.on("votePhoto", (data) => {missionVote(data, socket)});
     socket.on("newMission", (data) => {newMission(data, socket)});
@@ -697,6 +698,14 @@ pythonSocket.on("comparisonResult", function(jsondata) {
         }
     })
 });
+
+function groupImage(data, socket) {
+    MissionGroup.findById(data.groupId).then(function(group) {
+        if (group===null)
+            return;
+        socket.emit("groupImage", {image: group.image_data[0].encoded_image})
+    });
+}
 
 // OUTDATED FUNCTION written for first deadline
 // function oldMissionPhoto(data, socket) {
