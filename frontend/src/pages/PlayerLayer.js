@@ -127,7 +127,7 @@ class PlayerLayer extends React.Component {
     }
 
     startTictac(data) {
-        this.receiveSpecialSignal(data);
+        alert("Working")
     }
 
     sendLocation() {
