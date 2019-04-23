@@ -87,10 +87,11 @@ def image_resize(image, width = None, height = None, inter = cv2.INTER_AREA):
 
     return resized
 
-def compareImages():
+
+def compareImages(first, second):
     print(" -  compareImages() called")
-    image_to_compare = cv2.imread("image.jpg")
-    original = cv2.imread("newImage.jpg")
+    image_to_compare = cv2.imread(first)
+    original = cv2.imread(second)
 
     height_2, width_2, channels_2 = image_to_compare.shape
     height, width, channels = original.shape
@@ -100,7 +101,6 @@ def compareImages():
         original = image_resize(original, width=fixed_width)
     if width_2 > fixed_width :
         image_to_compare = image_resize(image_to_compare, width=fixed_width)
-
 
 	# Check for similarities
     sift = cv2.xfeatures2d.SIFT_create()
@@ -130,8 +130,10 @@ def compareImages():
         print("Images are NOT similar")
         return False, match_rate;
 
+
 def degreesToRadians(degrees):
     return degrees * math.pi / 180
+
 
 def distanceBetween(A, B):
     lat1 = A[0]
@@ -143,7 +145,9 @@ def distanceBetween(A, B):
     d = math.sqrt(x*x + y*y) * 6371;
     return d * 1000; # * 1000 (answer in meters)
 
+
 range = 100     # max distance between two images
+
 
 @pyio.on('connect')
 def connect(sid, environ):
@@ -162,11 +166,13 @@ def compareNewImage(sid, jsondata):
     print((len(base64_image) % 4) == 0)
     location = data["location"]
     print("player:  " + player)
-    ext = "png"
+    first_img = "newImage."
     if minigame_image.find("jpeg", 0, 25) >= 0:
-        ext = "jpg"
+        first_img += "jpg"
+    elif minigame_image.find("png", 0, 25) >= 0:
+        first_img += "png"
 
-    with open("newImage."+ext, "wb") as fh:
+    with open(first_img, "wb") as fh:
         fh.write(base64_image.decode('base64'))
 
     new_image_data = {"encoded_image": minigame_image, "player_id": player}
@@ -185,12 +191,14 @@ def compareNewImage(sid, jsondata):
             for img_data in current_group["image_data"]:
                 index = img_data["encoded_image"].find(",") + 1
                 base64_data = img_data["encoded_image"][index:len(img_data["encoded_image"])]
-                ext = "png"
-                if img_data["encoded_image"].find("jpeg", 0, 25) >= 0:
-                    ext = "jpg"
-                with open("image."+ext, "wb") as fh:
+                second_img = "image."
+                if minigame_image.find("jpeg", 0, 25) >= 0:
+                    second_img += "jpg"
+                elif minigame_image.find("png", 0, 25) >= 0:
+                    second_img += "png"
+                with open(second_img, "wb") as fh:
                     fh.write(base64_data.decode('base64'))
-                is_match, match_rate = compareImages()
+                is_match, match_rate = compareImages(first_img, second_img)
                 if is_match:
                     match_found = True
                     winning_players = checkForBestMatch(current_group["image_data"])
