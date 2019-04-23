@@ -49,7 +49,7 @@ def createNewGroup(new_image_data, location):
     print(" -  createNewGroup() called")
     mycol = mydb["missiongroups"]
     id = mycol.insert_one({'location': location})
-    mycol.update({'_id': id}, {'$push': {'image_data': new_image_data}})
+    mycol.update({'_id': id}, {'$set': {'image_data': [new_image_data,]}})
     return id
 
 
