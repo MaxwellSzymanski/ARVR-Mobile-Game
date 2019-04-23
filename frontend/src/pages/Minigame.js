@@ -299,7 +299,7 @@ class Minigame extends React.Component {
     render() {
 
         return(
-            <Map ref={(ref) => { this.map = ref; }} onViewportChange={()=> this.setZoom()} onClick={()=> this.mapChanged()} className="mapss" center={this.state.centerMap} zoom={this.state.zoom}>
+            <Map ref={(ref) => { this.map = ref; }} dragging={false} onViewportChange={()=> this.setZoom()} onClick={()=> this.mapChanged()} className="mapss" center={this.state.centerMap} zoom={this.state.zoom}>
                 <TileLayer
                     //attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     //url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
