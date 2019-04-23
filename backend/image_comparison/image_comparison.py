@@ -34,7 +34,11 @@ def checkForBestMatch(image_data):
             best_index = index
             n -= 1
         if img_data["player_id"] not in winning_players:
-            winning_players.append(img_data["player_id"]);
+            winning_players.append(img_data["player_id"])
+    print("\n\n========================================\n|")
+    print("|    Best match index :  " + best_index)
+    print("|    Match rate       :  " + best_match_rate)
+    print("|\n========================================\n\n")
     if n <= 0:
         winning_players.append(image_data[best_index]["player_id"]) #Player with best match gets double the points
         return winning_players
@@ -147,14 +151,20 @@ def compareNewImage(sid, jsondata):
     print(" >> new image received from Node server:")
     data = json.loads(jsondata)
     player = unicodedata.normalize('NFKD', data["player_id"]).encode('ascii', 'ignore')
-    minigameImage = unicodedata.normalize('NFKD', data["image"]).encode('ascii', 'ignore')
+    minigame_image = unicodedata.normalize('NFKD', data["image"]).encode('ascii', 'ignore')
+    index = minigame_image.find(",") + 1
+    base64_image = minigame_image[index:len(minigame_image)]
+    print((minigame_image % 4) == 0)
     location = data["location"]
     print("player:  " + player)
+    ext = "png"
+    if minigame_image.find("jpeg", 0, 25) >= 0:
+        ext = "jpg"
 
-    with open("newImage.png", "wb") as fh:
-        fh.write(minigameImage.decode('base64'))
+    with open("newImage."+ext, "wb") as fh:
+        fh.write(base64_image.decode('base64'))
 
-    new_image_data = {"encoded_image": minigameImage, "player_id": player}
+    new_image_data = {"encoded_image": minigame_image, "player_id": player}
 
     groups = getDataBaseGroups()
     print("number of groups:  " + str(groups.count()))
@@ -167,11 +177,15 @@ def compareNewImage(sid, jsondata):
         if distanceBetween(location, current_group["location"]) < range:
             close_to_existing_target = True
             for img_data in current_group["image_data"]:
-
-                with open("image.png", "wb") as fh:
-                    fh.write((img_data["encoded_image"]).decode('base64'))
-                isMatch, match_rate = compareImages()
-                if isMatch:
+                index = img_data["encoded_image"].find(",") + 1
+                base64_data = img_data["encoded_image"][index:len(img_data["encoded_image"])]
+                ext = "png"
+                if img_data["encoded_image"].find("jpeg", 0, 25) >= 0:
+                    ext = "jpg"
+                with open("image."+ext, "wb") as fh:
+                    fh.write(base64_data.decode('base64'))
+                is_match, match_rate = compareImages()
+                if is_match:
                     match_found = True
                     winning_players = checkForBestMatch(current_group["image_data"])
                     if len(winning_players) != 0:
@@ -182,13 +196,12 @@ def compareNewImage(sid, jsondata):
                         jsondata = json.dumps({'winning_players':0})
                         pyio.emit('comparisonResult', jsondata)
         index += 1
-    print(" -- while loop exited -- ")
     if not match_found and not close_to_existing_target:
         print(" ! no match found ! ")
 
         id = createNewGroup(new_image_data, location)
 
-        jsondata = json.dumps({'player_id': player, 'image': minigameImage, 'location': location, "group_id": id})
+        jsondata = json.dumps({'player_id': player, 'image': minigame_image, 'location': location, "group_id": id})
         pyio.emit('newGroup', jsondata)
 
 

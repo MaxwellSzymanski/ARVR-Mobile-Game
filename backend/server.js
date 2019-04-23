@@ -784,7 +784,14 @@ function missionVote(data, socket) {
                         missionPlayers[key].socket.emit("rejected", {expiry: exp})
                     }
                 });
-                MissionGroup.findByIdAndRemove(data.groupId)
+                MissionGroup.findByIdAndRemove(data.groupId);
+                MissionGroup.find({}, "_id location").lean().exec( (error, array)=> {
+                    if (error) throw error;
+                    Object.keys(missionPlayers).forEach(function (key) {
+                        missionPlayers[key].socket.emit("mission", array)
+                    });
+                });
+
             }
         }
     }

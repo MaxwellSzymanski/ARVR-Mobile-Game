@@ -55,7 +55,7 @@ class Minigame extends React.Component {
             lat: 50.8632811,
             lng: 4.6762872,
         },
-        zoom: 14,
+        zoom: 16,
         centerMap: [50.8632811, 4.6762872],
         showAlertBox: false,
         content: "Please allow access to your location.",
@@ -64,13 +64,13 @@ class Minigame extends React.Component {
         timer: 0,
         firstPicTaken: false,
         firstPicAccepted: false,
-        imageCapturer: "you"
+        imageCaptor: "you"
     };
 
     componentWillMount() {
         this.interval = setInterval(() => {
             this.sendLocation();
-            this.setCenter([this.state.location.lat, this.state.location.lng]);
+            // this.setCenter([this.state.location.lat, this.state.location.lng]);
         }, 1000);
     }
 
@@ -137,7 +137,7 @@ class Minigame extends React.Component {
         let ply = data.player;
         if (ply === cookies.get('name'))
             ply = "you";
-        this.setState({encodedPic: data.image, imageCapturer: ply});
+        this.setState({encodedPic: data.image, imageCaptor: ply});
         this.showImage()
     }
 
@@ -145,7 +145,7 @@ class Minigame extends React.Component {
         let content = [];
         content.push(<p>Try to take a similar picture when you reach this location.</p>);
         content.push(<img src={this.state.encodedPic}/>);
-        content.push(<p>This picture was taken by player {this.state.imageCapturer}.</p>);
+        content.push(<p>This picture was taken by player {this.state.imageCaptor}.</p>);
         this.showAlertBox(content);
     }
 
@@ -154,8 +154,8 @@ class Minigame extends React.Component {
         this.setState({timer: seconds-1});
         let stupidAnimation = ".".repeat(3 - seconds%3);
         let content = [];
+        content.push(<p>Is this a good target picture? Do you think it could be imitated easily? Please vote in time.</p>);
         content.push(<img src={this.state.encodedPic}/>);
-        content.push(<p>Is this a good picture of the mission location? Please vote in time.</p>);
         content.push(<p>{seconds} seconds left to vote{stupidAnimation}</p>);
         content.push(<button onClick={this.votePhoto.bind(this,true)}>Yes</button>);
         content.push(<button onClick={this.votePhoto.bind(this,false)}>No</button>);
@@ -171,17 +171,16 @@ class Minigame extends React.Component {
 
     votePhoto(vote){
         this.setState({ timer: 0});
-        this.context.emit("votePhoto",{token: cookies.get('token'), vote: vote, groupId: this.state.groupId});
+        if (!vote)
+            this.context.emit("votePhoto",{token: cookies.get('token'), vote: vote, groupId: this.state.groupId});
     }
 
     voteResult(data) {
         let content = [];
         if (data.accepted) {
-            this.setState({firstPicTaken: true, firstPicAccepted: true});
-            content.push(<p>The photo is accepted by all active mission players!</p>);
-            content.push(<p>Go to the mission location and take a similar photo.</p>);
+            content.push(<p>The photo is accepted by all active mission players and thus a new target is established!</p>);
+            content.push(<p>Go to one of the target locations and take a similar photo.</p>);
         } else {
-            this.setState({encodedPic: require("../assets/icons/user.png"), firstPicTaken: false, firstPicAccepted: false});
             content.push(<p>The photo is rejected!</p>);
             content.push(<p>Go to the mission location and take a better photo.</p>);
         }
@@ -250,11 +249,11 @@ class Minigame extends React.Component {
 
     mapChanged(feature, layer){
         if(this.state.showAlertBox === false) {
-            let rows = [];
             // rows.push(<p>Distance to the mission location: {Math.round(this.distanceBetween())} m.</p>);
             // if (this.distanceBetween() > 10000000) {
             //     rows.push(<p>You're not close enough to the mission location.</p>)
-            if (!this.state.firstPicTaken || this.state.firstPicAccepted) {
+            if (this.state.timer <= 0) {
+                let rows = [];
                 rows.push(<Camera
                     onTakePhoto={(dataUri) => {
                         this.sendPhoto(dataUri);
@@ -264,11 +263,12 @@ class Minigame extends React.Component {
                     imageCompression={0.98}
                     idealFacingMode={"FACING_MODES.ENVIRONMENT"}
                 />);
-            } else {
-                rows.push(<img src={this.state.encodedPic}/>);
-                rows.push(<p>Please wait for all the mission players to vote.</p>);
+                this.showAlertBox(rows);
             }
-            this.showAlertBox(rows);
+                // } else {
+            //     rows.push(<img src={this.state.encodedPic}/>);
+            //     rows.push(<p>Please wait for all the mission players to vote.</p>);
+            // }
         }
     }
 
