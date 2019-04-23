@@ -46,15 +46,17 @@ def checkForBestMatch(image_data, file):
             best_index = index
             best_match_rate = match_rate
             n -= 1
-        if img_data["player_id"] not in winning_players:
+        if isMatch:
             winning_players.append(img_data["player_id"])
 
         index += 1
 
-    print("\n\n========================================\n|")
+    print("\n\n/=======================================\n|")
     print("|    Best match index :  " + str(best_index))
-    print("|    Match rate       :  " + str(best_match_rate))
-    print("|\n========================================\n\n")
+    print("|    Match rate       :  " + str(round(best_match_rate,2)))
+    print("|\n\=======================================\n\n")
+    print(winning_players)
+    print()
     if n <= 0:
         winning_players.append(image_data[best_index]["player_id"]) #Player with best match gets double the points
         return winning_players
@@ -219,7 +221,7 @@ def compareNewImage(sid, jsondata):
                 if is_match:
                     match_found = True
                     winning_players = checkForBestMatch(current_group["image_data"], first_img)
-                    if len(winning_players) != 0:
+                    if len(winning_players) > 0:
                         setDataBaseImageInGroup(current_group['_id'], new_image_data)
                         jsondata = json.dumps({'winning_players': winning_players})
                         pyio.emit('comparisonResult', jsondata)
