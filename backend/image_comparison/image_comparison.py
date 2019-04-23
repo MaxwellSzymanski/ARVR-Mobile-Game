@@ -131,11 +131,11 @@ def compareImages(first, second):
     for m, n in matches:
         if m.distance < 0.6*n.distance:
             good_points.append((m,n))
-    print("GOOD Matches:   ", len(good_points))
+    print("Good matches     :  " + str(len(good_points)))
     match_rate = 0
     if len(keyp_1) != 0:
         match_rate = (float(len(good_points)) / float(len(keyp_1)) * 100)
-    print("Match %:   ", match_rate)
+    print("Match percentage :  " +  str(match_rate) + "%")
     if match_rate >= 3:
         print("Images are similar!")
         return True, match_rate;
