@@ -832,7 +832,6 @@ function initTictac(data, socket) {
                     console.log("(initTictac)           attacker not found.");
                     return;
                 }
-
                     if (err) {
                         console.log("(initTictac)         invalid defender token");
                         return;
@@ -844,7 +843,6 @@ function initTictac(data, socket) {
                                 console.log("(initTictac)           opponent not found.");
                                 return;
                             }
-
                             let you = Math.random() < 0.5 ? 'x' : 'o';
                             let opp = you === 'x' ? 'o' : 'x';
                             // TODO: Implement fatigue
@@ -854,11 +852,10 @@ function initTictac(data, socket) {
                             socket.emit("initResponse", {ownIcon: you, turn: turn});
                             console.log("response:::" + opponent.name);
                             if (game[opponent] !== undefined && game[opponent.name] !== null) {
-                                game[opponent].socket.emit("oppTictac", {ownIcon: you, turn: turn});
+                                game[opponent].socket.emit("oppTictac", {ownIcon: opp, turn: turn});
                             }
                         }
                     )
-
             })
     })
 }

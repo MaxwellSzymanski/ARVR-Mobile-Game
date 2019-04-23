@@ -18,8 +18,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="397" column="28" selection-start-line="397" selection-start-column="28" selection-end-line="398" selection-end-column="65" />
+            <state relative-caret-position="594">
+              <caret line="849" lean-forward="true" selection-start-line="849" selection-end-line="849" />
             </state>
           </provider>
         </entry>
@@ -70,11 +70,6 @@
               <item name="backend" type="b2602c69:ProjectViewProjectNode" />
               <item name="backend" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="backend" type="b2602c69:ProjectViewProjectNode" />
-              <item name="backend" type="462c0819:PsiDirectoryNode" />
-              <item name="db" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -115,11 +110,12 @@
       <workItem from="1553422734818" duration="3078000" />
       <workItem from="1553608085039" duration="1329000" />
       <workItem from="1554208172270" duration="8341000" />
+      <workItem from="1556022240054" duration="400000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="22592000" />
+    <option name="totallyTimeSpent" value="22992000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -148,17 +144,17 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/server.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="594">
+          <caret line="849" lean-forward="true" selection-start-line="849" selection-end-line="849" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/db/userModel.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1455">
           <caret line="97" column="12" selection-start-line="97" selection-start-column="12" selection-end-line="97" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="397" column="28" selection-start-line="397" selection-start-column="28" selection-end-line="398" selection-end-column="65" />
         </state>
       </provider>
     </entry>
