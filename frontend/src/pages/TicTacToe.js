@@ -4,8 +4,11 @@ import Announcement from './Announcement.js';
 import Tile from './Tile.js';
 import ResetButton from './ResetButton.js';
 import swal from "@sweetalert/with-react";
+import Cookies from "universal-cookie";
+import SocketContext from "../socketContext";
+import BattlePage from "./BattlePage";
 
-
+const cookies = new Cookies();
 
 class TicTacToe extends React.Component {
 
@@ -20,7 +23,10 @@ class TicTacToe extends React.Component {
        turn: 'x',
        ownIcon: '',
        winner: null,
-     }
+     };
+
+    this.updateBoard = this.updateBoard.bind(this);
+    this.componentDidMount = this.componentDidMount.bind(this);
   }
 
   componentDidMount() {
@@ -40,16 +46,19 @@ class TicTacToe extends React.Component {
         gameBoard: data.gameBoard,
         turn: this.state.ownIcon
       });
-
     });
 
   }
 
 
   updateBoard(loc, player) {
-    if (this.state.turn === this.state.ownIcon) {
+
+    // For attack
+    // this.context.emit("fight", {token: cookies.get('token'), enemy: cookies.get("attackToken")});
+    if (this.state.turn !== this.state.ownIcon) {
       return;
     }
+    let attackToken = cookies.get("attackToken");
     this.context.emit("initTictac", {token: cookies.get("token"), enemy: attackToken});
 
     if  (this.state.gameBoard[loc] === 'x' || this.state.gameBoard[loc] === 'o' || this.state.winner) {
@@ -134,4 +143,5 @@ class TicTacToe extends React.Component {
   }
 }
 
+TicTacToe.contextType = SocketContext;
 export default TicTacToe;

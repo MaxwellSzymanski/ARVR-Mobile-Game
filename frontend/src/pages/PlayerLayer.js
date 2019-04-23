@@ -2,6 +2,7 @@ import React from 'react';
 import { Marker, Popup } from 'react-leaflet';
 import '../App.css';
 import L from 'leaflet';
+import { Link, Redirect } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import SocketContext from "../socketContext";
 
@@ -76,6 +77,8 @@ class PlayerLayer extends React.Component {
 
         this.updateLocation = this.updateLocation.bind(this);
         this.receivePlayer = this.receivePlayer.bind(this);
+        this.showAlertBox = this.showAlertBox.bind(this);
+        this.startTictac = this.startTictac.bind(this);
     }
 
     state = {
@@ -100,6 +103,9 @@ class PlayerLayer extends React.Component {
         this.context.on("specialsignal", (data) => {this.receiveSpecialSignal(data)});
         this.context.on("handshake", (data) => {this.acknowledgeHandshake(data)});
         this.context.on("ACKhandshake", (data) => {this.handshakeAcknowledged(data)});
+        //game[opponent.name].socket.emit("oppTictac", {ownIcon: you, turn: turn});
+        this.context.on("oppTictac", (data) => {this.startTictac(data)});
+
 
         // this.context.on("message", (data) => {this.handshakeAcknowledged(data)});
     }
@@ -118,6 +124,10 @@ class PlayerLayer extends React.Component {
         });
 
         setTimeout(this.updateLocation, 250);
+    }
+
+    startTictac(data) {
+        this.receiveSpecialSignal(data);
     }
 
     sendLocation() {
@@ -197,7 +207,7 @@ class PlayerLayer extends React.Component {
                     if (timeDiff <= 5) {
                         rows.push(
                             <Marker onClick={
-                            () => this.showAlertBox(
+                            () => playerLayer.showAlertBox(
                               <div>
                               <p> {key}, accuracy: {player.accuracy} m</p>
                               <p>
@@ -218,7 +228,7 @@ class PlayerLayer extends React.Component {
                     } else if (timeDiff <= 30) {
                         rows.push(
                             <Marker onClick={
-                            () => this.showAlertBox(
+                            () => playerLayer.showAlertBox(
                               <div>  <p> {key} seems to be be offline. </p></div>
                             )
                             }
@@ -283,7 +293,7 @@ class PlayerLayer extends React.Component {
     }
 
     receiveSpecialSignal(data) {
-        this.showAlertBox(<p className="colorWhite">Special signal received from {data.sender}</p>);
+        this.showAlertBox(<Link to="/ticTacToe"><p className="colorWhite">Special signal received from {data.sender}</p></Link>);
     }
 
     // Send special signal to server
@@ -349,7 +359,7 @@ class PlayerLayer extends React.Component {
 
                 // check for enemy!
                 if(idEnemy !== playerLayer.state.id){
-                    rows.push(<button className="confirmButton wider" onClick={playerLayer.props.setTarget.bind(playerLayer,idEnemy,[playerData.latitude,playerData.longitude])}>Follow {idEnemy}</button>);
+                    rows.push(<Link to="/battlePage"><button className="confirmButton wider" onClick={cookies.set('attackToken', idEnemy)}>TicTacToe {idEnemy}</button></Link>);
                 }
             });
         }
