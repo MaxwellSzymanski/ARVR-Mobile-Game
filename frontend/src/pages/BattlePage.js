@@ -171,7 +171,7 @@ class BattlePage extends React.Component {
     attack() {
         this.context.emit("initTictac", {
             token: cookies.get('token'),
-            opponent: cookies.get("attackToken"),
+            enemy: cookies.get("attackToken"),
         })
 
         return <Redirect to="/settings" />;
