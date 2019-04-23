@@ -28,12 +28,14 @@ def checkForBestMatch(image_data, file):
     best_index = 0
     for img_data in image_data:
 
-        i = img_data.find(",") + 1
-        base64_image = img_data[i:len(img_data)]
+        image_string = img_data["encoded_image"]
+
+        i = image_string.find(",") + 1
+        base64_image = image_string[i:len(image_string)]
         img = "groupImg."
-        if img_data.find("jpeg", 0, 25) >= 0:
+        if image_string.find("jpeg", 0, 25) >= 0:
             img += "jpg"
-        elif img_data.find("png", 0, 25) >= 0:
+        elif image_string.find("png", 0, 25) >= 0:
             img += "png"
 
         with open(img, "wb") as fh:
