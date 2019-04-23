@@ -174,6 +174,7 @@ def compareNewImage(sid, jsondata):
     while index < groups.count():
         current_group = groups.next()
         print(current_group["_id"])
+        print(current_group["location"])
         if distanceBetween(location, current_group["location"]) < range:
             close_to_existing_target = True
             for img_data in current_group["image_data"]:
