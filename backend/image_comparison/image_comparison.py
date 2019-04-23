@@ -135,12 +135,12 @@ def compareImages(first, second):
     match_rate = 0
     if len(keyp_1) != 0:
         match_rate = (float(len(good_points)) / float(len(keyp_1)) * 100)
-    print("Match percentage :  " +  str(match_rate) + "%")
+    print("Match percentage :  " +  str(match_rate) + " %")
     if match_rate >= 3:
-        print("Images are similar!")
+        print("Images are similar!\n")
         return True, match_rate;
     else:
-        print("Images are NOT similar")
+        print("Images are NOT similar.\n")
         return False, match_rate;
 
 
@@ -222,6 +222,7 @@ def compareNewImage(sid, jsondata):
                     else:
                         jsondata = json.dumps({'winning_players':0})
                         pyio.emit('comparisonResult', jsondata)
+                    break;
         index += 1
     if not match_found and not close_to_existing_target:
         print(" ! no match found ! ")
