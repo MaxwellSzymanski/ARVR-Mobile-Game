@@ -48,7 +48,9 @@ def checkForBestMatch(image_data):
 def createNewGroup(new_image_data, location):
     print(" -  createNewGroup() called")
     mycol = mydb["missiongroups"]
-    id = mycol.insert_one({'location': location, "image_data": []})
+    arr = []
+    id = mycol.insert_one({'location': location, 'image_data': arr})
+    print(mycol.find({"_id": id}))
     mycol.update({'_id': id}, {'$push': {'image_data': new_image_data}})
     return id
 
@@ -62,8 +64,7 @@ def setDataBaseImageInGroup(group_id, new_image_data):
 def getDataBaseGroups():
     print(" -  getDataBaseGroups() called")
     mycol = mydb["missiongroups"]
-    myquery = {}
-    mydoc = mycol.find(myquery,{"_id":1, "image_data":1, "location":1})
+    mydoc = mycol.find({},{"_id":1, "image_data":1, "location":1})
     return mydoc
 
 
