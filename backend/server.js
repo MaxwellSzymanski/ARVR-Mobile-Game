@@ -817,6 +817,7 @@ function fight(data, socket) {
     })
 }
 
+
 function initTictac(data, socket) {
     if (!data.enemy || !data.token)
         return;
@@ -838,8 +839,8 @@ function initTictac(data, socket) {
                     } else if (!token.attack)
                         return;
                     User.findOne({name: token.name}).then(
-                        async function (opponent) {
-                            if (!opponent) {
+                        async function (enemy) {
+                            if (!enemy) {
                                 console.log("(initTictac)           defender not found.");
                                 return;
                             }
@@ -850,9 +851,9 @@ function initTictac(data, socket) {
 
                             // Send user data to attacker and to defender
                             socket.emit("initResponse", {ownIcon: you, turn: turn});
-                            console.log("response:::" + opponent.name);
-                            if (game[opponent.name] !== undefined && game[opponent.name] !== null) {
-                                game[opponent.name].socket.emit("oppTictac", {ownIcon: opp, turn: turn});
+                            console.log("response:::" + enemy.name);
+                            if (game[enemy.name] !== undefined && game[enemy.name] !== null) {
+                                game[enemy.name].socket.emit("oppTictac", {ownIcon: opp, turn: turn});
                             }
                         }
                     )
