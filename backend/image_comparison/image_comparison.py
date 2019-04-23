@@ -48,7 +48,7 @@ def checkForBestMatch(image_data, file):
             n -= 1
         if isMatch:
             winning_players.append(unicodedata.normalize('NFKD', img_data["player_id"]).encode('ascii', 'ignore'))
-
+        print(n)
         index += 1
 
     print("\n\n/=======================================\n|")
