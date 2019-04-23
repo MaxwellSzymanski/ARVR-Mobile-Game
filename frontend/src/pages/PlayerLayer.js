@@ -344,7 +344,7 @@ class PlayerLayer extends React.Component {
 
         var playerLayer = this;
 
-        rows.push(<button className="confirmButton wider" onClick={playerLayer.props.setTarget.bind(playerLayer,this.state.id,[this.state.latitude,this.state.longitude])}>Follow yourself</button> );
+        rows.push(<button className="confirmButton wider" onClick={playerLayer.props.setTargetMySelf.bind(playerLayer,[this.state.latitude,this.state.longitude])}>Follow yourself</button> );
 
         var jsonObject = this.state.dataPlayers;
         if(jsonObject !== null){
