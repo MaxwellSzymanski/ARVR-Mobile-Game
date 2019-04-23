@@ -44,9 +44,13 @@ def checkForBestMatch(image_data, file):
         isMatch, match_rate = compareImages(img, file)
         if best_match_rate < match_rate and isMatch:
             best_index = index
+            best_match_rate = match_rate
             n -= 1
         if img_data["player_id"] not in winning_players:
             winning_players.append(img_data["player_id"])
+
+        index += 1
+
     print("\n\n========================================\n|")
     print("|    Best match index :  " + str(best_index))
     print("|    Match rate       :  " + str(best_match_rate))
@@ -135,7 +139,7 @@ def compareImages(first, second):
     match_rate = 0
     if len(keyp_1) != 0:
         match_rate = (float(len(good_points)) / float(len(keyp_1)) * 100)
-    print("Match percentage :  " +  str(match_rate) + " %")
+    print("Match percentage :  " +  str(round(match_rate)) + " %")
     if match_rate >= 3:
         print("Images are similar!\n")
         return True, match_rate;
