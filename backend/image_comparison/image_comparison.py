@@ -47,7 +47,7 @@ def checkForBestMatch(image_data, file):
             best_match_rate = match_rate
             n -= 1
         if isMatch:
-            winning_players.append(img_data["player_id"])
+            winning_players.append(unicodedata.normalize('NFKD', img_data["player_id"]).encode('ascii', 'ignore'))
 
         index += 1
 
@@ -58,7 +58,7 @@ def checkForBestMatch(image_data, file):
     print(winning_players)
     print()
     if n <= 0:
-        winning_players.append(image_data[best_index]["player_id"]) #Player with best match gets double the points
+        winning_players.append(unicodedata.normalize('NFKD', image_data[best_index]["player_id"]).encode('ascii', 'ignore')) #Player with best match gets double the points
         return winning_players
     return []
 

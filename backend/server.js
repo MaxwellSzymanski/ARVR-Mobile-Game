@@ -676,6 +676,7 @@ pythonSocket.on("newGroup", function (jsondata) {
 // TODO handle votes
 
 pythonSocket.on("comparisonResult", function(jsondata) {
+    console.log(jsondata);
     data = JSON.parse(jsondata);
     console.log("   * pyScript result received!");
     if (data.winning_players === 0) {
