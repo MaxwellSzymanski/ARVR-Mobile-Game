@@ -169,14 +169,10 @@ class BattlePage extends React.Component {
     }
 
     attack() {
-        /*
-        if (this.state.probability > Math.random()) {
-            this.context.emit("fight", {token: cookies.get('token'), enemy: cookies.get("attackToken")});
-        }
-        else {
-            this.context.emit("miss", {token:cookies.get('token')});
-        }
-        */
+        this.context.emit("initTictac", {
+            token: cookies.get('token'),
+            opponent: cookies.get("attackToken"),
+        })
 
         return <Redirect to="/settings" />;
     }
@@ -253,7 +249,7 @@ class BattlePage extends React.Component {
 
                 <div>
                     <Link to="/ticTacToe">
-                    <button className="buttonAttack fadeIn2" >Attack</button>
+                    <button className="buttonAttack fadeIn2" onClick={this.attack} >Attack</button>
                     </Link>
                 </div>
 

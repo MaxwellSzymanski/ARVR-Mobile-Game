@@ -817,13 +817,12 @@ function fight(data, socket) {
     })
 }
 
-
 function initTictac(data, socket) {
     if (!data.enemy || !data.token)
         return;
     jwt.verify(data.token, secret, async function (err, token) {
         if (err) {
-            console.log("(initTictac)         invalid token");
+            console.log("(fight)         invalid token");
             return;
         }
         User.findById(token.id).then(
@@ -832,6 +831,7 @@ function initTictac(data, socket) {
                     console.log("(initTictac)           attacker not found.");
                     return;
                 }
+                jwt.verify(data.enemy, secret, async function (err, token) {
                     if (err) {
                         console.log("(initTictac)         invalid defender token");
                         return;
@@ -840,7 +840,7 @@ function initTictac(data, socket) {
                     User.findOne({name: token.name}).then(
                         async function (opponent) {
                             if (!opponent) {
-                                console.log("(initTictac)           opponent not found.");
+                                console.log("(initTictac)           defender not found.");
                                 return;
                             }
                             let you = Math.random() < 0.5 ? 'x' : 'o';
@@ -856,9 +856,12 @@ function initTictac(data, socket) {
                             }
                         }
                     )
+                })
             })
     })
 }
+
+
 
 
 function tictac(data, socket) {
