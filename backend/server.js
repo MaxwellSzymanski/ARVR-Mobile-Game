@@ -823,7 +823,7 @@ function initTictac(data, socket) {
         return;
     jwt.verify(data.token, secret, async function (err, token) {
         if (err) {
-            console.log("(fight)         invalid token");
+            console.log("(initTictac)         invalid token");
             return;
         }
         User.findById(token.id).then(
@@ -834,6 +834,7 @@ function initTictac(data, socket) {
                 }
                 jwt.verify(data.enemy, secret, async function (err, token) {
                     if (err) {
+                        console.log(data.enemy);
                         console.log("(initTictac)         invalid defender token");
                         return;
                     } else if (!token.attack)
