@@ -154,7 +154,7 @@ def compareNewImage(sid, jsondata):
     minigame_image = unicodedata.normalize('NFKD', data["image"]).encode('ascii', 'ignore')
     index = minigame_image.find(",") + 1
     base64_image = minigame_image[index:len(minigame_image)]
-    print((minigame_image % 4) == 0)
+    print((len(base64_image % 4)) == 0)
     location = data["location"]
     print("player:  " + player)
     ext = "png"
