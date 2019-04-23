@@ -43,25 +43,30 @@ def checkForBestMatch(image_data):
         winning_players.append(image_data[best_index]["player_id"]) #Player with best match gets double the points
         return winning_players
     return []
-		
+
+
 def createNewGroup(new_image_data, location):
     print(" -  createNewGroup() called")
     mycol = mydb["missiongroups"]
-    return mycol.insert_one({"location": location, 'image_data': [new_image_data,]})
+    id = mycol.insert_one({'location': location})
+    mycol.update({'_id': id}, {'$push': {'image_data': new_image_data}})
+    return id
+
 
 def setDataBaseImageInGroup(group_id, new_image_data):
     print(" -  setDataBaseImageInGroup() called      group_id:" + group_id)
     mycol = mydb["missiongroups"]
     mycol.update({'_id': group_id}, {'$push': {'image_data': new_image_data}})
-	
+
+
 def getDataBaseGroups():
     print(" -  getDataBaseGroups() called")
     mycol = mydb["missiongroups"]
     myquery = {}
     mydoc = mycol.find(myquery,{"_id":1, "image_data":1, "location":1})
     return mydoc
-		
-	
+
+
 def image_resize(image, width = None, height = None, inter = cv2.INTER_AREA):
     dim = None
     (h, w) = image.shape[:2]
