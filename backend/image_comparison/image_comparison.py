@@ -19,7 +19,7 @@ app = socketio.WSGIApp(pyio)
 						
 #After finding a match in a certain group this function is called to check for more matches in this image group
 #If more than n matches is found the new image is added to the group, and the players get rewarded, otherwise nothing happens.		
-def checkForBestMatch(image_data):
+def checkForBestMatch(image_data, file):
     print(" -  checkForBestMatch() called")
     n = len(image_data)//3
     winning_players = []
@@ -27,9 +27,19 @@ def checkForBestMatch(image_data):
     best_match_rate = 0
     best_index = 0
     for img_data in image_data:
-        with open("image.png", "wb") as fh:
-            fh.write((img_data["encoded_image"]).decode('base64'))
-        isMatch, match_rate = compareImages()
+
+        i = img_data.find(",") + 1
+        base64_image = img_data[i:len(img_data)]
+        img = "groupImg."
+        if img_data.find("jpeg", 0, 25) >= 0:
+            img += "jpg"
+        elif img_data.find("png", 0, 25) >= 0:
+            img += "png"
+
+        with open(img, "wb") as fh:
+            fh.write(base64_image.decode('base64'))
+
+        isMatch, match_rate = compareImages(img, file)
         if best_match_rate < match_rate and isMatch:
             best_index = index
             n -= 1
@@ -50,8 +60,6 @@ def createNewGroup(new_image_data, location):
     mycol = mydb["missiongroups"]
     arr = [new_image_data,]
     id = mycol.insert_one({'location': location, 'image_data': arr})
-    print(mycol.find({"_id": id}))
-    # mycol.update({'_id': id}, {'$push': {'image_data': new_image_data}})
     return id
 
 
@@ -204,7 +212,7 @@ def compareNewImage(sid, jsondata):
                 is_match, match_rate = compareImages(first_img, second_img)
                 if is_match:
                     match_found = True
-                    winning_players = checkForBestMatch(current_group["image_data"])
+                    winning_players = checkForBestMatch(current_group["image_data"], first_img)
                     if len(winning_players) != 0:
                         setDataBaseImageInGroup(current_group._id, new_image_data)
                         jsondata = json.dumps({'winning_players': winning_players})
