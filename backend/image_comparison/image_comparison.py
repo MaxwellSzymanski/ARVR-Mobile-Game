@@ -216,7 +216,7 @@ def compareNewImage(sid, jsondata):
                     match_found = True
                     winning_players = checkForBestMatch(current_group["image_data"], first_img)
                     if len(winning_players) != 0:
-                        setDataBaseImageInGroup(current_group._id, new_image_data)
+                        setDataBaseImageInGroup(current_group['_id'], new_image_data)
                         jsondata = json.dumps({'winning_players': winning_players})
                         pyio.emit('comparisonResult', jsondata)
                     else:
