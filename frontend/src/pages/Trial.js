@@ -38,6 +38,7 @@ class Trial extends React.Component {
         this.showAlertBox = this.showAlertBox.bind(this);
         this.alertBoxIsClosed = this.alertBoxIsClosed.bind(this);
         this.setTarget = this.setTarget.bind(this);
+        this.setTargetMySelf = this.setTargetMySelf.bind(this);
         this.changeMenu = this.changeMenu.bind(this);
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
@@ -126,6 +127,13 @@ class Trial extends React.Component {
         setTimeout(this.setState({idTarget: id}), 100);
     }
 
+    setTargetMySelf(pos){
+        this.setState({idTarget: null});
+        this.setState({showAlertBox: false});
+        this.setState({centerMap: [pos[0],pos[1]]});
+        this.map.leafletElement.setView(pos,this.map.leafletElement.getZoom());
+    }
+
     mapChanged(feature, layer){
 
       // if(this.state.idTarget === null) {
@@ -182,7 +190,7 @@ class Trial extends React.Component {
                 <PopPop open={this.state.showAlertBox} closeBtn={true} closeOnEsc={true} onClose={()=>this.alertBoxIsClosed()} closeOnOverlay={true} position={"centerCenter"} contentStyle={this.state.alertBoxStyle}>
                     <div>{this.state.content[0]}</div>
                 </PopPop>
-                <PlayerLayer idTarget={this.state.idTarget} setTarget={this.setTarget} showAlertBox={this.showAlertBox} alertBoxIsClosed={this.alertBoxIsClosed} id={this.state.id} locationEnabled={this.state.haveUsersLocation}/>
+                <PlayerLayer idTarget={this.state.idTarget} setTargetMySelf={this.setTargetMySelf} setTarget={this.setTarget} showAlertBox={this.showAlertBox} alertBoxIsClosed={this.alertBoxIsClosed} id={this.state.id} locationEnabled={this.state.haveUsersLocation}/>
             </Map>
             </div>
             <div>
