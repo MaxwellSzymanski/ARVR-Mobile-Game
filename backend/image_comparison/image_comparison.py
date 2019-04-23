@@ -56,8 +56,9 @@ def checkForBestMatch(image_data, file):
     print("|    Match rate       :  " + str(round(best_match_rate,2)))
     print("|\n\=======================================\n\n")
     print(winning_players)
-    print()
+    print(" n: " + str(n))
     if n <= 0:
+        print("returning list")
         winning_players.append(unicodedata.normalize('NFKD', image_data[best_index]["player_id"]).encode('ascii', 'ignore')) #Player with best match gets double the points
         return winning_players
     return []
@@ -221,6 +222,7 @@ def compareNewImage(sid, jsondata):
                 if is_match:
                     match_found = True
                     winning_players = checkForBestMatch(current_group["image_data"], first_img)
+                    print(winning_players)
                     if len(winning_players) > 0:
                         setDataBaseImageInGroup(current_group['_id'], new_image_data)
                         jsondata = json.dumps({'winning_players': winning_players})
