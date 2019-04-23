@@ -48,8 +48,8 @@ def checkForBestMatch(image_data, file):
         if img_data["player_id"] not in winning_players:
             winning_players.append(img_data["player_id"])
     print("\n\n========================================\n|")
-    print("|    Best match index :  " + best_index)
-    print("|    Match rate       :  " + best_match_rate)
+    print("|    Best match index :  " + str(best_index))
+    print("|    Match rate       :  " + str(best_match_rate))
     print("|\n========================================\n\n")
     if n <= 0:
         winning_players.append(image_data[best_index]["player_id"]) #Player with best match gets double the points
