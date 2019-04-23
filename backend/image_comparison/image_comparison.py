@@ -48,10 +48,10 @@ def checkForBestMatch(image_data):
 def createNewGroup(new_image_data, location):
     print(" -  createNewGroup() called")
     mycol = mydb["missiongroups"]
-    arr = []
+    arr = [new_image_data,]
     id = mycol.insert_one({'location': location, 'image_data': arr})
     print(mycol.find({"_id": id}))
-    mycol.update({'_id': id}, {'$push': {'image_data': new_image_data}})
+    # mycol.update({'_id': id}, {'$push': {'image_data': new_image_data}})
     return id
 
 
