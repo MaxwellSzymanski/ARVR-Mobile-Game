@@ -66,7 +66,7 @@ def createNewGroup(new_image_data, location):
 
 
 def setDataBaseImageInGroup(group_id, new_image_data):
-    print(" -  setDataBaseImageInGroup() called      group_id:" + group_id)
+    print(" -  setDataBaseImageInGroup() called      group_id:" + str(group_id))
     mycol = mydb["missiongroups"]
     mycol.update({'_id': group_id}, {'$push': {'image_data': new_image_data}})
 
