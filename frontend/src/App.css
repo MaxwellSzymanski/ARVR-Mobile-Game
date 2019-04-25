@@ -407,6 +407,10 @@ p {
     -ms-filter: "FlipH";
 }
 
+.inlineBlock {
+    display: inline-block
+}
+
 .cameraLoader {
     background-image: url(assets/icons/loader.gif);
     width: 100px;

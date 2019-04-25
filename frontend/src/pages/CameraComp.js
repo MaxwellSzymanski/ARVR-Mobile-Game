@@ -118,14 +118,15 @@ class CameraComp extends React.Component {
         {this.renderRedirect()}
         <p className="subTitle">Take your profile picture</p>
           {!this.state.calculating && <div className="polaroidMirror">
-              <Webcam
+              <div className="inlineBlock">
+                  <Webcam
                   ref="webcam"
                   audio={false}
                   screenshotFormat="image/jpeg"
                   videoConstraints={videoConstraints}
                   width={size}
-                  height={size}
-              />
+                  // height={size}
+              /></div>
               <button className="smallButton camera" onClick={this.onTakePhoto}> </button>
           </div>}
           {this.state.calculating && <div className="polaroid">
