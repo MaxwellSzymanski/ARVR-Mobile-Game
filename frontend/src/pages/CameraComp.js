@@ -30,6 +30,7 @@ class CameraComp extends React.Component {
     }
 
     updateWindowDimensions() {
+      alert(window.innerWidth);
         this.setState({ width: window.innerWidth });
     }
 
@@ -111,7 +112,7 @@ class CameraComp extends React.Component {
         const videoConstraints = {
             facingMode: "user"
         };
-        let size = this.state.width - 80;
+        let size = this.state.width - 60;
     return (
       <div className="background">
         {this.renderRedirect()}
