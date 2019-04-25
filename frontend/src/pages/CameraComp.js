@@ -1,25 +1,37 @@
 import React from 'react';
-import Camera from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
 import { Redirect } from 'react-router';
 import { getFeatureVector } from '../facerecognition/FaceRecognition';
 import swal from '@sweetalert/with-react';
-import {isIOS, isSafari} from 'react-device-detect';
-import ImageUploader from 'react-images-upload';
-import Cookies from 'universal-cookie';
-import Webcam from "./CapturePlayer";
-const cookies = new Cookies();
+import Webcam from "react-webcam";
 
 class CameraComp extends React.Component {
   constructor() {
-        super();
-          this.state = {
-              redirect : false,
-              picture: null,
-              calculating: false
-          };
+      super();
+      this.state = {
+          redirect : false,
+          picture: null,
+          calculating: false,
+          width: 0,
+          height: 0
+      };
 
-          this.handleUpload = this.handleUpload.bind(this);
+      this.handleUpload = this.handleUpload.bind(this);
+      this.onTakePhoto = this.onTakePhoto.bind(this);
+      this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+  }
+
+    componentDidMount() {
+        this.updateWindowDimensions();
+        window.addEventListener('resize', this.updateWindowDimensions);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWindowDimensions);
+    }
+
+    updateWindowDimensions() {
+        this.setState({ width: window.innerWidth, height: window.innerHeight });
     }
 
     setRedirect = () => {
@@ -98,22 +110,24 @@ class CameraComp extends React.Component {
 
     render () {
         const videoConstraints = {
-            facingMode: "user"
+            facingMode: "environment"
         };
-
+        let size = this.state.width - 100;
     return (
       <div className="background">
         {this.renderRedirect()}
         <p className="subTitle">Take your profile picture</p>
           {!this.state.calculating && <div className="polaroidMirror">
-              <button className="smallButton camera" onClick={this.onTakePhoto}> </button>
               <Webcam
-                  audio={false}
                   ref="webcam"
-                  screenshotFormat="image/jpeg"
+                  audio={false}
+                  screenshotFormat="image/png"
                   videoConstraints={videoConstraints}
+                  width={size}
+                  height={size}
               />
-            </div>}
+              <button className="smallButton camera" onClick={this.onTakePhoto}> </button>
+          </div>}
           {this.state.calculating && <div className="polaroid">
               <div className="cameraLoader"></div>
               <p>Detecting face. This can take up to 30 seconds.</p>

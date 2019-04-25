@@ -381,6 +381,7 @@ p {
 }
 
 .polaroid {
+    text-align: center;
     padding: 20px 20px 50px;
     background-color: white;
     margin-right: auto;
@@ -390,12 +391,13 @@ p {
 }
 
 .polaroidMirror {
+    text-align: center;
     padding: 20px 20px 50px;
     background-color: white;
-    margin-right: auto;
-    margin-left: auto;
+    margin-right: 20px;
+    margin-left: 20px;
     max-height: 950px;
-    max-width: 830px;
+    /*max-width: 830px;*/
 
     -moz-transform: scaleX(-1);
     -o-transform: scaleX(-1);

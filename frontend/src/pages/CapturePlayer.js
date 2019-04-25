@@ -167,7 +167,7 @@ class CapturePlayer extends React.Component {
     return (
       <div className="background">
         {this.renderRedirect()}
-          {!this.state.calculating && <div className="polaroidMirror">
+          {!this.state.calculating && <div className="polaroid">
               <Webcam
                   audio={false}
                   ref="webcam"
