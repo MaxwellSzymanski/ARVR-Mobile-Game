@@ -13,7 +13,6 @@ class CameraComp extends React.Component {
           picture: null,
           calculating: false,
           width: 0,
-          height: 0
       };
 
       this.handleUpload = this.handleUpload.bind(this);
@@ -22,8 +21,8 @@ class CameraComp extends React.Component {
   }
 
     componentDidMount() {
-        this.updateWindowDimensions();
         window.addEventListener('resize', this.updateWindowDimensions);
+        setTimeout(this.updateWindowDimensions(), 500);
     }
 
     componentWillUnmount() {
@@ -31,7 +30,7 @@ class CameraComp extends React.Component {
     }
 
     updateWindowDimensions() {
-        this.setState({ width: window.innerWidth, height: window.innerHeight });
+        this.setState({ width: window.innerWidth });
     }
 
     setRedirect = () => {
@@ -112,7 +111,7 @@ class CameraComp extends React.Component {
         const videoConstraints = {
             facingMode: "user"
         };
-        let size = this.state.width - 40;
+        let size = this.state.width - 80;
     return (
       <div className="background">
         {this.renderRedirect()}
@@ -125,7 +124,7 @@ class CameraComp extends React.Component {
                   screenshotFormat="image/jpeg"
                   videoConstraints={videoConstraints}
                   width={size}
-                  // height={size}
+                  height={size}
               /></div>
               <button className="smallButton camera" onClick={this.onTakePhoto}> </button>
           </div>}
