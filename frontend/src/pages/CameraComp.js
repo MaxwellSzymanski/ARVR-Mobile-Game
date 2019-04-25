@@ -110,9 +110,9 @@ class CameraComp extends React.Component {
 
     render () {
         const videoConstraints = {
-            facingMode: "environment"
+            facingMode: "user"
         };
-        let size = this.state.width - 100;
+        let size = this.state.width - 40;
     return (
       <div className="background">
         {this.renderRedirect()}
@@ -121,7 +121,7 @@ class CameraComp extends React.Component {
               <Webcam
                   ref="webcam"
                   audio={false}
-                  screenshotFormat="image/png"
+                  screenshotFormat="image/jpeg"
                   videoConstraints={videoConstraints}
                   width={size}
                   height={size}
