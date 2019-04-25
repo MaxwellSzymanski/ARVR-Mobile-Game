@@ -30,8 +30,7 @@ class CameraComp extends React.Component {
     }
 
     updateWindowDimensions() {
-      alert(window.innerWidth);
-        this.setState({ width: window.innerWidth });
+      this.setState({ width: window.innerWidth });
     }
 
     setRedirect = () => {
@@ -125,7 +124,6 @@ class CameraComp extends React.Component {
                   screenshotFormat="image/jpeg"
                   videoConstraints={videoConstraints}
                   width={size}
-                  height={size}
               /></div>
               <button className="smallButton camera" onClick={this.onTakePhoto}> </button>
           </div>}
