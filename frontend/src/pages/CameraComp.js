@@ -20,9 +20,9 @@ class CameraComp extends React.Component {
       this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
   }
 
-    componentDidMount() {
+    componentWillMount() {
         window.addEventListener('resize', this.updateWindowDimensions);
-        setTimeout(this.updateWindowDimensions(), 500);
+        this.updateWindowDimensions();
     }
 
     componentWillUnmount() {
