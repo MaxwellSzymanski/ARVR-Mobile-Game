@@ -128,6 +128,7 @@ class PlayerLayer extends React.Component {
     }
 
     startTictac(data) {
+        alert("Received tictactoe request");
         return <Redirect to="/settings" />;
     }
 
