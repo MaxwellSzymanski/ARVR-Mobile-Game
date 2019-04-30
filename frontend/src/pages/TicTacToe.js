@@ -62,7 +62,7 @@ class TicTacToe extends React.Component {
 
 
   updateBoard(loc, player) {
-
+    cookies.set("initiatedTicTac", false);
     // For attack
     // this.context.emit("fight", {token: cookies.get('token'), enemy: cookies.get("attackToken")});
     if (this.state.turn !== this.state.ownIcon) {
