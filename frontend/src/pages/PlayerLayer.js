@@ -80,7 +80,6 @@ class PlayerLayer extends React.Component {
         this.updateLocation = this.updateLocation.bind(this);
         this.receivePlayer = this.receivePlayer.bind(this);
         this.showAlertBox = this.showAlertBox.bind(this);
-        this.startTictac = this.startTictac.bind(this);
     }
 
     state = {
