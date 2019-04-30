@@ -887,6 +887,7 @@ function tictac(data, socket) {
                         return;
                     } else if (!token.enemy)
                         return;
+                    console.log("4-Hier");
                     User.findOne({name: token.name}).then(
                         async function (opponent) {
                             if (!opponent) {
@@ -904,6 +905,7 @@ function tictac(data, socket) {
 
                             if (checkWinner(data.gameBoard)) {
                                 // Game won
+                                console.log("Won");
                                 socket.emit("win");
                                 game[opponent.name].socket.emit("lose");
                                 // Calculate damage
@@ -911,6 +913,7 @@ function tictac(data, socket) {
 
                             }
                             else {
+                                console.log("Sending to the opponent");
                                 // Send new board to opponent
                                 if (game[opponent.name] !== undefined && game[defender.name] !== null) {
                                     game[opponent.name].socket.emit("oppMove", {board: data.gameboard})
