@@ -44,7 +44,7 @@ class TicTacToe extends React.Component {
 
     this.context.on("oppMove", (data) => {
       this.setState({
-        board: data.board,
+        gameBoard: data.board,
         turn: this.state.ownIcon
       });
     });
@@ -86,7 +86,7 @@ class TicTacToe extends React.Component {
     // Verplaatst naar serverside
     //
 
-    this.setState({turn: (this.state.turn === 'x') ? 'o' : 'x'})
+    this.setState({turn: (this.state.ownIcon === 'x') ? 'o' : 'x'})
   }
 
 
