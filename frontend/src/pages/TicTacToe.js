@@ -99,7 +99,7 @@ class TicTacToe extends React.Component {
         <div id="menu">
           <div id="title"><h1 id="titleText">Tic-Tac-Toe</h1></div>
           <div  id="text"><Announcement
-                              winner={this.state.winner}/></div>
+                              winner={this.state.turn}/></div>
         </div>
         <div className="theBoard">
         {this.state.gameBoard.map(function(value, i) {
