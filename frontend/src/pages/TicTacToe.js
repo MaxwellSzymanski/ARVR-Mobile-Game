@@ -51,13 +51,16 @@ class TicTacToe extends React.Component {
 
 
     this.context.on("lose", () => {
+      cookies.set('attackToken', null);
+      cookies.set('initiatedTicTac', null);
       swal("You lose..")
     });
 
     this.context.on("win", () => {
+      cookies.set('attackToken', null);
+      cookies.set('initiatedTicTac', null);
       swal("You win!")
     });
-
   }
 
 
