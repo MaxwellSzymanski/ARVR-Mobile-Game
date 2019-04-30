@@ -849,11 +849,12 @@ function initTictac(data, socket) {
                             let opp = you === 'x' ? 'o' : 'x';
                             // TODO: Implement fatigue
                             let turn = Math.random() < 0.5 ? you : opp;
-
+                            console.log("init DONE");
                             // Send user data to attacker and to defender
                             socket.emit("initResponse", {ownIcon: you, turn: turn});
                             console.log("response:::" + enemy);
                             if (game[enemy] !== undefined && game[enemy] !== null) {
+
                                 game[enemy].socket.emit("oppTictac", {ownIcon: opp, turn: turn});
                             }
                         }
