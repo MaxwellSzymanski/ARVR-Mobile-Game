@@ -840,8 +840,7 @@ function initTictac(data, socket) {
                         console.log(data.enemy);
                         console.log("(initTictac)         invalid defender token");
                         //return;
-                    } else if (!token.attack)
-                        return;
+                    }
                 console.log("3-Hier");
                     User.findOne({name: data.enemy}).then(
                         async function (enemy) {
