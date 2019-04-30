@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="62846d24-a773-43e7-bd6f-fcd39c23315b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../frontend/src/pages/TicTacToe.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/TicTacToe.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -19,8 +18,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="371">
-              <caret line="918" column="85" selection-start-line="918" selection-start-column="80" selection-end-line="918" selection-end-column="85" />
+            <state relative-caret-position="466">
+              <caret line="918" column="77" lean-forward="true" selection-start-line="918" selection-start-column="77" selection-end-line="918" selection-end-column="77" />
             </state>
           </provider>
         </entry>
@@ -113,12 +112,12 @@
       <workItem from="1554208172270" duration="8341000" />
       <workItem from="1556022240054" duration="5303000" />
       <workItem from="1556536495595" duration="379000" />
-      <workItem from="1556619401582" duration="9534000" />
+      <workItem from="1556619401582" duration="10058000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="37808000" />
+    <option name="totallyTimeSpent" value="38332000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -156,8 +155,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="371">
-          <caret line="918" column="85" selection-start-line="918" selection-start-column="80" selection-end-line="918" selection-end-column="85" />
+        <state relative-caret-position="466">
+          <caret line="918" column="77" lean-forward="true" selection-start-line="918" selection-start-column="77" selection-end-line="918" selection-end-column="77" />
         </state>
       </provider>
     </entry>

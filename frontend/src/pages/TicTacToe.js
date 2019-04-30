@@ -47,14 +47,6 @@ class TicTacToe extends React.Component {
         board: data.board,
         turn: this.state.ownIcon
       });
-
-    });
-
-    this.context.on("tictac", (data) => {
-      this.setState({
-        gameBoard: data.gameBoard,
-        turn: this.state.ownIcon
-      });
     });
 
 
