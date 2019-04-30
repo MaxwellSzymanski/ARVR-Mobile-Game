@@ -25,6 +25,7 @@ var myIcon = L.icon({
     iconUrl: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4Igp3aWR0aD0iNTAiIGhlaWdodD0iNTAiCnZpZXdCb3g9IjAgMCAxOTIgMTkyIgpzdHlsZT0iIGZpbGw6IzAwMDAwMDsiPjxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0ibm9uemVybyIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1saW5lY2FwPSJidXR0IiBzdHJva2UtbGluZWpvaW49Im1pdGVyIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHN0cm9rZS1kYXNoYXJyYXk9IiIgc3Ryb2tlLWRhc2hvZmZzZXQ9IjAiIGZvbnQtZmFtaWx5PSJub25lIiBmb250LXdlaWdodD0ibm9uZSIgZm9udC1zaXplPSJub25lIiB0ZXh0LWFuY2hvcj0ibm9uZSIgc3R5bGU9Im1peC1ibGVuZC1tb2RlOiBub3JtYWwiPjxwYXRoIGQ9Ik0wLDE5MnYtMTkyaDE5MnYxOTJ6IiBmaWxsPSJub25lIj48L3BhdGg+PGcgZmlsbD0iIzkxMGYwZiI+PHBhdGggZD0iTTE2MS4yNTc1LDMuODMyNWMtMC42OTEyLDAuMDA0OCAtMS4zNzczLDAuMjAxIC0xLjk3MjUsMC41ODVjLTAuMzg0LDAuMjMwNCAtMi4xOTA5LDEuMzQyNSAtNS4wMzI1LDMuMjYyNWMwLDAgLTAuMTkzNSwwLjE1MjEgLTAuNTc3NSwwLjM4MjVjLTUuMTQ1NiwzLjg0IC00My4wODMsMzIuNjc5OSAtNTMuODM1LDY0Ljg5NzVsMTkuMiwtMy44NGMwLDAgLTM1LjkwMjgsMzIuMjkxNyAtNDguNjksODYuNTEyNWMwLC0wLjAzODQgLTEuNzEsNy41Njg3IC0yLjE5LDEyLjYzNzVjMC42NTI4LDEuNDk3NiAxLjMwNTYsMy4wMjk3IDEuOTIsNC42NDI1YzAuMDM4NCwwLjExNTIgMi4xNDY4LDUuNzU5MSAzLjAzLDguNjc3NWMwLjQ5OTIsMS42MTI4IDIuMDAwNCwyLjczIDMuNjksMi43M2gzOC40YzEuNjg5NiwwIDMuMTkwOCwtMS4xMTcyIDMuNjksLTIuNzNjMTQuNDM4NCwtNDYuOTYzMiA0NS43NzE5LC01NC42NzYyIDQ3LjA3NzUsLTU0Ljk0NWMxLjE5MDQsLTAuMjY4OCAyLjE4NTgsLTEuMTEzIDIuNjg1LC0yLjI2NWwxMS41MiwtMjYuODhjMC41Mzc2LC0xLjIyODggMC4zODY0LC0yLjY1MjMgLTAuNDIsLTMuNzI3NWwtMTguMzk3NSwtMjUuNzYyNWwzLjc2NSwtNjAuMDk3NWMwLjA3NjgsLTEuNDIwOCAtMC42NTM3LC0yLjgwMjkgLTEuODgyNSwtMy41MzI1Yy0wLjU5NTIsLTAuMzY0OCAtMS4yODg4LC0wLjU1MjMgLTEuOTgsLTAuNTQ3NXpNMzAuMTUsMy44ODVjLTAuMzcwOCwwLjA1NTggLTAuNzM0NCwwLjE2NDcgLTEuMDgsMC4zMzc1Yy0xLjQyMDgsMC42NTI4IC0yLjI2NjgsMi4xNTQgLTIuMTksMy42OWwzLjc2NSw2MC4wOTc1bC0xOC4zOTc1LDI1Ljc2MjVjLTAuODA2NCwxLjA3NTIgLTAuOTU3NiwyLjQ5ODcgLTAuNDIsMy43Mjc1bDExLjUyLDI2Ljg4YzAuNDk5MiwxLjE1MiAxLjQ5NDYsMS45OTYyIDIuNjg1LDIuMjY1YzAuMTE1MiwwLjAzODQgNC40NjAxLDEuMDMyOSAxMC42NDI1LDQuNjQyNWMwLjIzMDQsMC4xMTUyIDUuOTQ1NywzLjc2ODMgOC45MDI1LDYuMTg3NWwxLjQyNSwtOC42MDI1bDIuOTE3NSwtMTcuNTEyNWgtMTEuNTJjNi40MTI4LC0zMi45MDg4IDI4LjQ5MDEsLTU5LjY3MTIgMzYuNTkyNSwtNjguNThsLTQxLjcsLTM3Ljk0MjVjLTAuODY0LC0wLjc3NzYgLTIuMDMwMSwtMS4xMTk5IC0zLjE0MjUsLTAuOTUyNXpNNTMuNzYsODguMzJjMCwwIDMuNDE2MjIsMTkuMiAxMy42NTc1LDE5LjJoMTcuMDYyNXpNMTM4LjI0LDg4LjMyYzAsMCAtMy40MTk3LDE5LjIgLTEzLjY3MjUsMTkuMmgtMTcuMDQ3NXpNODAuNjQsMTQyLjA4aDMwLjcybC0xNS4zNiwyMy4wNHoiPjwvcGF0aD48L2c+PC9nPjwvc3ZnPg==",
     //shadowUrl: 'leaf-shadow.png',
 
+
     iconSize:     [60, 60], // size of the icon
     shadowSize:   [50, 64], // size of the shadow
     iconAnchor:   [30, 30], // point of the icon which will correspond to marker's location
@@ -105,7 +106,6 @@ class PlayerLayer extends React.Component {
         this.context.on("handshake", (data) => {this.acknowledgeHandshake(data)});
         this.context.on("ACKhandshake", (data) => {this.handshakeAcknowledged(data)});
         //game[opponent.name].socket.emit("oppTictac", {ownIcon: you, turn: turn});
-        this.context.on("oppTictac", (data) => {this.startTictac(data)});
 
 
         // this.context.on("message", (data) => {this.handshakeAcknowledged(data)});
@@ -125,11 +125,6 @@ class PlayerLayer extends React.Component {
         });
 
         setTimeout(this.updateLocation, 250);
-    }
-
-    startTictac(data) {
-        alert("Received tictactoe request");
-        return <Redirect to="/ticTacToe" />;
     }
 
     sendLocation() {
