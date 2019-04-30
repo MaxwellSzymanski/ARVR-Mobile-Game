@@ -902,7 +902,7 @@ function tictac(data, socket) {
                                 return;
                             }*/
 
-                            if (checkWinner(data.gameBoard)) {
+                            if (checkWinner(data.board)) {
                                 // Game won
                                 console.log("Won");
                                 socket.emit("win");
