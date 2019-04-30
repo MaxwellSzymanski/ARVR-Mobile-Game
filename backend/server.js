@@ -819,6 +819,7 @@ function fight(data, socket) {
 
 
 function initTictac(data, socket) {
+    console.log("Initiated ticTac")
     if (!data.enemy || !data.token)
         return;
     jwt.verify(data.token, secret, async function (err, token) {
