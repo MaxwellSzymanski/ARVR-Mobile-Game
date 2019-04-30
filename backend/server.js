@@ -827,37 +827,31 @@ function initTictac(data, socket) {
             console.log("(initTictac)         invalid token");
             return;
         }
-        console.log("1-Hier");
         User.findById(token.id).then(
             async function (attacker) {
                 if (attacker === null) {
                     console.log("(initTictac)           attacker not found.");
                     return;
                 }
-                console.log("2-Hier");
                 //jwt.verify(data.enemy, secret, async function (err, token) {
                     if (err) {
                         console.log(data.enemy);
                         console.log("(initTictac)         invalid defender token");
                         //return;
                     }
-                console.log("3-Hier");
                     User.findOne({name: data.enemy}).then(
                         async function (enemy) {
                             if (!enemy) {
                                 console.log("(initTictac)           defender not found.");
                                 return;
                             }
-                            console.log("4-Hier");
                             let you = Math.random() < 0.5 ? 'x' : 'o';
                             let opp = (you === 'x' ? 'o' : 'x');
                             // TODO: Implement fatigue
                             let turn = Math.random() < 0.5 ? you : opp;
-                            console.log("init DONE");
                             // Send user data to attacker and to defender
                             socket.emit("initResponse", {ownIcon: you, turn: turn});
                             if (game[enemy.name] !== undefined && game[enemy.name] !== null) {
-                                console.log("(initTictac)    sending to opponent");
                                 game[enemy.name].socket.emit("oppTictac", {ownIcon: opp, turn: turn});
                             }
                         }
@@ -873,22 +867,25 @@ function initTictac(data, socket) {
 function tictac(data, socket) {
     if (!data.enemy || !data.token)
         return;
+    console.log("1-Hier");
     jwt.verify(data.token, secret, async function (err, token) {
         if (err) {
             console.log("(tictac)         invalid token");
             return;
         }
+        console.log("2-Hier");
         User.findById(token.id).then(
             async function (attacker) {
                 if (attacker === null) {
                     console.log("(tictac)           attacker not found.");
                     return;
                 }
+                console.log("3-Hier");
                 //jwt.verify(data.enemy, secret, async function (err, token) {
                     if (err) {
                         console.log("(tictac)         invalid defender token");
                         return;
-                    } else if (!token.attack)
+                    } else if (!token.enemy)
                         return;
                     User.findOne({name: token.name}).then(
                         async function (opponent) {
