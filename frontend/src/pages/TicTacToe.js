@@ -89,7 +89,7 @@ class TicTacToe extends React.Component {
     currentGameBoard.splice(loc, 1, this.state.turn);
     this.setState({gameBoard: currentGameBoard});
 
-    this.context.emit("fight",{board: cookies.get('token'), enemy: this.cookies.get("tictacMove")});
+    this.context.emit("tictacMove",{board: cookies.get('token'), enemy: this.cookies.get("attackToken")});
     //
     // Verplaatst naar serverside
     //
