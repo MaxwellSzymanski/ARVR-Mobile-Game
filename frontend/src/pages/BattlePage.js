@@ -175,7 +175,6 @@ class BattlePage extends React.Component {
         });
         cookies.set('initiatedTicTac', true);
 
-        return <Redirect to="/settings" />;
     }
 
     handleClose() {
