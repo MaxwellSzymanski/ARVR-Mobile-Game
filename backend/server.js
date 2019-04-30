@@ -832,7 +832,7 @@ function initTictac(data, socket) {
                     console.log("(initTictac)           attacker not found.");
                     return;
                 }
-
+                //jwt.verify(data.enemy, secret, async function (err, token) {
                     if (err) {
                         console.log(data.enemy);
                         console.log("(initTictac)         invalid defender token");
@@ -858,7 +858,7 @@ function initTictac(data, socket) {
                             }
                         }
                     )
-                )
+                //})
             })
     })
 }
