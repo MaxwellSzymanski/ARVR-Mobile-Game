@@ -42,6 +42,7 @@ class Trial extends React.Component {
         this.changeMenu = this.changeMenu.bind(this);
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.startTictac = this.startTictac.bind(this);
     }
 
     //dit is gwn een standaard setting, van af blijven
@@ -57,6 +58,7 @@ class Trial extends React.Component {
         centerMap: [50.8632811,4.6762872],
         showAlertBox: true,
         show:false,
+        redirect: false,
         content: [<p className="colorWhite">Please allow access to your location.</p>,],
         alertBoxStyle: {
             transition: 'all 0.2s',
@@ -92,12 +94,20 @@ class Trial extends React.Component {
             rows.push(<p className="colorWhite">{data.message}</p>);
             this.showAlertBox(rows);
         });
+
+        this.context.on("oppTictac", (data) => {this.startTictac(data)});
     }
 
     setCenter(pos){
         if(pos===null){
             this.setState({centerMap: pos});
         }
+    }
+
+    startTictac(data) {
+        this.setState({
+            redirect:true
+        });
     }
 
     showAlertBox(content) {
@@ -160,6 +170,10 @@ class Trial extends React.Component {
     this.changeMenu();
   }
 
+  renderRedirect = () => {
+        if (this.state.redirect) {return <Redirect to="/ticTacToe" />;}
+  };
+
   setZoom(){
     var zoom = this.map.leafletElement.getZoom();
     if ( zoom > 18 ){
@@ -173,6 +187,7 @@ class Trial extends React.Component {
     render() {
         return (
             <div>
+                {this.renderRedirect()}
             <div>
             <Modal
               isOpen={this.state.show}
