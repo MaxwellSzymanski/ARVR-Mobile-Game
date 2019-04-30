@@ -887,7 +887,7 @@ function tictac(data, socket) {
                         return;
                     }
                     console.log("4-Hier");
-                    User.findOne({name: token.name}).then(
+                    User.findOne({name: data.enemy}).then(
                         async function (opponent) {
                             if (!opponent) {
                                 console.log("(tictac)           opponent not found.");
