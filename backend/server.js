@@ -819,7 +819,7 @@ function fight(data, socket) {
 
 
 function initTictac(data, socket) {
-    console.log("Initiated ticTac")
+    console.log("Initiated ticTac");
     if (!data.enemy || !data.token)
         return;
     jwt.verify(data.token, secret, async function (err, token) {
@@ -855,7 +855,7 @@ function initTictac(data, socket) {
                             socket.emit("initResponse", {ownIcon: you, turn: turn});
                             console.log("response:::" + enemy);
                             if (game[enemy] !== undefined && game[enemy] !== null) {
-
+                                console.log("(initTictac)    sending to opponent");
                                 game[enemy].socket.emit("oppTictac", {ownIcon: opp, turn: turn});
                             }
                         }
