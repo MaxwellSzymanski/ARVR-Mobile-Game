@@ -852,7 +852,7 @@ function initTictac(data, socket) {
 
                             // Send user data to attacker and to defender
                             socket.emit("initResponse", {ownIcon: you, turn: turn});
-                            console.log("response:::" + enemy.name);
+                            console.log("response:::" + enemy);
                             if (game[enemy] !== undefined && game[enemy] !== null) {
                                 game[enemy].socket.emit("oppTictac", {ownIcon: opp, turn: turn});
                             }
