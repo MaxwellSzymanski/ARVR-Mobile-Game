@@ -899,6 +899,7 @@ function tictac(data, socket) {
                                 game[opponent.name].socket.emit("lose");
                                 // Calculate damage
                                 //TODO
+                                // TODO: Draw?
                             }
                             else {
                                 // Send new board to opponent
