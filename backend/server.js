@@ -914,8 +914,8 @@ function tictac(data, socket) {
                             else {
                                 console.log("Sending to the opponent");
                                 // Send new board to opponent
-                                if (game[opponent.name] !== undefined && game[defender.name] !== null) {
-                                    game[opponent.name].socket.emit("oppMove", {board: data.gameboard})
+                                if (game[opponent.name] !== undefined && game[opponent.name] !== null) {
+                                    game[opponent.name].socket.emit("oppMove", {board: data.board})
                                 }
                             }
                         }
