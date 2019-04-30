@@ -893,22 +893,61 @@ function tictac(data, socket) {
                                 return;
                             }
 
-                            socket.emit("tictac", {board: data.gameBoard});
-
-
-                            // Send user data to attacker and to defender
-                            socket.emit("stats", attacker.getUserData());
-                            socket.emit("enemystats", defender.getEnemyData());
-                            socket.emit("attack", {message: msgA});
-
-                            if (game[opponent.name] !== undefined && game[defender.name] !== null) {
-                                game[opponent.name].socket.emit("stats", defender.getUserData());
+                            if (checkWinner(data.gameBoard)) {
+                                // Game won
+                                socket.emit("win");
+                                game[opponent.name].socket.emit("lose");
+                                // Calculate damage
+                                //TODO
+                            }
+                            else {
+                                // Send new board to opponent
+                                if (game[opponent.name] !== undefined && game[defender.name] !== null) {
+                                    game[opponent.name].socket.emit("oppMove", {board: data.gameboard})
+                                }
                             }
                         }
                     )
                 })
             })
     })
+}
+
+
+function checkWinner(board) {
+    let topRow = board[0] + board[1] + board[2];
+    if (topRow.match(/xxx|ooo/)) {
+        return true;
+    }
+    let middleRow = board[3] + board[4] + board[5];
+    if (middleRow.match(/xxx|ooo/)) {
+        return true;
+    }
+    let downRow = board[6] + board[7] + board[8];
+    if (downRow.match(/xxx|ooo/)) {
+        return true;
+    }
+    let leftCol = board[0] + board[3] + board[6];
+    if (leftCol.match(/xxx|ooo/)) {
+        return true;
+    }
+    let middleCol = board[1] + board[4] + board[7];
+    if (middleCol.match(/xxx|ooo/)) {
+        return true;
+    }
+    let rightCol = board[2] + board[5] + board[8];
+    if (rightCol.match(/xxx|ooo/)) {
+        return true;
+    }
+    let leftDiag  = board[0] + board[4] + board[8];
+    if (leftDiag.match(/xxx|ooo/)) {
+        return true;
+    }
+    let rightDiag = board[2] +board[4] + board[6];
+    if (rightDiag.match(/xxx|ooo/)) {
+        return true;
+    }
+    return false;
 }
 
 

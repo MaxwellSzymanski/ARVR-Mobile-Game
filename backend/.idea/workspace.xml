@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="62846d24-a773-43e7-bd6f-fcd39c23315b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/BattlePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/BattlePage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/PlayerLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/PlayerLayer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/TicTacToe.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/TicTacToe.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -18,8 +22,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="227">
-              <caret line="828" column="37" lean-forward="true" selection-start-line="828" selection-start-column="37" selection-end-line="828" selection-end-column="37" />
+            <state relative-caret-position="489">
+              <caret line="900" column="38" selection-start-line="900" selection-start-column="38" selection-end-line="900" selection-end-column="38" />
             </state>
           </provider>
         </entry>
@@ -27,7 +31,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/db/userModel.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="753">
+            <state relative-caret-position="1069">
               <caret line="97" column="12" selection-start-line="97" selection-start-column="12" selection-end-line="97" selection-end-column="12" />
             </state>
           </provider>
@@ -53,8 +57,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" fullScreen="true">
+    <option name="y" value="23" />
     <option name="width" value="1440" />
-    <option name="height" value="900" />
+    <option name="height" value="877" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -62,7 +67,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -74,6 +78,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -110,12 +115,14 @@
       <workItem from="1553422734818" duration="3078000" />
       <workItem from="1553608085039" duration="1329000" />
       <workItem from="1554208172270" duration="8341000" />
-      <workItem from="1556022240054" duration="4802000" />
+      <workItem from="1556022240054" duration="5303000" />
+      <workItem from="1556536495595" duration="379000" />
+      <workItem from="1556619401582" duration="1780000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27394000" />
+    <option name="totallyTimeSpent" value="30054000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -146,15 +153,15 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/db/userModel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="753">
+        <state relative-caret-position="1069">
           <caret line="97" column="12" selection-start-line="97" selection-start-column="12" selection-end-line="97" selection-end-column="12" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/server.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="227">
-          <caret line="828" column="37" lean-forward="true" selection-start-line="828" selection-start-column="37" selection-end-line="828" selection-end-column="37" />
+        <state relative-caret-position="489">
+          <caret line="900" column="38" selection-start-line="900" selection-start-column="38" selection-end-line="900" selection-end-column="38" />
         </state>
       </provider>
     </entry>

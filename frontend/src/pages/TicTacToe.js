@@ -32,7 +32,9 @@ class TicTacToe extends React.Component {
   componentDidMount() {
     let attackToken = cookies.get("attackToken");
 
-    this.context.emit("initTictac", {token: cookies.get("token"), enemy: attackToken});
+    if (cookies.get('initiatedTicTac')) {
+      this.context.emit("initTictac", {token: cookies.get("token"), enemy: attackToken});
+    }
 
     this.context.on("initResponse", (data) => {
       this.setState({
@@ -41,11 +43,28 @@ class TicTacToe extends React.Component {
       });
     });
 
+    this.context.on("oppMove", (data) => {
+      this.setState({
+        board: data.gameboard,
+        turn: ownIcon
+      });
+
+    });
+
     this.context.on("tictac", (data) => {
       this.setState({
         gameBoard: data.gameBoard,
         turn: this.state.ownIcon
       });
+    });
+
+
+    this.context.on("lose", () => {
+      swal("You lose..")
+    });
+
+    this.context.on("win", () => {
+      swal("You win!")
     });
 
   }
@@ -59,7 +78,7 @@ class TicTacToe extends React.Component {
       return;
     }
     let attackToken = cookies.get("attackToken");
-    this.context.emit("initTictac", {token: cookies.get("token"), enemy: attackToken});
+
 
     if  (this.state.gameBoard[loc] === 'x' || this.state.gameBoard[loc] === 'o' || this.state.winner) {
       //Invalid move
@@ -68,46 +87,10 @@ class TicTacToe extends React.Component {
     let currentGameBoard =  this.state.gameBoard;
     currentGameBoard.splice(loc, 1, this.state.turn);
     this.setState({gameBoard: currentGameBoard});
-    let topRow = this.state.gameBoard[0] + this.state.gameBoard[1] + this.state.gameBoard[2];
-    if (topRow.match(/xxx|ooo/)) {
-      this.setState({winner: this.state.turn});
-      return;
-    }
-    let middleRow = this.state.gameBoard[3] + this.state.gameBoard[4] + this.state.gameBoard[5];
-    if (middleRow.match(/xxx|ooo/)) {
-      this.setState({winner: this.state.turn});
-      return;
-    }
-    let downRow = this.state.gameBoard[6] + this.state.gameBoard[7] + this.state.gameBoard[8];
-    if (downRow.match(/xxx|ooo/)) {
-      this.setState({winner: this.state.turn});
-      return;
-    }
-    let leftCol = this.state.gameBoard[0] + this.state.gameBoard[3] + this.state.gameBoard[6];
-    if (leftCol.match(/xxx|ooo/)) {
-      this.setState({winner: this.state.turn});
-      return;
-    }
-    let middleCol = this.state.gameBoard[1] + this.state.gameBoard[4] + this.state.gameBoard[7];
-    if (middleCol.match(/xxx|ooo/)) {
-      this.setState({winner: this.state.turn});
-      return;
-    }
-    let rightCol = this.state.gameBoard[2] + this.state.gameBoard[5] + this.state.gameBoard[8];
-    if (rightCol.match(/xxx|ooo/)) {
-      this.setState({winner: this.state.turn});
-      return;
-    }
-    let leftDiag  = this.state.gameBoard[0] + this.state.gameBoard[4] + this.state.gameBoard[8];
-    if (leftDiag.match(/xxx|ooo/)) {
-      this.setState({winner: this.state.turn});
-      return;
-    }
-    let rightDiag = this.state.gameBoard[2] + this.state.gameBoard[4] + this.state.gameBoard[6];
-    if (rightDiag.match(/xxx|ooo/)) {
-      this.setState({winner: this.state.turn});
-      return;
-    }
+
+    //
+    // Verplaatst naar serverside
+    //
     let moves = this.state.gameBoard.join('').replace(/ /g,'');
     if (moves.length === 9 ) {
       this.setState({winner: 'nobody'});

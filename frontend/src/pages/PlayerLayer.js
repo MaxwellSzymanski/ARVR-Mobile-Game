@@ -74,6 +74,7 @@ class PlayerLayer extends React.Component {
         this.state.id = props.id;
         this.state.locationEnabled = props.locationEnabled;
         this.popup = React.createRef();
+        cookies.set('initiatedTicTac', false);
 
         this.updateLocation = this.updateLocation.bind(this);
         this.receivePlayer = this.receivePlayer.bind(this);
@@ -127,7 +128,7 @@ class PlayerLayer extends React.Component {
     }
 
     startTictac(data) {
-        alert("Working")
+        return <Redirect to="/settings" />;
     }
 
     sendLocation() {
@@ -337,7 +338,7 @@ class PlayerLayer extends React.Component {
     }
 
     showFindEnemyAlertBox(){
-        this.setState({showAlertBox: false})
+        this.setState({showAlertBox: false});
         this.popup.current.leafletElement.options.leaflet.map.closePopup();
 
         var rows = [];
