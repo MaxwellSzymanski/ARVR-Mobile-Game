@@ -77,6 +77,7 @@ class TicTacToe extends React.Component {
     if (this.state.turn !== this.state.ownIcon) {
       return;
     }
+
     let attackToken = cookies.get("attackToken");
 
 
@@ -88,6 +89,7 @@ class TicTacToe extends React.Component {
     currentGameBoard.splice(loc, 1, this.state.turn);
     this.setState({gameBoard: currentGameBoard});
 
+    this.context.emit("fight",{board: cookies.get('token'), enemy: this.cookies.get("tictacMove")});
     //
     // Verplaatst naar serverside
     //
@@ -98,8 +100,6 @@ class TicTacToe extends React.Component {
     }
     this.setState({turn: (this.state.turn === 'x') ? 'o' : 'x'})
   }
-
-
 
 
   render() {
