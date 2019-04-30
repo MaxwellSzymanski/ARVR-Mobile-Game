@@ -21,8 +21,7 @@ class TicTacToe extends React.Component {
          ' ', ' ', ' '
        ],
        turn: 'x',
-       ownIcon: '',
-       winner: null,
+       ownIcon: ''
      };
 
     this.updateBoard = this.updateBoard.bind(this);
@@ -89,15 +88,11 @@ class TicTacToe extends React.Component {
     currentGameBoard.splice(loc, 1, this.state.turn);
     this.setState({gameBoard: currentGameBoard});
 
-    this.context.emit("tictacMove",{board: this.state.board, token: cookies.get('token'), enemy: this.cookies.get("attackToken")});
+    this.context.emit("tictacMove",{board: this.state.gameBoard, token: cookies.get('token'), enemy: attackToken});
     //
     // Verplaatst naar serverside
     //
-    let moves = this.state.gameBoard.join('').replace(/ /g,'');
-    if (moves.length === 9 ) {
-      this.setState({winner: 'nobody'});
-      return;
-    }
+
     this.setState({turn: (this.state.turn === 'x') ? 'o' : 'x'})
   }
 

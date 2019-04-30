@@ -893,13 +893,21 @@ function tictac(data, socket) {
                                 return;
                             }
 
+                            // TODO: Draw?
+                            /*
+                            let moves = this.state.gameBoard.join('').replace(/ /g,'');
+                            if (moves.length === 9 ) {
+                                this.setState({winner: 'nobody'});
+                                return;
+                            }*/
+
                             if (checkWinner(data.gameBoard)) {
                                 // Game won
                                 socket.emit("win");
                                 game[opponent.name].socket.emit("lose");
                                 // Calculate damage
                                 //TODO
-                                // TODO: Draw?
+
                             }
                             else {
                                 // Send new board to opponent
