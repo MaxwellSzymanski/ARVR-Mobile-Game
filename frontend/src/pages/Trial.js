@@ -94,7 +94,7 @@ class Trial extends React.Component {
             rows.push(<p className="colorWhite">{data.message}</p>);
             this.showAlertBox(rows);
         });
-
+        this.cookies.set("initiatedTicTac", false);
         this.context.on("oppTictac", (data) => {this.startTictac(data)});
     }
 

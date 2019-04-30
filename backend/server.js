@@ -850,7 +850,7 @@ function initTictac(data, socket) {
                             }
                             console.log("4-Hier");
                             let you = Math.random() < 0.5 ? 'x' : 'o';
-                            let opp = you === 'x' ? 'o' : 'x';
+                            let opp = (you === 'x' ? 'o' : 'x');
                             // TODO: Implement fatigue
                             let turn = Math.random() < 0.5 ? you : opp;
                             console.log("init DONE");
