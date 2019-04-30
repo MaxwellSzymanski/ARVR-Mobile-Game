@@ -97,6 +97,7 @@ class SignUpForm extends React.Component {
                         };
                         cookies.set('token', json.data.token, options);
                         cookies.set('name', json.data.name, options);
+                        localStorage.removeItem("PhotoOfMe");
                         that.setState({redirect: true});
                     }
                     else swal(json.data.message, {icon: "warning"});
