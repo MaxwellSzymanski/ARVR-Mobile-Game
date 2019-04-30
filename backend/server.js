@@ -885,8 +885,7 @@ function tictac(data, socket) {
                     if (err) {
                         console.log("(tictac)         invalid defender token");
                         return;
-                    } else if (!token.enemy)
-                        return;
+                    }
                     console.log("4-Hier");
                     User.findOne({name: token.name}).then(
                         async function (opponent) {
