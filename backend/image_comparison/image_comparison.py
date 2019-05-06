@@ -162,10 +162,11 @@ def distanceBetween(A, B):
     lon1 = A[1]
     lat2 = B[0]
     lon2 = B[1]
-    x = degreesToRadians(lon2-lon1) * math.cos(degreesToRadians(lat2+lat1)/2);
-    y = degreesToRadians(lat2-lat1);
-    d = math.sqrt(x*x + y*y) * 6371;
-    return d * 1000; # * 1000 (answer in meters)
+    x = degreesToRadians(lon2-lon1) * math.cos(degreesToRadians(lat2+lat1)/2)
+    y = degreesToRadians(lat2-lat1)
+    d = math.sqrt(x*x + y*y) * 6371
+    print("(x,y):   (" + str(x) + ", " + str(y) + ")     d:    " + str(d*1000))
+    return d * 1000 # * 1000 (answer in meters)
 
 
 range = 50     # max distance between two images
@@ -206,8 +207,9 @@ def compareNewImage(sid, jsondata):
     close_to_existing_target = False
     while index < groups.count():
         current_group = groups.next()
+        dist = 1000
         dist = distanceBetween(location, current_group["location"])
-        print(str(index) + ": distance to group " + str(current_group["_id"]) + ":   " + str(dist))
+        print(str(index) + ": distance to target " + str(current_group["_id"]) + ":   " + str(dist))
         if dist < range:
             close_to_existing_target = True
             for img_data in current_group["image_data"]:
