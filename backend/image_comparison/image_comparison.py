@@ -22,6 +22,8 @@ app = socketio.WSGIApp(pyio)
 def checkForBestMatch(image_data, file):
     print(" -  checkForBestMatch() called")
     n = len(image_data)//3
+    if n == 0:
+        n = 1
     winning_players = []
     index = 0
     best_match_rate = 0
@@ -166,7 +168,7 @@ def distanceBetween(A, B):
     return d * 1000; # * 1000 (answer in meters)
 
 
-range = 100     # max distance between two images
+range = 50     # max distance between two images
 
 
 @pyio.on('connect')
@@ -204,9 +206,9 @@ def compareNewImage(sid, jsondata):
     close_to_existing_target = False
     while index < groups.count():
         current_group = groups.next()
-        print(current_group["_id"])
-        print(current_group["location"])
-        if distanceBetween(location, current_group["location"]) < range:
+        dist = distanceBetween(location, current_group["location"])
+        print(str(index) + ": distance to group " + str(current_group["_id"]) + ":   " + str(dist))
+        if dist < range:
             close_to_existing_target = True
             for img_data in current_group["image_data"]:
                 index = img_data["encoded_image"].find(",") + 1
