@@ -158,6 +158,9 @@ def degreesToRadians(degrees):
 
 
 def distanceBetween(A, B):
+    print("\n - distanceBetween() called!")
+    print(A)
+    print(B)
     lat1 = A[0]
     lon1 = A[1]
     lat2 = B[0]
