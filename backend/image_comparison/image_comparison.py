@@ -20,10 +20,10 @@ app = socketio.WSGIApp(pyio)
 #After finding a match in a certain group this function is called to check for more matches in this image group
 #If more than n matches is found the new image is added to the group, and the players get rewarded, otherwise nothing happens.		
 def checkForBestMatch(image_data, file):
-	number_of_matches = 0
-	print(" -  checkForBestMatch() called")
-	n = len(image_data)//3
-	if n == 0:
+    number_of_matches = 0
+    print(" -  checkForBestMatch() called")
+    n = len(image_data)//3;
+    if n == 0:
         n = 1
     winning_players = []
     index = 0
@@ -51,25 +51,24 @@ def checkForBestMatch(image_data, file):
             n -= 1
         if isMatch:
             winning_players.append(unicodedata.normalize('NFKD', img_data["player_id"]).encode('ascii', 'ignore'))
-			number_of_matches += 1
+            number_of_matches += 1
         print(n)
         index += 1
     if n <= 0:
-		print("\n\n/=======================================\n|")
-		print("|    Best match player   :  " + str(image_data[best_index]["player_id"]) + " | index: " + str(best_index))
-		print("|    Best match rate     :  " + str(round(best_match_rate,2))) + "%"
-		print("|    total matches       :  " + str(number_of_matches) + "/" + str(len(image_data)))
-		print("|    winning players     :  " + str(winning_players))
-		print("|\n\|threshold of 33% matches reached! => uploaded picture added to the collection")
-		print("|\n\=======================================\n\n")
-		winning_players.append(unicodedata.normalize('NFKD', image_data[best_index]["player_id"]).encode('ascii', 'ignore')) #Player with best match gets double the points
-		return winning_players
-	else:
-		print("\n\n/=======================================\n|")
-		print("|    total matches       :  " + str(number_of_matches) + "/" + str(len(image_data)))
-		print("|    threshold of 33% matches NOT reached! => uploaded picture discarded")
-		print("|\n\=======================================\n\n")	
-		return []
+        print("\n\n/=======================================\n|")
+        print("|    Best match rate     :  " + str(round(best_match_rate,2))) + "%"
+        print("|    total matches       :  " + str(number_of_matches) + "/" + str(len(image_data)))
+        print("|    winning players     :  " + str(winning_players))
+        print("|\n\|threshold of 33% matches reached! => uploaded picture added to the collection")
+        print("|\n\=======================================\n\n")
+        winning_players.append(unicodedata.normalize('NFKD', image_data[best_index]["player_id"]).encode('ascii', 'ignore')) #Player with best match gets double the points
+        return winning_players
+    else:
+        print("\n\n/=======================================\n|")
+        print("|    total matches       :  " + str(number_of_matches) + "/" + str(len(image_data)))
+        print("|    threshold of 33% matches NOT reached! => uploaded picture discarded")
+        print("|\n\=======================================\n\n")
+        return []
 
 
 def createNewGroup(new_image_data, location):
