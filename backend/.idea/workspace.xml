@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="62846d24-a773-43e7-bd6f-fcd39c23315b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/TicTacToe.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/TicTacToe.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -19,7 +20,7 @@
         <entry file="file://$PROJECT_DIR$/server.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="173">
-              <caret line="573" column="31" selection-start-line="573" selection-start-column="31" selection-end-line="573" selection-end-column="31" />
+              <caret line="573" column="30" selection-start-line="573" selection-start-column="30" selection-end-line="573" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -113,12 +114,12 @@
       <workItem from="1556022240054" duration="5303000" />
       <workItem from="1556536495595" duration="379000" />
       <workItem from="1556619401582" duration="11740000" />
-      <workItem from="1557232000062" duration="3906000" />
+      <workItem from="1557232000062" duration="4123000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="43920000" />
+    <option name="totallyTimeSpent" value="44137000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -157,7 +158,7 @@
     <entry file="file://$PROJECT_DIR$/server.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="173">
-          <caret line="573" column="31" selection-start-line="573" selection-start-column="31" selection-end-line="573" selection-end-column="31" />
+          <caret line="573" column="30" selection-start-line="573" selection-start-column="30" selection-end-line="573" selection-end-column="30" />
         </state>
       </provider>
     </entry>

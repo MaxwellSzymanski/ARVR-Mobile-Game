@@ -571,7 +571,7 @@ function signuphttp(obj, res) {
 function signinhttp(obj, res) {
     User.findOne({ email : obj.email }, async function(error, result) {
         if (error) throw error;
-        if (result === null) { 
+        if (result === null) {
             respond(res, {"email": false});
         } else {
             const value = await result.checkPassword(obj.password);
