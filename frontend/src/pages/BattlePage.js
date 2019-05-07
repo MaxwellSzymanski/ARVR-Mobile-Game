@@ -169,18 +169,24 @@ class BattlePage extends React.Component {
     }
 
     attack() {
-
         this.context.emit("startOpponentTicTac", {
             token: cookies.get('token'),
             enemy: cookies.get("attackToken"),
         });
 
         cookies.set('initiatedTicTac', true);
+        this.setState({
+            redirect:true
+        });
     }
 
+    renderRedirect = () => {
+        if (this.state.redirect) {return <Redirect to="/ticTacToe" />;}
+    };
+
     handleClose() {
-    this.setState({ show: false });
-  }
+        this.setState({ show: false });
+    }
 
   handleShow() {
     this.setState({ show: true });
@@ -194,6 +200,8 @@ class BattlePage extends React.Component {
     render() {
         return (
             <div>
+                {this.renderRedirect()}
+                <div>
             <Modal
               isOpen={this.state.show}
               onRequestClose={this.handleClose}
