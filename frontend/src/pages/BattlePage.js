@@ -192,11 +192,6 @@ class BattlePage extends React.Component {
     this.setState({ show: true });
   }
 
-
-    renderRedirect = () => {
-        if (this.state.redirect) {return <Redirect to="/map" />}
-    };
-
     render() {
         return (
             <div>
