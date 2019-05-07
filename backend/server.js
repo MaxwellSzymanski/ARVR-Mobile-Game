@@ -873,7 +873,7 @@ function initTictac(data, socket) {
                             // Send user data to attacker and to defender
                             socket.emit("initResponse", {ownIcon: you, turn: turn, oppId: enemy.name});
                             if (game[enemy.name] !== undefined && game[enemy.name] !== null) {
-                                game[enemy.name].socket.emit("oppTictac", {ownIcon: opp, turn: turn, oppId: attacker.name});
+                                game[enemy.name].socket.emit("initResponse", {ownIcon: opp, turn: turn, oppId: attacker.name});
                             }
                         }
                     )
@@ -881,9 +881,6 @@ function initTictac(data, socket) {
             })
     })
 }
-
-
-
 
 function tictac(data, socket) {
     if (!data.enemy || !data.token)
