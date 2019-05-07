@@ -32,9 +32,10 @@ class TicTacToe extends React.Component {
     let attackToken = cookies.get("attackToken");
 
     if (cookies.get('initiatedTicTac')) {
-      swal();
       this.context.emit("initTictac", {token: cookies.get("token"), enemy: attackToken});
     }
+
+    swal("Started. Your icon is >" + this.state.ownIcon + "<\n The turn is >" + this.state.turn + "<");
 
     this.context.on("initResponse", (data) => {
       this.setState({
