@@ -58,16 +58,16 @@ class TicTacToe extends React.Component {
     this.context.on("lose", () => {
       cookies.set('attackToken', false);
       cookies.set('initiatedTicTac', false);
-      swal({title: 'You lose!', icon: 'error', text: "You took some damage. Better luck next time!", confirm: true})
+      swal({title: 'You lose!', icon: 'error', text: data.message, confirm: true})
           .then((value) => {
             this.setState({redirect: true})
           });
     });
 
-    this.context.on("win", () => {
+    this.context.on("win", (data) => {
       cookies.set('attackToken', false);
       cookies.set('initiatedTicTac', false);
-      swal({title: 'You win!', icon: 'success', text: "Your opponent took some damage!", confirm: true})
+      swal({title: 'You win!', icon: 'success', text: data.message, confirm: true})
           .then((value) => {
             this.setState({redirect: true})
           });

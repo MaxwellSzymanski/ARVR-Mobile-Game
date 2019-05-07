@@ -316,14 +316,6 @@ function stats(data, socket) {
             });
 
     });
-    if (!data.enemy)
-        return;
-    jwt.verify(data.enemy, secret, async function (err, token) {
-        if (err) {
-            console.log("(stats)         invalid enemy token");
-            return;
-        } else if (!token.attack)
-            return;
         User.findOne({name: token.name}).then(
             function (enemy) {
                 if (enemy === null) {
@@ -334,7 +326,7 @@ function stats(data, socket) {
                 }
             }
         )
-    });
+
 }
 
 let game = {};
@@ -947,20 +939,40 @@ function tictac(data, socket) {
                             }
 
                             // TODO: Draw?
-                            /*
-                            let moves = this.state.gameBoard.join('').replace(/ /g,'');
-                            if (moves.length === 9 ) {
-                                this.setState({winner: 'nobody'});
-                                return;
-                            }*/
 
                             if (checkWinner(data.board)) {
                                 // Game won
-                                console.log("Won");
-                                socket.emit("win");
-                                game[opponent.name].socket.emit("lose");
                                 // Calculate damage
-                                //TODO
+                                let attack = Math.ceil(calculateAttack(attacker, defender));
+                                let attackXP = Math.ceil(attack * (1.5 + 0.5 * Math.random()));
+                                let msgA = "You inflicted " + attack + " damage to " + defender.name + " and ";
+                                let msgD = "You lost and took " + attack + " damage. Better luck next time!";
+                                defender.health = defender.health - attack;
+                                if (defender.health <= 0) {
+                                    defender.health = defender.health + 100;
+                                    defender.deaths = defender.deaths + 1;
+                                    attacker.kills = attacker.kills + 1;
+                                    attackXP += 50;
+                                    msgA += "killed him/her.\nYou "
+                                    msgD = "You took " + attack + " damage and were killed. Autch."
+                                }
+                                attacker.experience = attacker.experience + attackXP;
+                                defender.experience = defender.experience + 10;
+                                if (attacker.experience >= 350) {
+                                    attacker.level = attacker.level + 1;
+                                    attacker.experience = attacker.experience % 350;
+                                }
+                                if (defender.experience >= 350) {
+                                    defender.level = defender.level + 1;
+                                    defender.experience = defender.experience % 350;
+                                }
+                                msgA += "gained " + attackXP + " experience points.";
+
+                                attacker.save();
+                                defender.save();
+
+                                socket.emit("win", {message: msgA});
+                                game[opponent.name].socket.emit("lose", {message: msgD});
 
                             }
                             else {
