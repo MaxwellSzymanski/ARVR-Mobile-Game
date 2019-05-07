@@ -124,6 +124,7 @@ io.sockets.on('connection', function (socket) {
     socket.on("miss", (data) => {miss(data, socket)});
     socket.on("tictacMove", (data) => {tictac(data, socket)});
     socket.on("initTictac", (data) => {initTictac(data, socket)});
+    socket.on("startOpponentTicTac", (data) => {askToTictac(data, socket)});
 
     socket.on("resetTutorials", (data) => {resetTutorial(data)});
 
