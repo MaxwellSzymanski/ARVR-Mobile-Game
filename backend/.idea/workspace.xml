@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="62846d24-a773-43e7-bd6f-fcd39c23315b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/TicTacToe.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/TicTacToe.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/TicTacToe.css" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/TicTacToe.css" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -105,12 +105,12 @@
       <workItem from="1556022240054" duration="5303000" />
       <workItem from="1556536495595" duration="379000" />
       <workItem from="1556619401582" duration="11740000" />
-      <workItem from="1557232000062" duration="7550000" />
+      <workItem from="1557232000062" duration="7647000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="47564000" />
+    <option name="totallyTimeSpent" value="47661000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />

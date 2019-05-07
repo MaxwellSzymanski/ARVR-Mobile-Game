@@ -25,6 +25,7 @@ h1 {
   margin: 0 auto;
   font-size: fit-width | fit-height | fit-height-precise;
   margin-top: 5%;
+  color: #910f0f;
 }
 
 h1,h2, button {
