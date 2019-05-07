@@ -944,33 +944,33 @@ function tictac(data, socket) {
                             if (checkWinner(data.board)) {
                                 // Game won
                                 // Calculate damage
-                                let attack = Math.ceil(calculateAttack(attacker, defender));
+                                let attack = Math.ceil(calculateAttack(attacker, opponent));
                                 let attackXP = Math.ceil(attack * (1.5 + 0.5 * Math.random()));
-                                let msgA = "You inflicted " + attack + " damage to " + defender.name + " and ";
+                                let msgA = "You inflicted " + attack + " damage to " + opponent.name + " and ";
                                 let msgD = "You lost and took " + attack + " damage. Better luck next time!";
-                                defender.health = defender.health - attack;
-                                if (defender.health <= 0) {
-                                    defender.health = defender.health + 100;
-                                    defender.deaths = defender.deaths + 1;
+                                opponent.health = opponent.health - attack;
+                                if (opponent.health <= 0) {
+                                    opponent.health = opponent.health + 100;
+                                    opponent.deaths = opponent.deaths + 1;
                                     attacker.kills = attacker.kills + 1;
                                     attackXP += 50;
                                     msgA += "killed him/her.\nYou "
                                     msgD = "You took " + attack + " damage and were killed. Autch."
-                                }
+                                } 
                                 attacker.experience = attacker.experience + attackXP;
-                                defender.experience = defender.experience + 10;
+                                opponent.experience = opponent.experience + 10;
                                 if (attacker.experience >= 350) {
                                     attacker.level = attacker.level + 1;
                                     attacker.experience = attacker.experience % 350;
                                 }
-                                if (defender.experience >= 350) {
-                                    defender.level = defender.level + 1;
-                                    defender.experience = defender.experience % 350;
+                                if (opponent.experience >= 350) {
+                                    opponent.level = opponent.level + 1;
+                                    opponent.experience = opponent.experience % 350;
                                 }
                                 msgA += "gained " + attackXP + " experience points.";
 
                                 attacker.save();
-                                defender.save();
+                                opponent.save();
 
                                 socket.emit("win", {message: msgA});
                                 game[opponent.name].socket.emit("lose", {message: msgD});
