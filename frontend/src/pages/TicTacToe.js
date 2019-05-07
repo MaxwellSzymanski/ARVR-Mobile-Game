@@ -32,6 +32,7 @@ class TicTacToe extends React.Component {
     let attackToken = cookies.get("attackToken");
 
     if (cookies.get('initiatedTicTac')) {
+      swal();
       this.context.emit("initTictac", {token: cookies.get("token"), enemy: attackToken});
     }
 
@@ -48,22 +49,25 @@ class TicTacToe extends React.Component {
         gameBoard: data.board,
         turn: this.state.ownIcon
       });
+      swal("Opponent board received! Your icon is " + this.state.ownIcon)
     });
 
-
     this.context.on("lose", () => {
-      cookies.set('attackToken', null);
-      cookies.set('initiatedTicTac', null);
+      cookies.set('attackToken', false);
+      cookies.set('initiatedTicTac', false);
       swal("You lose..")
     });
 
     this.context.on("win", () => {
-      cookies.set('attackToken', null);
-      cookies.set('initiatedTicTac', null);
+      cookies.set('attackToken', false);
+      cookies.set('initiatedTicTac', false);
       swal("You win!")
     });
   }
 
+  componentWillUnmount() {
+    cookies.set('initiatedTicTac', false);
+  }
 
   updateBoard(loc, player) {
     cookies.set("initiatedTicTac", false);
