@@ -257,9 +257,7 @@ class BattlePage extends React.Component {
                 </div>
 
                 <div>
-                    <Link to="/ticTacToe">
                     <button className="buttonAttack fadeIn2" onClick={this.attack} >Attack</button>
-                    </Link>
                 </div>
 
                 <div>
