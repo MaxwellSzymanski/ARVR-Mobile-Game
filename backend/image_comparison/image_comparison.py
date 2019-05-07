@@ -20,9 +20,9 @@ app = socketio.WSGIApp(pyio)
 #After finding a match in a certain group this function is called to check for more matches in this image group
 #If more than n matches is found the new image is added to the group, and the players get rewarded, otherwise nothing happens.		
 def checkForBestMatch(image_data, file):
+	number_of_matches = 0
     print(" -  checkForBestMatch() called")
     n = len(image_data)//3
-	number_of_matches = 0
     if n == 0:
         n = 1
     winning_players = []
