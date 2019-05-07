@@ -110,6 +110,11 @@ class TicTacToe extends React.Component {
     if (this.state.redirect) {return <Redirect to="/map" />;}
   };
 
+  getTurn() {
+    if (this.state.ownIcon === this.state.turn) return "Your";
+    return "Opponents";
+  }
+
 
   render() {
     return (
@@ -118,8 +123,7 @@ class TicTacToe extends React.Component {
       <div className= "container">
         <div id="menu">
           <div id="title"><h1 id="titleText">Tic-Tac-Toe</h1></div>
-          <div  id="text"><Announcement
-                              winner={this.state.turn}/></div>
+          <h2>{this.getTurn()} turn</h2>
         </div>
         <div className="theBoard">
         {this.state.gameBoard.map(function(value, i) {
