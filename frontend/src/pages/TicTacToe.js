@@ -37,7 +37,7 @@ class TicTacToe extends React.Component {
       cookies.set('initiatedTicTac', false)
     }
     else{
-      alert("Cookie is false.")
+      alert("Cookie is: " + cookies.get("initiatedTicTac"))
     }
 
     //swal("Started. Your icon is >" + this.state.ownIcon + "<\n The turn is >" + this.state.turn + "<");
