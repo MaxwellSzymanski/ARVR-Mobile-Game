@@ -7,6 +7,7 @@ import swal from "@sweetalert/with-react";
 import Cookies from "universal-cookie";
 import SocketContext from "../socketContext";
 import BattlePage from "./BattlePage";
+import {Redirect} from "react-router-dom";
 
 const cookies = new Cookies();
 
@@ -21,7 +22,8 @@ class TicTacToe extends React.Component {
          ' ', ' ', ' '
        ],
        turn: 'x',
-       ownIcon: ''
+       ownIcon: '',
+       redirect: false
      };
 
     this.updateBoard = this.updateBoard.bind(this);
@@ -56,13 +58,19 @@ class TicTacToe extends React.Component {
     this.context.on("lose", () => {
       cookies.set('attackToken', false);
       cookies.set('initiatedTicTac', false);
-      swal("You lose..")
+      swal({title: 'You lose!', icon: 'error', text: "You took some damage. Better luck next time!", confirm: true})
+          .then((value) => {
+            this.setState({redirect: true})
+          });
     });
 
     this.context.on("win", () => {
       cookies.set('attackToken', false);
       cookies.set('initiatedTicTac', false);
-      swal("You win!")
+      swal({title: 'You win!', icon: 'success', text: "Your opponent took some damage!", confirm: true})
+          .then((value) => {
+            this.setState({redirect: true})
+          });
     });
   }
 
@@ -98,9 +106,15 @@ class TicTacToe extends React.Component {
     this.setState({turn: (this.state.ownIcon === 'x') ? 'o' : 'x'})
   }
 
+  renderRedirect = () => {
+    if (this.state.redirect) {return <Redirect to="/map" />;}
+  };
+
 
   render() {
     return (
+        <div>
+          {this.renderRedirect()}
       <div className= "container">
         <div id="menu">
           <div id="title"><h1 id="titleText">Tic-Tac-Toe</h1></div>
@@ -119,6 +133,7 @@ class TicTacToe extends React.Component {
         }.bind(this))}
         </div>
       </div>
+        </div>
     );
   }
 }
