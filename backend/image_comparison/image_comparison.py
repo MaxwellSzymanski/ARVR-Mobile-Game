@@ -22,6 +22,7 @@ app = socketio.WSGIApp(pyio)
 def checkForBestMatch(image_data, file):
     print(" -  checkForBestMatch() called")
     n = len(image_data)//3
+	number_of_matches = 0
     if n == 0:
         n = 1
     winning_players = []
@@ -50,19 +51,23 @@ def checkForBestMatch(image_data, file):
             n -= 1
         if isMatch:
             winning_players.append(unicodedata.normalize('NFKD', img_data["player_id"]).encode('ascii', 'ignore'))
+			number_of_matches += 1
         print(n)
         index += 1
-
-    print("\n\n/=======================================\n|")
-    print("|    Best match index :  " + str(best_index))
-    print("|    Match rate       :  " + str(round(best_match_rate,2)))
-    print("|\n\=======================================\n\n")
-    print(winning_players)
-    print(" n: " + str(n))
     if n <= 0:
-        print("returning list")
+		print("\n\n/=======================================\n|")
+		print("|    Best match player   :  " + str(image_data[best_index]["player_id"]) + " | index: " + str(best_index))
+		print("|    Best match rate     :  " + str(round(best_match_rate,2))) + "%"
+		print("|    total matches       :  " + str(number_of_matches) + "/" + str(len(image_data)))
+		print("|    winning players     :  " + str(winning_players))
+		print("|\n\|threshold of 33% matches reached! => uploaded picture added to the collection")
+		print("|\n\=======================================\n\n")
         winning_players.append(unicodedata.normalize('NFKD', image_data[best_index]["player_id"]).encode('ascii', 'ignore')) #Player with best match gets double the points
         return winning_players
+	print("\n\n/=======================================\n|")
+	print("|    total matches       :  " + str(number_of_matches) + "/" + str(len(image_data)))
+	print("|    threshold of 33% matches NOT reached! => uploaded picture discarded")
+	print("|\n\=======================================\n\n")	
     return []
 
 
