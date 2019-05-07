@@ -64,6 +64,15 @@ class TicTacToe extends React.Component {
           });
     });
 
+    this.context.on("draw", (data) => {
+      cookies.set('attackToken', false);
+      cookies.set('initiatedTicTac', false);
+      swal({title: 'Draw!', icon: 'warning', text: data.message, confirm: true})
+          .then((value) => {
+            this.setState({redirect: true})
+          });
+    });
+
     this.context.on("win", (data) => {
       cookies.set('attackToken', false);
       cookies.set('initiatedTicTac', false);

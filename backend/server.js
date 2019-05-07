@@ -325,7 +325,6 @@ function stats(data, socket) {
                 }
             }
         )
-
 }
 
 let game = {};
@@ -937,7 +936,10 @@ function tictac(data, socket) {
                                 return;
                             }
 
-                            // TODO: Draw?
+                            if (checkDraw(data.board)) {
+                                socket.emit("draw", {message: "Draw! You both took damage."});
+                                game[opponent.name].socket.emit("draw", {message: "Draw! You both took damage."});
+                            }
 
                             if (checkWinner(data.board)) {
                                 // Game won
@@ -988,6 +990,16 @@ function tictac(data, socket) {
     })
 }
 
+function checkDraw(board) {
+    var count = 0;
+    for (i = 0; i < 9; i++) {
+        if (board[i] === 'x' || board[i] === 'o') {
+            count++;
+        }
+    }
+    if (count === 9) return true;
+    return false;
+}
 
 function checkWinner(board) {
     let topRow = board[0] + board[1] + board[2];
