@@ -51,7 +51,6 @@ class TicTacToe extends React.Component {
         gameBoard: data.board,
         turn: this.state.ownIcon
       });
-      swal("Opponent board received! Your icon is >" + this.state.ownIcon + "<")
     });
 
     this.context.on("lose", () => {
