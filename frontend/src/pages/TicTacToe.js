@@ -55,7 +55,7 @@ class TicTacToe extends React.Component {
       });
     });
 
-    this.context.on("lose", () => {
+    this.context.on("lose", (data) => {
       cookies.set('attackToken', false);
       cookies.set('initiatedTicTac', false);
       swal({title: 'You lose!', icon: 'error', text: data.message, confirm: true})
