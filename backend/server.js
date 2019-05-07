@@ -314,9 +314,8 @@ function stats(data, socket) {
                     socket.emit("photo", {image: user.image})
                 }
             });
-
     });
-        User.findOne({name: token.name}).then(
+        User.findOne({name: data.enemy}).then(
             function (enemy) {
                 if (enemy === null) {
                     console.log("(stats)         No enemy found");
