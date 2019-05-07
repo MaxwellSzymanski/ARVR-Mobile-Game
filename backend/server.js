@@ -421,6 +421,25 @@ function removePlayer(socket) {
     })
 }
 
+
+
+function getFactionNumbers(socket) {
+    var loneWolf = 0;
+    var adventurer = 0;
+    var query = {faction: "loneWolf"};
+    User.count(query).then(
+        function (result) {
+            loneWolf = result;
+        }
+    );
+    query = {faction: "adventurer"};
+    User.count(query).then(
+        function (result) {
+            loneWolf = result;
+        }
+    );
+}
+
 function verifyJWT(data, socket) {
     console.log("checking token");
     if (!data.token) return;
