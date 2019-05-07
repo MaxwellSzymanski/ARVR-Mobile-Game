@@ -866,6 +866,8 @@ function initTictac(data, socket) {
                             }
                             let you = Math.random() < 0.5 ? 'x' : 'o';
                             let opp = (you === 'x' ? 'o' : 'x');
+                            console.log('Assigned to you: ' + you);
+                            console.log('Assigned to opp: ' + opp);
                             // TODO: Implement fatigue
                             let turn = Math.random() < 0.5 ? you : opp;
                             // Send user data to attacker and to defender
