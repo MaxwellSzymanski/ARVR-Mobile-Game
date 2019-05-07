@@ -270,7 +270,7 @@ class BattlePage extends React.Component {
                     <button className="buttonFlee fadeIn3" onClick={this.flee}>Flee</button>
                 </div>
 
-
+                </div>
             </div>
         )
     }
