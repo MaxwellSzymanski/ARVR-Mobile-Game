@@ -40,6 +40,7 @@ class TicTacToe extends React.Component {
         ownIcon: data.ownIcon,
         turn: data.turn
       });
+      cookies.set('attackToken', data.oppId);
     });
 
     this.context.on("oppMove", (data) => {
