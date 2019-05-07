@@ -95,7 +95,7 @@ class Trial extends React.Component {
             this.showAlertBox(rows);
         });
         cookies.set("initiatedTicTac", false);
-        this.context.on("oppTictac", (data) => {this.startTictac(data)});
+        this.context.on("goToTicTac", (data) => {this.startTictac(data)});
     }
 
     setCenter(pos){

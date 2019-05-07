@@ -873,10 +873,43 @@ function initTictac(data, socket) {
                             // Send user data to attacker and to defender
                             socket.emit("initResponse", {ownIcon: you, turn: turn, oppId: enemy.name});
                             if (game[enemy.name] !== undefined && game[enemy.name] !== null) {
-                                game[enemy.name].socket.emit("oppTictac", {ownIcon: opp, turn: turn, oppId: attacker.name});
+                                game[enemy.name].socket.emit("initResponse", {ownIcon: opp, turn: turn, oppId: attacker.name});
                             }
                         }
                     )
+                //})
+            })
+    })
+}
+
+function askToTictac(data, socket) {
+    if (!data.enemy || !data.token)
+        return;
+    jwt.verify(data.token, secret, async function (err, token) {
+        if (err) {
+            console.log("(askToTictac)         invalid token");
+            return;
+        }
+        User.findById(token.id).then(
+            async function (attacker) {
+                if (attacker === null) {
+                    console.log("(askToTictac)           attacker not found.");
+                    return;
+                }
+                User.findOne({name: data.enemy}).then(
+                    async function (opponent) {
+                        if (!opponent) {
+                            console.log("(askToTictac)           opponent not found.");
+                            return;
+                        }
+                        else {
+                            // Send new board to opponent
+                            if (game[opponent.name] !== undefined && game[opponent.name] !== null) {
+                                game[opponent.name].socket.emit("goToTicTac", {oppId: opponent.name})
+                            }
+                        }
+                    }
+                )
                 //})
             })
     })
