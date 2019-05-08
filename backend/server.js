@@ -93,6 +93,7 @@ io.sockets.on('connection', function (socket) {
     socket.on('signup', (data) => {signup(data, socket)});
     socket.on('verify', (data) => {verifyEmail(data, socket)});
     socket.on("newmail", (data) => {newMail(data)});
+    socket.on("requestFractions", () => {calculateFractions(socket)});
     socket.on("faction", (data) => {faction(data, socket)});
     socket.on("signin", (data) => {signin(data, socket)});
     socket.on("signout", (data) => {signout(data, socket)});
@@ -293,6 +294,41 @@ function newImage(data) {
     })
 }
 
+function calculateFractions(socket) {
+    var loneWolf = 0;
+    var adventurer = 0;
+    var scavenger = 0;
+    var query = {faction: "loneWolf"};
+    User.count(query).then(
+        function (result) {
+            loneWolf = result;
+        }
+    );
+    query = {faction: "adventurer"};
+    User.count(query).then(
+        function (result) {
+            adventurer = result;
+        }
+    );
+    query = {faction: "scavenger"};
+    User.count(query).then(
+        function (result) {
+            scavenger = result;
+        }
+    );
+    let total = scavenger + adventurer + loneWolf;
+    let lonerWolfFraction = lonerwolf/total;
+    let adventurerFraction = adventurer/total;
+    let scavengerFraction = scavenger/total;
+
+    socket.emit("factionFractions", {
+        lonerWolfFraction: lonerWolfFraction,
+        adventurerFraction: adventurerFraction,
+        scavengerFraction: scavengerFraction
+    });
+
+}
+
 
 function stats(data, socket) {
     if (!data.token) {
@@ -412,24 +448,6 @@ function removePlayer(socket) {
     })
 }
 
-
-
-function getFactionNumbers(socket) {
-    var loneWolf = 0;
-    var adventurer = 0;
-    var query = {faction: "loneWolf"};
-    User.count(query).then(
-        function (result) {
-            loneWolf = result;
-        }
-    );
-    query = {faction: "adventurer"};
-    User.count(query).then(
-        function (result) {
-            loneWolf = result;
-        }
-    );
-}
 
 function verifyJWT(data, socket) {
     console.log("checking token");
@@ -915,20 +933,17 @@ function tictac(data, socket) {
             console.log("(tictac)         invalid token");
             return;
         }
-        console.log("2-Hier");
         User.findById(token.id).then(
             async function (attacker) {
                 if (attacker === null) {
                     console.log("(tictac)           attacker not found.");
                     return;
                 }
-                console.log("3-Hier");
                 //jwt.verify(data.enemy, secret, async function (err, token) {
                     if (err) {
                         console.log("(tictac)         invalid defender token");
                         return;
                     }
-                    console.log("4-Hier");
                     User.findOne({name: data.enemy}).then(
                         async function (opponent) {
                             if (!opponent) {
@@ -939,6 +954,11 @@ function tictac(data, socket) {
                             if (checkDraw(data.board)) {
                                 socket.emit("draw", {message: "Draw! You both took damage."});
                                 game[opponent.name].socket.emit("draw", {message: "Draw! You both took damage."});
+                                opponent.health = opponent.health - 10;
+                                if (opponent.health <= 0) opponent.health = 1;
+                                attacker.health = attacker.health - 10;
+                                if (attacker.health <= 0) attacker.health = 1;
+
                             }
 
                             if (checkWinner(data.board)) {
@@ -954,9 +974,9 @@ function tictac(data, socket) {
                                     opponent.deaths = opponent.deaths + 1;
                                     attacker.kills = attacker.kills + 1;
                                     attackXP += 50;
-                                    msgA += "killed him/her.\nYou "
+                                    msgA += "killed him/her.\nYou ";
                                     msgD = "You took " + attack + " damage and were killed. Autch."
-                                } 
+                                }
                                 attacker.experience = attacker.experience + attackXP;
                                 opponent.experience = opponent.experience + 10;
                                 if (attacker.experience >= 350) {
@@ -977,7 +997,6 @@ function tictac(data, socket) {
 
                             }
                             else {
-                                console.log("Sending to the opponent");
                                 // Send new board to opponent
                                 if (game[opponent.name] !== undefined && game[opponent.name] !== null) {
                                     game[opponent.name].socket.emit("oppMove", {board: data.board})

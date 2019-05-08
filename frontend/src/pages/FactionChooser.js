@@ -14,18 +14,32 @@ class FactionChooser extends React.Component {
 
         this.state = {
             faction: "none",
-            render: false
+            render: false,
+            lonerWolfFraction: 0,
+            adventurerFraction: 0,
+            scavengerFraction: 0
         };
 
         this.confirm = this.confirm.bind(this);
     }
 
     alert() {
-        swal("Faction chooser", "Hold down on a faction until it is selected to choose your team.");
+        swal("Faction chooser", "Select a faction. The icons indicate how crowded a faction is. The more people" +
+            "join it, the weaker the players, so choose wisely!");
     }
 
     componentDidMount() {
-        this.alert();
+        this.context.emit("requestFractions");
+
+        this.context.on("factionFractions", (data) => {
+            this.alert();
+            this.setState({
+                lonerWolfFraction: data.lonerWolfFraction,
+                adventurerFraction: data.adventurerFraction,
+                scavengerFraction: data.scavengerFraction
+            })
+        });
+
         this.context.on("faction", (data) => {
             if (data.success) {
                 window.location.reload();
@@ -56,8 +70,8 @@ class FactionChooser extends React.Component {
     }
 
     renderText() {
-        if (this.state.faction == "none") {return "Select first"}
-        else if (this.state.faction == "loneWolf") {return "Confirm lone wolf"}
+        if (this.state.faction === "none") {return "Select first"}
+        else if (this.state.faction === "loneWolf") {return "Confirm lone wolf"}
         else {return "Confirm " + this.state.faction}
     }
 
@@ -89,9 +103,8 @@ class FactionChooser extends React.Component {
                 </div>
                 <button className="selectButton fadeIn1" onClick={this.confirm}>{this.renderText()}</button>
             </div>
-    )
+        )
     }
-
 
 }
 FactionChooser.contextType = SocketContext;
