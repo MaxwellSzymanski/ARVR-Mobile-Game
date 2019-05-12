@@ -234,7 +234,7 @@ def compareNewImage(sid, jsondata):
                 if is_match:
                     match_found = True
                     winning_players = checkForBestMatch(current_group["image_data"], first_img)
-                    print(winning_players)
+                    winning_players.append(player)
                     if len(winning_players) > 0:
                         setDataBaseImageInGroup(current_group['_id'], new_image_data)
                         jsondata = json.dumps({'winning_players': winning_players})
