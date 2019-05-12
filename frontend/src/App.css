@@ -456,23 +456,28 @@ p {
 
 .back {
     background-image: url(assets/buttons/back.png);
+    background-color: beige;
 }
 
 .next {
     background-image: url(assets/buttons/back.png);
     transform: rotateY(180deg);
+    background-color: beige;
 }
 
 .settings {
     background-image: url(assets/buttons/settings.png);
+    background-color: beige;
 }
 
 .camera {
     background-image: url(assets/buttons/camera.png);
+    background-color: beige;
 }
 
 .info {
     background-image: url(assets/buttons/info.png);
+    background-color: beige;
 }
 
 .left {

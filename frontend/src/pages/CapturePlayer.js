@@ -192,7 +192,7 @@ class CapturePlayer extends React.Component {
               <div className="cameraLoader"></div>
               <p>Please wait while we look for this player.</p>
           </div>}
-
+          <Link to="/map"><button className="smallButton back topLeftIcon fadeIn0"/></Link>
       </div>
     );
   }
