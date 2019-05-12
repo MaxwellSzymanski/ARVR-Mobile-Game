@@ -25,8 +25,11 @@ class EmailVerif extends React.Component {
         const that = this;
         this.context.on("verify", function (response) {
             if (response.success) {
-                swal("Your e-mail has been verified.", {icon: "success"});
-                that.setState({redirect: true});
+                swal("Your e-mail has been verified.", {icon: "success"}).then( () => {
+                    swal("Faction chooser", "Select a faction. The icons indicate how crowded a faction is. " +
+                        "The more people join it, the weaker the players, so choose wisely!");
+                    that.setState({redirect: true});
+                });
             } else {
                 swal("That code seems to be wrong. Please try again or let us send you another code.", {icon: "error"});
                 that.setState({firstTry: false, loading: false})

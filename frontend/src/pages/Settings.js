@@ -103,7 +103,9 @@ class Settings extends React.Component {
 
 
     showLicences() {
-        swal("Licences", "Flickity - GNU General Public License v3 \nFace-api.js - MIT Licence\nIcons used: 'https://icons8.com/license'")
+        swal("Licences", "Flickity - GNU General Public License v3\n" +
+            "Face-api.js - MIT License\n" +
+            "Icons8 icons - Creative Commons Attribution-NoDerivs 3.0 Unported license:\n    'https://icons8.com/license'")
     }
 
     render() {

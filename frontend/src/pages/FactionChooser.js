@@ -23,10 +23,13 @@ class FactionChooser extends React.Component {
         this.confirm = this.confirm.bind(this);
     }
 
-    alert() {
-        swal("Faction chooser", "Select a faction. The icons indicate how crowded a faction is. The more people" +
-            "join it, the weaker the players, so choose wisely!");
-    }
+    //      Dit wordt nu al opgeroepen vanuit de vorige pagina, dus als ge deze tekst nog zou willen aanpassen,
+    //          kijk dan in EmailVerif.js op lijn 29.
+    //
+    // alert() {
+    //     swal("Faction chooser", "Select a faction. The icons indicate how crowded a faction is. The more people " +
+    //         "join it, the weaker the players, so choose wisely!");
+    // }
 
     componentDidMount() {
         this.context.emit("requestFractions");

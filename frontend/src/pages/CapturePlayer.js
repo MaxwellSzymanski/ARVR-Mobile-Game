@@ -19,7 +19,8 @@ class CapturePlayer extends React.Component {
 
   state = {
     redirect : false,
-    calculating: false
+    calculating: false,
+    width: 0,
   };
 
   setRedirect = () => {
@@ -56,6 +57,11 @@ class CapturePlayer extends React.Component {
           //localStorage.setItem("fv", JSON.stringify(fv));
           this.context.emit('getFVMatch', JSON.stringify(fv));
       }
+  }
+
+  componentWillMount() {
+      window.addEventListener('resize', this.updateWindowDimensions);
+      this.updateWindowDimensions();
   }
 
   componentDidMount() {
@@ -126,6 +132,11 @@ class CapturePlayer extends React.Component {
 
   componentWillUnmount() {
     clearInterval(this.interval);
+    window.removeEventListener('resize', this.updateWindowDimensions);
+  }
+
+  updateWindowDimensions() {
+      this.setState({ width: window.innerWidth });
   }
 
   async getMatchingPlayerFromFV(results) {
@@ -163,7 +174,7 @@ class CapturePlayer extends React.Component {
       const videoConstraints = {
           facingMode: "environment"
       };
-
+      let size = this.state.width - 60;
     return (
       <div className="background">
         {this.renderRedirect()}
@@ -173,6 +184,7 @@ class CapturePlayer extends React.Component {
                   ref="webcam"
                   screenshotFormat="image/jpeg"
                   videoConstraints={videoConstraints}
+                  width={size}
               />
               <button className="smallButton camera" onClick={this.onTakePhoto}> </button>
           </div>}
