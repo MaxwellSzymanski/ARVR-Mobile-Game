@@ -785,7 +785,7 @@ function missionVote(data, socket) {
                         missionPlayers[key].socket.emit("rejected", {expiry: exp})
                     }
                 });
-                MissionGroup.findByIdAndRemove(data.groupId);
+                MissionGroup.findByIdAndRemove(mongoose.Types.ObjectId(data.groupId));
                 MissionGroup.find({}, "_id location").lean().exec( (error, array)=> {
                     if (error) throw error;
                     Object.keys(missionPlayers).forEach(function (key) {
