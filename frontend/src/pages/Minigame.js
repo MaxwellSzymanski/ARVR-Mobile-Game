@@ -51,10 +51,8 @@ class Minigame extends React.Component {
     }
 
     state = {
-        location: {
-            lat: 50.8632811,
-            lng: 4.6762872,
-        },
+        latitude: 50.8632811,
+        longitude: 4.6762872,
         zoom: 16,
         centerMap: [50.8632811, 4.6762872],
         showAlertBox: false,
@@ -79,8 +77,6 @@ class Minigame extends React.Component {
     }
 
     componentDidMount() {
-        this.setState({targetLocations: [{location:[50.863137, 4.683394], _id:2},
-                {location:[50.853137, 4.68334], _id: 5}]});
         this.context.emit("mission", {token:cookies.get('token')});
         this.context.on("mission", (data) => {
             this.setState({targetLocations: data});
@@ -273,7 +269,11 @@ class Minigame extends React.Component {
     }
 
     sendPhoto(dataUri){
-        this.context.emit("missionPhoto", {token: cookies.get('token'), photo: dataUri.toString('base64'), location: [this.state.location.lat, this.state.location.lng]} );
+        this.context.emit("missionPhoto", {
+            token: cookies.get('token'),
+            photo: dataUri.toString('base64'),
+            location: [this.state.location.lat, this.state.location.lng]
+        });
         // if (this.state.firstPicTaken) {
         //     this.setState({showAlertBox: false, firstPicAccepted: true});
         // } else {

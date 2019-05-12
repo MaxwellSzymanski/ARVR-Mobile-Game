@@ -649,6 +649,7 @@ function missionPhoto(data, socket) {
     if (!data.token || missionPlayers[data.token] === undefined || missionPlayers[data.token] === null)
         return;
     console.log("   * MISSION: new image -> emit to pyScript.");
+    console.log("              image taken at  " + data.location);
     const pyData = {
         image: data.photo,
         player_id: missionPlayers[data.token].name,
