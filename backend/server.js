@@ -6,8 +6,8 @@ const secret = require('./db/config.js');
 var frequency = 1000;
 
 const mongoose = require('mongoose');
-// mongoose.connect('mongodb://team12:mongoDBteam12@35.241.198.186:27017/userdb?authMechanism=SCRAM-SHA-1&authSource=userdb',  { useNewUrlParser: true });
-mongoose.connect('mongodb://13.95.120.117:27017/userdb',  { useNewUrlParser: true });
+mongoose.connect('mongodb://team12:mongoDBteam12@13.95.120.117:27017/userdb?authMechanism=SCRAM-SHA-1&authSource=userdb',  { useNewUrlParser: true });
+// mongoose.connect('mongodb://13.95.120.117:27017/userdb',  { useNewUrlParser: true });
 
 const User = require('./db/userModel.js');
 const MissionGroup = require('./db/missionModel.js').MissionGroup;
