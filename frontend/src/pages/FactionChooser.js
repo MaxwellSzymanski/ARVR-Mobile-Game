@@ -15,7 +15,7 @@ class FactionChooser extends React.Component {
         this.state = {
             faction: "none",
             render: false,
-            lonerWolfFraction: 0,
+            loneWolfFraction: 0,
             adventurerFraction: 0,
             scavengerFraction: 0
         };
@@ -34,7 +34,7 @@ class FactionChooser extends React.Component {
         this.context.on("factionFractions", (data) => {
             this.alert();
             this.setState({
-                lonerWolfFraction: data.lonerWolfFraction,
+                loneWolfFraction: data.loneWolfFraction,
                 adventurerFraction: data.adventurerFraction,
                 scavengerFraction: data.scavengerFraction
             })
