@@ -77,7 +77,7 @@ def createNewGroup(new_image_data, location):
     arr = [new_image_data,]
     id = mycol.insert_one({'location': location, 'image_data': arr})
     print("\n\n/=======================================\n|")
-    print("|\n|    No targets near => let players vote for new target")
+    print("|    No targets near => let players vote for new target")
     print("|\n\=======================================\n\n")
     return id
 
@@ -212,7 +212,7 @@ def compareNewImage(sid, jsondata):
     new_image_data = {"encoded_image": minigame_image, "player_id": player}
 
     groups = getDataBaseGroups()
-    print("number of groups:  " + str(groups.count()))
+    print("number of targets:  " + str(groups.count()))
     index = 0
     match_found = False
     close_to_existing_target = False
@@ -251,7 +251,7 @@ def compareNewImage(sid, jsondata):
 
         id = createNewGroup(new_image_data, location)
 
-        jsondata = json.dumps({'player_id': player, 'image': minigame_image, 'location': location, "group_id": id})
+        jsondata = json.dumps({'player_id': data["player_id"], 'image': data["image"], 'location': data["location"], "group_id": id})
         pyio.emit('newGroup', jsondata)
 
 
