@@ -649,7 +649,6 @@ function missionPhoto(data, socket) {
     if (!data.token || missionPlayers[data.token] === undefined || missionPlayers[data.token] === null)
         return;
     console.log("   * MISSION: new image -> emit to pyScript.");
-    console.log("              image taken at  " + data.location);
     const pyData = {
         image: data.photo,
         player_id: missionPlayers[data.token].name,
@@ -660,6 +659,7 @@ function missionPhoto(data, socket) {
 
 pythonSocket.on("newGroup", function (jsondata) {
     data = JSON.parse(jsondata);
+    console.log(" new group with id: " + data.group_id);
     const exp = new Date(new Date().getTime() + timeInterval);
     Object.keys(missionPlayers).forEach(function (key) {
         if (missionPlayers[key].name !== data.player_id) {
@@ -771,6 +771,8 @@ function groupImage(data, socket) {
 function missionVote(data, socket) {
     if (data.token) {
         if (missionPlayers[data.token] !== undefined && missionPlayers[data.token] !== null) {
+            console.log(missionPlayers[data.token].name + " voted "
+                    + data.vote + " on the new target " + data.groupId);
             if (!data.vote) {
                 currentPhoto = null;
                 voting = false;
