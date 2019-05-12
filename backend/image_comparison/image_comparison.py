@@ -49,23 +49,24 @@ def checkForBestMatch(image_data, file):
             best_match_rate = match_rate
             n -= 1
         if isMatch:
-            winning_players.append(unicodedata.normalize('NFKD', img_data["player_id"]).encode('ascii', 'ignore'))
             number_of_matches += 1
+            if img_data["player_id"] not in winning_players:
+                winning_players.append(unicodedata.normalize('NFKD', img_data["player_id"]).encode('ascii', 'ignore'))
         print(n)
         index += 1
     if n <= 0:
         print("\n\n/=======================================\n|")
         print("|    Best match rate     :  " + str(round(best_match_rate,2))) + "%"
-        print("|    total matches       :  " + str(number_of_matches) + "/" + str(len(image_data)))
+        print("|    total matches       :  " + str(number_of_matches) + " of " + str(len(image_data)))
         print("|    winning players     :  " + str(winning_players))
-        print("|\n|threshold of 33% matches reached! => uploaded picture added to the collection")
+        print("|\n|    threshold of 33% matches reached! => uploaded picture added to the collection")
         print("|\n\=======================================\n\n")
         winning_players.append(unicodedata.normalize('NFKD', image_data[best_index]["player_id"]).encode('ascii', 'ignore')) #Player with best match gets double the points
         return winning_players
     else:
         print("\n\n/=======================================\n|")
-        print("|    total matches       :  " + str(number_of_matches) + "/" + str(len(image_data)))
-        print("|    threshold of 33% matches NOT reached! => uploaded picture discarded")
+        print("|    total matches       :  " + str(number_of_matches) + " of " + str(len(image_data)))
+        print("|\n|    threshold of 33% matches NOT reached! => uploaded picture discarded")
         print("|\n\=======================================\n\n")
         return []
 
@@ -75,6 +76,9 @@ def createNewGroup(new_image_data, location):
     mycol = mydb["missiongroups"]
     arr = [new_image_data,]
     id = mycol.insert_one({'location': location, 'image_data': arr})
+    print("\n\n/=======================================\n|")
+    print("|\n|    No targets near => let players vote for new target")
+    print("|\n\=======================================\n\n")
     return id
 
 

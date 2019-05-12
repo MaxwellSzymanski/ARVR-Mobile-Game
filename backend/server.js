@@ -601,8 +601,7 @@ function fight(data, socket){
 const pythonPort = 5000;
 const pythonSocket = require('socket.io-client')('http://localhost:'+pythonPort);
 
-const range = 1000;                   // Players need to be within RANGE of te target in order to send a photo
-const missionList = [ [50.863137, 4.683394], [50.8632811, 4.6762872], ];
+const range = 1000;                   // Players need to be within RANGE of the target in order to send a photo
 let currentMission = 0;
 let missionPlayers = [];
 const timeInterval = 16 * 1000;       // in milliseconds
@@ -672,8 +671,6 @@ pythonSocket.on("newGroup", function (jsondata) {
         }
     })
 });
-
-// TODO handle votes
 
 pythonSocket.on("comparisonResult", function(jsondata) {
     console.log(jsondata);
@@ -752,23 +749,23 @@ function groupImage(data, socket) {
 //     }
 // }
 
-function secondPhoto(data, socket) {
-    console.log("   Second photo received!");
-    Object.keys(missionPlayers).forEach( function (key) {
-        missionPlayers[key].socket.emit("secondPhoto", {firstPhoto: currentPhoto.image, secondPhoto: data.photo})
-    });
-}
+// function secondPhoto(data, socket) {
+//     console.log("   Second photo received!");
+//     Object.keys(missionPlayers).forEach( function (key) {
+//         missionPlayers[key].socket.emit("secondPhoto", {firstPhoto: currentPhoto.image, secondPhoto: data.photo})
+//     });
+// }
 
-function photoAccepted(ID) {
-    console.log("  photoAccepted() ID:    " + ID);
-    if (currentPhoto !== null && currentPhotoID === ID) {
-        Object.keys(missionPlayers).forEach( function (key) {
-            missionPlayers[key].socket.emit("voteResult", {accepted: true })
-        });
-        firstPhotoAccepted = true;
-        voting = false;
-    }
-}
+// function photoAccepted(ID) {
+//     console.log("  photoAccepted() ID:    " + ID);
+//     if (currentPhoto !== null && currentPhotoID === ID) {
+//         Object.keys(missionPlayers).forEach( function (key) {
+//             missionPlayers[key].socket.emit("voteResult", {accepted: true })
+//         });
+//         firstPhotoAccepted = true;
+//         voting = false;
+//     }
+// }
 
 function missionVote(data, socket) {
     if (data.token) {
