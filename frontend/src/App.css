@@ -139,7 +139,7 @@ body {
 .background {
     width: 100%;
     background-color: #910F0F;
-    padding: 50px 10px 50px;
+    padding: 40px 10px 40px;
     text-align: center;
     height: 100vh;
 }
@@ -456,28 +456,28 @@ p {
 
 .back {
     background-image: url(assets/buttons/back.png);
-    background-color: beige;
+    background-color: antiquewhite;
 }
 
 .next {
     background-image: url(assets/buttons/back.png);
     transform: rotateY(180deg);
-    background-color: beige;
+    background-color: antiquewhite;
 }
 
 .settings {
     background-image: url(assets/buttons/settings.png);
-    background-color: beige;
+    background-color: antiquewhite;
 }
 
 .camera {
     background-image: url(assets/buttons/camera.png);
-    background-color: beige;
+    background-color: antiquewhite;
 }
 
 .info {
     background-image: url(assets/buttons/info.png);
-    background-color: beige;
+    background-color: antiquewhite;
 }
 
 .left {

@@ -176,14 +176,14 @@ img {
 
 .topRightIcon {
     position: absolute;
-    right: 50px;
-    top: 30px;
+    right: 40px;
+    top: 40px;
 }
 
 .topLeftIcon {
     position: absolute;
-    left: 50px;
-    top: 30px;
+    left: 40px;
+    top: 40px;
 }
 
 .xpBar {
