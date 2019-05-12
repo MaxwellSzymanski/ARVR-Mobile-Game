@@ -317,7 +317,7 @@ function calculateFractions(socket) {
         }
     );
     let total = scavenger + adventurer + loneWolf;
-    let loneWolfFraction = lonewolf/total;
+    let loneWolfFraction = loneWolf/total;
     let adventurerFraction = adventurer/total;
     let scavengerFraction = scavenger/total;
 
