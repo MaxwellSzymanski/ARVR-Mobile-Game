@@ -272,7 +272,7 @@ class Minigame extends React.Component {
         this.context.emit("missionPhoto", {
             token: cookies.get('token'),
             photo: dataUri.toString('base64'),
-            location: [this.state.location.lat, this.state.location.lng]
+            location: [this.state.latitude, this.state.longitude]
         });
         // if (this.state.firstPicTaken) {
         //     this.setState({showAlertBox: false, firstPicAccepted: true});
