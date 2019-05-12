@@ -8,7 +8,7 @@ import json
 import unicodedata
 import math
 #opencv version 3.2.4.16
-myclient = pymongo.MongoClient("mongodb://13.95.120.117:27017/")
+myclient = pymongo.MongoClient("mongodb://team12:mongoDBteam12@13.95.120.117:27017/userdb?authMechanism=SCRAM-SHA-1&authSource=userdb")
 mydb = myclient["userdb"]
 # create a Socket.IO server
 pyio = socketio.Server()
