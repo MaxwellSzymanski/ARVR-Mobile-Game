@@ -79,7 +79,7 @@ def createNewGroup(new_image_data, location):
     print("\n\n/=======================================\n|")
     print("|    No targets near => let players vote for new target")
     print("|\n\=======================================\n\n")
-    return id.inserted_id
+    return str(id.inserted_id)
 
 
 def setDataBaseImageInGroup(group_id, new_image_data):
