@@ -50,11 +50,11 @@ class ProfilePage extends React.Component {
                 faction: data.faction,
             });
         });
-        // this.context.on("photo", (data) => {
-        //     this.setState({
-        //         encodedPic: data.image
-        //     })
-        // });
+        this.context.on("photo", (data) => {
+            this.setState({
+                encodedPic: data.image
+            })
+        });
         this.context.on("message", (data) => {
             swal({text: data.message});
         });
