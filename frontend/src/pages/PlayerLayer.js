@@ -205,13 +205,9 @@ class PlayerLayer extends React.Component {
                             <Marker onClick={
                             () => playerLayer.showAlertBox(
                               <div>
-                              <p> {key}, accuracy: {player.accuracy} m</p>
+                              <p className="colorWhite"> {key}, accuracy: {player.accuracy} m</p>
                               <p>
-                                  <button onClick={() => playerLayer.sendSpecialSignal(idEnemy)}> Send signal
-                                  </button>
-                              </p>
-                              <p>
-                                  <button onClick={() => playerLayer.sendHandShakeSignal(id, idEnemy)}> Send
+                                  <button className="confirmButton wider" onClick={() => playerLayer.sendHandShakeSignal(id, idEnemy)}> Send
                                       handshake signal
                                   </button>
                               </p>
@@ -244,7 +240,7 @@ class PlayerLayer extends React.Component {
               () => this.showAlertBox(
                 <div>
                 <p className="textAccuracy">Accuracy: {playerLayer.state.accuracy} m</p>
-                <button className="findPlayers" onClick={playerLayer.showFindEnemyAlertBox.bind(playerLayer)}> Find other players </button>
+                <button className="confirmButton wider" onClick={playerLayer.showFindEnemyAlertBox.bind(playerLayer)}> Find other players </button>
                 </div>
               )
             } title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>

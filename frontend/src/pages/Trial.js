@@ -66,7 +66,7 @@ class Trial extends React.Component {
             borderRadius: '5px',
             boxShadow: '0 0 12px rgba(0,0,0,.14),0 12px 24px rgba(0,0,0,.28)',
             overflow: 'scroll',
-            maxWidth: '70vw',
+            maxWidth: '80vw',
             padding: '10px 20px'
         }
     };
