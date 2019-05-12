@@ -186,13 +186,13 @@ class CapturePlayer extends React.Component {
                   videoConstraints={videoConstraints}
                   width={size}
               />
-              <button className="smallButton camera" onClick={this.onTakePhoto}> </button>
+              <button className="smallButton antiquewhite camera" onClick={this.onTakePhoto}> </button>
           </div>}
           {this.state.calculating && <div className="polaroid">
               <div className="cameraLoader"></div>
               <p>Please wait while we look for this player.</p>
           </div>}
-          <Link to="/map"><button className="smallButton back topLeftIcon fadeIn0"/></Link>
+          <Link to="/map"><button className="smallButton back antiquewhite topLeftIcon fadeIn0"/></Link>
       </div>
     );
   }

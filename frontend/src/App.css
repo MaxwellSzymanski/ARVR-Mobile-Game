@@ -456,32 +456,31 @@ p {
 
 .back {
     background-image: url(assets/buttons/back.png);
-    background-color: antiquewhite;
 }
 
 .next {
     background-image: url(assets/buttons/back.png);
     transform: rotateY(180deg);
-    background-color: antiquewhite;
 }
 
 .settings {
     background-image: url(assets/buttons/settings.png);
-    background-color: antiquewhite;
 }
 
 .camera {
     background-image: url(assets/buttons/camera.png);
-    background-color: antiquewhite;
 }
 
 .info {
     background-image: url(assets/buttons/info.png);
-    background-color: antiquewhite;
 }
 
 .left {
     float: left;
+}
+
+.antiquewhite {
+    background-color: antiquewhite;
 }
 
 /* UI Buttons */

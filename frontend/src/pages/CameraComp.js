@@ -125,7 +125,7 @@ class CameraComp extends React.Component {
                   videoConstraints={videoConstraints}
                   width={size}
               /></div>
-              <button className="smallButton camera" onClick={this.onTakePhoto}> </button>
+              <button className="smallButton antiquewhite camera" onClick={this.onTakePhoto}> </button>
           </div>}
           {this.state.calculating && <div className="polaroid">
               <div className="cameraLoader"></div>
