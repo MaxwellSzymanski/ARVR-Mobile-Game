@@ -786,10 +786,6 @@ function missionVote(data, socket) {
                     }
                 });
                 const id = mongoose.Types.ObjectId(data.groupId);
-                console.log(id);
-                MissionGroup.findById(id).then(function (result) {
-                    console.log(result.location);
-                });
                 MissionGroup.findOneAndDelete({_id: id}, function (error, result) {
                     console.log("group with _id " + result._id + " removed");
                 });

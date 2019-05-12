@@ -82,7 +82,13 @@ class Minigame extends React.Component {
             this.setState({targetLocations: data});
         });
         this.context.on("missionPhoto", (data) => {
+            let locations = this.state.targetLocations;
+            locations.push({
+                _id: data.groupId,
+                location: data.location
+            });
             this.setState({
+                targetLocations: locations,
                 encodedPic: data.photo,
                 firstPicTaken: true,
                 groupId: data.groupId
@@ -133,6 +139,8 @@ class Minigame extends React.Component {
         let ply = data.player;
         if (ply === cookies.get('name'))
             ply = "you";
+        else
+            ply = "player " + ply;
         this.setState({encodedPic: data.image, imageCaptor: ply});
         this.showImage()
     }
@@ -141,7 +149,7 @@ class Minigame extends React.Component {
         let content = [];
         content.push(<p>Try to take a similar picture when you reach this location.</p>);
         content.push(<img src={this.state.encodedPic}/>);
-        content.push(<p>This picture was taken by player {this.state.imageCaptor}.</p>);
+        content.push(<p>This picture was taken by {this.state.imageCaptor}.</p>);
         this.showAlertBox(content);
     }
 
@@ -178,7 +186,6 @@ class Minigame extends React.Component {
             content.push(<p>Go to one of the target locations and take a similar photo.</p>);
         } else {
             content.push(<p>The photo is rejected!</p>);
-            content.push(<p>Go to the mission location and take a better photo.</p>);
         }
         this.showAlertBox(content)
     }
