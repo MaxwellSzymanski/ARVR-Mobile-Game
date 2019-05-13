@@ -99,6 +99,11 @@ body {
     background: #cccccc;
 }
 
+.indicator {
+    width: 25px;
+    padding-top: 5px;
+}
+
 @keyframes makeHigher {
     0% {
         height: 100px;

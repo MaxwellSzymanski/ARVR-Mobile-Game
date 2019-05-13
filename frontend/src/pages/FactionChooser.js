@@ -6,7 +6,10 @@ import ReactDOM from 'react-dom';
 import swal from '@sweetalert/with-react';
 import SocketContext from "../socketContext";
 import Cookies from 'universal-cookie';
+import gain from '../assets/icons/gain.png';
+import loss from '../assets/icons/loss.png';
 const cookies = new Cookies();
+
 
 class FactionChooser extends React.Component {
     constructor() {
@@ -21,6 +24,7 @@ class FactionChooser extends React.Component {
         };
 
         this.confirm = this.confirm.bind(this);
+        this.generateIcon = this.generateIcon.bind(this);
     }
 
     //      Dit wordt nu al opgeroepen vanuit de vorige pagina, dus als ge deze tekst nog zou willen aanpassen,
@@ -82,24 +86,46 @@ class FactionChooser extends React.Component {
         this.context.emit("faction", {token: cookies.get('token'), faction: this.state.faction})
     }
 
+    generateIcon(index) {
+        if (index === 1) {
+            if (this.state.scavengerFraction > this.state.adventurerFraction && this.state.scavengerFraction > this.state.loneWolfFraction)
+                return <img className="indicator" src={gain}/>
+            else if (this.state.scavengerFraction < this.state.adventurerFraction && this.state.scavengerFraction < this.state.loneWolfFraction)
+                return <img className="indicator" src={loss}/>
+        }
+        if (index === 2) {
+            if (this.state.loneWolfFraction > this.state.adventurerFraction && this.state.loneWolfFraction > this.state.scavengerFraction)
+                return <img className="indicator" src={gain}/>
+            else if (this.state.loneWolfFraction < this.state.adventurerFraction && this.state.loneWolfFraction < this.state.scavengerFraction)
+                return <img className="indicator" src={loss}/>
+        }
+
+        else {
+            if (this.state.adventurerFraction > this.state.loneWolfFraction && this.state.adventurerFraction > this.state.scavengerFraction)
+                return <img className="indicator" src={gain}/>
+            else if (this.state.adventurerFraction < this.state.loneWolfFraction && this.state.adventurerFraction < this.state.scavengerFraction)
+                return <img className="indicator" src={loss}/>
+        }
+    }
+
     render() {
         return (
             <div>
                 <h1 className="subTitle fadeIn0 unselectable">Choose your faction</h1>
                <div className="cell fadeIn1" onClick={() => this.selectFaction(1)}>
-                    <div className="header scavenger">Scavenger</div>
+                    <div className="header scavenger">Scavenger {this.generateIcon(1)}</div>
                     <div className="cardImage scavenger">
                         <h1 className="white unselectable"> Stamina reduces slower. </h1>
                     </div>
                 </div>
                 <div className="cell fadeIn2" onClick={() => this.selectFaction(2)}>
-                    <div className="header loneWolf unselectable">Lone Wolf</div>
+                    <div className="header loneWolf unselectable">Lone Wolf {this.generateIcon(2)}</div>
                     <div className="cardImage loneWolf">
                         <h1 className="white unselectable"> Increases chances of successful attacks. </h1>
                     </div>
                 </div>
                 <div className="cell fadeIn3" onClick={() => this.selectFaction(3)}>
-                    <div className="header adventurer unselectable">Adventurer</div>
+                    <div className="header adventurer unselectable">Adventurer {this.generateIcon(3)}</div>
                     <div className="cardImage adventurer">
                         <h1 className="white unselectable"> Gain attack and defence after battles.</h1>
                     </div>
