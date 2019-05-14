@@ -294,39 +294,40 @@ function newImage(data) {
     })
 }
 
-function calculateFractions(socket) {
+async function calculateFractions(socket) {
     var loneWolf = 0;
     var adventurer = 0;
     var scavenger = 0;
     var query = {faction: "loneWolf"};
-    User.count(query).then(
+    User.countDocuments(query).then(
         function (result) {
             loneWolf = result;
-        }
-    );
-    query = {faction: "adventurer"};
-    User.count(query).then(
-        function (result) {
-            adventurer = result;
-        }
-    );
-    query = {faction: "scavenger"};
-    User.count(query).then(
-        function (result) {
-            scavenger = result;
-        }
-    );
-    let total = scavenger + adventurer + loneWolf;
-    let loneWolfFraction = loneWolf/total;
-    let adventurerFraction = adventurer/total;
-    let scavengerFraction = scavenger/total;
+            query = {faction: "adventurer"};
+            User.countDocuments(query).then(
+                function (result) {
+                    adventurer = result;
+                    query = {faction: "scavenger"};
+                    User.countDocuments(query).then(
+                        function (result) {
+                            scavenger = result;
+                            let total = scavenger + adventurer + loneWolf;
+                            let loneWolfFraction = loneWolf/total;
+                            let adventurerFraction = adventurer/total;
+                            let scavengerFraction = scavenger/total;
 
-    socket.emit("factionFractions", {
-        loneWolfFraction: loneWolfFraction,
-        adventurerFraction: adventurerFraction,
-        scavengerFraction: scavengerFraction
-    });
+                            console.log("total:  " + total + "      loneWolf  :  " + loneWolfFraction);
 
+                            socket.emit("factionFractions", {
+                                loneWolfFraction: loneWolfFraction,
+                                adventurerFraction: adventurerFraction,
+                                scavengerFraction: scavengerFraction
+                            });
+                        }
+                    );
+                }
+            );
+        }
+    );
 }
 
 
@@ -961,11 +962,14 @@ function tictac(data, socket) {
                     return;
                 }
                 jwt.verify(data.enemy, secret, async function (err, enemy) {
+                    let name = data.enemy;
                     if (err) {
                         console.log("(tictac)         invalid defender token");
-                        return;
+                        // return;
+                    } else {
+                        name = enemy.name;
                     }
-                    User.findOne({name: enemy.name}).then(
+                    User.findOne({name: name}).then(
                         async function (opponent) {
                             if (!opponent) {
                                 console.log("(tictac)           opponent not found.");
