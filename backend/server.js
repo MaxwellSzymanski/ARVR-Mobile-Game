@@ -302,33 +302,32 @@ async function calculateFractions(socket) {
     User.countDocuments(query).then(
         function (result) {
             loneWolf = result;
+            query = {faction: "adventurer"};
+            User.countDocuments(query).then(
+                function (result) {
+                    adventurer = result;
+                    query = {faction: "scavenger"};
+                    User.countDocuments(query).then(
+                        function (result) {
+                            scavenger = result;
+                            let total = scavenger + adventurer + loneWolf;
+                            let loneWolfFraction = loneWolf/total;
+                            let adventurerFraction = adventurer/total;
+                            let scavengerFraction = scavenger/total;
+
+                            console.log("total:  " + total + "      loneWolf  :  " + loneWolfFraction);
+
+                            socket.emit("factionFractions", {
+                                loneWolfFraction: loneWolfFraction,
+                                adventurerFraction: adventurerFraction,
+                                scavengerFraction: scavengerFraction
+                            });
+                        }
+                    );
+                }
+            );
         }
     );
-    query = {faction: "adventurer"};
-    User.countDocuments(query).then(
-        function (result) {
-            adventurer = result;
-        }
-    );
-    query = {faction: "scavenger"};
-    User.countDocuments(query).then(
-        function (result) {
-            scavenger = result;
-        }
-    );
-    let total = scavenger + adventurer + loneWolf;
-    let loneWolfFraction = loneWolf/total;
-    let adventurerFraction = adventurer/total;
-    let scavengerFraction = scavenger/total;
-
-    console.log("total:  " + total + "      loneWolf  :  " + loneWolfFraction);
-
-    socket.emit("factionFractions", {
-        loneWolfFraction: loneWolfFraction,
-        adventurerFraction: adventurerFraction,
-        scavengerFraction: scavengerFraction
-    });
-
 }
 
 
