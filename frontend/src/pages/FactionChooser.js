@@ -39,7 +39,6 @@ class FactionChooser extends React.Component {
         this.context.emit("requestFractions");
 
         this.context.on("factionFractions", (data) => {
-            this.alert();
             this.setState({
                 loneWolfFraction: data.loneWolfFraction,
                 adventurerFraction: data.adventurerFraction,
