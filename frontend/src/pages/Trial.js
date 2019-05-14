@@ -216,7 +216,6 @@ class Trial extends React.Component {
             </div>
             { this.state.displayMenu ? (
             <ul>
-           <li><Link to="/capturePlayer"><div id="buttonsDiv"><button id="capturePButton"></button></div></Link></li>
            <li><Link to="/profilePage"><div id="buttonsDiv"><button id="profileButton"></button></div></Link></li>
            <li><div id="buttonsDiv"><button onClick={()=>this.handleShow()} id="questionButton"></button></div></li>
            <li><Link to="/settings"><div id="buttonsDiv"><button id="settingsButton"></button></div></Link></li>

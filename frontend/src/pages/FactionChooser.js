@@ -27,14 +27,6 @@ class FactionChooser extends React.Component {
         this.generateIcon = this.generateIcon.bind(this);
     }
 
-    //      Dit wordt nu al opgeroepen vanuit de vorige pagina, dus als ge deze tekst nog zou willen aanpassen,
-    //          kijk dan in EmailVerif.js op lijn 29.
-    //
-    // alert() {
-    //     swal("Faction chooser", "Select a faction. The icons indicate how crowded a faction is. The more people " +
-    //         "join it, the weaker the players, so choose wisely!");
-    // }
-
     componentDidMount() {
         this.context.emit("requestFractions");
 
@@ -73,6 +65,7 @@ class FactionChooser extends React.Component {
                 });
                 break;
         }
+        alert("Lonewolf: " + this.state.loneWolfFraction + "\nScavenger: " + this.state.scavengerFraction + "\nAdventurer: " + this.state.adventurerFraction);
     }
 
     renderText() {
