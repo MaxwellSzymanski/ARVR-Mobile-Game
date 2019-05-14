@@ -363,7 +363,7 @@ function stats(data, socket) {
             return;
         } else if (token.login)
             return;
-        User.findOne({name: token.enemy}).then(
+        User.findOne({name: token.name}).then(
             function (enemy) {
                 if (enemy === null) {
                     console.log("(stats)         No enemy found");
