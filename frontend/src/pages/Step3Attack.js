@@ -16,7 +16,7 @@ class Step3 extends Component {
       <div width="100vh" id="gifDiv">
       <p align="center" id="gif3">
       </p>
-      </div><p id="stepsText">instructions for step 3</p>
+      </div><p id="stepsText">Fleeing makes you take damage, so beware of that! When you lose, you get to choose a new faction.</p>
       </div>
       </div>
     );

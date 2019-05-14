@@ -16,7 +16,7 @@ class Step2 extends Component {
       <div width="100vh" id="gifDiv">
       <p align="center" id="gif2">
       </p>
-      </div><p id="stepsText">Instructions for step 2</p>
+      </div><p id="stepsText">Gain achievements by killing more players and become the best player of your faction.</p>
       </div>
       </div>
     );

@@ -17,7 +17,7 @@ class Step1Attack extends Component {
       <p align="center" id="gif1">
       </p>
       </div>
-      <p id="stepsText">Instructions for step 1</p>
+      <p id="stepsText">Play a game of tic-tac-toe to win against the opponent. Note that your stamina and motivation affect the damage you inflict.</p>
       </div>
       </div>
     );

@@ -101,9 +101,9 @@ body {
     top : -100px;
     height : 140px;
     width : 140px;
-    background-size: 100% 100%;
+    background-size: cover;
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: 50% 50%;
     border-radius: 15px;
     margin: 15px auto;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
