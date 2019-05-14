@@ -36,7 +36,6 @@ class FactionChooser extends React.Component {
                 adventurerFraction: data.adventurerFraction,
                 scavengerFraction: data.scavengerFraction
             });
-            alert("Lonewolf: " + this.state.loneWolfFraction + "\nScavenger: " + this.state.scavengerFraction + "\nAdventurer: " + this.state.adventurerFraction);
         });
 
         this.context.on("faction", (data) => {
