@@ -23,7 +23,8 @@ class TicTacToe extends React.Component {
        ],
        turn: 'x',
        ownIcon: '',
-       redirect: false
+       redirect: false,
+       redirectFaction: false
      };
 
     this.updateBoard = this.updateBoard.bind(this);
@@ -57,8 +58,14 @@ class TicTacToe extends React.Component {
       cookies.set('attackToken', false);
       cookies.set('initiatedTicTac', false);
       swal({title: 'You lose!', icon: 'error', text: data.message, confirm: true})
-          .then((value) => {
-            this.setState({redirect: true})
+          .then(() => {
+            if (data.dead) {
+              this.setState({redirectFaction: true})
+            }
+            else {
+              this.setState({redirect: true})
+            }
+
           });
     });
 
@@ -117,6 +124,10 @@ class TicTacToe extends React.Component {
     if (this.state.redirect) {return <Redirect to="/map" />;}
   };
 
+  renderRedirectDied = () => {
+    if (this.state.redirectFaction) {return <Redirect to="/factionChooser" />;}
+  };
+
   getTurn() {
     if (this.state.ownIcon === this.state.turn) return "Your";
     return "Opponents";
@@ -127,6 +138,7 @@ class TicTacToe extends React.Component {
     return (
         <div>
           {this.renderRedirect()}
+          {this.renderRedirectDied()}
       <div className= "container">
         <div id="menu">
           <div id="title"><h1 id="titleText">Tic-Tac-Toe</h1></div>
