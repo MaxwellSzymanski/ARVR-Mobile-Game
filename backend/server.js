@@ -949,7 +949,6 @@ function askToTictac(data, socket) {
 function tictac(data, socket) {
     if (!data.enemy || !data.token)
         return;
-    console.log("1-Hier");
     jwt.verify(data.token, secret, async function (err, token) {
         if (err) {
             console.log("(tictac)         invalid token");
