@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="62846d24-a773-43e7-bd6f-fcd39c23315b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/BattlePage.css" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/BattlePage.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/Step1Attack.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/Step1Attack.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/Step2Attack.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/Step2Attack.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/Step3Attack.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/Step3Attack.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/pages/profilePage.css" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/pages/profilePage.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -22,8 +18,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3891">
-              <caret line="620" column="21" selection-start-line="620" selection-start-column="9" selection-end-line="620" selection-end-column="21" />
+            <state relative-caret-position="9315">
+              <caret line="621" column="21" selection-start-line="621" selection-start-column="21" selection-end-line="621" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -121,7 +117,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24947146" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -155,8 +150,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3891">
-          <caret line="620" column="21" selection-start-line="620" selection-start-column="9" selection-end-line="620" selection-end-column="21" />
+        <state relative-caret-position="9315">
+          <caret line="621" column="21" selection-start-line="621" selection-start-column="21" selection-end-line="621" selection-end-column="21" />
         </state>
       </provider>
     </entry>
