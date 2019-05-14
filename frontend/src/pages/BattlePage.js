@@ -51,6 +51,7 @@ class BattlePage extends React.Component {
         this.attack = this.attack.bind(this);
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.generateProbabilities = this.generateProbabilities.bind(this);
           }
 
     componentDidMount() {
@@ -183,6 +184,12 @@ class BattlePage extends React.Component {
         if (this.state.redirect) {return <Redirect to="/ticTacToe" />;}
     };
 
+
+    generateProbabilities() {
+        return Math.floor(Math.random() * 20 + 80;)
+    }
+
+
     handleClose() {
         this.setState({ show: false });
     }
@@ -222,7 +229,7 @@ class BattlePage extends React.Component {
 
                     <div className="attackContent">
                         <h3 className="bSuccess">Attack success</h3>
-                        <h3 className="bPercent">{this.state.probability}%</h3>
+                        <h3 className="bPercent">{this.generateProbabilities()}%</h3>
                     </div>
 
                     <div className="attributes">
