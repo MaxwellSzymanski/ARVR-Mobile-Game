@@ -299,19 +299,19 @@ function calculateFractions(socket) {
     var adventurer = 0;
     var scavenger = 0;
     var query = {faction: "loneWolf"};
-    User.count(query).then(
+    User.countDocuments(query).then(
         function (result) {
             loneWolf = result;
         }
     );
     query = {faction: "adventurer"};
-    User.count(query).then(
+    User.countDocuments(query).then(
         function (result) {
             adventurer = result;
         }
     );
     query = {faction: "scavenger"};
-    User.count(query).then(
+    User.countDocuments(query).then(
         function (result) {
             scavenger = result;
         }
@@ -320,6 +320,8 @@ function calculateFractions(socket) {
     let loneWolfFraction = loneWolf/total;
     let adventurerFraction = adventurer/total;
     let scavengerFraction = scavenger/total;
+
+    console.log("total:  " + total + "      loneWolf  :  " + loneWolfFraction);
 
     socket.emit("factionFractions", {
         loneWolfFraction: loneWolfFraction,
