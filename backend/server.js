@@ -294,7 +294,7 @@ function newImage(data) {
     })
 }
 
-function calculateFractions(socket) {
+async function calculateFractions(socket) {
     var loneWolf = 0;
     var adventurer = 0;
     var scavenger = 0;
