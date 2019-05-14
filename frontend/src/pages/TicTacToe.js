@@ -115,7 +115,6 @@ class TicTacToe extends React.Component {
 
     let attackToken = cookies.get("attackToken");
 
-
     if  (this.state.gameBoard[loc] === 'x' || this.state.gameBoard[loc] === 'o' || this.state.winner) {
       //Invalid move
       return;

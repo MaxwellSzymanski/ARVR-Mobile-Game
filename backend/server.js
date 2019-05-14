@@ -961,11 +961,14 @@ function tictac(data, socket) {
                     return;
                 }
                 jwt.verify(data.enemy, secret, async function (err, enemy) {
+                    let name = data.enemy;
                     if (err) {
                         console.log("(tictac)         invalid defender token");
-                        return;
+                        // return;
+                    } else {
+                        name = enemy.name;
                     }
-                    User.findOne({name: enemy.name}).then(
+                    User.findOne({name: name}).then(
                         async function (opponent) {
                             if (!opponent) {
                                 console.log("(tictac)           opponent not found.");
