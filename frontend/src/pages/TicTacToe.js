@@ -101,6 +101,10 @@ class TicTacToe extends React.Component {
   }
 
   updateBoard(loc, player) {
+    if("vibrate" in window.navigator)
+    {navigator.vibrate(100);}
+    else
+    {console.log("Your browser doesn't support vibration API");}
     cookies.set("initiatedTicTac", false);
     // For attack
     // this.context.emit("fight", {token: cookies.get('token'), enemy: cookies.get("attackToken")});
