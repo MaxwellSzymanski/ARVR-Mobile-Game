@@ -788,13 +788,14 @@ function missionVote(data, socket) {
                 const id = mongoose.Types.ObjectId(data.groupId);
                 MissionGroup.findOneAndDelete({_id: id}, function (error, result) {
                     console.log("group with _id " + result._id + " removed");
-                });
-                MissionGroup.find({}, "_id location").lean().exec( (error, array)=> {
-                    if (error) throw error;
-                    Object.keys(missionPlayers).forEach(function (key) {
-                        missionPlayers[key].socket.emit("mission", array)
+                    MissionGroup.find({}, "_id location").lean().exec( (error, array)=> {
+                        if (error) throw error;
+                        Object.keys(missionPlayers).forEach(function (key) {
+                            missionPlayers[key].socket.emit("mission", array)
+                        });
                     });
                 });
+
 
             }
         }
