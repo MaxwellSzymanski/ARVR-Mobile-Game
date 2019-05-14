@@ -186,7 +186,7 @@ class BattlePage extends React.Component {
 
 
     generateProbabilities() {
-        return Math.floor(Math.random() * 20 + 80;)
+        return Math.floor(Math.random() * 20 + 80);
     }
 
 
