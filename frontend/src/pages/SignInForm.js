@@ -51,11 +51,9 @@ class SignInForm extends React.Component {
         let target = e.target;
         let value = target.type === 'checkbox' ? target.checked : target.value;
         let name = target.name;
-
         this.setState({
             [name]: value
         });
-
     }
 
     async handleSubmit(e) {
