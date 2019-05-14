@@ -89,6 +89,7 @@ class App extends Component {
                             <AuthRoute exact path="/battlePage" component={BattlePage} redirectTo="/sign-in" authenticated={this.state.verified} />
                             <AuthRoute exact path="/changePicture" component={ChangePicture} redirectTo="/sign-in" authenticated={this.state.verified} />
                             <AuthRoute exact path="/ticTacToe" component={TicTacToe} redirectTo="/sign-in" authenticated={this.state.verified} />
+                            <AuthRoute exact path="/factionChooserPath" component={FactionChooser} redirectTo="/sign-in" authenticated={this.state.verified}/>
 
                             <Route path="*" component={NotFound} />
                         </Switch>

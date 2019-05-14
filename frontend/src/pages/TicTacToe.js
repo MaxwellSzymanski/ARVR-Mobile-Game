@@ -22,7 +22,7 @@ class TicTacToe extends React.Component {
          ' ', ' ', ' '
        ],
        turn: 'x',
-       ownIcon: '',
+       ownIcon: 'x',
        redirect: false,
        redirectFaction: false
      };
@@ -84,7 +84,7 @@ class TicTacToe extends React.Component {
       swal({title: 'You win!', icon: 'success', text: data.message, confirm: true})
           .then((value) => {
             if (data.kills % 10 === 0 || data.kills === 1) {
-              swal({title: 'Achievement unlocked!', icon: 'success', text: "You killed" + data.kills + "people in total", confirm: true})
+              swal({title: 'Achievement unlocked!', icon: 'success', text: "You killed " + data.kills + " people in total.", confirm: true})
                   .then((value) => {
                     this.setState({redirect: true})
                   });
@@ -92,7 +92,6 @@ class TicTacToe extends React.Component {
             else {
               this.setState({redirect: true})
             }
-
           });
     });
   }
@@ -134,7 +133,7 @@ class TicTacToe extends React.Component {
   };
 
   renderRedirectDied = () => {
-    if (this.state.redirectFaction) {return <Redirect to="/factionChooser" />;}
+    if (this.state.redirectFaction) {return <Redirect to="/factionChooserPath" />;}
   };
 
   getTurn() {
