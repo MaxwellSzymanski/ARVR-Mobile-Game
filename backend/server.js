@@ -331,6 +331,8 @@ function calculateFractions(socket) {
 
 
 function stats(data, socket) {
+    console.log("\nstats, data:\n");
+    console.log(data);
     if (!data.token) {
         console.log("(stats)     no token.");
         return;
@@ -341,7 +343,7 @@ function stats(data, socket) {
             return;
         } else if (!token.login)
             return;
-        User.findById(token.id).then(
+        User.findOne({name: token.name}).then(
             function (user) {
                 if (user === null) {
                     console.log("(stats)         No user found");
@@ -351,13 +353,17 @@ function stats(data, socket) {
                 }
             });
     });
-    jwt.verify(data.token, secret, async function(err, token) {
+    if (!data.enemy) {
+        console.log("(stats)     no enemy token.");
+        return;
+    }
+    jwt.verify(data.enemy, secret, async function(err, token) {
         if (err) {
             console.log("(stats)         invalid enemy token");
             return;
         } else if (token.login)
             return;
-        User.findOne({name: token.enemy}).then(
+        User.findOne({name: token.name}).then(
             function (enemy) {
                 if (enemy === null) {
                     console.log("(stats)         No enemy found");
