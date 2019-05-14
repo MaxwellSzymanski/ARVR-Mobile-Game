@@ -83,7 +83,16 @@ class TicTacToe extends React.Component {
       cookies.set('initiatedTicTac', false);
       swal({title: 'You win!', icon: 'success', text: data.message, confirm: true})
           .then((value) => {
-            this.setState({redirect: true})
+            if (data.kills % 10 === 0 || data.kills === 1) {
+              swal({title: 'Achievement unlocked!', icon: 'success', text: "You killed" + data.kills + "people in total", confirm: true})
+                  .then((value) => {
+                    this.setState({redirect: true})
+                  });
+            }
+            else {
+              this.setState({redirect: true})
+            }
+
           });
     });
   }
