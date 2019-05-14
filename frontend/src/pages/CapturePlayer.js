@@ -72,8 +72,8 @@ class CapturePlayer extends React.Component {
         if (capturedPlayer === null){
             this.setState({calculating:false});
             swal({
-              title: "Unkown Person",
-              text: "The Person in the photo is not a Game of Wolves player.\nSure you followed game protocol?",
+              title: "Unkown person",
+              text: "This is not player " + cookies.get("enemy") + ".\nSure you followed game protocol?",
               icon: "warning",
               button: "Try again!",
           });

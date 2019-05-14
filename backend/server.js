@@ -351,7 +351,13 @@ function stats(data, socket) {
                 }
             });
     });
-        User.findOne({name: data.enemy}).then(
+    jwt.verify(data.token, secret, async function(err, token) {
+        if (err) {
+            console.log("(stats)         invalid enemy token");
+            return;
+        } else if (token.login)
+            return;
+        User.findOne({name: token.enemy}).then(
             function (enemy) {
                 if (enemy === null) {
                     console.log("(stats)         No enemy found");
@@ -361,6 +367,7 @@ function stats(data, socket) {
                 }
             }
         )
+    });
 }
 
 let game = {};
