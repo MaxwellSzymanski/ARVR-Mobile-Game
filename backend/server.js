@@ -79,9 +79,9 @@ const server = https.createServer(https_options, async function (req, res) {
                 console.log(" ----------------------- \n\n\n");
                 res.end();
                 break;
-    }
-    // console.log("\n");
-});
+        }
+        // console.log("\n");
+    });
 }).listen(port);
 console.log("\n\n    Server listening on localhost:" + port + "\n\n");
 
@@ -109,15 +109,15 @@ io.sockets.on('connection', function (socket) {
     socket.on('getFVMatch', async (data) => {
         getFeatureVectorsFromDB( async function(result) {
             let match = await getFVMatch(data, result);
-			socket.emit('sentFVMatch', match);
+            socket.emit('sentFVMatch', match);
         })
     });
-	socket.on('getStatsById', (id) => {
+    socket.on('getStatsById', (id) => {
         getStatsById(id, socket) });
-	socket.on('getFVById', (id) => {
+    socket.on('getFVById', (id) => {
         getFVById(id, socket) });
-	socket.on('newImage', (data) => {
-         });
+    socket.on('newImage', (data) => {
+    });
     socket.on('addToJSON', (json, callback) => {
         fs.writeFile('testFeatureVectors.json', json, 'utf8', callback);
     });
@@ -171,9 +171,9 @@ function verifyEmail(data, socket) {
         } else {
             User.findById(token.id).then(
                 async function(user) {
-                const result = await user.verify(data.code);
-                socket.emit("verify", {success: result});
-            });
+                    const result = await user.verify(data.code);
+                    socket.emit("verify", {success: result});
+                });
         }
     })
 }
@@ -188,7 +188,7 @@ function newMail(data) {
             User.findById(token.id).then(
                 async function(user) {
                     user.sendVerifMail();
-            });
+                });
         }
     })
 }
@@ -331,8 +331,6 @@ function calculateFractions(socket) {
 
 
 function stats(data, socket) {
-    console.log("\nstats, data:\n");
-    console.log(data);
     if (!data.token) {
         console.log("(stats)     no token.");
         return;
@@ -483,8 +481,8 @@ function verifyJWT(data, socket) {
                 socket.emit("jwt", {
                     loggedIn: jwtValid,
                     verified: emailVerified
+                });
             });
-        });
     });
 }
 
@@ -513,13 +511,13 @@ var names;
 // }
 
 async function getStatsById(id, socket) {
-  User.findById(id).exec( function(error, result) {
-      if (error) throw error;
-      if (result !== null) {
-          socket.emit('sentStatsById', result.getEnemyData());
-          socket.emit('enemyphoto', result.image);
-      }
-  });
+    User.findById(id).exec( function(error, result) {
+        if (error) throw error;
+        if (result !== null) {
+            socket.emit('sentStatsById', result.getEnemyData());
+            socket.emit('enemyphoto', result.image);
+        }
+    });
 }
 
 async function getFVById(data, socket) {
@@ -535,15 +533,15 @@ async function getFVById(data, socket) {
                         socket.emit('sentFVById', user.featureVector);
                     }
                 });
-		}
-	})
+        }
+    })
 }
 
 async function getFeatureVectorsFromDB(callBack) {
-  User.find( {}, 'name featureVector').lean().exec( function(error, array) {
-      if (error) throw error;
-      return callBack(array);
-  });
+    User.find( {}, 'name featureVector').lean().exec( function(error, array) {
+        if (error) throw error;
+        return callBack(array);
+    });
 }
 
 
@@ -701,13 +699,13 @@ async function getFVMatch(data, results) {
 }
 
 async function euclideanDistance(arr1, arr2) {
-	if (arr1.length !== arr2.length)
-		throw new Error('euclideanDistance: arr1.length !== arr2.length');
-	var desc1 = Array.from(arr1);
-	var desc2 = Array.from(arr2);
-	return Math.sqrt(desc1
-		.map(function (val, i) { return val - desc2[i]; })
-		.reduce(function (res, diff) { return res + Math.pow(diff, 2); }, 0));
+    if (arr1.length !== arr2.length)
+        throw new Error('euclideanDistance: arr1.length !== arr2.length');
+    var desc1 = Array.from(arr1);
+    var desc2 = Array.from(arr2);
+    return Math.sqrt(desc1
+        .map(function (val, i) { return val - desc2[i]; })
+        .reduce(function (res, diff) { return res + Math.pow(diff, 2); }, 0));
 }
 // ============================================================================
 
@@ -740,29 +738,29 @@ function miss(data, socket) {
 function calculateProbability(data, socket) {
     if (data.token) {
         jwt.verify(data.token, secret, async function(err, token) {
-            if (err) {
-                console.log("(prob)           invalid token");
-                return;
-            }
-            User.findById(token.id).then(
-                async function (player) {
-                    if (player === null) {
-                        console.log("(prob)             player not found.");
-                        return;
-                    }
-                    const fatigue = calculateFatigue(player.health, player.level);
-                    const stamina = calculateFatigue(player.health, player.level);
-                    const motivation = calculateFatigue(player.kills, player.deaths, player.experience);
-                    const prob = Math.max((0.33 * fatigue + 0.33 * stamina + 0.33 * motivation), 0.30);
-                    socket.emit("probData", {
-                        probability: prob,
-                        fatigue: fatigue,
-                        motivation: motivation,
-                        stamina: stamina
-                    })
+                if (err) {
+                    console.log("(prob)           invalid token");
+                    return;
                 }
-            )
-        }
+                User.findById(token.id).then(
+                    async function (player) {
+                        if (player === null) {
+                            console.log("(prob)             player not found.");
+                            return;
+                        }
+                        const fatigue = calculateFatigue(player.health, player.level);
+                        const stamina = calculateFatigue(player.health, player.level);
+                        const motivation = calculateFatigue(player.kills, player.deaths, player.experience);
+                        const prob = Math.max((0.33 * fatigue + 0.33 * stamina + 0.33 * motivation), 0.30);
+                        socket.emit("probData", {
+                            probability: prob,
+                            fatigue: fatigue,
+                            motivation: motivation,
+                            stamina: stamina
+                        })
+                    }
+                )
+            }
         )
     }
 }
@@ -879,13 +877,13 @@ function initTictac(data, socket) {
                     console.log("(initTictac)           attacker not found.");
                     return;
                 }
-                //jwt.verify(data.enemy, secret, async function (err, token) {
+                jwt.verify(data.enemy, secret, async function (err, enemy) {
                     if (err) {
                         console.log(data.enemy);
                         console.log("(initTictac)         invalid defender token");
                         //return;
                     }
-                    User.findOne({name: data.enemy}).then(
+                    User.findOne({name: enemy.name}).then(
                         async function (enemy) {
                             if (!enemy) {
                                 console.log("(initTictac)           defender not found.");
@@ -904,7 +902,7 @@ function initTictac(data, socket) {
                             }
                         }
                     )
-                //})
+                })
             })
     })
 }
@@ -917,28 +915,34 @@ function askToTictac(data, socket) {
             console.log("(askToTictac)         invalid token");
             return;
         }
-        User.findById(token.id).then(
-            async function (attacker) {
-                if (attacker === null) {
-                    console.log("(askToTictac)           attacker not found.");
-                    return;
-                }
-                User.findOne({name: data.enemy}).then(
-                    async function (opponent) {
-                        if (!opponent) {
-                            console.log("(askToTictac)           opponent not found.");
-                            return;
-                        }
-                        else {
-                            // Send new board to opponent
-                            if (game[opponent.name] !== undefined && game[opponent.name] !== null) {
-                                game[opponent.name].socket.emit("goToTicTac", {oppId: opponent.name})
+        jwt.verify(data.enemy, secret, async function (err, enemy) {
+            if (err) {
+                console.log("(askToTictac)         invalid enemy token");
+                return;
+            }
+            User.findById(token.id).then(
+                async function (attacker) {
+                    if (attacker === null) {
+                        console.log("(askToTictac)           attacker not found.");
+                        return;
+                    }
+                    User.findOne({name: enemy.name}).then(
+                        async function (opponent) {
+                            if (!opponent) {
+                                console.log("(askToTictac)           opponent not found.");
+                                return;
+                            }
+                            else {
+                                // Send new board to opponent
+                                if (game[opponent.name] !== undefined && game[opponent.name] !== null) {
+                                    game[opponent.name].socket.emit("goToTicTac", {oppId: opponent.name})
+                                }
                             }
                         }
-                    }
-                )
-                //})
-            })
+                    )
+                    //})
+                });
+        });
     })
 }
 
@@ -957,12 +961,12 @@ function tictac(data, socket) {
                     console.log("(tictac)           attacker not found.");
                     return;
                 }
-                //jwt.verify(data.enemy, secret, async function (err, token) {
+                jwt.verify(data.enemy, secret, async function (err, enemy) {
                     if (err) {
                         console.log("(tictac)         invalid defender token");
                         return;
                     }
-                    User.findOne({name: data.enemy}).then(
+                    User.findOne({name: enemy.name}).then(
                         async function (opponent) {
                             if (!opponent) {
                                 console.log("(tictac)           opponent not found.");
@@ -1023,7 +1027,7 @@ function tictac(data, socket) {
                             }
                         }
                     )
-                //})
+                })
             })
     })
 }
