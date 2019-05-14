@@ -65,6 +65,7 @@ class FactionChooser extends React.Component {
                 });
                 break;
         }
+        alert("Lonewolf: " + this.state.loneWolfFraction + "\nScavenger: " + this.state.scavengerFraction + "\nAdventurer: " + this.state.adventurerFraction);
     }
 
     renderText() {

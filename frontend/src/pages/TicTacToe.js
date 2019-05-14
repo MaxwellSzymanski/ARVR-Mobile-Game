@@ -60,7 +60,6 @@ class TicTacToe extends React.Component {
       swal({title: 'You lose!', icon: 'error', text: data.message, confirm: true})
           .then(() => {
             if (data.dead) {
-              alert("Dead")
               this.setState({redirectFaction: true})
             }
             else {
