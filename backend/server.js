@@ -964,8 +964,8 @@ function tictac(data, socket) {
                             if (checkWinner(data.board)) {
                                 // Game won
                                 // Calculate damage
-                                let attack = Math.ceil(calculateAttack(attacker, opponent));
-                                let attackXP = Math.ceil(attack * (1.5 + 0.5 * Math.random())) * 100;
+                                let attack = Math.ceil(calculateAttack(attacker, opponent)) + 100;
+                                let attackXP = Math.ceil(attack * (1.5 + 0.5 * Math.random()));
                                 let died = false;
                                 let msgA = "You inflicted " + attack + " damage to " + opponent.name + " and ";
                                 let msgD = "You lost and took " + attack + " damage. Better luck next time!";
