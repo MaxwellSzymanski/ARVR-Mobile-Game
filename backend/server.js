@@ -896,9 +896,9 @@ function initTictac(data, socket) {
                             // TODO: Implement fatigue
                             let turn = Math.random() < 0.5 ? you : opp;
                             // Send user data to attacker and to defender
-                            socket.emit("initResponse", {ownIcon: you, turn: turn, oppId: enemy.name});
+                            socket.emit("initResponse", {ownIcon: you, turn: turn, oppId: enemy.createFightToken()});
                             if (game[enemy.name] !== undefined && game[enemy.name] !== null) {
-                                game[enemy.name].socket.emit("initResponse", {ownIcon: opp, turn: turn, oppId: attacker.name});
+                                game[enemy.name].socket.emit("initResponse", {ownIcon: opp, turn: turn, oppId: attacker.createFightToken()});
                             }
                         }
                     )
@@ -935,7 +935,7 @@ function askToTictac(data, socket) {
                             else {
                                 // Send new board to opponent
                                 if (game[opponent.name] !== undefined && game[opponent.name] !== null) {
-                                    game[opponent.name].socket.emit("goToTicTac", {oppId: opponent.name})
+                                    game[opponent.name].socket.emit("goToTicTac", {oppId: opponent.createFightToken()})
                                 }
                             }
                         }
