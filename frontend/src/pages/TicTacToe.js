@@ -60,9 +60,11 @@ class TicTacToe extends React.Component {
       swal({title: 'You lose!', icon: 'error', text: data.message, confirm: true})
           .then(() => {
             if (data.dead) {
+              alert("Dead")
               this.setState({redirectFaction: true})
             }
             else {
+              console.log(data.dead);
               this.setState({redirect: true})
             }
 
@@ -134,9 +136,6 @@ class TicTacToe extends React.Component {
 
   renderRedirect = () => {
     if (this.state.redirect) {return <Redirect to="/map" />;}
-  };
-
-  renderRedirectDied = () => {
     if (this.state.redirectFaction) {return <Redirect to="/factionChooserPath" />;}
   };
 
@@ -150,7 +149,6 @@ class TicTacToe extends React.Component {
     return (
         <div>
           {this.renderRedirect()}
-          {this.renderRedirectDied()}
       <div className= "container">
         <div id="menu">
           <div id="title"><h1 id="titleText">Tic-Tac-Toe</h1></div>
