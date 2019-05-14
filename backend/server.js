@@ -331,6 +331,8 @@ function calculateFractions(socket) {
 
 
 function stats(data, socket) {
+    console.log("\nstats, data:\n");
+    console.log(data);
     if (!data.token) {
         console.log("(stats)     no token.");
         return;
@@ -351,7 +353,11 @@ function stats(data, socket) {
                 }
             });
     });
-    jwt.verify(data.token, secret, async function(err, token) {
+    if (!data.enemy) {
+        console.log("(stats)     no enemy token.");
+        return;
+    }
+    jwt.verify(data.enemy, secret, async function(err, token) {
         if (err) {
             console.log("(stats)         invalid enemy token");
             return;
