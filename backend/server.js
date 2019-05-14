@@ -341,7 +341,7 @@ function stats(data, socket) {
             return;
         } else if (!token.login)
             return;
-        User.findById(token.id).then(
+        User.findOne({name: token.name}).then(
             function (user) {
                 if (user === null) {
                     console.log("(stats)         No user found");
