@@ -55,7 +55,7 @@ class CapturePlayer extends React.Component {
       else {
           localStorage.setItem("PhotoOfPlayer", dataUri);
           //localStorage.setItem("fv", JSON.stringify(fv));
-          this.context.emit('getFVMatch', JSON.stringify(fv));
+          this.context.emit('getFVMatch', {FV: JSON.stringify(fv), enemy: cookies.get("enemy")});
       }
   }
 
@@ -94,6 +94,7 @@ class CapturePlayer extends React.Component {
 
           else {
             console.log(capturedPlayer._id);
+            cookies.remove("enemy");
             if (capturedPlayer.token !== null && capturedPlayer.token !== undefined) {
                 const options = {
                     path: '/',

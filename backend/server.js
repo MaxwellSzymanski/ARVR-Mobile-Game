@@ -106,9 +106,9 @@ io.sockets.on('connection', function (socket) {
     //     console.log('received player entry from: ' + name);
     //     addPlayerEntry(name, fv);
     // });
-    socket.on('getFVMatch', async (fv) => {
+    socket.on('getFVMatch', async (data) => {
         getFeatureVectorsFromDB( async function(result) {
-            let match = await getFVMatch(fv, result);
+            let match = await getFVMatch(data, result);
 			socket.emit('sentFVMatch', match);
         })
     });
@@ -650,21 +650,26 @@ function resetTutorial(data) {
 
 
 // FACERECOGNITION ==============================================================
-async function getFVMatch(fv, results) {
-    let fv1 = Object.values(JSON.parse(fv));
+async function getFVMatch(data, results) {
+    let fv1 = Object.values(JSON.parse(data.FV));
+    const player = data.enemy;
     let minDist = 1;
     let index = null;
-    const threshold = 0.52;
+    const threshold = 0.56; // 0.52
     let i = 0;
     for (i; i < results.length; i++) {
-        if (results[i].featureVector != null) {
+        if (results[i].name === player && results[i].featureVector != null) {
             let fv2 = Object.values(JSON.parse(results[i].featureVector));
             let dist = await euclideanDistance(fv1, fv2);
-            if (minDist > dist && dist <= threshold) {
-                console.log(dist);
-                minDist = dist;
+            if (dist <= threshold) {
                 index = i;
+                break;
             }
+            // if (minDist > dist && dist <= threshold) {
+            //     console.log(dist);
+            //     minDist = dist;
+            //     index = i;
+            // }
         }
     }
     if (index !== null) {

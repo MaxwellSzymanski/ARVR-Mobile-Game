@@ -210,6 +210,9 @@ class PlayerLayer extends React.Component {
                                   <button className="confirmButton wider" onClick={() => playerLayer.sendHandShakeSignal(id, idEnemy)}> Send
                                       handshake signal
                                   </button>
+                                  <Link to="/capturePlayer"><button className="confirmButton wider" onClick={() => playerLayer.capturePlayer(idEnemy)}>
+                                      capture {key}
+                                  </button></Link>
                               </p>
                               </div>
                             )
@@ -240,7 +243,7 @@ class PlayerLayer extends React.Component {
               () => this.showAlertBox(
                 <div>
                 <p className="textAccuracy">Accuracy: {playerLayer.state.accuracy} m</p>
-                <button className="confirmButton wider" onClick={playerLayer.showFindEnemyAlertBox.bind(playerLayer)}> Find other players </button>
+                    <button className="confirmButton wider" onClick={playerLayer.showFindEnemyAlertBox.bind(playerLayer)}> Find other players </button>
                 </div>
               )
             } title={id} position={[this.state.latitude, this.state.longitude]} icon={myIcon}>
@@ -275,6 +278,10 @@ class PlayerLayer extends React.Component {
             }
         });
         return rows;
+    }
+
+    capturePlayer(idEnemy) {
+        cookies.set("enemy", idEnemy);
     }
 
     // Send signal to server
