@@ -18,9 +18,9 @@ class FactionChooser extends React.Component {
         this.state = {
             faction: "none",
             render: false,
-            loneWolfFraction: 0,
-            adventurerFraction: 0,
-            scavengerFraction: 0
+            loneWolfFraction: 1,
+            adventurerFraction: 3,
+            scavengerFraction: 2
         };
 
         this.confirm = this.confirm.bind(this);
