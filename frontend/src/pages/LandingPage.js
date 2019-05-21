@@ -31,7 +31,7 @@ class LandingPage extends React.Component {
             <div className="background">
                 {this.renderRedirect()}
                 <div>
-                    <ltitle>Game of Wolves</ltitle>
+                    <ltitle>WhereWolf</ltitle>
                 </div>
                 <div>
                     <lsubtitle>Kill or be killed</lsubtitle>

@@ -107,7 +107,7 @@ class EmailVerif extends React.Component {
                 {this.renderRedirect()}
                 {this.setPage()}
                 <div>
-                    <h1>Game Of Wolves</h1>
+                    <h1>WhereWolf</h1>
                 </div>
                 <div className="FormCenter colorWhite">
                     <form onSubmit={this.handleSubmit} className="FormFields">

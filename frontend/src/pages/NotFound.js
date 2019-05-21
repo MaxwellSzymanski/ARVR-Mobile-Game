@@ -8,14 +8,14 @@ class NotFound extends Component {
       <div className="background">
         <div className="wolfIcon"/>
         <div className="notfound">
-          <ltitle>Game of Wolves</ltitle>
+          <ltitle>WhereWolf</ltitle>
         </div>
         <div>
           <p className="notfound">Page not found</p>
         </div>
 
         <div>
-          <center><Link className="linkBack" to="/map">Return to Game of Wolves</Link></center>
+          <center><Link className="linkBack" to="/map">Return to WhereWolf</Link></center>
         </div>
       </div>
 
